@@ -1,11 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
- <title id="title">Yi盘 portable AI agent workspace</title><desc id="desc">Controlled beta. Linux has the strongest evidence; Windows and macOS validation continues.</desc>
- <defs><linearGradient id="b" x1="0" x2="1"><stop stop-color="#170e0d"/><stop offset=".5" stop-color="#0c0f15"/><stop offset="1" stop-color="#090b10"/></linearGradient><linearGradient id="o" x1="0" x2="1"><stop stop-color="#ff6b4a"/><stop offset="1" stop-color="#ff9a3d"/></linearGradient><pattern id="g" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" fill="none" stroke="#fff" stroke-opacity=".03"/></pattern></defs>
- <rect x="1" y="1" width="1198" height="298" rx="18" fill="url(#b)" stroke="#ff6b4a" stroke-opacity=".25"/><rect x="1" y="1" width="1198" height="298" rx="18" fill="url(#g)"/>
- <text x="46" y="52" fill="#ff8b59" font-family="monospace" font-size="10" letter-spacing="2">NOW BUILDING / PRODUCT SHOWCASE</text>
- <text x="44" y="132" fill="#f1f4f8" font-family="Arial,sans-serif" font-size="68" font-weight="750" letter-spacing="-4">Yi<tspan fill="#ff6b4a">盘</tspan></text>
- <text x="46" y="170" fill="#c1c8d2" font-family="Arial,sans-serif" font-size="21">Portable AI Agent Workspace</text>
- <text x="46" y="209" fill="#8e97a5" font-family="Arial,sans-serif" font-size="14">受控内测 · 发布门禁收口 · Linux 证据最完整</text>
- <g transform="translate(46 237)" font-family="monospace" font-size="8" letter-spacing="1"><g fill="#11151c" stroke="#fff" stroke-opacity=".12"><rect width="92" height="28" rx="7"/><rect x="102" width="92" height="28" rx="7"/><rect x="204" width="92" height="28" rx="7"/><rect x="306" width="92" height="28" rx="7"/></g><g fill="#9aa3b1"><text x="46" y="18" text-anchor="middle">INBOX</text><text x="148" y="18" text-anchor="middle">VAULT</text><text x="250" y="18" text-anchor="middle">AGENTS</text><text x="352" y="18" text-anchor="middle">BYOK</text></g></g>
- <g transform="translate(682 54)"><text x="0" y="-16" fill="#626b79" font-family="monospace" font-size="8" letter-spacing="1">ABSTRACT CAPABILITY MAP · NOT A PRODUCT SCREENSHOT</text><g transform="translate(0 50)"><path d="M0 35h72v90H0z" fill="#171b22" stroke="#ff9a3d" stroke-opacity=".4"/><g fill="#2b323d" stroke="#555e6a"><rect x="15" y="53" width="8" height="50"/><rect x="31" y="53" width="8" height="50"/><rect x="47" y="53" width="8" height="50"/></g><rect x="72" y="0" width="380" height="160" rx="14" fill="#11151c" stroke="#ff9a3d" stroke-opacity=".45"/><path d="M88 16H436V144H88z" fill="none" stroke="#fff" stroke-opacity=".05"/><text x="115" y="76" fill="#f1f4f8" font-family="Arial,sans-serif" font-size="37" font-weight="800">YI<tspan fill="#ff6b4a">盘</tspan></text><text x="115" y="100" fill="#626b79" font-family="monospace" font-size="8" letter-spacing="2">PORTABLE AGENT WORKSPACE</text><path d="M114 120h180" stroke="#fff" stroke-opacity=".09"/><circle cx="402" cy="120" r="5" fill="url(#o)"/><circle cx="402" cy="120" r="12" fill="#ff6b4a" fill-opacity=".08"/></g></g>
+  <title id="title">Yi盘 portable AI agent workspace</title>
+  <desc id="desc">Abstract capability map, not a product screenshot.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1">
+      <stop stop-color="#170e0d" />
+      <stop offset="0.52" stop-color="#0c0f15" />
+      <stop offset="1" stop-color="#090b10" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1">
+      <stop stop-color="#ff6b4a" />
+      <stop offset="1" stop-color="#ff9a3d" />
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="1198" height="298" rx="20" fill="url(#background)" stroke="#ff6b4a" stroke-opacity="0.36" />
+  <text x="52" y="58" fill="#ff8b59" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="2">NOW BUILDING / YI盘</text>
+  <text x="145" y="152" fill="#f1f4f8" font-family="Arial, sans-serif" font-size="74" font-weight="800" text-anchor="end">Yi</text>
+  <text x="158" y="152" fill="#ff6b4a" font-family="Noto Sans CJK SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="72" font-weight="800">盘</text>
+  <text x="52" y="202" fill="#d0d6de" font-family="Arial, sans-serif" font-size="27">Portable AI Agent Workspace</text>
+  <text x="52" y="248" fill="#9aa3b1" font-family="Noto Sans CJK SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="20">受控内测 · Linux 证据最完整 · 跨平台继续验证</text>
+  <g transform="translate(684 55)">
+    <rect x="0" y="38" width="86" height="120" fill="#171b22" stroke="#ff9a3d" stroke-opacity="0.54" />
+    <rect x="86" y="0" width="406" height="196" rx="18" fill="#11151c" stroke="#ff9a3d" stroke-opacity="0.54" />
+    <g fill="#343c48">
+      <rect x="20" y="64" width="10" height="68" />
+      <rect x="39" y="64" width="10" height="68" />
+      <rect x="58" y="64" width="10" height="68" />
+    </g>
+    <text x="220" y="88" fill="#f1f4f8" font-family="Arial, sans-serif" font-size="46" font-weight="800" text-anchor="end">Yi</text>
+    <text x="229" y="88" fill="#ff6b4a" font-family="Noto Sans CJK SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="44" font-weight="800">盘</text>
+    <text x="122" y="128" fill="#9aa3b1" font-family="Arial, sans-serif" font-size="17">LOCAL DATA → MANAGED AGENT</text>
+    <path d="M122 151H334" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2" />
+    <circle cx="446" cy="151" r="8" fill="url(#accent)" />
+  </g>
 </svg>
