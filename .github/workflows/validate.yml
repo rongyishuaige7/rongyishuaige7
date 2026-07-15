@@ -39,6 +39,11 @@ jobs:
           fail: true
           failIfEmpty: true
 
+      - name: Verify fixed Actions evidence semantics
+        run: python3 scripts/validate-evidence-links.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
