@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
-  <title id="title">Rongyi Founder Lab</title>
-  <desc id="desc">Make AI context move with you.</desc>
+  <title id="title">Rongyi</title>
+  <desc id="desc">Rongyi 的 GitHub 个人主页横幅。</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#0d1118" />
@@ -21,11 +21,10 @@
     <rect width="48" height="48" rx="12" fill="none" stroke="#ff6b4a" stroke-width="2" />
     <text x="24" y="33" fill="#ff6b4a" font-family="Arial, sans-serif" font-size="25" font-weight="800" text-anchor="middle">R</text>
     <text x="68" y="21" fill="#f1f4f8" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3">RONGYI</text>
-    <text x="68" y="44" fill="#9aa3b1" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">/ FOUNDER LAB</text>
+    <text x="68" y="44" fill="#9aa3b1" font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="12" letter-spacing="2">/ YI盘 · HANGZHOU</text>
   </g>
   <text x="56" y="178" fill="#f1f4f8" font-family="Arial, sans-serif" font-size="60" font-weight="700" letter-spacing="-2">MAKE AI CONTEXT</text>
   <text x="56" y="246" fill="url(#accent)" font-family="Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="-2">MOVE WITH YOU.</text>
-  <text x="58" y="296" fill="#9aa3b1" font-family="Arial, sans-serif" font-size="20">Portable context · Local-first systems · Real work</text>
   <g transform="translate(902 170)">
     <circle cx="0" cy="0" r="62" fill="#ff6b4a" fill-opacity="0.06" stroke="#ff6b4a" stroke-opacity="0.32" stroke-width="2" />
     <circle cx="0" cy="0" r="43" fill="#0f1219" stroke="#ffffff" stroke-opacity="0.16" />
