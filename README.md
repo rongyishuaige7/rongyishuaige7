@@ -10,7 +10,7 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
 
-我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，同时持续探索一些本地优先的桌面工具和有趣的软硬件项目。
+我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，也持续发布本地优先的桌面工具和有趣的硬件项目。
 
 ---
 
@@ -62,6 +62,8 @@
 <summary><b><code>// MORE EXPERIMENTS</code></b> 硬件与桌面实验</summary>
 <br>
 
+完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
+
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
 基于 ESP32-S3 的视觉猜拳硬件实验，包含摄像头识别、OLED、音频与 RGB 反馈。
@@ -72,7 +74,7 @@
 
 独立完成的 ESP32-S3 + FreeRTOS 软硬件原型，包含环境感知、双泵灌溉、本地彩屏、局域网控制、语音和手势交互；公开固件、EDA/制造文件与历史实物照片。
 
-`C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29517499131) | 历史真机照片，当前硬件未复测 | MIT
+`C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29518255431) | 历史真机照片，当前硬件未复测 | MIT
 
 ### [Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)
 
@@ -80,7 +82,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片属于历史演示证据，不等同于当前公开提交的真机复测。Actions 中的固件 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片属于历史演示证据，不等同于当前公开提交的真机复测。STM32 等完整项目与边界见 Hardware Lab。Actions 中的固件 Artifact 会过期。
 
 </details>
 
@@ -98,6 +100,8 @@ I am **Rongyi**, founder of **Yi盘**, a portable AI workspace designed to run f
   <strong>Rongyi / Yi盘 / Hangzhou</strong>
   <br><br>
   <a href="https://github.com/rongyishuaige7?tab=repositories"><strong>全部仓库</strong></a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://github.com/rongyishuaige7/hardware-lab"><strong>Hardware Lab</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><strong>提交 Yi盘反馈</strong></a>
 </div>

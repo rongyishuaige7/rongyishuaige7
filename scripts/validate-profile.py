@@ -33,7 +33,7 @@ REQUIRED_TEXT = (
     "核心实现、客户配置与制盘工具不公开",
     "结构示意，不是产品截图",
     "主要调用云端模型",
-    "同时持续探索一些本地优先的桌面工具和有趣的软硬件项目",
+    "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",
@@ -48,6 +48,7 @@ REQUIRED_REPOSITORIES = (
     "ESP32_RPS_Game",
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
+    "hardware-lab",
 )
 FORBIDDEN_TEXT = (
     "—",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate fixed GitHub Actions evidence links against their workflow semantics."""
+"""Validate fixed GitHub Actions evidence links against live branch semantics."""
 
 import json
 import os
@@ -65,6 +65,17 @@ def main() -> int:
             problems.append(f"{repo} run {run_id}: unexpected event {run.get('event')}")
         if run.get("status") != "completed" or run.get("conclusion") != "success":
             problems.append(f"{repo} run {run_id}: not completed/success")
+        metadata = api(f"/repos/{OWNER}/{repo}")
+        branch = metadata.get("default_branch")
+        if not branch:
+            problems.append(f"{repo}: missing default branch")
+            continue
+        head = api(f"/repos/{OWNER}/{repo}/commits/{branch}").get("sha")
+        if run.get("head_sha") != head:
+            problems.append(
+                f"{repo} run {run_id}: evidence head {run.get('head_sha')} "
+                f"does not match {branch} HEAD {head}"
+            )
 
     if problems:
         print("Evidence-link verification failed:\n- " + "\n- ".join(problems), file=sys.stderr)
