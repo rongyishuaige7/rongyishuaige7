@@ -13,18 +13,21 @@
   <style>
     text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .route { stroke-dasharray: 8 10; }
+    .route { stroke-dasharray: 6 10; stroke-linecap: round; }
+    .packet { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .route { animation: route-flow 3.8s linear 1 both; }
-      .workspace { animation: workspace-settle 1.4s ease-in-out 3; transform-box: fill-box; transform-origin: center; }
-      .node { animation: node-in 650ms ease-out 1 both; }
-      .context { animation-delay: 100ms; }
-      .model { animation-delay: 550ms; }
-      .output { animation-delay: 950ms; }
+      .route { animation: route-flow 1.6s linear infinite; }
+      .packet-context { animation: packet-right 2.4s ease-in-out infinite; }
+      .packet-model-out { animation: packet-right 2.4s ease-in-out 400ms infinite; }
+      .packet-model-back { animation: packet-left 2.4s ease-in-out 1200ms infinite; }
+      .packet-output { animation: packet-down 2.4s ease-in-out 800ms infinite; }
+      .workspace { animation: workspace-live 3.2s ease-in-out infinite; }
     }
-    @keyframes route-flow { from { stroke-dashoffset: 72; } to { stroke-dashoffset: 0; } }
-    @keyframes workspace-settle { 0%, 100% { opacity: 0.84; } 50% { opacity: 1; } }
-    @keyframes node-in { from { opacity: 0.34; } to { opacity: 1; } }
+    @keyframes route-flow { to { stroke-dashoffset: -32; } }
+    @keyframes packet-right { 0% { transform: translateX(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateX(142px); opacity: 0; } }
+    @keyframes packet-left { 0% { transform: translateX(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateX(-140px); opacity: 0; } }
+    @keyframes packet-down { 0% { transform: translateY(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateY(36px); opacity: 0; } }
+    @keyframes workspace-live { 0%, 100% { opacity: 0.88; } 50% { opacity: 1; } }
   </style>
 
   <rect x="1" y="1" width="1198" height="318" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
@@ -38,6 +41,12 @@
     <path class="route" d="M744 126H884" marker-end="url(#arrow)"/>
     <path class="route" d="M884 163H744" marker-end="url(#arrow)"/>
     <path class="route" d="M600 192V228" marker-end="url(#arrow)"/>
+  </g>
+  <g fill="#a92f18" stroke="#ffffff" stroke-width="2">
+    <circle class="packet packet-context" cx="314" cy="145" r="4.5"/>
+    <circle class="packet packet-model-out" cx="744" cy="126" r="4.5"/>
+    <circle class="packet packet-model-back" cx="884" cy="163" r="4.5"/>
+    <circle class="packet packet-output" cx="600" cy="192" r="4.5"/>
   </g>
 
   <g class="node context">

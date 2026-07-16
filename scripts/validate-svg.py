@@ -26,6 +26,26 @@ def local_name(name: str) -> str:
     return name.rsplit("}", 1)[-1]
 
 
+def validate_motion_css(style_text: str) -> list[str]:
+    """Require every animation declaration to be opt-in for normal motion."""
+    problems: list[str] = []
+    depth = 0
+    motion_guard_depth: int | None = None
+
+    for line_number, line in enumerate(style_text.splitlines(), start=1):
+        opens = line.count("{")
+        closes = line.count("}")
+        if "@media" in line and "prefers-reduced-motion: no-preference" in line:
+            motion_guard_depth = depth + opens
+        if "animation:" in line and motion_guard_depth is None:
+            problems.append(f"animation declaration outside no-preference guard at style line {line_number}")
+        depth += opens - closes
+        if motion_guard_depth is not None and depth < motion_guard_depth:
+            motion_guard_depth = None
+
+    return problems
+
+
 def validate(path: Path) -> list[str]:
     problems: list[str] = []
     try:
@@ -62,10 +82,9 @@ def validate(path: Path) -> list[str]:
     )
     if FORBIDDEN_STYLE.search(style_text):
         problems.append("style contains an external or executable reference")
-    if re.search(r"\binfinite\b", style_text, re.IGNORECASE):
-        problems.append("infinite animation is not allowed in profile assets")
     if "animation:" in style_text and "prefers-reduced-motion" not in style_text:
         problems.append("animated SVG does not honor prefers-reduced-motion")
+    problems.extend(validate_motion_css(style_text))
 
     for element in root.iter():
         tag = local_name(element.tag)

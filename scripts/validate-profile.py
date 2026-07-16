@@ -9,10 +9,10 @@ import sys
 
 README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg",
-    "./assets/hero-light.svg",
-    "./assets/yipan-flow-dark.svg",
-    "./assets/yipan-flow-light.svg",
+    "./assets/hero-dark.svg?v=2",
+    "./assets/hero-light.svg?v=2",
+    "./assets/yipan-flow-dark.svg?v=2",
+    "./assets/yipan-flow-light.svg?v=2",
 }
 REQUIRED_TEXT = (
     "受控内测",
@@ -53,7 +53,7 @@ def main() -> int:
         if text in readme:
             problems.append(f"forbidden stale or stylistic text: {text}")
 
-    referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg)"', readme))
+    referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))
     if referenced_assets != EXPECTED_ASSETS:
         missing = sorted(EXPECTED_ASSETS - referenced_assets)
         unexpected = sorted(referenced_assets - EXPECTED_ASSETS)

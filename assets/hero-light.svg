@@ -21,18 +21,17 @@
   <style>
     text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .route { stroke-dasharray: 7 10; }
+    .route { stroke-dasharray: 6 10; stroke-linecap: round; }
     @media (prefers-reduced-motion: no-preference) {
-      .route { animation: route-flow 3.8s linear 1 both; }
-      .core { transform-box: fill-box; transform-origin: center; animation: core-settle 1.3s ease-in-out 3; }
-      .node { animation: node-in 700ms ease-out 1 both; }
-      .node-context { animation-delay: 100ms; }
-      .node-agent { animation-delay: 500ms; }
-      .node-model { animation-delay: 900ms; }
+      .route { animation: route-flow 1.8s linear infinite; }
+      .activity-ring { animation: ring-live 2.8s ease-in-out infinite; }
+      .node-context { animation: node-live 4.8s ease-in-out infinite; }
+      .node-agent { animation: node-live 4.8s ease-in-out 800ms infinite; }
+      .node-model { animation: node-live 4.8s ease-in-out 1600ms infinite; }
     }
-    @keyframes route-flow { from { stroke-dashoffset: 64; } to { stroke-dashoffset: 0; } }
-    @keyframes core-settle { 0%, 100% { transform: scale(0.96); opacity: 0.78; } 50% { transform: scale(1.03); opacity: 1; } }
-    @keyframes node-in { from { opacity: 0.38; } to { opacity: 1; } }
+    @keyframes route-flow { to { stroke-dashoffset: -32; } }
+    @keyframes ring-live { 0%, 100% { opacity: 0.06; } 50% { opacity: 0.15; } }
+    @keyframes node-live { 0%, 100% { opacity: 0.78; } 45%, 70% { opacity: 1; } }
   </style>
 
   <rect x="1" y="1" width="1198" height="358" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
@@ -66,7 +65,7 @@
   </g>
 
   <g class="core">
-    <circle cx="940" cy="177" r="72" fill="#e45738" opacity="0.08"/>
+    <circle class="activity-ring" cx="940" cy="177" r="72" fill="#e45738" opacity="0.08"/>
     <circle cx="940" cy="177" r="53" fill="#ffffff" stroke="#e45738" stroke-width="2"/>
     <circle cx="940" cy="177" r="42" fill="#f7f8fa" stroke="#e45738" stroke-opacity="0.34"/>
     <text x="932" y="185" fill="#18202a" font-size="28" font-weight="800" text-anchor="end">Yi</text>
