@@ -10,7 +10,7 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
 
-我是 **Rongyi**，在杭州开发 **Yi盘**，也持续发布本地优先的桌面工具和硬件实验。
+我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，也持续发布本地优先的桌面工具和有趣的硬件项目。
 
 ---
 
