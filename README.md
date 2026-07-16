@@ -64,6 +64,8 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
+最新收录：[LoRa Warehouse Tracking System](https://github.com/rongyishuaige7/lora-warehouse-tracking-system) 的标签/网关固件、Flask/SQLite 服务与 Android App 均已通过构建或测试；当前端到端硬件未复测。
+
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
 基于 ESP32-S3 的视觉猜拳硬件实验，包含摄像头识别、OLED、音频与 RGB 反馈。
@@ -82,7 +84,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片属于历史演示证据，不等同于当前公开提交的真机复测。STM32 等完整项目与边界见 Hardware Lab。Actions 中的固件 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa 等完整项目与边界见 Hardware Lab。Actions 中的固件 Artifact 会过期。
 
 </details>
 

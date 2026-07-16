@@ -37,6 +37,8 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",
+    "LoRa Warehouse Tracking System",
+    "当前端到端硬件未复测",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -49,6 +51,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
+    "lora-warehouse-tracking-system",
 )
 FORBIDDEN_TEXT = (
     "—",
