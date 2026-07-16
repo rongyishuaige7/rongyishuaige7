@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="184" height="36" viewBox="0 0 184 36" role="img" aria-labelledby="title desc">
+  <title id="title">提交 Yi盘反馈</title>
+  <desc id="desc">前往 Yi盘公开反馈页面。</desc>
+  <rect x="0.5" y="0.5" width="183" height="35" rx="8" fill="#c44227" stroke="#c44227"/>
+  <text x="14" y="22" fill="#ffffff" font-family="Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="0.8">FEEDBACK</text>
+  <path d="M76 8V28" stroke="#ffffff" stroke-opacity="0.42"/>
+  <text x="90" y="23" fill="#ffffff" font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, sans-serif" font-size="14" font-weight="700">提交反馈</text>
+</svg>

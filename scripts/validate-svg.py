@@ -11,6 +11,10 @@ FORBIDDEN_TAGS = {"script", "foreignObject", "iframe", "image", "use"}
 FORBIDDEN_VALUE = re.compile(r"(?:javascript:|data:|https?://)", re.IGNORECASE)
 FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNORECASE)
 EXPECTED_ASSETS = {
+    "badge-build-log.svg",
+    "badge-feedback.svg",
+    "badge-product-facts.svg",
+    "badge-yipan.svg",
     "hero-dark.svg",
     "hero-light.svg",
     "yipan-flow-dark.svg",
@@ -20,6 +24,7 @@ THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
 )
+MAX_BADGE_BYTES = 20 * 1024
 
 
 def local_name(name: str) -> str:
@@ -118,6 +123,14 @@ def main() -> int:
         failed = True
         print("FAIL assets")
         print("  - unexpected SVG assets: " + ", ".join(unexpected))
+
+    badge_bytes = sum(asset.stat().st_size for asset in assets if asset.name.startswith("badge-"))
+    if badge_bytes > MAX_BADGE_BYTES:
+        failed = True
+        print("FAIL assets")
+        print(f"  - badge SVG size {badge_bytes} exceeds {MAX_BADGE_BYTES} bytes")
+    else:
+        print(f"OK   badge SVG size: {badge_bytes} bytes")
 
     for asset in assets:
         problems = validate(asset)

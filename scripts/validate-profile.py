@@ -9,10 +9,22 @@ import sys
 
 README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=2",
-    "./assets/hero-light.svg?v=2",
-    "./assets/yipan-flow-dark.svg?v=2",
-    "./assets/yipan-flow-light.svg?v=2",
+    "./assets/hero-dark.svg?v=3",
+    "./assets/hero-light.svg?v=3",
+    "./assets/yipan-flow-dark.svg?v=3",
+    "./assets/yipan-flow-light.svg?v=3",
+    "./assets/badge-yipan.svg?v=1",
+    "./assets/badge-build-log.svg?v=1",
+    "./assets/badge-product-facts.svg?v=1",
+    "./assets/badge-feedback.svg?v=1",
+}
+EXPECTED_IMG_ASSETS = {
+    "./assets/hero-light.svg?v=3",
+    "./assets/yipan-flow-light.svg?v=3",
+    "./assets/badge-yipan.svg?v=1",
+    "./assets/badge-build-log.svg?v=1",
+    "./assets/badge-product-facts.svg?v=1",
+    "./assets/badge-feedback.svg?v=1",
 }
 REQUIRED_TEXT = (
     "受控内测",
@@ -21,8 +33,12 @@ REQUIRED_TEXT = (
     "核心实现、客户配置与制盘工具不公开",
     "结构示意，不是产品截图",
     "主要调用云端模型",
-    "DevFlow 和 Desktop Pet 只检查 Web 单元测试与前端构建",
+    "DevFlow 只检查 Web 单元测试与前端构建",
+    "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 只检查固件能否按固定配置编译",
+    "// OPEN BUILDS",
+    "// MORE EXPERIMENTS",
+    "// ENGLISH OVERVIEW",
 )
 REQUIRED_REPOSITORIES = (
     "yipan-showcase",
@@ -36,6 +52,13 @@ FORBIDDEN_TEXT = (
     "–",
     "founder-lab.svg",
     "yipan-feature.svg",
+    "// OPEN LAB",
+    "// LAB NOTES",
+    "SYSTEM ONLINE",
+    "| 当前状态 | 平台验证 | 公开范围 |",
+    '<td width="50%"',
+    "申请体验",
+    "咨询 Yi盘",
 )
 
 
@@ -53,6 +76,16 @@ def main() -> int:
         if text in readme:
             problems.append(f"forbidden stale or stylistic text: {text}")
 
+    if "| 项目 | 当前事实 |" not in readme:
+        problems.append("product facts must use the approved two-column mobile-readable table")
+    if readme.count('src="./assets/badge-') != 4:
+        problems.append("profile must contain exactly four local brand badges")
+    if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
+        problems.append("Problem Solution Recorder must remain a primary open build")
+    for experiment in ("ESP32_RPS_Game", "pet-desktop-tauri"):
+        if readme.index(experiment) < readme.index("// MORE EXPERIMENTS"):
+            problems.append(f"{experiment} must remain inside the folded experiments section")
+
     referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))
     if referenced_assets != EXPECTED_ASSETS:
         missing = sorted(EXPECTED_ASSETS - referenced_assets)
@@ -63,15 +96,20 @@ def main() -> int:
             problems.append("README has unexpected SVG references: " + ", ".join(unexpected))
 
     image_tags = re.findall(r"<img\b[^>]*>", readme, re.IGNORECASE)
-    if len(image_tags) != 2:
-        problems.append(f"expected 2 fallback img tags, found {len(image_tags)}")
+    image_sources: set[str] = set()
+    if len(image_tags) != len(EXPECTED_IMG_ASSETS):
+        problems.append(f"expected {len(EXPECTED_IMG_ASSETS)} local img tags, found {len(image_tags)}")
     for tag in image_tags:
         alt = re.search(r'alt="([^"]+)"', tag, re.IGNORECASE)
         if alt is None or not alt.group(1).strip():
             problems.append("fallback img is missing non-empty alt text")
         src = re.search(r'src="([^"]+)"', tag, re.IGNORECASE)
         if src is None or not src.group(1).startswith("./assets/"):
-            problems.append("fallback img must use a local asset")
+            problems.append("img must use a local asset")
+        elif src is not None:
+            image_sources.add(src.group(1))
+    if image_sources != EXPECTED_IMG_ASSETS:
+        problems.append("img asset set does not match the approved local assets")
 
     verified = re.search(r"最后核对：\*\*(\d{4}-\d{2}-\d{2})\*\*", readme)
     if verified is None:

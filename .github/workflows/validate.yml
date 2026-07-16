@@ -32,6 +32,9 @@ jobs:
       - name: Validate local SVG assets
         run: python3 scripts/validate-svg.py
 
+      - name: Validate SVG motion contracts
+        run: python3 scripts/validate-motion.py
+
       - name: Validate profile content contracts
         run: python3 scripts/validate-profile.py
 

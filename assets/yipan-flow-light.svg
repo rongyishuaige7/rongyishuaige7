@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
-  <title id="title">Yi盘工作方式</title>
-  <desc id="desc">盘内资料和任务进入 Yi盘工作台，工作台按需调用云端模型，主要产出和记录返回盘内保存。结构示意，不是产品截图。</desc>
+  <title id="title">Yi盘完整任务周期</title>
+  <desc id="desc">一项任务从盘内资料进入 Yi盘工作台，工作台按需请求云端模型，模型返回结果，主要产出和记录再保存到盘内。结构示意，不是产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#ffffff"/>
@@ -14,26 +14,63 @@
     text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .route { stroke-dasharray: 6 10; stroke-linecap: round; }
-    .packet { opacity: 0; }
+    .packet, .activity { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .route { animation: route-flow 1.6s linear infinite; }
-      .packet-context { animation: packet-right 2.4s ease-in-out infinite; }
-      .packet-model-out { animation: packet-right 2.4s ease-in-out 400ms infinite; }
-      .packet-model-back { animation: packet-left 2.4s ease-in-out 1200ms infinite; }
-      .packet-output { animation: packet-down 2.4s ease-in-out 800ms infinite; }
-      .workspace { animation: workspace-live 3.2s ease-in-out infinite; }
+      .packet-context { animation: packet-context 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .packet-model-out { animation: packet-model-out 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .packet-model-back { animation: packet-model-back 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .packet-output { animation: packet-output 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .activity-workspace-in { animation: workspace-in 6.8s ease-in-out infinite; }
+      .activity-model { animation: model-active 6.8s ease-in-out infinite; }
+      .activity-workspace-back { animation: workspace-back 6.8s ease-in-out infinite; }
+      .activity-output { animation: output-active 6.8s ease-in-out infinite; }
     }
-    @keyframes route-flow { to { stroke-dashoffset: -32; } }
-    @keyframes packet-right { 0% { transform: translateX(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateX(142px); opacity: 0; } }
-    @keyframes packet-left { 0% { transform: translateX(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateX(-140px); opacity: 0; } }
-    @keyframes packet-down { 0% { transform: translateY(0); opacity: 0; } 18%, 82% { opacity: 1; } 100% { transform: translateY(36px); opacity: 0; } }
-    @keyframes workspace-live { 0%, 100% { opacity: 0.88; } 50% { opacity: 1; } }
+    @keyframes packet-context {
+      0% { transform: translateX(0); opacity: 0; }
+      2% { opacity: 1; }
+      16% { transform: translateX(142px); opacity: 1; }
+      18%, 100% { transform: translateX(142px); opacity: 0; }
+    }
+    @keyframes workspace-in {
+      0%, 17%, 30%, 100% { opacity: 0; }
+      20%, 27% { opacity: 1; }
+    }
+    @keyframes packet-model-out {
+      0%, 30% { transform: translateX(0); opacity: 0; }
+      32% { opacity: 1; }
+      46% { transform: translateX(140px); opacity: 1; }
+      48%, 100% { transform: translateX(140px); opacity: 0; }
+    }
+    @keyframes model-active {
+      0%, 47%, 57%, 100% { opacity: 0; }
+      50%, 54% { opacity: 1; }
+    }
+    @keyframes packet-model-back {
+      0%, 50% { transform: translateX(0); opacity: 0; }
+      52% { opacity: 1; }
+      63% { transform: translateX(-140px); opacity: 1; }
+      65%, 100% { transform: translateX(-140px); opacity: 0; }
+    }
+    @keyframes workspace-back {
+      0%, 64%, 73%, 100% { opacity: 0; }
+      67%, 70% { opacity: 1; }
+    }
+    @keyframes packet-output {
+      0%, 68% { transform: translateY(0); opacity: 0; }
+      70% { opacity: 1; }
+      80% { transform: translateY(36px); opacity: 1; }
+      82%, 100% { transform: translateY(36px); opacity: 0; }
+    }
+    @keyframes output-active {
+      0%, 81%, 92%, 100% { opacity: 0; }
+      84%, 89% { opacity: 1; }
+    }
   </style>
 
   <rect x="1" y="1" width="1198" height="318" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
   <path d="M792 1H1199V319H1034Z" fill="#e45738" opacity="0.028"/>
 
-  <text x="42" y="45" class="mono" fill="#e45738" font-size="14" letter-spacing="1.8">YI盘 / WORKFLOW</text>
+  <text x="42" y="45" class="mono" fill="#e45738" font-size="14" letter-spacing="1.8">YI盘 / TASK CYCLE</text>
   <text x="1158" y="45" class="mono" fill="#78818e" font-size="12" letter-spacing="1" text-anchor="end">STRUCTURE DIAGRAM / NOT A PRODUCT SCREEN</text>
 
   <g fill="none" stroke="#e45738" stroke-width="1.8" opacity="0.74">
@@ -65,6 +102,8 @@
     <text x="550" y="123" class="mono" fill="#e45738" font-size="13" letter-spacing="1.2">AGENT WORKSPACE</text>
     <text x="550" y="158" fill="#18202a" font-size="27" font-weight="800">Yi盘工作台</text>
     <text x="550" y="181" fill="#697381" font-size="14">便携启动与任务工作界面</text>
+    <rect class="activity activity-workspace-in" x="451" y="77" width="298" height="120" rx="20" fill="none" stroke="#e45738" stroke-width="3"/>
+    <rect class="activity activity-workspace-back" x="451" y="77" width="298" height="120" rx="20" fill="none" stroke="#e45738" stroke-width="3"/>
   </g>
 
   <g class="node model">
@@ -72,11 +111,13 @@
     <text x="910" y="126" class="mono" fill="#697381" font-size="13" letter-spacing="1.2">CLOUD MODELS</text>
     <text x="910" y="158" fill="#18202a" font-size="24" font-weight="700">云端模型</text>
     <text x="910" y="181" fill="#697381" font-size="14">需要智能处理时按需调用</text>
+    <rect class="activity activity-model" x="879" y="91" width="278" height="108" rx="20" fill="none" stroke="#e45738" stroke-width="3"/>
   </g>
 
   <g class="node output">
     <rect x="456" y="228" width="288" height="64" rx="16" fill="#ffffff" stroke="#cbd1da"/>
     <text x="480" y="255" class="mono" fill="#697381" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
     <text x="480" y="279" fill="#18202a" font-size="20" font-weight="700">主要产出与记录保存在盘内</text>
+    <rect class="activity activity-output" x="451" y="223" width="298" height="74" rx="20" fill="none" stroke="#e45738" stroke-width="3"/>
   </g>
 </svg>
