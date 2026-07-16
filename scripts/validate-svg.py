@@ -102,6 +102,27 @@ def validate(path: Path) -> list[str]:
             if attribute_name not in {"xmlns"} and FORBIDDEN_VALUE.search(value):
                 problems.append(f"forbidden external or executable value in {attribute_name}")
 
+    if path.name.startswith("hero-"):
+        for design_id in ("edge", "grid", "gridFade", "gridMask", "panelClip"):
+            if design_id not in element_ids:
+                problems.append(f"hero is missing required frame or grid definition: {design_id}")
+        top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
+        if len(top_level_rects) < 3:
+            problems.append("hero must keep an outer shell, inset panel, and inner edge")
+
+    if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
+        badge_rects = [element for element in root if local_name(element.tag) == "rect"]
+        if len(badge_rects) < 2:
+            problems.append("primary badge must keep a visible edge and inset highlight")
+        else:
+            surface = badge_rects[0]
+            if surface.get("fill") == surface.get("stroke"):
+                problems.append("primary badge border must contrast with its fill")
+            if float(surface.get("stroke-width", "0")) < 1.5:
+                problems.append("primary badge border is too weak")
+            if badge_rects[1].get("stroke-opacity") is None:
+                problems.append("primary badge is missing its restrained inset highlight")
+
     return problems
 
 

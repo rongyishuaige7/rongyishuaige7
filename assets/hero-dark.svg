@@ -11,11 +11,29 @@
       <stop stop-color="#ff6b4a" stop-opacity="0.22"/>
       <stop offset="1" stop-color="#ff6b4a" stop-opacity="0"/>
     </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff6b4a" stop-opacity="0.7"/>
+      <stop offset="0.34" stop-color="#ff6b4a" stop-opacity="0"/>
+      <stop offset="0.76" stop-color="#ff6b4a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ff6b4a" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="gridFade" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.7"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#526171" stroke-width="0.6" opacity="0.44"/>
+      <circle r="1" fill="#ff6b4a" opacity="0.13"/>
+    </pattern>
+    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="328">
+      <rect x="16" y="16" width="1168" height="328" fill="url(#gridFade)"/>
+    </mask>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
       <path d="M0 0 8 4 0 8Z" fill="#ff6b4a"/>
     </marker>
     <clipPath id="panelClip">
-      <rect x="1" y="1" width="1198" height="358" rx="20"/>
+      <rect x="16" y="16" width="1168" height="328" rx="16"/>
     </clipPath>
   </defs>
   <style>
@@ -51,11 +69,14 @@
     }
   </style>
 
-  <rect x="1" y="1" width="1198" height="358" rx="20" fill="url(#surface)" stroke="#303846"/>
+  <rect x="0.5" y="0.5" width="1199" height="359" rx="20" fill="#080c13" stroke="#303846"/>
+  <rect x="16" y="16" width="1168" height="328" rx="16" fill="url(#surface)" stroke="#414b5b"/>
   <g clip-path="url(#panelClip)">
+    <rect x="16" y="16" width="1168" height="328" fill="url(#grid)" mask="url(#gridMask)"/>
     <circle cx="1125" cy="44" r="290" fill="url(#accentWash)"/>
     <path d="M760 0H1200V360H1040Z" fill="#ff6b4a" opacity="0.025"/>
   </g>
+  <rect x="16.5" y="16.5" width="1167" height="327" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.82"/>
 
   <g transform="translate(54 44)">
     <rect width="46" height="46" rx="12" fill="#151b25" stroke="#ff6b4a" stroke-width="2"/>

@@ -1,11 +1,11 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=3">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=3">
-  <img src="./assets/hero-light.svg?v=3" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=4">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=4">
+  <img src="./assets/hero-light.svg?v=4" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
 </picture>
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/yipan-showcase"><img src="./assets/badge-yipan.svg?v=1" height="36" alt="了解 Yi盘"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase"><img src="./assets/badge-yipan.svg?v=2" height="36" alt="了解 Yi盘"></a>
   &nbsp;&nbsp;
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
@@ -22,6 +22,8 @@
   <img src="./assets/yipan-flow-light.svg?v=3" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，智能处理主要调用云端模型，主要产出和记录保存在盘内。">
 </picture>
 
+<br>
+
 **Yi盘是一套装在 U 盘里的随身 AI 工作台。** 长期资料、任务记录和主要产出保存在盘内；需要智能处理时，主要调用云端模型。
 
 | 项目 | 当前事实 |
@@ -35,7 +37,7 @@
 <div align="center">
   <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=1" height="36" alt="查看 Yi盘产品事实与限制"></a>
   &nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=1" height="36" alt="提交 Yi盘反馈"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=2" height="36" alt="提交 Yi盘反馈"></a>
 </div>
 
 ---
