@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘工作方式</title>
+  <desc id="desc">盘内资料和任务进入 Yi盘工作台，工作台按需调用云端模型，主要产出和记录返回盘内保存。结构示意，不是产品截图。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f7f8fa"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0 8 4 0 8Z" fill="#e45738"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .route { stroke-dasharray: 8 10; }
+    @media (prefers-reduced-motion: no-preference) {
+      .route { animation: route-flow 3.8s linear 1 both; }
+      .workspace { animation: workspace-settle 1.4s ease-in-out 3; transform-box: fill-box; transform-origin: center; }
+      .node { animation: node-in 650ms ease-out 1 both; }
+      .context { animation-delay: 100ms; }
+      .model { animation-delay: 550ms; }
+      .output { animation-delay: 950ms; }
+    }
+    @keyframes route-flow { from { stroke-dashoffset: 72; } to { stroke-dashoffset: 0; } }
+    @keyframes workspace-settle { 0%, 100% { opacity: 0.84; } 50% { opacity: 1; } }
+    @keyframes node-in { from { opacity: 0.34; } to { opacity: 1; } }
+  </style>
+
+  <rect x="1" y="1" width="1198" height="318" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
+  <path d="M792 1H1199V319H1034Z" fill="#e45738" opacity="0.028"/>
+
+  <text x="42" y="45" class="mono" fill="#e45738" font-size="14" letter-spacing="1.8">YI盘 / WORKFLOW</text>
+  <text x="1158" y="45" class="mono" fill="#78818e" font-size="12" letter-spacing="1" text-anchor="end">STRUCTURE DIAGRAM / NOT A PRODUCT SCREEN</text>
+
+  <g fill="none" stroke="#e45738" stroke-width="1.8" opacity="0.74">
+    <path class="route" d="M314 145H456" marker-end="url(#arrow)"/>
+    <path class="route" d="M744 126H884" marker-end="url(#arrow)"/>
+    <path class="route" d="M884 163H744" marker-end="url(#arrow)"/>
+    <path class="route" d="M600 192V228" marker-end="url(#arrow)"/>
+  </g>
+
+  <g class="node context">
+    <rect x="48" y="96" width="266" height="98" rx="16" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="74" y="126" class="mono" fill="#697381" font-size="13" letter-spacing="1.2">LOCAL CONTEXT</text>
+    <text x="74" y="158" fill="#18202a" font-size="24" font-weight="700">盘内资料与任务</text>
+    <text x="74" y="181" fill="#697381" font-size="14">长期资料、任务记录</text>
+  </g>
+
+  <g class="workspace">
+    <rect x="456" y="82" width="288" height="110" rx="16" fill="#fff8f6" stroke="#e45738" stroke-width="2"/>
+    <rect x="470" y="96" width="52" height="82" rx="8" fill="#ffffff" stroke="#e45738" stroke-opacity="0.42"/>
+    <rect x="482" y="111" width="7" height="50" fill="#e45738" opacity="0.72"/>
+    <rect x="494" y="111" width="7" height="50" fill="#e45738" opacity="0.42"/>
+    <rect x="506" y="111" width="7" height="50" fill="#e45738" opacity="0.24"/>
+    <text x="550" y="123" class="mono" fill="#e45738" font-size="13" letter-spacing="1.2">AGENT WORKSPACE</text>
+    <text x="550" y="158" fill="#18202a" font-size="27" font-weight="800">Yi盘工作台</text>
+    <text x="550" y="181" fill="#697381" font-size="14">便携启动与任务工作界面</text>
+  </g>
+
+  <g class="node model">
+    <rect x="884" y="96" width="268" height="98" rx="16" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="910" y="126" class="mono" fill="#697381" font-size="13" letter-spacing="1.2">CLOUD MODELS</text>
+    <text x="910" y="158" fill="#18202a" font-size="24" font-weight="700">云端模型</text>
+    <text x="910" y="181" fill="#697381" font-size="14">需要智能处理时按需调用</text>
+  </g>
+
+  <g class="node output">
+    <rect x="456" y="228" width="288" height="64" rx="16" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="480" y="255" class="mono" fill="#697381" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
+    <text x="480" y="279" fill="#18202a" font-size="20" font-weight="700">主要产出与记录保存在盘内</text>
+  </g>
+</svg>

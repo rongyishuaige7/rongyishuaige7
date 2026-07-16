@@ -5,6 +5,8 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
+import subprocess
 import sys
 from urllib.request import Request, urlopen
 
@@ -22,6 +24,15 @@ EXPECTED = {
 
 def api(path: str) -> dict:
     token = os.environ.get("GITHUB_TOKEN")
+    if not token and shutil.which("gh"):
+        completed = subprocess.run(
+            ["gh", "api", path.lstrip("/")],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return json.loads(completed.stdout)
+
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",

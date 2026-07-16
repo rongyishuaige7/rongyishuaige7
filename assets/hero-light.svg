@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Rongyi，Yi盘创始人</title>
+  <desc id="desc">明亮的橙灰色品牌横幅。左侧是让 AI 上下文随身移动的主张，右侧是资料、Yi盘、云端模型和 Agent 工作之间的关系示意。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#f7f8fa"/>
+      <stop offset="1" stop-color="#fff6f3"/>
+    </linearGradient>
+    <linearGradient id="accentWash" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#e45738" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#e45738" stop-opacity="0"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0 0 8 4 0 8Z" fill="#e45738"/>
+    </marker>
+    <clipPath id="panelClip">
+      <rect x="1" y="1" width="1198" height="358" rx="20"/>
+    </clipPath>
+  </defs>
+  <style>
+    text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .route { stroke-dasharray: 7 10; }
+    @media (prefers-reduced-motion: no-preference) {
+      .route { animation: route-flow 3.8s linear 1 both; }
+      .core { transform-box: fill-box; transform-origin: center; animation: core-settle 1.3s ease-in-out 3; }
+      .node { animation: node-in 700ms ease-out 1 both; }
+      .node-context { animation-delay: 100ms; }
+      .node-agent { animation-delay: 500ms; }
+      .node-model { animation-delay: 900ms; }
+    }
+    @keyframes route-flow { from { stroke-dashoffset: 64; } to { stroke-dashoffset: 0; } }
+    @keyframes core-settle { 0%, 100% { transform: scale(0.96); opacity: 0.78; } 50% { transform: scale(1.03); opacity: 1; } }
+    @keyframes node-in { from { opacity: 0.38; } to { opacity: 1; } }
+  </style>
+
+  <rect x="1" y="1" width="1198" height="358" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
+  <g clip-path="url(#panelClip)">
+    <circle cx="1125" cy="44" r="290" fill="url(#accentWash)"/>
+    <path d="M760 0H1200V360H1040Z" fill="#e45738" opacity="0.025"/>
+  </g>
+
+  <g transform="translate(54 44)">
+    <rect width="46" height="46" rx="12" fill="#ffffff" stroke="#e45738" stroke-width="2"/>
+    <text x="23" y="31" fill="#e45738" font-size="24" font-weight="800" text-anchor="middle">R</text>
+    <text x="64" y="18" fill="#18202a" font-size="16" font-weight="700" letter-spacing="3">RONGYI</text>
+    <text x="64" y="40" fill="#6c7583" font-size="13" letter-spacing="1.6">FOUNDER OF YI盘</text>
+  </g>
+
+  <text x="54" y="165" fill="#18202a" font-size="52" font-weight="760" letter-spacing="-1.5">MAKE AI CONTEXT</text>
+  <text x="54" y="224" fill="#e45738" font-size="54" font-weight="800" letter-spacing="-1.8">MOVE WITH YOU.</text>
+  <text x="57" y="269" fill="#5f6876" font-size="16">装在 U 盘里的随身 AI 工作台</text>
+  <text x="57" y="300" class="mono" fill="#77808d" font-size="13" letter-spacing="1.4">PORTABLE CONTEXT / PRACTICAL AGENTS</text>
+
+  <g fill="none" stroke="#e45738" stroke-width="1.7" opacity="0.72">
+    <path class="route" d="M770 121C823 121 848 145 892 167" marker-end="url(#arrow)"/>
+    <path class="route" d="M989 167C1031 145 1060 121 1112 121" marker-end="url(#arrow)"/>
+    <path class="route" d="M940 222V282" marker-end="url(#arrow)"/>
+  </g>
+
+  <g class="node node-context">
+    <rect x="688" y="91" width="132" height="60" rx="14" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="754" y="117" class="mono" fill="#18202a" font-size="14" text-anchor="middle">CONTEXT</text>
+    <text x="754" y="138" fill="#6c7583" font-size="13" text-anchor="middle">资料与任务</text>
+  </g>
+
+  <g class="core">
+    <circle cx="940" cy="177" r="72" fill="#e45738" opacity="0.08"/>
+    <circle cx="940" cy="177" r="53" fill="#ffffff" stroke="#e45738" stroke-width="2"/>
+    <circle cx="940" cy="177" r="42" fill="#f7f8fa" stroke="#e45738" stroke-opacity="0.34"/>
+    <text x="932" y="185" fill="#18202a" font-size="28" font-weight="800" text-anchor="end">Yi</text>
+    <text x="938" y="185" fill="#e45738" font-size="27" font-weight="800">盘</text>
+  </g>
+
+  <g class="node node-agent">
+    <rect x="1060" y="91" width="112" height="60" rx="14" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="1116" y="117" class="mono" fill="#18202a" font-size="13" text-anchor="middle">AGENT</text>
+    <text x="1116" y="138" fill="#6c7583" font-size="13" text-anchor="middle">工作与产出</text>
+  </g>
+
+  <g class="node node-model">
+    <rect x="865" y="282" width="150" height="48" rx="14" fill="#ffffff" stroke="#cbd1da"/>
+    <text x="940" y="311" class="mono" fill="#4f5966" font-size="13" letter-spacing="0.8" text-anchor="middle">CLOUD MODELS</text>
+  </g>
+</svg>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate local SVG assets without rendering or network access."""
+"""Validate local profile SVG assets without rendering or network access."""
 
 from pathlib import Path
 import re
@@ -9,6 +9,17 @@ import xml.etree.ElementTree as ET
 SVG_NAMESPACE = "{http://www.w3.org/2000/svg}"
 FORBIDDEN_TAGS = {"script", "foreignObject", "iframe", "image", "use"}
 FORBIDDEN_VALUE = re.compile(r"(?:javascript:|data:|https?://)", re.IGNORECASE)
+FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNORECASE)
+EXPECTED_ASSETS = {
+    "hero-dark.svg",
+    "hero-light.svg",
+    "yipan-flow-dark.svg",
+    "yipan-flow-light.svg",
+}
+THEME_PAIRS = (
+    ("hero-dark.svg", "hero-light.svg"),
+    ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
+)
 
 
 def local_name(name: str) -> str:
@@ -28,7 +39,8 @@ def validate(path: Path) -> list[str]:
         problems.append("missing viewBox")
     if root.get("role") != "img":
         problems.append('missing role="img"')
-    if not root.get("aria-labelledby"):
+    labelled_by = root.get("aria-labelledby", "").split()
+    if not labelled_by:
         problems.append("missing aria-labelledby")
 
     title = root.find(f"{SVG_NAMESPACE}title")
@@ -37,6 +49,23 @@ def validate(path: Path) -> list[str]:
         problems.append("missing non-empty title")
     if description is None or not "".join(description.itertext()).strip():
         problems.append("missing non-empty description")
+
+    element_ids = {element.get("id") for element in root.iter() if element.get("id")}
+    for reference in labelled_by:
+        if reference not in element_ids:
+            problems.append(f"aria-labelledby references missing id {reference}")
+
+    style_text = "\n".join(
+        "".join(element.itertext())
+        for element in root.iter()
+        if local_name(element.tag) == "style"
+    )
+    if FORBIDDEN_STYLE.search(style_text):
+        problems.append("style contains an external or executable reference")
+    if re.search(r"\binfinite\b", style_text, re.IGNORECASE):
+        problems.append("infinite animation is not allowed in profile assets")
+    if "animation:" in style_text and "prefers-reduced-motion" not in style_text:
+        problems.append("animated SVG does not honor prefers-reduced-motion")
 
     for element in root.iter():
         tag = local_name(element.tag)
@@ -59,6 +88,18 @@ def main() -> int:
         return 1
 
     failed = False
+    asset_names = {asset.name for asset in assets}
+    missing = sorted(EXPECTED_ASSETS - asset_names)
+    unexpected = sorted(asset_names - EXPECTED_ASSETS)
+    if missing:
+        failed = True
+        print("FAIL assets")
+        print("  - missing required assets: " + ", ".join(missing))
+    if unexpected:
+        failed = True
+        print("FAIL assets")
+        print("  - unexpected SVG assets: " + ", ".join(unexpected))
+
     for asset in assets:
         problems = validate(asset)
         if problems:
@@ -68,6 +109,19 @@ def main() -> int:
                 print(f"  - {problem}")
         else:
             print(f"OK   {asset}")
+
+    for dark_name, light_name in THEME_PAIRS:
+        dark_path = Path("assets", dark_name)
+        light_path = Path("assets", light_name)
+        if not dark_path.exists() or not light_path.exists():
+            continue
+        dark_root = ET.parse(dark_path).getroot()
+        light_root = ET.parse(light_path).getroot()
+        for attribute in ("width", "height", "viewBox"):
+            if dark_root.get(attribute) != light_root.get(attribute):
+                failed = True
+                print(f"FAIL {dark_name} / {light_name}")
+                print(f"  - mismatched {attribute}")
     return 1 if failed else 0
 
 
