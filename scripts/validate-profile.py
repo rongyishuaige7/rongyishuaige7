@@ -35,7 +35,7 @@ REQUIRED_TEXT = (
     "主要调用云端模型",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
-    "ESP32 只检查固件能否按固定配置编译",
+    "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -45,6 +45,7 @@ REQUIRED_REPOSITORIES = (
     "problem-solution-recorder-oss",
     "devflow-recorder",
     "ESP32_RPS_Game",
+    "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
 )
 FORBIDDEN_TEXT = (
@@ -84,7 +85,7 @@ def main() -> int:
         problems.append("profile must contain exactly four local brand badges")
     if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
         problems.append("Problem Solution Recorder must remain a primary open build")
-    for experiment in ("ESP32_RPS_Game", "pet-desktop-tauri"):
+    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
         if readme.index(experiment) < readme.index("// MORE EXPERIMENTS"):
             problems.append(f"{experiment} must remain inside the folded experiments section")
 

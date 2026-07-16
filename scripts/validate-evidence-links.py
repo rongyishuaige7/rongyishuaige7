@@ -18,6 +18,7 @@ EXPECTED = {
     "problem-solution-recorder-oss": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "devflow-recorder": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "ESP32_RPS_Game": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
+    "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
 }
 

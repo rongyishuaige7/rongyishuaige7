@@ -68,13 +68,19 @@
 
 `C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29339478819) | MIT
 
+### [Multimodal Smart Pot](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
+
+独立完成的 ESP32-S3 + FreeRTOS 软硬件原型，包含环境感知、双泵灌溉、本地彩屏、局域网控制、语音和手势交互；公开固件、EDA/制造文件与历史实物照片。
+
+`C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29517499131) | 历史真机照片，当前硬件未复测 | MIT
+
 ### [Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)
 
 使用 Tauri、React、Rust 与 GTK 构建的 Linux 原生透明桌面宠物原型。
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-15。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 只检查固件能否按固定配置编译。Actions 中的固件 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片属于历史演示证据，不等同于当前公开提交的真机复测。Actions 中的固件 Artifact 会过期。
 
 </details>
 
