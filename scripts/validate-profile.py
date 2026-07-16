@@ -9,8 +9,8 @@ import sys
 
 README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=4",
-    "./assets/hero-light.svg?v=4",
+    "./assets/hero-dark.svg?v=5",
+    "./assets/hero-light.svg?v=5",
     "./assets/yipan-flow-dark.svg?v=3",
     "./assets/yipan-flow-light.svg?v=3",
     "./assets/badge-yipan.svg?v=2",
@@ -19,7 +19,7 @@ EXPECTED_ASSETS = {
     "./assets/badge-feedback.svg?v=2",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=4",
+    "./assets/hero-light.svg?v=5",
     "./assets/yipan-flow-light.svg?v=3",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
@@ -33,6 +33,7 @@ REQUIRED_TEXT = (
     "核心实现、客户配置与制盘工具不公开",
     "结构示意，不是产品截图",
     "主要调用云端模型",
+    "同时持续探索一些本地优先的桌面工具和有趣的软硬件项目",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",

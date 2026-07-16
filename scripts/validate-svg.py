@@ -103,12 +103,15 @@ def validate(path: Path) -> list[str]:
                 problems.append(f"forbidden external or executable value in {attribute_name}")
 
     if path.name.startswith("hero-"):
-        for design_id in ("edge", "grid", "gridFade", "gridMask", "panelClip"):
+        for design_id in ("edge", "grid", "gridFade", "gridMask", "panelClip", "portable-sequence"):
             if design_id not in element_ids:
                 problems.append(f"hero is missing required frame or grid definition: {design_id}")
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hero must keep an outer shell, inset panel, and inner edge")
+        portable_sequence = next((element for element in root.iter() if element.get("id") == "portable-sequence"), None)
+        if portable_sequence is None or portable_sequence.get("transform") != "translate(-42 0)":
+            problems.append("hero portable sequence must preserve comfortable right-edge clearance")
 
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]

@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=4">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=4">
-  <img src="./assets/hero-light.svg?v=4" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=5">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=5">
+  <img src="./assets/hero-light.svg?v=5" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
 </picture>
 
 <div align="center">
@@ -10,7 +10,7 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
 
-我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，也持续发布本地优先的桌面工具和有趣的硬件项目。
+我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，同时持续探索一些本地优先的桌面工具和有趣的软硬件项目。
 
 ---
 
