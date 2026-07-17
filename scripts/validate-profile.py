@@ -37,12 +37,15 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "基于ESP32的多路智能照明控制系统",
+    "基于ESP32的智能化妆品收纳与环境管理系统",
     "已完成公开净化",
-    "硬件无关源码契约与 ESP32 固件构建已经由",
-    "当前 ESP32、四路低压 LED、BH1750、NVS、本机凭据连接、HTTP、倒计时和自动模式尚未按当前公开提交重新真机复测",
+    "公开范围扫描、仓库检查、源码契约、ESP32 默认、双 opt-in 与仅执行器宏编译覆盖，以及 Flutter format/test/analyze/debug APK 构建已经由",
+    "当前 ESP32、DHT11、GUVA-S12SD、PIR、RC522、OLED、低压执行器、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测",
     "默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP",
-    "本项目不适用于市电、公共/应急照明、安防、消防、医疗、生产控制或无人值守",
+    "执行器相关 GPIO 不初始化输出并保持输入高阻",
+    "RFID UID 不是身份或访问凭据",
+    "CI 不上传固件、ELF 或 APK 构建产物",
+    "本项目不适用于化妆品质量、真假、保质期真实性、皮肤健康、紫外线防护、医疗、环境安全、门禁、电子锁、防盗、身份认证、访问控制、应急响应或无人值守系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -55,7 +58,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-smart-light-controller",
+    "esp32-smart-makeup-cabinet",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -70,6 +73,7 @@ FORBIDDEN_TEXT = (
     "申请体验",
     "咨询 Yi盘",
     "esp32-baby-monitor",
+    "esp32-smart-light-controller",
 )
 
 

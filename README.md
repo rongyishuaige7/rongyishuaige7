@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32的多路智能照明控制系统](https://github.com/rongyishuaige7/esp32-smart-light-controller) 已完成公开净化；硬件无关源码契约与 ESP32 固件构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-smart-light-controller/actions/runs/29599875410) 验证。当前 ESP32、四路低压 LED、BH1750、NVS、本机凭据连接、HTTP、倒计时和自动模式尚未按当前公开提交重新真机复测。默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP；只有本机提供可信局域网凭据并成功连接后才启动本地 HTTP。HTTP 无 TLS、身份认证、权限模型或设备身份校验，仅限隔离可信局域网与低压 LED 教学负载；CI、Artifact、HTTP 返回和页面显示都不代表实体 LED 已动作、设备在线、控制必达、照度准确、网络安全或长期稳定性。本项目不适用于市电、公共/应急照明、安防、消防、医疗、生产控制或无人值守。
+最新收录：[基于ESP32的智能化妆品收纳与环境管理系统](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet) 已完成公开净化；公开范围扫描、仓库检查、源码契约、ESP32 默认、双 opt-in 与仅执行器宏编译覆盖，以及 Flutter format/test/analyze/debug APK 构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet/actions/runs/29608194135) 验证。当前 ESP32、DHT11、GUVA-S12SD、PIR、RC522、OLED、低压执行器、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测。默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP；执行器相关 GPIO 不初始化输出并保持输入高阻，但未知驱动极性、外部上拉、供电和接线仍可能改变实体行为，不能据此推断负载已关闭、电气安全或无误动作。只有使用者本机在隔离可信局域网的受监督低压台架中，同时提供非空 Wi-Fi 凭据并将执行器与本地控制两个实验开关精确设为 `1`，且成功入网后，明文无认证 HTTP 才可能启动；RFID UID 不是身份或访问凭据。CI 不上传固件、ELF 或 APK 构建产物；CI 和构建不代表设备在线、传感器准确、网络持续可达、实体动作、机械位置、Android/iOS 真机或电气安全。本项目不适用于化妆品质量、真假、保质期真实性、皮肤健康、紫外线防护、医疗、环境安全、门禁、电子锁、防盗、身份认证、访问控制、应急响应或无人值守系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -84,7 +84,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端和触摸手势控制等完整项目与边界见 Hardware Lab。Actions 中的构建 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端和触摸手势控制等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 
