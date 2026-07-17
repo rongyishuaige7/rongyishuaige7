@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32的智能化妆品收纳与环境管理系统](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet) 已完成公开净化；公开范围扫描、仓库检查、源码契约、ESP32 默认、双 opt-in 与仅执行器宏编译覆盖，以及 Flutter format/test/analyze/debug APK 构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet/actions/runs/29608194135) 验证。当前 ESP32、DHT11、GUVA-S12SD、PIR、RC522、OLED、低压执行器、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测。默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP；执行器相关 GPIO 不初始化输出并保持输入高阻，但未知驱动极性、外部上拉、供电和接线仍可能改变实体行为，不能据此推断负载已关闭、电气安全或无误动作。只有使用者本机在隔离可信局域网的受监督低压台架中，同时提供非空 Wi-Fi 凭据并将执行器与本地控制两个实验开关精确设为 `1`，且成功入网后，明文无认证 HTTP 才可能启动；RFID UID 不是身份或访问凭据。CI 不上传固件、ELF 或 APK 构建产物；CI 和构建不代表设备在线、传感器准确、网络持续可达、实体动作、机械位置、Android/iOS 真机或电气安全。本项目不适用于化妆品质量、真假、保质期真实性、皮肤健康、紫外线防护、医疗、环境安全、门禁、电子锁、防盗、身份认证、访问控制、应急响应或无人值守系统。
+最新收录：[基于ESP32的智能化妆品收纳与环境管理系统](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet) 已完成公开净化；公开范围扫描、仓库检查、源码契约、ESP32 默认、双 opt-in 与仅执行器宏编译覆盖，以及 Flutter format/test/analyze/debug APK 构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-smart-makeup-cabinet/actions/runs/29610463430) 验证。当前 ESP32、DHT11、GUVA-S12SD、PIR、RC522、OLED、低压执行器、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测。默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP；执行器相关 GPIO 不初始化输出并保持输入高阻，但未知驱动极性、外部上拉、供电和接线仍可能改变实体行为，不能据此推断负载已关闭、电气安全或无误动作。只有使用者本机在隔离可信局域网的受监督低压台架中，同时提供非空 Wi-Fi 凭据并将执行器与本地控制两个实验开关精确设为 `1`，且成功入网后，明文无认证 HTTP 才可能启动；RFID UID 不是身份或访问凭据。CI 不上传固件、ELF 或 APK 构建产物；CI 和构建不代表设备在线、传感器准确、网络持续可达、实体动作、机械位置、Android/iOS 真机或电气安全。本项目不适用于化妆品质量、真假、保质期真实性、皮肤健康、紫外线防护、医疗、环境安全、门禁、电子锁、防盗、身份认证、访问控制、应急响应或无人值守系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
