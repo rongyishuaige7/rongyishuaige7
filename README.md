@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32的蜂箱多传感器数据采集与局域网展示原型](https://github.com/rongyishuaige7/esp32-beehive-monitor) 已完成公开净化；硬件无关源码契约、ESP32 固件与 Flutter 客户端构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-beehive-monitor/actions/runs/29594726823) 验证。当前 ESP32、DHT11、BH1750、BMP280、声音输入、MQ-2、LED、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测。MQ-2 原始 ADC 不代表烟雾、燃气、火灾或安全检测；声音幅度不代表蜂群健康或行为诊断；气压趋势不是天气预报；HTTP、CI 和 Artifact 都不代表设备在线、传感器准确、蜂群状态、蜂箱安全、告警送达或有人处理。本项目不是养蜂生产、动物健康、气象预报、烟雾/燃气/火灾报警、环境安全、应急响应或无人值守系统。
+最新收录：[基于ESP32的多路智能照明控制系统](https://github.com/rongyishuaige7/esp32-smart-light-controller) 已完成公开净化；硬件无关源码契约与 ESP32 固件构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-smart-light-controller/actions/runs/29599875410) 验证。当前 ESP32、四路低压 LED、BH1750、NVS、本机凭据连接、HTTP、倒计时和自动模式尚未按当前公开提交重新真机复测。默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP；只有本机提供可信局域网凭据并成功连接后才启动本地 HTTP。HTTP 无 TLS、身份认证、权限模型或设备身份校验，仅限隔离可信局域网与低压 LED 教学负载；CI、Artifact、HTTP 返回和页面显示都不代表实体 LED 已动作、设备在线、控制必达、照度准确、网络安全或长期稳定性。本项目不适用于市电、公共/应急照明、安防、消防、医疗、生产控制或无人值守。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 

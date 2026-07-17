@@ -20,7 +20,7 @@ EXPECTED = {
     "ESP32_RPS_Game": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
-    "esp32-beehive-monitor": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "esp32-smart-light-controller": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
 }
 
 
