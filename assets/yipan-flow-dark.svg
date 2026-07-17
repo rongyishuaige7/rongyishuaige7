@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘完整任务周期</title>
-  <desc id="desc">一项任务从盘内资料进入 Yi盘工作台，工作台按需请求云端模型，模型返回结果，主要产出和记录再保存到盘内。结构示意，不是产品截图。</desc>
+  <desc id="desc">一项任务从盘内资料进入 Yi盘工作台，工作台按需请求云端模型，模型返回结果，主要产出和记录再保存到盘内，数据随盘走。结构示意，不是产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#101620"/>
@@ -115,9 +115,10 @@
   </g>
 
   <g class="node output">
-    <rect x="456" y="228" width="288" height="64" rx="16" fill="#151b25" stroke="#414b5b"/>
-    <text x="480" y="255" class="mono" fill="#8792a2" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
-    <text x="480" y="279" fill="#f3f6fa" font-size="20" font-weight="700">主要产出与记录保存在盘内</text>
-    <rect class="activity activity-output" x="451" y="223" width="298" height="74" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
+    <rect x="456" y="228" width="288" height="80" rx="16" fill="#151b25" stroke="#414b5b"/>
+    <text x="480" y="251" class="mono" fill="#8792a2" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
+    <text x="480" y="275" fill="#f3f6fa" font-size="20" font-weight="700">主要产出与记录保存在盘内</text>
+    <text x="480" y="298" fill="#8f99a8" font-size="14">数据随盘走</text>
+    <rect class="activity activity-output" x="451" y="223" width="298" height="90" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
   </g>
 </svg>

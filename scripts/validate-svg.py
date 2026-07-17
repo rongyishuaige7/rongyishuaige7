@@ -113,6 +113,11 @@ def validate(path: Path) -> list[str]:
         if portable_sequence is None or portable_sequence.get("transform") != "translate(-42 0)":
             problems.append("hero portable sequence must preserve comfortable right-edge clearance")
 
+    if path.name.startswith("yipan-flow-"):
+        visible_text = "".join(root.itertext())
+        if "数据随盘走" not in visible_text:
+            problems.append("Yi盘 output card must keep its data-portability supporting line")
+
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(badge_rects) < 2:
