@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[ESP32 智能药盒](https://github.com/rongyishuaige7/esp32-smart-pillbox) 的源码来源、硬件无关契约、ESP32 固件与 Flutter 客户端构建已验证；当前 ESP32、两个 PIR、两个 HX711、RGB、蜂鸣器、SPIFFS、Wi-Fi、NTP 与 Flutter App 端到端链路尚未重新真机复测，构建不等同于服药确认、提醒送达或实际硬件行为。
+最新收录：[基于ESP32的天气时钟](https://github.com/rongyishuaige7/esp32-weather-clock) 的源码来源、公开净化与 ESP32 固件构建已验证；当前 ESP32、DHT22、BH1750、DS3231、OLED、Wi-Fi、NTP、EEPROM 与天气 API 端到端链路尚未重新真机复测。开放 AP 配网、EEPROM 凭据保存与当前 `setInsecure()` 天气请求都有明确安全边界，不应视为安全连接或实际硬件行为。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 

@@ -37,9 +37,10 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "ESP32 智能药盒",
-    "源码来源、硬件无关契约、ESP32 固件与 Flutter 客户端构建已验证",
-    "当前 ESP32、两个 PIR、两个 HX711、RGB、蜂鸣器、SPIFFS、Wi-Fi、NTP 与 Flutter App 端到端链路尚未重新真机复测",
+    "基于ESP32的天气时钟",
+    "源码来源、公开净化与 ESP32 固件构建已验证",
+    "当前 ESP32、DHT22、BH1750、DS3231、OLED、Wi-Fi、NTP、EEPROM 与天气 API 端到端链路尚未重新真机复测",
+    "setInsecure()",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -52,7 +53,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-smart-pillbox",
+    "esp32-weather-clock",
 )
 FORBIDDEN_TEXT = (
     "—",
