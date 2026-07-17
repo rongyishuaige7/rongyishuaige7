@@ -11,8 +11,8 @@ README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
     "./assets/hero-dark.svg?v=6",
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-dark.svg?v=7",
-    "./assets/yipan-flow-light.svg?v=7",
+    "./assets/yipan-flow-dark.svg?v=8",
+    "./assets/yipan-flow-light.svg?v=8",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -20,7 +20,7 @@ EXPECTED_ASSETS = {
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-light.svg?v=7",
+    "./assets/yipan-flow-light.svg?v=8",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -37,9 +37,9 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",
-    "Raspberry Pi RFID Room-card System",
-    "四张脱敏历史界面截图",
-    "当前 Raspberry Pi 与端到端硬件未复测",
+    "Adaptive Traffic Signal System",
+    "后端测试、Vue 前端构建",
+    "当前五板端到端硬件未复测",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -52,7 +52,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "raspberry-pi-rfid-room-card-system",
+    "adaptive-traffic-signal-system",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -85,7 +85,7 @@ def main() -> int:
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
-    if not re.search(r"yipan-flow-light\.svg\?v=7[^>]*>\n</picture>\n\n<br>\n\n\*\*Yi盘是一套", readme):
+    if not re.search(r"yipan-flow-light\.svg\?v=8[^>]*>\n</picture>\n\n<br>\n\n\*\*Yi盘是一套", readme):
         problems.append("Yi盘 product diagram must keep one explicit visual spacer before its description")
     if readme.count('src="./assets/badge-') != 4:
         problems.append("profile must contain exactly four local brand badges")
