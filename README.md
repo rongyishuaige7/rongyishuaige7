@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于树莓派的多传感器小型气象站](https://github.com/rongyishuaige7/raspberry-pi-weather-station) 的源码来源、公开净化、Python/API/隔离 MySQL mock 联调与 Avalonia 构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-weather-station/actions/runs/29581619884)）；当前 Raspberry Pi、DHT22、BH1750、真实 MySQL 部署与 LAN 端到端链路尚未按当前公开提交重新真机复测。随机 mock 数据、API 响应和人工设备状态字段均不代表真实传感器、实时采样、设备在线或环境安全结论。
+最新收录：[基于ESP32的婴儿状态监测原型](https://github.com/rongyishuaige7/esp32-baby-monitor) 的桌面原工程当前工作区来源、公开净化、硬件无关源码契约与 ESP32 PlatformIO 构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/esp32-baby-monitor/actions/runs/29583836343)）；当前 ESP32、双 HC-SR04、DHT11、声音模块、RGB LED、蜂鸣器、按钮、Wi-Fi 与 HTTP 尚未按当前公开提交重新真机复测。两路距离组合不是人体、婴儿、姿态、睡姿或趴睡识别，声音幅度不是哭声识别；LED、蜂鸣器、HTTP、CI 和 Artifact 都不代表安全、医疗、告警送达、有人看护或设备在线。该项目不得用于婴儿看护、医疗、睡眠安全、紧急响应或生命安全场景。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
