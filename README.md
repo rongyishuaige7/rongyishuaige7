@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[STM32 触摸与隔空手势控制系统](https://github.com/rongyishuaige7/stm32-touch-gesture-control-system) 的源码来源、硬件无关契约与 PlatformIO 干净构建已验证；当前 STM32、TTP223、APDS-9960、ESP-01S 与 LED 整机尚未重新真机复测，构建不等同于触摸可靠性、手势识别率或实际硬件行为。
+最新收录：[ESP32 智能闹钟](https://github.com/rongyishuaige7/esp32-smart-alarm-clock) 的源码来源、硬件无关契约、ESP32 固件与 Flutter 客户端构建已验证；当前 ESP32、OLED、DHT11、PIR、MAX98357A、实体按键及 Flutter App 端到端链路尚未重新真机复测，构建不等同于设备连接、声音播放或实际硬件行为。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
