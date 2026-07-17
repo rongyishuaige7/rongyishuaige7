@@ -174,6 +174,11 @@ def validate(path: Path) -> list[str]:
             local_name(continuity_path.tag) != "path" or not continuity_path.get("marker-end")
         ):
             problems.append("Yi盘 continuity return must remain a visible directional path")
+        elif continuity_path is not None and (
+            "C" not in continuity_path.get("d", "")
+            or continuity_path.get("stroke-dashoffset") != "-12"
+        ):
+            problems.append("Yi盘 continuity return must keep a smooth curve with a dash connected to its arrow")
 
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
@@ -243,7 +248,18 @@ def main() -> int:
         if dark_name == "yipan-flow-dark.svg":
             dark_by_id = {element.get("id"): element for element in dark_root.iter() if element.get("id")}
             light_by_id = {element.get("id"): element for element in light_root.iter() if element.get("id")}
-            geometry_attributes = ("class", "d", "x", "y", "width", "height", "cx", "cy", "r")
+            geometry_attributes = (
+                "class",
+                "d",
+                "x",
+                "y",
+                "width",
+                "height",
+                "cx",
+                "cy",
+                "r",
+                "stroke-dashoffset",
+            )
             structural_ids = (
                 "main-loop",
                 "context-to-workspace",
