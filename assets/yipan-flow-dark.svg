@@ -70,11 +70,12 @@
     @keyframes packet-continuity {
       0%, 73% { transform: translate(0, 0); opacity: 0; }
       74% { transform: translate(0, 0); opacity: 1; }
-      77% { transform: translate(-50px, -2px); }
-      80% { transform: translate(-76px, -40px); }
-      83% { transform: translate(-118px, -62px); }
-      86% { transform: translate(-168px, -62px); }
-      89% { transform: translate(-218px, -62px); }
+      77% { transform: translate(-50px, 0); }
+      80% { transform: translate(-100px, 0); }
+      83% { transform: translate(-150px, 0); }
+      86% { transform: translate(-200px, 0); }
+      88% { transform: translate(-229px, -4px); }
+      90% { transform: translate(-241px, -30px); }
       91% { transform: translate(-241px, -74px); }
       92%, 100% { transform: translate(-241px, -74px); opacity: 0; }
     }
@@ -93,7 +94,7 @@
   <g id="main-loop" fill="none" stroke="#ff6b4a" stroke-width="2" opacity="0.82">
     <path id="context-to-workspace" class="route" d="M314 145H456" marker-end="url(#arrow)"/>
     <path id="workspace-to-output" class="route" d="M600 192V228" marker-end="url(#arrow)"/>
-    <path id="continuity-loop" class="route" d="M422 268H390C365 268 348 257 348 240C348 219 330 206 306 206H209C191 206 181 201 181 194" stroke-dashoffset="-12" marker-end="url(#arrow)"/>
+    <path id="continuity-loop" class="route" d="M422 268H199C189 268 181 260 181 250V194" stroke-dashoffset="-12" marker-end="url(#arrow)"/>
   </g>
   <g id="cloud-branch" fill="none" stroke="#ff6b4a" stroke-width="1.6" opacity="0.64">
     <path id="workspace-to-model" class="route" d="M744 126H884" marker-end="url(#arrow)"/>
@@ -105,7 +106,7 @@
     <text x="814" y="111" text-anchor="middle">按需请求</text>
     <text x="814" y="187" text-anchor="middle">返回结果</text>
     <text x="620" y="218">生成 / 记录</text>
-    <text x="266" y="224" text-anchor="middle">记录 / 沉淀</text>
+    <text x="292" y="255" text-anchor="middle">记录 / 沉淀</text>
   </g>
 
   <g fill="#fff3f0" stroke="#ff6b4a" stroke-width="2">

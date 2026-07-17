@@ -175,10 +175,12 @@ def validate(path: Path) -> list[str]:
         ):
             problems.append("Yi盘 continuity return must remain a visible directional path")
         elif continuity_path is not None and (
-            "C" not in continuity_path.get("d", "")
+            continuity_path.get("d") != "M422 268H199C189 268 181 260 181 250V194"
             or continuity_path.get("stroke-dashoffset") != "-12"
         ):
-            problems.append("Yi盘 continuity return must keep a smooth curve with a dash connected to its arrow")
+            problems.append(
+                "Yi盘 continuity return must run horizontally to the arrow axis, then turn vertically upward"
+            )
 
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
