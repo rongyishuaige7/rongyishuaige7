@@ -37,9 +37,9 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "STM32 触摸与隔空手势控制系统",
-    "源码来源、硬件无关契约与 PlatformIO 干净构建已验证",
-    "当前 STM32、TTP223、APDS-9960、ESP-01S 与 LED 整机尚未重新真机复测",
+    "ESP32 智能闹钟",
+    "源码来源、硬件无关契约、ESP32 固件与 Flutter 客户端构建已验证",
+    "当前 ESP32、OLED、DHT11、PIR、MAX98357A、实体按键及 Flutter App 端到端链路尚未重新真机复测",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -52,7 +52,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "stm32-touch-gesture-control-system",
+    "esp32-smart-alarm-clock",
 )
 FORBIDDEN_TEXT = (
     "—",
