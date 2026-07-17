@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32的天气时钟](https://github.com/rongyishuaige7/esp32-weather-clock) 的源码来源、公开净化与 ESP32 固件构建已验证；当前 ESP32、DHT22、BH1750、DS3231、OLED、Wi-Fi、NTP、EEPROM 与天气 API 端到端链路尚未重新真机复测。开放 AP 配网、EEPROM 凭据保存与当前 `setInsecure()` 天气请求都有明确安全边界，不应视为安全连接或实际硬件行为。
+最新收录：[基于ESP32-S3的多传感器智能安全监测系统](https://github.com/rongyishuaige7/esp32-s3-smart-safety-monitor) 的源码来源、固定热点密码清理、无硬件源码契约与 ESP32-S3 固件构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/esp32-s3-smart-safety-monitor/actions/runs/29577699732)）；当前开发板、MQ-2、MQ-5、火焰、HC-SR04、OLED、执行器与本地状态页尚未按当前公开提交重新真机复测。该项目仅为受控低压教学原型，不是火灾/燃气报警、自动灭火、通风安全、生命安全或生产控制系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
