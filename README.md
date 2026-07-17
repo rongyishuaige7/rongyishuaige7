@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32的婴儿状态监测原型](https://github.com/rongyishuaige7/esp32-baby-monitor) 的桌面原工程当前工作区来源、公开净化、硬件无关源码契约与 ESP32 PlatformIO 构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/esp32-baby-monitor/actions/runs/29583836343)）；当前 ESP32、双 HC-SR04、DHT11、声音模块、RGB LED、蜂鸣器、按钮、Wi-Fi 与 HTTP 尚未按当前公开提交重新真机复测。两路距离组合不是人体、婴儿、姿态、睡姿或趴睡识别，声音幅度不是哭声识别；LED、蜂鸣器、HTTP、CI 和 Artifact 都不代表安全、医疗、告警送达、有人看护或设备在线。该项目不得用于婴儿看护、医疗、睡眠安全、紧急响应或生命安全场景。
+最新收录：[基于ESP32的蜂箱多传感器数据采集与局域网展示原型](https://github.com/rongyishuaige7/esp32-beehive-monitor) 已完成公开净化；硬件无关源码契约、ESP32 固件与 Flutter 客户端构建已经由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-beehive-monitor/actions/runs/29594726823) 验证。当前 ESP32、DHT11、BH1750、BMP280、声音输入、MQ-2、LED、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测。MQ-2 原始 ADC 不代表烟雾、燃气、火灾或安全检测；声音幅度不代表蜂群健康或行为诊断；气压趋势不是天气预报；HTTP、CI 和 Artifact 都不代表设备在线、传感器准确、蜂群状态、蜂箱安全、告警送达或有人处理。本项目不是养蜂生产、动物健康、气象预报、烟雾/燃气/火灾报警、环境安全、应急响应或无人值守系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 

@@ -37,11 +37,12 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "基于ESP32的婴儿状态监测原型",
-    "桌面原工程当前工作区来源、公开净化、硬件无关源码契约与 ESP32 PlatformIO 构建已验证",
-    "当前 ESP32、双 HC-SR04、DHT11、声音模块、RGB LED、蜂鸣器、按钮、Wi-Fi 与 HTTP 尚未按当前公开提交重新真机复测",
-    "两路距离组合不是人体、婴儿、姿态、睡姿或趴睡识别，声音幅度不是哭声识别",
-    "不得用于婴儿看护、医疗、睡眠安全、紧急响应或生命安全场景",
+    "基于ESP32的蜂箱多传感器数据采集与局域网展示原型",
+    "已完成公开净化",
+    "硬件无关源码契约、ESP32 固件与 Flutter 客户端构建已经由",
+    "当前 ESP32、DHT11、BH1750、BMP280、声音输入、MQ-2、LED、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测",
+    "MQ-2 原始 ADC 不代表烟雾、燃气、火灾或安全检测；声音幅度不代表蜂群健康或行为诊断；气压趋势不是天气预报",
+    "本项目不是养蜂生产、动物健康、气象预报、烟雾/燃气/火灾报警、环境安全、应急响应或无人值守系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -54,7 +55,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-baby-monitor",
+    "esp32-beehive-monitor",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -68,6 +69,7 @@ FORBIDDEN_TEXT = (
     '<td width="50%"',
     "申请体验",
     "咨询 Yi盘",
+    "esp32-baby-monitor",
 )
 
 
