@@ -11,8 +11,8 @@ README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
     "./assets/hero-dark.svg?v=6",
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-dark.svg?v=5",
-    "./assets/yipan-flow-light.svg?v=5",
+    "./assets/yipan-flow-dark.svg?v=6",
+    "./assets/yipan-flow-light.svg?v=6",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -20,7 +20,7 @@ EXPECTED_ASSETS = {
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-light.svg?v=5",
+    "./assets/yipan-flow-light.svg?v=6",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -85,7 +85,7 @@ def main() -> int:
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
-    if not re.search(r"yipan-flow-light\.svg\?v=5[^>]*>\n</picture>\n\n<br>\n\n\*\*Yi盘是一套", readme):
+    if not re.search(r"yipan-flow-light\.svg\?v=6[^>]*>\n</picture>\n\n<br>\n\n\*\*Yi盘是一套", readme):
         problems.append("Yi盘 product diagram must keep one explicit visual spacer before its description")
     if readme.count('src="./assets/badge-') != 4:
         problems.append("profile must contain exactly four local brand badges")

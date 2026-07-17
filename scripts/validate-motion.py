@@ -64,6 +64,8 @@ def main() -> int:
         "activity-workspace-back",
         "packet-output",
         "activity-output",
+        "packet-continuity",
+        "activity-context-return",
     )
     flow_animation = dict(ANIMATION.findall(flow))
     flow_keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(flow)}
@@ -73,6 +75,11 @@ def main() -> int:
         if not keyframe or keyframe not in flow_keyframes:
             problems.append(f"missing flow animation for {class_name}")
             continue
+        if not re.search(
+            rf"\.{re.escape(class_name)}\s*\{{\s*animation:\s*[^;]*\b8\.4s\b",
+            flow,
+        ):
+            problems.append(f"{class_name} does not use the shared 8.4s continuity cycle")
         intervals = visible_intervals(flow_keyframes[keyframe])
         if not intervals:
             problems.append(f"{class_name} never becomes visible")
@@ -82,8 +89,8 @@ def main() -> int:
             problems.append(f"{class_name} overlaps the previous causal stage too heavily ({start}% < {previous_end}%)")
         previous_end = end
 
-    if "6.8s" not in flow:
-        problems.append("flow does not use one 6.8s task cycle")
+    if "8.4s" not in flow or "6.8s" in flow:
+        problems.append("flow does not use one 8.4s continuity cycle")
     if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
         problems.append("hero still duplicates the cloud-agent workflow semantics")
     for text in ("DESKTOP", "PORTABLE CONTEXT", "ANOTHER COMPUTER"):
@@ -93,7 +100,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero portability narrative and the sequential 6.8s task cycle are valid.")
+    print("Hero portability narrative and the sequential 8.4s continuity loop are valid.")
     return 0
 
 

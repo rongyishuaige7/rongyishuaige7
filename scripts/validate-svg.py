@@ -126,14 +126,54 @@ def validate(path: Path) -> list[str]:
 
     if path.name.startswith("yipan-flow-"):
         visible_text = "".join(root.itertext())
-        if "数据随盘走" not in visible_text:
-            problems.append("Yi盘 output card must keep its data-portability supporting line")
+        required_flow_text = (
+            "YI盘 / CONTINUITY LOOP",
+            "DATA ON DRIVE / CLOUD ON DEMAND",
+            "盘内资料与任务",
+            "检索资料，处理当前任务",
+            "需要智能处理时按需调用",
+            "产出与任务记录留在盘内",
+            "数据随盘走",
+            "记录 / 沉淀",
+        )
+        for required_text in required_flow_text:
+            if required_text not in visible_text:
+                problems.append(f"Yi盘 continuity diagram is missing required text: {required_text}")
         output_heading = next(
-            (element for element in root.iter() if "".join(element.itertext()).strip() == "主要产出与记录保存在盘内"),
+            (element for element in root.iter() if "".join(element.itertext()).strip() == "产出与任务记录留在盘内"),
             None,
         )
         if output_heading is None or output_heading.get("font-size") != "24":
             problems.append("Yi盘 output heading must match the 24px peer-card heading scale")
+        required_flow_ids = {
+            "main-loop",
+            "context-to-workspace",
+            "workspace-to-output",
+            "continuity-loop",
+            "cloud-branch",
+            "workspace-to-model",
+            "model-to-workspace",
+            "packet-continuity",
+            "activity-context-return",
+        }
+        for required_id in sorted(required_flow_ids - element_ids):
+            problems.append(f"Yi盘 continuity diagram is missing structural element: {required_id}")
+
+        main_loop = next((element for element in root.iter() if element.get("id") == "main-loop"), None)
+        cloud_branch = next((element for element in root.iter() if element.get("id") == "cloud-branch"), None)
+        if main_loop is not None:
+            main_ids = {element.get("id") for element in main_loop.iter() if element.get("id")}
+            if not {"context-to-workspace", "workspace-to-output", "continuity-loop"}.issubset(main_ids):
+                problems.append("Yi盘 main loop must connect context, workspace, output, and continuity return")
+        if cloud_branch is not None:
+            branch_ids = {element.get("id") for element in cloud_branch.iter() if element.get("id")}
+            if branch_ids != {"cloud-branch", "workspace-to-model", "model-to-workspace"}:
+                problems.append("Yi盘 cloud models must remain a separate bidirectional branch")
+        continuity_path = next((element for element in root.iter() if element.get("id") == "continuity-loop"), None)
+        if continuity_path is not None and (
+            local_name(continuity_path.tag) != "path" or not continuity_path.get("marker-end")
+        ):
+            problems.append("Yi盘 continuity return must remain a visible directional path")
 
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
@@ -200,6 +240,32 @@ def main() -> int:
                 failed = True
                 print(f"FAIL {dark_name} / {light_name}")
                 print(f"  - mismatched {attribute}")
+        if dark_name == "yipan-flow-dark.svg":
+            dark_by_id = {element.get("id"): element for element in dark_root.iter() if element.get("id")}
+            light_by_id = {element.get("id"): element for element in light_root.iter() if element.get("id")}
+            geometry_attributes = ("class", "d", "x", "y", "width", "height", "cx", "cy", "r")
+            structural_ids = (
+                "main-loop",
+                "context-to-workspace",
+                "workspace-to-output",
+                "continuity-loop",
+                "cloud-branch",
+                "workspace-to-model",
+                "model-to-workspace",
+                "packet-continuity",
+                "activity-context-return",
+            )
+            for element_id in structural_ids:
+                dark_element = dark_by_id.get(element_id)
+                light_element = light_by_id.get(element_id)
+                if dark_element is None or light_element is None:
+                    continue
+                dark_geometry = tuple(dark_element.get(attribute) for attribute in geometry_attributes)
+                light_geometry = tuple(light_element.get(attribute) for attribute in geometry_attributes)
+                if local_name(dark_element.tag) != local_name(light_element.tag) or dark_geometry != light_geometry:
+                    failed = True
+                    print(f"FAIL {dark_name} / {light_name}")
+                    print(f"  - mismatched continuity geometry for {element_id}")
     return 1 if failed else 0
 
 

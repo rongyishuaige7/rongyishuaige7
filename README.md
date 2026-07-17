@@ -17,9 +17,9 @@
 ## `// YI盘 PRODUCT`
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=5">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=5">
-  <img src="./assets/yipan-flow-light.svg?v=5" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，智能处理主要调用云端模型，主要产出和记录保存在盘内，数据随盘走。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=6">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=6">
+  <img src="./assets/yipan-flow-light.svg?v=6" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，需要智能处理时按需调用云端模型，产出和任务记录留在盘内，经记录或沉淀后成为下一次继续工作的基础，数据随盘走。">
 </picture>
 
 <br>
