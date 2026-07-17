@@ -36,10 +36,10 @@ REQUIRED_TEXT = (
     "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
-    "两个 ESP32 项目的 CI 只检查固件能否按固定配置编译",
-    "Adaptive Traffic Signal System",
-    "后端测试、Vue 前端构建",
-    "当前五板端到端硬件未复测",
+    "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
+    "ESP32-S3 健康科普语音终端",
+    "硬件无关契约与 ESP-IDF 5.5.2 干净构建已通过",
+    "当前开发板、音频、显示与真实云端链路尚未重新真机复测",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -52,7 +52,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "adaptive-traffic-signal-system",
+    "esp32-s3-health-voice-terminal",
 )
 FORBIDDEN_TEXT = (
     "—",

@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[Adaptive Traffic Signal System](https://github.com/rongyishuaige7/adaptive-traffic-signal-system) 的后端测试、Vue 前端构建、四方向 ESP32-CAM 与 ESP32 主控构建已通过；当前五板端到端硬件未复测，模拟器与构建不等同于检测准确率或道路安全证据。
+最新收录：[ESP32-S3 健康科普语音终端](https://github.com/rongyishuaige7/esp32-s3-health-voice-terminal) 的硬件无关契约与 ESP-IDF 5.5.2 干净构建已通过；当前开发板、音频、显示与真实云端链路尚未重新真机复测，构建不等同于在线调用、语音质量或医学安全证据。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -84,7 +84,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个 ESP32 项目的 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号等完整项目与边界见 Hardware Lab。Actions 中的构建 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号和健康科普语音终端等完整项目与边界见 Hardware Lab。Actions 中的构建 Artifact 会过期。
 
 </details>
 
