@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于树莓派的多传感器小型气象站](https://github.com/rongyishuaige7/raspberry-pi-weather-station) 的源码来源、公开净化、Python/API/隔离 MySQL mock 联调与 Avalonia 构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-weather-station/actions/runs/29580328463)）；当前 Raspberry Pi、DHT22、BH1750、真实 MySQL 部署与 LAN 端到端链路尚未按当前公开提交重新真机复测。随机 mock 数据、API 响应和人工设备状态字段均不代表真实传感器、实时采样、设备在线或环境安全结论。
+最新收录：[基于树莓派的多传感器小型气象站](https://github.com/rongyishuaige7/raspberry-pi-weather-station) 的源码来源、公开净化、Python/API/隔离 MySQL mock 联调与 Avalonia 构建已验证（[固定 Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-weather-station/actions/runs/29581113359)）；当前 Raspberry Pi、DHT22、BH1750、真实 MySQL 部署与 LAN 端到端链路尚未按当前公开提交重新真机复测。随机 mock 数据、API 响应和人工设备状态字段均不代表真实传感器、实时采样、设备在线或环境安全结论。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
