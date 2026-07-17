@@ -37,10 +37,10 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "基于ESP32-S3的多传感器智能安全监测系统",
-    "源码来源、固定热点密码清理、无硬件源码契约与 ESP32-S3 固件构建已验证",
-    "当前开发板、MQ-2、MQ-5、火焰、HC-SR04、OLED、执行器与本地状态页尚未按当前公开提交重新真机复测",
-    "不是火灾/燃气报警、自动灭火、通风安全、生命安全或生产控制系统",
+    "基于树莓派的多传感器小型气象站",
+    "源码来源、公开净化、Python/API/隔离 MySQL mock 联调与 Avalonia 构建已验证",
+    "当前 Raspberry Pi、DHT22、BH1750、真实 MySQL 部署与 LAN 端到端链路尚未按当前公开提交重新真机复测",
+    "随机 mock 数据、API 响应和人工设备状态字段均不代表真实传感器、实时采样、设备在线或环境安全结论",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -53,7 +53,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-s3-smart-safety-monitor",
+    "raspberry-pi-weather-station",
 )
 FORBIDDEN_TEXT = (
     "—",
