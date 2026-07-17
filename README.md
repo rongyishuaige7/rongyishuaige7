@@ -64,7 +64,7 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[ESP32-S3 健康科普语音终端](https://github.com/rongyishuaige7/esp32-s3-health-voice-terminal) 的硬件无关契约与 ESP-IDF 5.5.2 干净构建已通过；当前开发板、音频、显示与真实云端链路尚未重新真机复测，构建不等同于在线调用、语音质量或医学安全证据。
+最新收录：[STM32 触摸与隔空手势控制系统](https://github.com/rongyishuaige7/stm32-touch-gesture-control-system) 的源码来源、硬件无关契约与 PlatformIO 干净构建已验证；当前 STM32、TTP223、APDS-9960、ESP-01S 与 LED 整机尚未重新真机复测，构建不等同于触摸可靠性、手势识别率或实际硬件行为。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -84,7 +84,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号和健康科普语音终端等完整项目与边界见 Hardware Lab。Actions 中的构建 Artifact 会过期。
+> **实验验证范围：2026-07-17。** Desktop Pet 只检查 Web 单元测试与前端构建；两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端和触摸手势控制等完整项目与边界见 Hardware Lab。Actions 中的构建 Artifact 会过期。
 
 </details>
 
