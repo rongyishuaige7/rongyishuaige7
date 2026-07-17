@@ -36,16 +36,17 @@ REQUIRED_TEXT = (
     "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
-    "两个折叠展示的 ESP32 项目 CI 只检查固件能否按固定配置编译",
-    "基于ESP32的智能化妆品收纳与环境管理系统",
-    "已完成公开净化",
-    "公开范围扫描、仓库检查、源码契约、ESP32 默认、双 opt-in 与仅执行器宏编译覆盖，以及 Flutter format/test/analyze/debug APK 构建已经由",
-    "当前 ESP32、DHT11、GUVA-S12SD、PIR、RC522、OLED、低压执行器、Wi-Fi、HTTP 与 Flutter 端到端链路尚未按当前公开提交重新真机复测",
-    "默认公开固件没有 Wi-Fi 凭据，不启动 Wi-Fi 或 HTTP",
-    "执行器相关 GPIO 不初始化输出并保持输入高阻",
-    "RFID UID 不是身份或访问凭据",
+    "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
+    "多传感器手环的 CI 还检查公开范围、源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建",
+    "基于ESP32-C3的多传感器健康数据展示手环原型",
+    "公开范围扫描、仓库检查、10 项源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建已由",
+    "当前 ESP32-C3、MAX30102、MPU6050、DS18B20、GPS、OLED、BLE、Android 和实验性振动低压台架尚未按当前公开提交重新真机复测",
+    "默认不编译 GPIO5 实验性振动输出，GPIO5 保持输入",
+    "GPS 坐标不向 App 传输或展示，但不代表没有位置隐私风险",
+    "BLE 服务 UUID 与广播名不是身份",
     "CI 不上传固件、ELF 或 APK 构建产物",
-    "本项目不适用于化妆品质量、真假、保质期真实性、皮肤健康、紫外线防护、医疗、环境安全、门禁、电子锁、防盗、身份认证、访问控制、应急响应或无人值守系统",
+    "实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
+    "医疗或健康结论、心率/血氧准确性、跌倒检测、紧急告警、安全看护、定位/追踪、消费级可穿戴或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -58,7 +59,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-smart-makeup-cabinet",
+    "esp32-c3-smart-band",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -74,6 +75,7 @@ FORBIDDEN_TEXT = (
     "咨询 Yi盘",
     "esp32-baby-monitor",
     "esp32-smart-light-controller",
+    "esp32-smart-makeup-cabinet",
 )
 
 
@@ -99,7 +101,7 @@ def main() -> int:
         problems.append("profile must contain exactly four local brand badges")
     if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
         problems.append("Problem Solution Recorder must remain a primary open build")
-    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
+    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri", "esp32-c3-smart-band"):
         if readme.index(experiment) < readme.index("// MORE EXPERIMENTS"):
             problems.append(f"{experiment} must remain inside the folded experiments section")
 
