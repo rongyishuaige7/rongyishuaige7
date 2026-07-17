@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=5">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=5">
-  <img src="./assets/hero-light.svg?v=5" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=6">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=6">
+  <img src="./assets/hero-light.svg?v=6" width="100%" alt="Rongyi，Yi盘创始人。让 AI 上下文随身移动。">
 </picture>
 
 <div align="center">
@@ -17,9 +17,9 @@
 ## `// YI盘 PRODUCT`
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=4">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=4">
-  <img src="./assets/yipan-flow-light.svg?v=4" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，智能处理主要调用云端模型，主要产出和记录保存在盘内，数据随盘走。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=5">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=5">
+  <img src="./assets/yipan-flow-light.svg?v=5" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，智能处理主要调用云端模型，主要产出和记录保存在盘内，数据随盘走。">
 </picture>
 
 <br>

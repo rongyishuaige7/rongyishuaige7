@@ -115,10 +115,10 @@
   </g>
 
   <g class="node output">
-    <rect x="456" y="228" width="288" height="80" rx="16" fill="#151b25" stroke="#414b5b"/>
-    <text x="480" y="251" class="mono" fill="#8792a2" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
-    <text x="480" y="275" fill="#f3f6fa" font-size="20" font-weight="700">主要产出与记录保存在盘内</text>
-    <text x="480" y="298" fill="#8f99a8" font-size="14">数据随盘走</text>
-    <rect class="activity activity-output" x="451" y="223" width="298" height="90" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
+    <rect x="432" y="228" width="336" height="80" rx="16" fill="#151b25" stroke="#414b5b"/>
+    <text x="456" y="251" class="mono" fill="#8792a2" font-size="12" letter-spacing="1">LOCAL OUTPUT</text>
+    <text x="456" y="275" fill="#f3f6fa" font-size="24" font-weight="700">主要产出与记录保存在盘内</text>
+    <text x="456" y="298" fill="#8f99a8" font-size="14">数据随盘走</text>
+    <rect class="activity activity-output" x="427" y="223" width="346" height="90" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
   </g>
 </svg>

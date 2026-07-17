@@ -112,11 +112,28 @@ def validate(path: Path) -> list[str]:
         portable_sequence = next((element for element in root.iter() if element.get("id") == "portable-sequence"), None)
         if portable_sequence is None or portable_sequence.get("transform") != "translate(-42 0)":
             problems.append("hero portable sequence must preserve comfortable right-edge clearance")
+        drive_name = next((element for element in root.iter() if "drive-name" in element.get("class", "").split()), None)
+        drive_label = next((element for element in root.iter() if "drive-label" in element.get("class", "").split()), None)
+        if drive_name is None or drive_label is None:
+            problems.append("hero portable card must separate the Yi盘 name from its supporting label")
+        elif (
+            drive_name.get("x") != drive_label.get("x")
+            or drive_name.get("text-anchor") != "middle"
+            or drive_label.get("text-anchor") != "middle"
+            or float(drive_name.get("y", "0")) >= float(drive_label.get("y", "0"))
+        ):
+            problems.append("hero portable card must center Yi盘 above PORTABLE CONTEXT")
 
     if path.name.startswith("yipan-flow-"):
         visible_text = "".join(root.itertext())
         if "数据随盘走" not in visible_text:
             problems.append("Yi盘 output card must keep its data-portability supporting line")
+        output_heading = next(
+            (element for element in root.iter() if "".join(element.itertext()).strip() == "主要产出与记录保存在盘内"),
+            None,
+        )
+        if output_heading is None or output_heading.get("font-size") != "24":
+            problems.append("Yi盘 output heading must match the 24px peer-card heading scale")
 
     if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
