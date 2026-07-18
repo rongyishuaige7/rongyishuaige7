@@ -64,7 +64,7 @@
 
 最新收录：[基于树莓派的居家环境与活动状态监测教学原型](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo)。
 
-- **构建证据：** Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo/actions/runs/29656150545) 验证；CI 不上传构建产物。
+- **构建证据：** Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo/actions/runs/29656863145) 验证；CI 不上传构建产物。
 - **真机与素材：** 当前树莓派、传感器、显示屏、继电器、蜂鸣器、摄像头、MySQL 部署、网络链路和 Android 尚未按当前公开提交重新真机复测；本批公开了一张已脱敏的 2026-03-17 历史实物照片，四张旧界面截图未上传，演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供。历史照片、CI、模拟器和构建不代表当前提交的实体读数、输出动作、设备在线、通知送达、稳定性或电气安全。
 - **公开默认与边界：** `ENABLE_PHYSICAL_OUTPUTS=false`、`ENABLE_CAMERA=false`，继电器、蜂鸣器和摄像头默认关闭。MQ-7 数字 GPIO 只表示未标定教学阈值事件，MPU6050 阈值不能可靠判断人员跌倒，可选图片路径不是身份认证；HTTP/Socket.IO 共享 Token 只适合隔离实验网络。
 - **不适用：** 医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统。
@@ -73,7 +73,7 @@
 
 基于 ESP32-S3 的视觉猜拳硬件实验，包含摄像头识别、OLED、音频与 RGB 反馈。
 
-`C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29656135651) | 历史原理图，当前硬件未复测 | MIT
+`C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29656842625) | 历史原理图，当前硬件未复测 | MIT
 
 ### [Multimodal Smart Pot](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
 
