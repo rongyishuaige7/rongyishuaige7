@@ -38,15 +38,15 @@ REQUIRED_TEXT = (
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
     "智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物",
-    "掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物",
-    "基于ESP32和ILI9341的8键掌机界面教学原型",
-    "公开范围扫描、仓库检查、7 项源码契约、ESP32 默认与背光 opt-in 编译已由",
-    "当前 ESP32、ILI9341、8 个按键、背光、供电与完整交互尚未按当前公开提交重新真机复测",
-    "固定 ILI9341/SPI 配置，默认不驱动 GPIO21 背光候选脚",
-    "不包含网络、存储、音频、红外、ROM 或模拟器",
+    "衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物",
+    "基于STM32F103的衣柜环境监测与自动通风控制系统",
+    "公开范围扫描、仓库检查、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建已由",
+    "当前 STM32、DHT11、MQ135、OLED、UART、驱动器和风扇尚未按当前公开提交重新真机复测",
+    "MQ 原始 ADC 与 `demo_index` 不是空气质量或气体浓度",
+    "ENABLE_FAN_OUTPUT=0",
     "CI 不上传构建产物",
     "实物照片、演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
-    "模拟器、ROM 分发、完整游戏机、消费电子、量产设计、电气安全产品或生产系统",
+    "空气质量仪、自动家电、量产设计、无人值守控制、电气安全产品或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -59,7 +59,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-ili9341-handheld-demo",
+    "stm32f103-wardrobe-environment-monitoring-ventilation-system",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -76,6 +76,7 @@ FORBIDDEN_TEXT = (
     "esp32-baby-monitor",
     "esp32-smart-light-controller",
     "esp32-smart-makeup-cabinet",
+    "最新收录：[基于ESP32和ILI9341的8键掌机界面教学原型]",
     "最新收录：[基于Arduino的多传感器数据展示与音频联动教学原型]",
     "Arduino 多传感器教学原型的 CI 还检查公开范围、源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建，且不上传构建产物",
     "公开范围扫描、仓库检查、15 项源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建已由",
@@ -120,7 +121,7 @@ def main() -> int:
     # the older full cards must be below that marker; the spotlight is required
     # to occur at or after it and may be the first matching repository string.
     experiments_marker = readme.index("// MORE EXPERIMENTS")
-    newest_spotlight = "esp32-ili9341-handheld-demo"
+    newest_spotlight = "stm32f103-wardrobe-environment-monitoring-ventilation-system"
     if readme.index(newest_spotlight) < experiments_marker:
         problems.append(f"{newest_spotlight} must remain inside the folded experiments section")
     for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):

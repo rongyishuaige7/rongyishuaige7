@@ -22,7 +22,7 @@ EXPECTED = {
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-smart-agriculture-monitoring-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "stm32f103-ov7670-smart-door-reminder-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
-    "esp32-ili9341-handheld-demo": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "stm32f103-wardrobe-environment-monitoring-ventilation-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
 }
 
 
