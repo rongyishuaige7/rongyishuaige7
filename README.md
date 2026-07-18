@@ -66,7 +66,7 @@
 
 最新收录：[基于STM32F103和OV7670的智能门口提醒系统](https://github.com/rongyishuaige7/stm32f103-ov7670-smart-door-reminder-system)。
 
-- **构建证据：** 公开范围扫描、源码/协议契约、Host 内存串口单元测试与 STM32 PlatformIO 隔离构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/stm32f103-ov7670-smart-door-reminder-system/actions/runs/29635341165) 验证；CI 不上传构建产物。
+- **构建证据：** 公开范围扫描（含 fail-closed 敏感文件回归测试）、源码/协议契约、Host 内存串口单元测试与 STM32 PlatformIO 隔离构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/stm32f103-ov7670-smart-door-reminder-system/actions/runs/29636386247) 验证；CI 不上传构建产物。
 - **真机与素材：** 当前 STM32、OV7670、PIR、USB-TTL、SYN6288 与串口端到端链路尚未按当前公开提交重新真机复测；实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、采图、触发、播报、图像质量或电气安全。
 - **公开默认与边界：** 公开 Host 只在内存中校验固定 `80 × 60` RGB565 串口帧，并回传固定通用 GBK 提示；不含真人图像、人脸样本、身份模板、身份识别、图像落盘或网络服务。XOR 只用于误码检测，不提供认证、加密、可靠送达或安全保证；固件仍会初始化 GPIO/UART/MCO，满足触发与接线条件时可能产生采集、串口与语音 I/O。
 - **不适用：** 门禁、门锁、安防、身份认证、人员追踪、可靠提醒、公共场所监控、无人值守或生产系统。
@@ -89,7 +89,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查公开范围、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统与智能门口提醒系统等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
+> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统与智能门口提醒系统等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 
