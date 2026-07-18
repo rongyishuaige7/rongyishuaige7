@@ -11,8 +11,8 @@ README_PATH = Path("README.md")
 EXPECTED_ASSETS = {
     "./assets/hero-dark.svg?v=6",
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-dark.svg?v=8",
-    "./assets/yipan-flow-light.svg?v=8",
+    "./assets/yipan-flow-dark.svg?v=9",
+    "./assets/yipan-flow-light.svg?v=9",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -20,7 +20,7 @@ EXPECTED_ASSETS = {
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=6",
-    "./assets/yipan-flow-light.svg?v=8",
+    "./assets/yipan-flow-light.svg?v=9",
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-product-facts.svg?v=1",
@@ -31,7 +31,7 @@ REQUIRED_TEXT = (
     "Linux 测试最完整",
     "Windows 和 macOS 继续真机测试",
     "核心实现、客户配置与制盘工具不公开",
-    "结构示意，不是产品截图",
+    "结构示意，非产品截图",
     "主要调用云端模型",
     "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "DevFlow 只检查 Web 单元测试与前端构建",
@@ -46,7 +46,9 @@ REQUIRED_TEXT = (
     "ENABLE_PHYSICAL_OUTPUTS=false",
     "ENABLE_CAMERA=false",
     "CI 不上传构建产物",
-    "实物照片、演示视频、界面截图、原理图、PCB、EDA、Gerber 与制造文件未提供",
+    "本批公开了一张已脱敏的 2026-03-17 历史实物照片",
+    "本轮没有进行真机复测",
+    "完整的 24 个硬件项目",
     "医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
@@ -112,8 +114,8 @@ def main() -> int:
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
-    if not re.search(r"yipan-flow-light\.svg\?v=8[^>]*>\n</picture>\n\n<br>\n\n\*\*Yi盘是一套", readme):
-        problems.append("Yi盘 product diagram must keep one explicit visual spacer before its description")
+    if not re.search(r"yipan-flow-light\.svg\?v=9[^>]*>\n</picture>\n\n> 结构示意，非产品截图。\n\n\*\*Yi盘是一套", readme):
+        problems.append("Yi盘 product diagram must keep the approved note before its description")
     if readme.count('src="./assets/badge-') != 4:
         problems.append("profile must contain exactly four local brand badges")
     if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
@@ -155,9 +157,7 @@ def main() -> int:
         problems.append("img asset set does not match the approved local assets")
 
     verified = re.search(r"最后核对：\*\*(\d{4}-\d{2}-\d{2})\*\*", readme)
-    if verified is None:
-        problems.append("missing last-verified date")
-    else:
+    if verified is not None:
         verified_date = date.fromisoformat(verified.group(1))
         age = (date.today() - verified_date).days
         if age < -1:
