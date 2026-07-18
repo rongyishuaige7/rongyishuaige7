@@ -38,15 +38,15 @@ REQUIRED_TEXT = (
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
     "智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物",
-    "智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物",
-    "基于STM32F103和OV7670的智能门口提醒系统",
-    "公开范围扫描（含 fail-closed 敏感文件回归测试）、源码/协议契约、Host 内存串口单元测试与 STM32 PlatformIO 隔离构建已由",
-    "当前 STM32、OV7670、PIR、USB-TTL、SYN6288 与串口端到端链路尚未按当前公开提交重新真机复测",
-    "公开 Host 只在内存中校验固定 `80 × 60` RGB565 串口帧，并回传固定通用 GBK 提示",
-    "不含真人图像、人脸样本、身份模板、身份识别、图像落盘或网络服务",
+    "掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物",
+    "基于ESP32和ILI9341的8键掌机界面教学原型",
+    "公开范围扫描、仓库检查、7 项源码契约、ESP32 默认与背光 opt-in 编译已由",
+    "当前 ESP32、ILI9341、8 个按键、背光、供电与完整交互尚未按当前公开提交重新真机复测",
+    "固定 ILI9341/SPI 配置，默认不驱动 GPIO21 背光候选脚",
+    "不包含网络、存储、音频、红外、ROM 或模拟器",
     "CI 不上传构建产物",
-    "实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
-    "门禁、门锁、安防、身份认证、人员追踪、可靠提醒、公共场所监控、无人值守或生产系统",
+    "实物照片、演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
+    "模拟器、ROM 分发、完整游戏机、消费电子、量产设计、电气安全产品或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -59,7 +59,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "stm32f103-ov7670-smart-door-reminder-system",
+    "esp32-ili9341-handheld-demo",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -120,7 +120,7 @@ def main() -> int:
     # the older full cards must be below that marker; the spotlight is required
     # to occur at or after it and may be the first matching repository string.
     experiments_marker = readme.index("// MORE EXPERIMENTS")
-    newest_spotlight = "stm32f103-ov7670-smart-door-reminder-system"
+    newest_spotlight = "esp32-ili9341-handheld-demo"
     if readme.index(newest_spotlight) < experiments_marker:
         problems.append(f"{newest_spotlight} must remain inside the folded experiments section")
     for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
