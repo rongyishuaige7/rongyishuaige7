@@ -64,12 +64,12 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32-C3的多传感器健康数据展示手环原型](https://github.com/rongyishuaige7/esp32-c3-smart-band)。
+最新收录：[基于Arduino的多传感器数据展示与音频联动教学原型](https://github.com/rongyishuaige7/arduino-multisensor-audio-demo)。
 
-- **构建证据：** 公开范围扫描、仓库检查、10 项源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-c3-smart-band/actions/runs/29616713831) 验证；CI 不上传固件、ELF 或 APK 构建产物。
-- **真机与素材：** 当前 ESP32-C3、MAX30102、MPU6050、DS18B20、GPS、OLED、BLE、Android 和实验性振动低压台架尚未按当前公开提交重新真机复测；实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、传感器、BLE、Android、佩戴、电源或电气安全。
-- **公开默认与 BLE：** 默认不编译 GPIO5 实验性振动输出，GPIO5 保持输入；I²C、OneWire、GPS UART、OLED、MAX30102 LED 与 BLE 仍可能初始化或产生 I/O，不等于无外设 I/O、电气安全或外部负载已关闭。GPS 坐标不向 App 传输或展示，但不代表没有位置隐私风险。BLE 服务 UUID 与广播名不是身份，未实现 pairing、bonding、MITM、防重放、加密、身份认证、授权或可靠送达。
-- **不适用：** 医疗或健康结论、心率/血氧准确性、跌倒检测、紧急告警、安全看护、定位/追踪、消费级可穿戴或生产系统。
+- **构建证据：** 公开范围扫描、仓库检查、15 项源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/arduino-multisensor-audio-demo/actions/runs/29630781086) 验证；CI 不上传构建产物。
+- **真机与素材：** 当前 Arduino Uno、MAX30100、DHT11、DS18B20、BH1750、MPU6050、HC-05、DFPlayer、蜂鸣器、LED、按键、Android 与 Flutter 链路尚未按当前公开提交重新真机复测；实物照片、视频、音频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、传感器、HC-05、DFPlayer、音频、Android、接线、供电或电气安全。
+- **公开默认与 HC-05：** 默认关闭模拟数据与 DFPlayer 音频；I²C、传感器、HC-05、蜂鸣器和状态 LED 仍可能初始化或产生 I/O，不等于无外设 I/O、外设断电、负载关闭或电气安全。HC-05 文本协议没有应用层身份认证、授权、端到端加密、MITM 防护、防重放或可靠送达保证；公开远程控制仅保留尽力而为的 `CMD:STOP`，不代表对端已收到或已停止。
+- **不适用：** 医疗器械、健康监护、人体体温/心率/血氧准确测量、睡眠监测、助眠治疗、跌倒/翻身识别、紧急告警、安全看护、消费级产品或生产系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -89,7 +89,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；多传感器手环的 CI 还检查公开范围、源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制与多传感器手环等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
+> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；Arduino 多传感器教学原型的 CI 还检查公开范围、源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环与 Arduino 多传感器教学原型等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 

@@ -20,7 +20,7 @@ EXPECTED = {
     "ESP32_RPS_Game": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
-    "esp32-c3-smart-band": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "arduino-multisensor-audio-demo": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
 }
 
 

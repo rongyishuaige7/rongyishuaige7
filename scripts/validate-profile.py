@@ -37,16 +37,16 @@ REQUIRED_TEXT = (
     "DevFlow 只检查 Web 单元测试与前端构建",
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
-    "多传感器手环的 CI 还检查公开范围、源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建",
-    "基于ESP32-C3的多传感器健康数据展示手环原型",
-    "公开范围扫描、仓库检查、10 项源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建已由",
-    "当前 ESP32-C3、MAX30102、MPU6050、DS18B20、GPS、OLED、BLE、Android 和实验性振动低压台架尚未按当前公开提交重新真机复测",
-    "默认不编译 GPIO5 实验性振动输出，GPIO5 保持输入",
-    "GPS 坐标不向 App 传输或展示，但不代表没有位置隐私风险",
-    "BLE 服务 UUID 与广播名不是身份",
-    "CI 不上传固件、ELF 或 APK 构建产物",
-    "实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
-    "医疗或健康结论、心率/血氧准确性、跌倒检测、紧急告警、安全看护、定位/追踪、消费级可穿戴或生产系统",
+    "Arduino 多传感器教学原型的 CI 还检查公开范围、源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建，且不上传构建产物",
+    "基于Arduino的多传感器数据展示与音频联动教学原型",
+    "公开范围扫描、仓库检查、15 项源码契约、Arduino Uno 默认与实验环境隔离构建，以及 Flutter format/test/analyze/debug APK 构建已由",
+    "当前 Arduino Uno、MAX30100、DHT11、DS18B20、BH1750、MPU6050、HC-05、DFPlayer、蜂鸣器、LED、按键、Android 与 Flutter 链路尚未按当前公开提交重新真机复测",
+    "默认关闭模拟数据与 DFPlayer 音频",
+    "HC-05 文本协议没有应用层身份认证、授权、端到端加密、MITM 防护、防重放或可靠送达保证",
+    "CMD:STOP",
+    "CI 不上传构建产物",
+    "实物照片、视频、音频、原理图、PCB、EDA、Gerber 与制造文件未提供",
+    "医疗器械、健康监护、人体体温/心率/血氧准确测量、睡眠监测、助眠治疗、跌倒/翻身识别、紧急告警、安全看护、消费级产品或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -59,7 +59,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-c3-smart-band",
+    "arduino-multisensor-audio-demo",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -76,6 +76,14 @@ FORBIDDEN_TEXT = (
     "esp32-baby-monitor",
     "esp32-smart-light-controller",
     "esp32-smart-makeup-cabinet",
+    "最新收录：[基于ESP32-C3的多传感器健康数据展示手环原型]",
+    "公开范围扫描、仓库检查、10 项源码契约、ESP32-C3 默认与实验性振动 opt-in 编译，以及 Flutter format/test/analyze/debug APK 构建已由",
+    "当前 ESP32-C3、MAX30102、MPU6050、DS18B20、GPS、OLED、BLE、Android 和实验性振动低压台架尚未按当前公开提交重新真机复测",
+    "默认不编译 GPIO5 实验性振动输出，GPIO5 保持输入",
+    "GPS 坐标不向 App 传输或展示，但不代表没有位置隐私风险",
+    "BLE 服务 UUID 与广播名不是身份",
+    "CI 不上传固件、ELF 或 APK 构建产物",
+    "医疗或健康结论、心率/血氧准确性、跌倒检测、紧急告警、安全看护、定位/追踪、消费级可穿戴或生产系统",
 )
 
 
@@ -101,7 +109,7 @@ def main() -> int:
         problems.append("profile must contain exactly four local brand badges")
     if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
         problems.append("Problem Solution Recorder must remain a primary open build")
-    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri", "esp32-c3-smart-band"):
+    for experiment in ("arduino-multisensor-audio-demo", "ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
         if readme.index(experiment) < readme.index("// MORE EXPERIMENTS"):
             problems.append(f"{experiment} must remain inside the folded experiments section")
 
