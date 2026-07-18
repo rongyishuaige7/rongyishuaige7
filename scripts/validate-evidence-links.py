@@ -23,6 +23,7 @@ EXPECTED = {
     "esp32-s3-smart-agriculture-monitoring-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "stm32f103-ov7670-smart-door-reminder-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "stm32f103-wardrobe-environment-monitoring-ventilation-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "raspberry-pi-home-environment-activity-monitoring-demo": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
 }
 
 

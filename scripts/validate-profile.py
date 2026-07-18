@@ -38,15 +38,16 @@ REQUIRED_TEXT = (
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
     "智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物",
-    "衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物",
-    "基于STM32F103的衣柜环境监测与自动通风控制系统",
-    "公开范围扫描、仓库检查、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建已由",
-    "当前 STM32、DHT11、MQ135、OLED、UART、驱动器和风扇尚未按当前公开提交重新真机复测",
-    "MQ 原始 ADC 与 `demo_index` 不是空气质量或气体浓度",
-    "ENABLE_FAN_OUTPUT=0",
+    "居家环境与活动状态监测教学原型的 CI 检查 Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息与精确公开清单，且不上传构建产物",
+    "基于树莓派的居家环境与活动状态监测教学原型",
+    "Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由",
+    "当前树莓派、传感器、显示屏、继电器、蜂鸣器、摄像头、MySQL 部署、网络链路和 Android 尚未按当前公开提交重新真机复测",
+    "MQ-7 数字 GPIO 只表示未标定教学阈值事件",
+    "ENABLE_PHYSICAL_OUTPUTS=false",
+    "ENABLE_CAMERA=false",
     "CI 不上传构建产物",
-    "实物照片、演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
-    "空气质量仪、自动家电、量产设计、无人值守控制、电气安全产品或生产系统",
+    "实物照片、演示视频、界面截图、原理图、PCB、EDA、Gerber 与制造文件未提供",
+    "医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -59,7 +60,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "stm32f103-wardrobe-environment-monitoring-ventilation-system",
+    "raspberry-pi-home-environment-activity-monitoring-demo",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -121,7 +122,7 @@ def main() -> int:
     # the older full cards must be below that marker; the spotlight is required
     # to occur at or after it and may be the first matching repository string.
     experiments_marker = readme.index("// MORE EXPERIMENTS")
-    newest_spotlight = "stm32f103-wardrobe-environment-monitoring-ventilation-system"
+    newest_spotlight = "raspberry-pi-home-environment-activity-monitoring-demo"
     if readme.index(newest_spotlight) < experiments_marker:
         problems.append(f"{newest_spotlight} must remain inside the folded experiments section")
     for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):

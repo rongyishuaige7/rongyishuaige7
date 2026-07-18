@@ -64,12 +64,12 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于STM32F103的衣柜环境监测与自动通风控制系统](https://github.com/rongyishuaige7/stm32f103-wardrobe-environment-monitoring-ventilation-system)。
+最新收录：[基于树莓派的居家环境与活动状态监测教学原型](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo)。
 
-- **构建证据：** 公开范围扫描、仓库检查、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/stm32f103-wardrobe-environment-monitoring-ventilation-system/actions/runs/29641483562) 验证；CI 不上传构建产物。
-- **真机与素材：** 当前 STM32、DHT11、MQ135、OLED、UART、驱动器和风扇尚未按当前公开提交重新真机复测；实物照片、演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、传感器读数、显示、串口、风扇动作、接线、稳定性或电气安全。
-- **公开默认与边界：** MQ 原始 ADC 与 `demo_index` 不是空气质量或气体浓度，控制阈值不是健康标准；`ENABLE_FAN_OUTPUT=0`、`ENABLE_STARTUP_FAN_TEST=0`，默认不配置 PB0/PB1 输出。PB0/PB1 不得直接驱动电机，MQ 模块模拟输出必须先核对并调理至 STM32 3.3 V ADC 安全范围。
-- **不适用：** 空气质量仪、自动家电、量产设计、无人值守控制、电气安全产品或生产系统。
+- **构建证据：** Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo/actions/runs/29643779848) 验证；CI 不上传构建产物。
+- **真机与素材：** 当前树莓派、传感器、显示屏、继电器、蜂鸣器、摄像头、MySQL 部署、网络链路和 Android 尚未按当前公开提交重新真机复测；实物照片、演示视频、界面截图、原理图、PCB、EDA、Gerber 与制造文件未提供。CI、模拟器和构建不代表实体读数、输出动作、设备在线、通知送达、稳定性或电气安全。
+- **公开默认与边界：** `ENABLE_PHYSICAL_OUTPUTS=false`、`ENABLE_CAMERA=false`，继电器、蜂鸣器和摄像头默认关闭。MQ-7 数字 GPIO 只表示未标定教学阈值事件，MPU6050 阈值不能可靠判断人员跌倒，可选图片路径不是身份认证；HTTP/Socket.IO 共享 Token 只适合隔离实验网络。
+- **不适用：** 医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -89,7 +89,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物；衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统、智能门口提醒系统、掌机界面教学原型与衣柜环境监测和通风控制系统等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
+> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；居家环境与活动状态监测教学原型的 CI 检查 Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息与精确公开清单，且不上传构建产物；掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物；衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统、智能门口提醒系统、掌机界面教学原型、衣柜环境监测和通风控制系统与居家环境和活动状态监测教学原型等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 
