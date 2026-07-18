@@ -22,7 +22,7 @@
   <img src="./assets/yipan-flow-light.svg?v=8" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，需要智能处理时按需调用云端模型，产出和任务记录留在盘内，经记录或沉淀后成为下一次继续工作的基础，数据随盘走。">
 </picture>
 
-<br>
+> 结构示意，不是产品截图。
 
 **Yi盘是一套装在 U 盘里的随身 AI 工作台。** 长期资料、任务记录和主要产出保存在盘内；需要智能处理时，主要调用云端模型。
 
@@ -31,8 +31,6 @@
 | 当前状态 | 受控内测，正在完成上市前验证 |
 | 平台验证 | Linux 测试最完整；Windows 和 macOS 继续真机测试 |
 | 公开范围 | 产品事实、已知限制和开发复盘公开；核心实现、客户配置与制盘工具不公开 |
-
-> 结构示意，不是产品截图。最后核对：**2026-07-15**。
 
 <div align="center">
   <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=1" height="36" alt="查看 Yi盘产品事实与限制"></a>
@@ -56,7 +54,7 @@
 
 `Rust` `Tauri` `React` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | GNOME Wayland MVP | MIT
 
-> **公开证据核对：2026-07-15。** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
+> **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
 <details>
 <summary><b><code>// MORE EXPERIMENTS</code></b> 硬件与桌面实验</summary>
@@ -89,7 +87,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；居家环境与活动状态监测教学原型的 CI 检查 Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息与精确公开清单，且不上传构建产物；掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物；衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统、智能门口提醒系统、掌机界面教学原型、衣柜环境监测和通风控制系统与居家环境和活动状态监测教学原型等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
+> **实验验证范围：** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；居家环境与活动状态监测教学原型的 CI 检查 Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息与精确公开清单，且不上传构建产物；掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物；衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统、智能门口提醒系统、掌机界面教学原型、衣柜环境监测和通风控制系统与居家环境和活动状态监测教学原型等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 
@@ -111,4 +109,6 @@ I am **Rongyi**, founder of **Yi盘**, a portable AI workspace designed to run f
   <a href="https://github.com/rongyishuaige7/hardware-lab"><strong>Hardware Lab</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><strong>提交 Yi盘反馈</strong></a>
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="mailto:2830305965@qq.com"><strong>2830305965@qq.com</strong></a>
 </div>
