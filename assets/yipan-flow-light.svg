@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘盘内连续性闭环</title>
-  <desc id="desc">盘内资料与任务进入 Yi盘工作台，需要智能处理时与云端模型双向交互，产出与任务记录留在盘内，经记录与沉淀成为下一次继续工作的基础。云端模型不是长期存储节点。结构示意，不是产品截图。</desc>
+  <desc id="desc">盘内资料与任务进入 Yi盘工作台，需要智能处理时与云端模型双向交互，产出与任务记录留在盘内，经记录与沉淀成为下一次继续工作的基础。云端模型不是长期存储节点。结构示意，非产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#ffffff"/>
@@ -85,8 +85,8 @@
     }
   </style>
 
-  <rect x="1" y="1" width="1198" height="318" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
-  <path d="M792 1H1199V319H1034Z" fill="#e45738" opacity="0.028"/>
+  <rect x="1" y="1" width="1198" height="338" rx="20" fill="url(#surface)" stroke="#d7dce4"/>
+  <path d="M792 1H1199V339H1034Z" fill="#e45738" opacity="0.028"/>
 
   <text x="42" y="45" class="mono" fill="#e45738" font-size="14" letter-spacing="1.8">YI盘 / CONTINUITY LOOP</text>
   <text x="1158" y="45" class="mono" fill="#78818e" font-size="12" letter-spacing="1" text-anchor="end">DATA ON DRIVE / CLOUD ON DEMAND</text>
