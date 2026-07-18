@@ -21,6 +21,7 @@ EXPECTED = {
     "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-smart-agriculture-monitoring-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "stm32f103-ov7670-smart-door-reminder-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
 }
 
 

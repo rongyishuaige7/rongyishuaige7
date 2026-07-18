@@ -38,14 +38,15 @@ REQUIRED_TEXT = (
     "Desktop Pet 只检查 Web 单元测试与前端构建",
     "ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译",
     "智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物",
-    "基于ESP32-S3和Avalonia的智能农业环境监测系统",
-    "公开范围扫描、仓库检查、10 项源码契约、.NET 8 构建与 ESP32-S3 默认、网络遥测 compile-only、执行器 compile-only 三种隔离构建已由",
-    "当前 ESP32-S3、DHT11、BH1750、ACD10、BMP280、OLED、网络、桌面界面和低压台架尚未按当前公开提交重新真机复测",
-    "默认固件不连接 Wi-Fi/TCP，GPIO5、GPIO6、GPIO38 为输入",
-    "网络和执行器仅为显式 compile-time opt-in；无设备身份、TLS、认证、授权、ACK、可靠投递或远程控制",
+    "智能门口提醒系统的 CI 检查公开范围、协议单元测试与 STM32 隔离构建，且不上传构建产物",
+    "基于STM32F103和OV7670的智能门口提醒系统",
+    "公开范围扫描、源码/协议契约、Host 内存串口单元测试与 STM32 PlatformIO 隔离构建已由",
+    "当前 STM32、OV7670、PIR、USB-TTL、SYN6288 与串口端到端链路尚未按当前公开提交重新真机复测",
+    "公开 Host 只在内存中校验固定 `80 × 60` RGB565 串口帧，并回传固定通用 GBK 提示",
+    "不含真人图像、人脸样本、身份模板、身份识别、图像落盘或网络服务",
     "CI 不上传构建产物",
     "实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供",
-    "农业自动化、可靠告警、作物/空气质量/安全结论、远程控制、无人值守、生产或工业系统",
+    "门禁、门锁、安防、身份认证、人员追踪、可靠提醒、公共场所监控、无人值守或生产系统",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
     "// ENGLISH OVERVIEW",
@@ -58,7 +59,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "pet-desktop-tauri",
     "hardware-lab",
-    "esp32-s3-smart-agriculture-monitoring-system",
+    "stm32f103-ov7670-smart-door-reminder-system",
 )
 FORBIDDEN_TEXT = (
     "—",
@@ -115,8 +116,15 @@ def main() -> int:
         problems.append("profile must contain exactly four local brand badges")
     if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
         problems.append("Problem Solution Recorder must remain a primary open build")
-    for experiment in ("esp32-s3-smart-agriculture-monitoring-system", "ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
-        if readme.index(experiment) < readme.index("// MORE EXPERIMENTS"):
+    # The newest spotlight link appears in the <details> summary itself. Only
+    # the older full cards must be below that marker; the spotlight is required
+    # to occur at or after it and may be the first matching repository string.
+    experiments_marker = readme.index("// MORE EXPERIMENTS")
+    newest_spotlight = "stm32f103-ov7670-smart-door-reminder-system"
+    if readme.index(newest_spotlight) < experiments_marker:
+        problems.append(f"{newest_spotlight} must remain inside the folded experiments section")
+    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
+        if readme.index(experiment) < experiments_marker:
             problems.append(f"{experiment} must remain inside the folded experiments section")
 
     referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))

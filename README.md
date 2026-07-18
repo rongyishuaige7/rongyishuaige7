@@ -64,12 +64,12 @@
 
 完整硬件项目、真实构建证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。
 
-最新收录：[基于ESP32-S3和Avalonia的智能农业环境监测系统](https://github.com/rongyishuaige7/esp32-s3-smart-agriculture-monitoring-system)。
+最新收录：[基于STM32F103和OV7670的智能门口提醒系统](https://github.com/rongyishuaige7/stm32f103-ov7670-smart-door-reminder-system)。
 
-- **构建证据：** 公开范围扫描、仓库检查、10 项源码契约、.NET 8 构建与 ESP32-S3 默认、网络遥测 compile-only、执行器 compile-only 三种隔离构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/esp32-s3-smart-agriculture-monitoring-system/actions/runs/29633160450) 验证；CI 不上传构建产物。
-- **真机与素材：** 当前 ESP32-S3、DHT11、BH1750、ACD10、BMP280、OLED、网络、桌面界面和低压台架尚未按当前公开提交重新真机复测；实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、传感器、OLED、网络、桌面界面、执行器或电气安全。
-- **公开默认与边界：** 默认固件不连接 Wi-Fi/TCP，GPIO5、GPIO6、GPIO38 为输入；传感器和 OLED 仍可能初始化，不代表无外设 I/O、外部负载物理关闭或电气安全。网络和执行器仅为显式 compile-time opt-in；无设备身份、TLS、认证、授权、ACK、可靠投递或远程控制。
-- **不适用：** 农业自动化、可靠告警、作物/空气质量/安全结论、远程控制、无人值守、生产或工业系统。
+- **构建证据：** 公开范围扫描、源码/协议契约、Host 内存串口单元测试与 STM32 PlatformIO 隔离构建已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/stm32f103-ov7670-smart-door-reminder-system/actions/runs/29635341165) 验证；CI 不上传构建产物。
+- **真机与素材：** 当前 STM32、OV7670、PIR、USB-TTL、SYN6288 与串口端到端链路尚未按当前公开提交重新真机复测；实物照片、视频、原理图、PCB、EDA、Gerber 与制造文件未提供。CI 和构建不代表烧录、采图、触发、播报、图像质量或电气安全。
+- **公开默认与边界：** 公开 Host 只在内存中校验固定 `80 × 60` RGB565 串口帧，并回传固定通用 GBK 提示；不含真人图像、人脸样本、身份模板、身份识别、图像落盘或网络服务。XOR 只用于误码检测，不提供认证、加密、可靠送达或安全保证；固件仍会初始化 GPIO/UART/MCO，满足触发与接线条件时可能产生采集、串口与语音 I/O。
+- **不适用：** 门禁、门锁、安防、身份认证、人员追踪、可靠提醒、公共场所监控、无人值守或生产系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
@@ -89,7 +89,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型与智能农业环境监测系统等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
+> **实验验证范围：2026-07-18。** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查公开范围、协议单元测试与 STM32 隔离构建，且不上传构建产物。智能花盆照片与房卡系统界面截图属于历史演示证据，不等同于当前公开提交的真机复测。STM32、LoRa、树莓派 RFID、交通信号、健康科普语音终端、触摸手势控制、多传感器手环、Arduino 多传感器教学原型、智能农业环境监测系统与智能门口提醒系统等完整项目与边界见 Hardware Lab。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以项目条目为准。
 
 </details>
 
