@@ -60,26 +60,26 @@
 <summary><b><code>// MORE EXPERIMENTS</code></b> 硬件与桌面实验</summary>
 <br>
 
-完整的 24 个硬件项目、真实构建证据、素材证据与真机验证边界统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)。索引已更新至 2026-07-19；本轮素材发布没有进行真机复测。
+完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)，包含项目介绍、构建证据、公开资料与实际使用注意事项。索引更新至 2026-07-19。
 
 最新收录：[基于树莓派的居家环境与活动状态监测教学原型](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo)。
 
-- **构建证据：** Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由 [固定 exact-HEAD Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo/actions/runs/29656863145) 验证；CI 不上传构建产物。
-- **真机与素材：** 当前树莓派、传感器、显示屏、继电器、蜂鸣器、摄像头、MySQL 部署、网络链路和 Android 尚未按当前公开提交重新真机复测；本批公开了一张已脱敏的 2026-03-17 历史实物照片，四张旧界面截图未上传，演示视频、原理图、PCB、EDA、Gerber 与制造文件未提供。历史照片、CI、模拟器和构建不代表当前提交的实体读数、输出动作、设备在线、通知送达、稳定性或电气安全。
-- **公开默认与边界：** `ENABLE_PHYSICAL_OUTPUTS=false`、`ENABLE_CAMERA=false`，继电器、蜂鸣器和摄像头默认关闭。MQ-7 数字 GPIO 只表示未标定教学阈值事件，MPU6050 阈值不能可靠判断人员跌倒，可选图片路径不是身份认证；HTTP/Socket.IO 共享 Token 只适合隔离实验网络。
+- **构建证据：** Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由 [固定 Actions 构建证据](https://github.com/rongyishuaige7/raspberry-pi-home-environment-activity-monitoring-demo/actions/runs/29658037876) 验证；CI 不上传构建产物。
+- **项目资料：** 公开一张已脱敏的 2026-03-17 项目照片；四张旧界面截图未上传，未公开 APK、演示视频或 EDA/制造文件。
+- **实际使用限制：** `ENABLE_PHYSICAL_OUTPUTS=false`、`ENABLE_CAMERA=false`，继电器、蜂鸣器和摄像头默认关闭。MQ-7 数字 GPIO 只表示未标定教学阈值事件，MPU6050 阈值不能可靠判断人员跌倒，可选图片路径不是身份认证；HTTP/Socket.IO 共享 Token 只适合隔离实验网络。
 - **不适用：** 医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 
 基于 ESP32-S3 的视觉猜拳硬件实验，包含摄像头识别、OLED、音频与 RGB 反馈。
 
-`C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29656842625) | 历史原理图，当前硬件未复测 | MIT
+`C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29658176252) | 历史原理图资料 | MIT
 
 ### [Multimodal Smart Pot](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
 
 独立完成的 ESP32-S3 + FreeRTOS 软硬件原型，包含环境感知、双泵灌溉、本地彩屏、局域网控制、语音和手势交互；公开固件、EDA/制造文件与历史实物照片。
 
-`C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29518255431) | 历史真机照片，当前硬件未复测 | MIT
+`C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29658003504) | 项目照片与 EDA 资料 | MIT
 
 ### [Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)
 
@@ -87,7 +87,7 @@
 
 `Tauri` `React` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | Linux prototype | MIT
 
-> **实验验证范围：** Desktop Pet 只检查 Web 单元测试与前端构建；ESP32 RPS Game 与智能花盆的 CI 只检查固件能否按固定配置编译；居家环境与活动状态监测教学原型的 CI 检查 Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息与精确公开清单，且不上传构建产物；掌机界面教学原型的 CI 检查公开范围、仓库结构、7 项源码契约、ESP32 默认与背光 opt-in 编译，且不上传构建产物；衣柜环境监测与自动通风控制系统的 CI 检查公开范围、仓库结构、15 项源码契约、STM32 安全默认与风扇精确 opt-in 隔离构建，且不上传构建产物；智能农业环境监测系统的 CI 还检查公开范围、源码契约、.NET 8 构建与 ESP32-S3 三种隔离构建，且不上传构建产物；智能门口提醒系统的 CI 检查 fail-closed 公开范围扫描、协议单元测试与 STM32 隔离构建，且不上传构建产物。Hardware Lab 已同步本批 20 个仓库的 exact-HEAD Actions 与已脱敏历史照片、截图和 EDA/制造衍生材料；这些历史素材不等同于当前公开提交的真机复测，本轮没有进行真机复测。若项目上传 Actions Artifact，其保留期会过期；部分项目不上传构建产物，以 24 项 Hardware Lab 索引条目为准。
+> **构建说明：** 各项目的 GitHub Actions 负责固定配置下的构建与仓库检查；对应的精确构建链接、公开资料和使用限制以 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab) 为准。部分项目上传的 Actions Artifact 按平台保留期自动过期。
 
 </details>
 
