@@ -10,7 +10,7 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
 
-我是 **Rongyi**，一名独立开发者，目前在杭州开发 **Yi盘**，也持续发布本地优先的桌面工具和有趣的硬件项目。
+我是 **Rongyi**，一名独立开发者，目前正在开发 **Yi盘**，也持续发布本地优先的桌面工具和有趣的硬件项目。
 
 ---
 
@@ -102,13 +102,11 @@ I am **Rongyi**, founder of **Yi盘**, a portable AI workspace designed to run f
 ---
 
 <div align="center">
-  <strong>Rongyi / Yi盘 / Hangzhou</strong>
+  <strong>Rongyi / Yi盘</strong>
   <br><br>
   <a href="https://github.com/rongyishuaige7?tab=repositories"><strong>全部仓库</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7/hardware-lab"><strong>Hardware Lab</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><strong>提交 Yi盘反馈</strong></a>
-  &nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="mailto:2830305965@qq.com"><strong>2830305965@qq.com</strong></a>
 </div>
