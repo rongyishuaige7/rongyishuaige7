@@ -29,6 +29,9 @@ jobs:
           globs: |
             README.md
 
+      - name: Check generated SVG assets
+        run: python3 scripts/render-svg.py --check
+
       - name: Validate local SVG assets
         run: python3 scripts/validate-svg.py
 
