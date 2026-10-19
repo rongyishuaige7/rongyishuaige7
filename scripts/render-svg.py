@@ -563,12 +563,14 @@ ${style}
 SIGNAL_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .bar { transform-box: fill-box; transform-origin: 50% 100%; }
-    .s2 { transform-box: fill-box; transform-origin: 50% 50%; }
+    .s2, .run-pulse { transform-box: fill-box; transform-origin: 50% 50%; }
+    .cost { transform-box: fill-box; transform-origin: 0 50%; }
     .s1, .s2, .s3, .cost, .flag, .sweep-a, .sweep-b { opacity: 0; }
+    .run-pulse { opacity: 0.5; }
+    .glow { opacity: 0.08; }
     @media (prefers-reduced-motion: no-preference) {
-      .bar-a { animation: bar-a 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
-      .bar-b { animation: bar-b 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .reveal { animation: reveal 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .bright { animation: bright 6.8s ease-in-out infinite; }
       .s1 { animation: s1 6.8s ease-in-out infinite; }
       .s2 { animation: s2 6.8s ease-in-out infinite; }
       .s3 { animation: s3 6.8s ease-in-out infinite; }
@@ -576,58 +578,85 @@ SIGNAL_STYLE = """  <style>
       .sweep-b { animation: sweep-b 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
       .cost { animation: cost 6.8s ease-in-out infinite; }
       .flag { animation: flag 6.8s ease-in-out infinite; }
+      .packet-a { animation: packet 2.2s linear infinite; }
+      .packet-b { animation: packet 2.2s linear infinite; animation-delay: -1.1s; }
+      .glow { animation: glow 4.2s ease-in-out infinite; }
+      .run-pulse { animation: run-pulse 1.7s ease-out infinite; }
+      .cursor { animation: cursor 1.1s steps(1, end) infinite; }
     }
-    @keyframes bar-a {
-      0%, 12% { transform: scaleY(0.06); opacity: 0.45; }
-      40%, 100% { transform: scaleY(1); opacity: 1; }
+    @keyframes reveal {
+      0%, 8% { transform: translateX(-366px); }
+      38% { transform: translateX(-186px); }
+      39% { transform: translateX(-186px); }
+      74%, 100% { transform: translateX(0); }
     }
-    @keyframes bar-b {
-      0%, 48% { transform: scaleY(0.06); opacity: 0.45; }
-      76%, 100% { transform: scaleY(1); opacity: 1; }
+    @keyframes bright {
+      0%, 96% { opacity: 1; }
+      100% { opacity: 0; }
     }
     @keyframes s1 {
-      0%, 2% { opacity: 0; }
-      3%, 16% { opacity: 1; }
-      17%, 100% { opacity: 0; }
+      0%, 1% { opacity: 0; }
+      2%, 10% { opacity: 1; }
+      11%, 100% { opacity: 0; }
     }
     @keyframes s2 {
-      0%, 48% { transform: scale(1); opacity: 0; }
-      50% { transform: scale(1); opacity: 0.8; }
-      60% { transform: scale(2.4); opacity: 0; }
-      61%, 100% { transform: scale(2.4); opacity: 0; }
+      0%, 34% { transform: scale(1); opacity: 0; }
+      36% { transform: scale(1); opacity: 0.8; }
+      46% { transform: scale(2.4); opacity: 0; }
+      47%, 100% { transform: scale(2.4); opacity: 0; }
     }
     @keyframes s3 {
-      0%, 52% { opacity: 0; }
-      54%, 72% { opacity: 1; }
-      74%, 100% { opacity: 0; }
+      0%, 38% { opacity: 0; }
+      40%, 64% { opacity: 1; }
+      65%, 100% { opacity: 0; }
     }
     @keyframes sweep-a {
-      0%, 13% { transform: translateX(0); opacity: 0; }
-      14% { transform: translateX(0); opacity: 1; }
-      37% { transform: translateX(180px); opacity: 1; }
+      0%, 8% { transform: translateX(0); opacity: 0; }
+      9% { transform: translateX(0); opacity: 1; }
+      37.5% { transform: translateX(180px); opacity: 1; }
       38%, 100% { transform: translateX(180px); opacity: 0; }
     }
     @keyframes sweep-b {
-      0%, 50% { transform: translateX(0); opacity: 0; }
-      51% { transform: translateX(0); opacity: 1; }
-      73% { transform: translateX(176px); opacity: 1; }
-      75%, 100% { transform: translateX(176px); opacity: 0; }
+      0%, 38% { transform: translateX(0); opacity: 0; }
+      39% { transform: translateX(0); opacity: 1; }
+      73% { transform: translateX(186px); opacity: 1; }
+      74%, 100% { transform: translateX(186px); opacity: 0; }
     }
     @keyframes cost {
-      0%, 36% { opacity: 0; }
-      38%, 50% { opacity: 1; }
-      52%, 100% { opacity: 0; }
+      0%, 73% { opacity: 0; transform: scale(1); }
+      75%, 76% { opacity: 1; transform: scale(1); }
+      79%, 84% { opacity: 1; transform: scale(1.04); }
+      87% { opacity: 1; transform: scale(1); }
+      88%, 100% { opacity: 0; transform: scale(1); }
     }
     @keyframes flag {
-      0%, 74% { opacity: 0; }
-      76%, 90% { opacity: 1; }
-      92%, 100% { opacity: 0; }
+      0%, 86% { opacity: 0; }
+      88%, 96% { opacity: 1; }
+      97%, 100% { opacity: 0; }
+    }
+    @keyframes packet {
+      0% { transform: translateX(0); opacity: 0; }
+      6% { opacity: 1; }
+      46% { transform: translateX(40px); opacity: 1; }
+      54%, 100% { transform: translateX(40px); opacity: 0; }
+    }
+    @keyframes glow {
+      0%, 100% { opacity: 0.05; }
+      50% { opacity: 0.24; }
+    }
+    @keyframes run-pulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      70%, 100% { transform: scale(2.2); opacity: 0; }
+    }
+    @keyframes cursor {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
   </style>"""
 
 SIGNAL = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
   <title id="title">DSH Usage 用量信号示意</title>
-  <desc id="desc">${theme_desc}用量信号卡。左侧三段会话依次亮起，中间十根半小时 Token 柱随扫描线生长，右侧显示推算费用、余额，以及无法确认价格时的明确标记。结构示意，非产品截图。</desc>
+  <desc id="desc">${theme_desc}用量信号卡。左侧三段会话依次亮起，信号经虚线通路进入中间的半小时 Token 柱，扫描线扫过的柱逐段点亮；右侧显示推算费用、余额，以及无法确认价格时的明确标记。结构示意，非产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
@@ -648,11 +677,22 @@ SIGNAL = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height
       <stop offset="0.5" stop-color="${see_2}" stop-opacity="0.45"/>
       <stop offset="1" stop-color="${see_2}" stop-opacity="0"/>
     </linearGradient>
-    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="10" r="0.9" fill="${see}" opacity="0.16"/>
+    <radialGradient id="cardGlow">
+      <stop stop-color="${see}" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="${see}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="packetGlow">
+      <stop stop-color="${see_2}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${see_2}" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.9" fill="${see}" opacity="0.12"/>
     </pattern>
     <clipPath id="panelClip">
       <rect x="16" y="16" width="1168" height="288" rx="14"/>
+    </clipPath>
+    <clipPath id="revealClip">
+      <rect class="reveal" x="372" y="104" width="366" height="140"/>
     </clipPath>
   </defs>
 ${style}
@@ -668,32 +708,33 @@ ${style}
   <text x="1160" y="48" class="mono" fill="${faint}" font-size="12" letter-spacing="0.8" text-anchor="end">结构示意 · 非产品截图</text>
 
   <g id="sessions">
-    <rect x="40" y="68" width="286" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <rect x="40" y="68" width="270" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
     <text x="58" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">SESSIONS</text>
     <g>
-      <rect x="56" y="100" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <rect x="56" y="100" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
       <circle cx="74" cy="119" r="4" fill="${zone_fill}" stroke="${idle}"/>
       <text x="88" y="124" fill="${ink}" font-size="12">SESSION 01</text>
-      <text x="298" y="124" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">RUN</text>
+      <text x="282" y="124" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">RUN</text>
+      <circle class="run-pulse" cx="74" cy="119" r="5" fill="none" stroke="${see_2}" stroke-width="1.5"/>
       <g class="s1">
-        <rect x="56" y="100" width="254" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
+        <rect x="56" y="100" width="238" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
         <circle cx="74" cy="119" r="4" fill="${see_2}"/>
       </g>
     </g>
     <g>
-      <rect x="56" y="142" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <rect x="56" y="142" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
       <circle cx="74" cy="161" r="4" fill="${zone_fill}" stroke="${idle}"/>
       <text x="88" y="166" fill="${muted}" font-size="12">SESSION 02</text>
-      <text x="298" y="166" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">IDLE</text>
+      <text x="282" y="166" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">IDLE</text>
       <circle class="s2" cx="74" cy="161" r="5" fill="none" stroke="${see}" stroke-width="2"/>
     </g>
     <g>
-      <rect x="56" y="184" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <rect x="56" y="184" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
       <circle cx="74" cy="203" r="4" fill="${zone_fill}" stroke="${idle}"/>
       <text x="88" y="208" fill="${ink}" font-size="12">SESSION 03</text>
-      <text x="298" y="208" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">DONE</text>
+      <text x="282" y="208" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">DONE</text>
       <g class="s3">
-        <rect x="56" y="184" width="254" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
+        <rect x="56" y="184" width="238" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
         <circle cx="74" cy="203" r="4" fill="${see_2}"/>
       </g>
     </g>
@@ -701,55 +742,72 @@ ${style}
   </g>
 
   <g id="usage-bars">
-    <rect x="346" y="68" width="430" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
-    <text x="364" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">TOKENS / 30 MIN</text>
-    <text x="758" y="90" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">10 × 30 MIN</text>
-    <line x1="364" y1="238" x2="758" y2="238" stroke="${card_stroke}"/>
+    <rect x="354" y="68" width="402" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <ellipse class="glow" cx="555" cy="238" rx="176" ry="58" fill="url(#cardGlow)"/>
+    <text x="372" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">TOKENS / 30 MIN</text>
+    <text x="738" y="90" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">10 × 30 MIN</text>
+    <line x1="372" y1="238" x2="738" y2="238" stroke="${card_stroke}"/>
 ${bars}
+    <g class="bright" clip-path="url(#revealClip)">
+${bars_bright}
+    </g>
     <g class="sweep-a">
-      <rect x="372" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
-      <rect x="379" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
-      <circle cx="380" cy="104" r="3" fill="${see_2}"/>
+      <rect x="364" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
+      <rect x="371" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
+      <circle cx="372" cy="104" r="3" fill="${see_2}"/>
     </g>
     <g class="sweep-b">
-      <rect x="552" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
-      <rect x="559" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
-      <circle cx="560" cy="104" r="3" fill="${see_2}"/>
+      <rect x="544" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
+      <rect x="551" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
+      <circle cx="552" cy="104" r="3" fill="${see_2}"/>
     </g>
   </g>
 
   <g id="cost-readout">
-    <rect x="796" y="68" width="364" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
-    <text x="814" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">COST / 30 MIN</text>
-    <text x="814" y="140" fill="${ink}" font-size="30" font-weight="800">≈ ¥0.24</text>
+    <rect x="800" y="68" width="360" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <text x="818" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">COST / 30 MIN</text>
+    <text x="818" y="140" fill="${ink}" font-size="30" font-weight="800">≈ ¥0.24</text>
     <g class="cost">
-      <text x="814" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.24</text>
+      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.24</text>
     </g>
-    <rect x="814" y="150" width="120" height="2" rx="1" fill="${see}" opacity="0.35"/>
-    <text x="814" y="168" fill="${faint}" font-size="10">按公开 API 计价规则推算</text>
-    <line x1="814" y1="182" x2="1142" y2="182" stroke="${card_stroke}"/>
-    <text x="814" y="204" class="mono" fill="${faint}" font-size="10" letter-spacing="1">BALANCE</text>
-    <text x="814" y="232" fill="${muted}" font-size="20" font-weight="700">—</text>
-    <rect x="1000" y="204" width="142" height="24" rx="12" fill="none" stroke="${faint}" stroke-opacity="0.45"/>
-    <text x="1071" y="220" class="mono" fill="${faint}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
+    <rect class="cursor" x="936" y="124" width="3" height="16" fill="${see_2}"/>
+    <rect x="818" y="150" width="120" height="2" rx="1" fill="${see}" opacity="0.35"/>
+    <text x="818" y="168" fill="${faint}" font-size="10">按公开 API 计价规则推算</text>
+    <line x1="818" y1="182" x2="1142" y2="182" stroke="${card_stroke}"/>
+    <text x="818" y="204" class="mono" fill="${faint}" font-size="10" letter-spacing="1">BALANCE</text>
+    <text x="818" y="232" fill="${muted}" font-size="20" font-weight="700">—</text>
+    <rect x="1004" y="204" width="138" height="24" rx="12" fill="none" stroke="${faint}" stroke-opacity="0.45"/>
+    <text x="1073" y="220" class="mono" fill="${faint}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
     <g class="flag">
-      <rect x="1000" y="204" width="142" height="24" rx="12" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.6"/>
-      <text x="1071" y="220" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
+      <rect x="1004" y="204" width="138" height="24" rx="12" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.6"/>
+      <text x="1073" y="220" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
+    </g>
+  </g>
+
+  <g id="connectors">
+    <path d="M312 165H352" stroke="${see}" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 5" fill="none"/>
+    <path d="M758 165H798" stroke="${see}" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 5" fill="none"/>
+    <g class="packet-a">
+      <circle cx="312" cy="165" r="11" fill="url(#packetGlow)"/>
+      <circle cx="312" cy="165" r="5" fill="${see_2}"/>
+    </g>
+    <g class="packet-b">
+      <circle cx="758" cy="165" r="11" fill="url(#packetGlow)"/>
+      <circle cx="758" cy="165" r="5" fill="${see_2}"/>
     </g>
   </g>
 
   <g id="legend">
     <circle cx="44" cy="279" r="3" fill="${see}"/>
     <text x="54" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">SESSION</text>
-    <circle cx="420" cy="279" r="3" fill="${see_2}"/>
-    <text x="430" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">TOKENS</text>
-    <circle cx="796" cy="279" r="3" fill="${see}"/>
-    <text x="806" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">COST / BALANCE</text>
+    <circle cx="400" cy="279" r="3" fill="${see_2}"/>
+    <text x="410" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">TOKENS</text>
+    <circle cx="820" cy="279" r="3" fill="${see}"/>
+    <text x="830" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">COST / BALANCE</text>
     <text x="1160" y="283" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">KEY STAYS LOCAL</text>
   </g>
 </svg>
 """)
-
 BAR_RATIOS = (0.42, 0.78, 0.96, 0.55, 0.3, 0.62, 0.84, 0.48, 0.24, 0.7)
 
 
@@ -766,38 +824,43 @@ def hero_bars() -> str:
     return "\n".join(lines)
 
 
-def signal_bars() -> str:
-    """Half-hour Token bars; three growth classes keep the refresh from looking uniform."""
+def signal_bars(bright: bool = False) -> str:
+    """Half-hour Token bars; the bright copy is revealed behind the scan line."""
     lines = []
     for index, ratio in enumerate(BAR_RATIOS):
-        x = 380 + index * 38
+        x = 372 + index * 36
         height = 126 * ratio
-        variant = "a" if index < 5 else "b"
+        opacity = "" if bright else ' opacity="0.34"'
         lines.append(
-            f'    <rect class="bar bar-{variant}" x="{x}" y="{238 - height:.1f}" width="24" height="{height:.1f}" '
-            f'rx="3" fill="url(#barFill)"/>'
+            f'    <rect class="bar" x="{x}" y="{238 - height:.1f}" width="22" height="{height:.1f}" '
+            f'rx="3" fill="url(#barFill)"{opacity}/>'
         )
     return "\n".join(lines)
 
 
-def render(template: Template, style: str, palette: dict[str, str], bars: str | None = None) -> str:
+def signal_tokens() -> dict[str, str]:
+    return {"bars": signal_bars(False), "bars_bright": signal_bars(True)}
+
+
+def render(template: Template, style: str, palette: dict[str, str], extra: dict[str, str] | None = None) -> str:
     tokens = dict(palette)
-    tokens.update(style=style, bars=bars() if bars is not None else hero_bars(), prototypes=str(HARDWARE_PROTOTYPES))
+    tokens.update(style=style, prototypes=str(HARDWARE_PROTOTYPES))
+    tokens.update(extra or {})
     return template.substitute(tokens)
 
 
 def main() -> int:
     check = "--check" in sys.argv[1:]
     outputs = {
-        "hero": (HERO, HERO_STYLE, hero_bars),
-        "hardware-strip": (STRIP, STRIP_STYLE, None),
-        "dsh-signal": (SIGNAL, SIGNAL_STYLE, signal_bars),
+        "hero": (HERO, HERO_STYLE, lambda: {"bars": hero_bars()}),
+        "hardware-strip": (STRIP, STRIP_STYLE, lambda: {}),
+        "dsh-signal": (SIGNAL, SIGNAL_STYLE, signal_tokens),
     }
     stale: list[str] = []
-    for stem, (template, style, bars) in outputs.items():
+    for stem, (template, style, extra) in outputs.items():
         for theme, palette in PALETTES.items():
             path = ASSETS / f"{stem}-{theme}.svg"
-            svg = render(template, style, palette, bars)
+            svg = render(template, style, palette, extra())
             if check:
                 if not path.exists() or path.read_text(encoding="utf-8") != svg:
                     stale.append(str(path))

@@ -49,8 +49,8 @@ STORIES = {
     SIGNAL: ("6.8s", (
         ("s1",),
         ("sweep-a",),
-        ("cost",),
         ("s2", "s3", "sweep-b"),
+        ("cost",),
         ("flag",),
     )),
 }
