@@ -4,28 +4,46 @@
 from datetime import date
 from pathlib import Path
 import re
+import struct
 import sys
 
 
 README_PATH = Path("README.md")
+STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
+SCREENSHOT = Path("assets/dsh-timeline.png")
+MAX_SCREENSHOT_BYTES = 150 * 1024
+# PNG chunks that can carry EXIF, comments, or editor metadata.
+FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=6",
-    "./assets/hero-light.svg?v=6",
+    "./assets/hero-dark.svg?v=7",
+    "./assets/hero-light.svg?v=7",
     "./assets/yipan-flow-dark.svg?v=9",
     "./assets/yipan-flow-light.svg?v=9",
-    "./assets/badge-yipan.svg?v=2",
+    "./assets/hardware-strip-dark.svg?v=1",
+    "./assets/hardware-strip-light.svg?v=1",
+    "./assets/badge-studio.svg?v=1",
     "./assets/badge-build-log.svg?v=1",
+    "./assets/badge-yipan.svg?v=2",
     "./assets/badge-product-facts.svg?v=1",
     "./assets/badge-feedback.svg?v=2",
+    "./assets/badge-dsh.svg?v=1",
+    "./assets/badge-hardware.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=6",
+    "./assets/hero-light.svg?v=7",
     "./assets/yipan-flow-light.svg?v=9",
-    "./assets/badge-yipan.svg?v=2",
+    "./assets/hardware-strip-light.svg?v=1",
+    "./assets/dsh-timeline.png?v=1",
+    "./assets/badge-studio.svg?v=1",
     "./assets/badge-build-log.svg?v=1",
+    "./assets/badge-yipan.svg?v=2",
     "./assets/badge-product-facts.svg?v=1",
     "./assets/badge-feedback.svg?v=2",
+    "./assets/badge-dsh.svg?v=1",
+    "./assets/badge-hardware.svg?v=1",
 }
+# The three homepage lanes, in order, then the folded English overview.
+LANE_MARKERS = ("// 01 CARRY", "// 02 SEE", "// 03 TOUCH", "// ENGLISH OVERVIEW")
 REQUIRED_TEXT = (
     "受控内测",
     "Linux 测试最完整",
@@ -33,7 +51,10 @@ REQUIRED_TEXT = (
     "核心实现、客户配置与制盘工具不公开",
     "结构示意，非产品截图",
     "主要调用云端模型",
-    "也持续发布本地优先的桌面工具和有趣的硬件项目",
+    "一个人做产品的独立开发者",
+    "真实运行界面，夹具数据，项目名为占位",
+    "最终以 Provider 账单为准",
+    "产品由 Codex 独立构思、设计与开发",
     "DevFlow 只检查 Web 单元测试与前端构建",
     "基于树莓派的居家环境与活动状态监测教学原型",
     "Python 编译、11 项后端与源码合同、Android Gradle test task（当前 `NO-SOURCE`）、lint、debug assembly、敏感信息扫描与精确公开清单已由",
@@ -43,20 +64,39 @@ REQUIRED_TEXT = (
     "CI 不上传构建产物",
     "22 个公开硬件项目",
     "医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统",
-    "// OPEN BUILDS",
-    "// MORE EXPERIMENTS",
-    "// ENGLISH OVERVIEW",
+    "// LATEST BUILD",
+    *LANE_MARKERS,
 )
 REQUIRED_REPOSITORIES = (
     "yipan-showcase",
+    "dsh-stats",
+    "dsh-spec",
+    "tech-mentor",
     "problem-solution-recorder-oss",
+    "ningque",
     "devflow-recorder",
+    "memory-monitor",
+    "pet-desktop-tauri",
     "ESP32_RPS_Game",
     "esp32-s3-multimodal-smart-pot",
-    "pet-desktop-tauri",
     "hardware-lab",
     "raspberry-pi-home-environment-activity-monitoring-demo",
 )
+# Repositories whose first README mention must sit inside a given lane.
+LANE_REPOSITORIES = {
+    "// 01 CARRY": ("yipan-showcase",),
+    "// 02 SEE": (
+        "dsh-stats",
+        "dsh-spec",
+        "tech-mentor",
+        "problem-solution-recorder-oss",
+        "ningque",
+        "devflow-recorder",
+        "memory-monitor",
+        "pet-desktop-tauri",
+    ),
+    "// 03 TOUCH": ("hardware-lab", "ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot"),
+}
 FORBIDDEN_TEXT = (
     "—",
     "–",
@@ -64,6 +104,10 @@ FORBIDDEN_TEXT = (
     "yipan-feature.svg",
     "// OPEN LAB",
     "// LAB NOTES",
+    "// OPEN BUILDS",
+    "// MORE EXPERIMENTS",
+    "// YI盘 PRODUCT",
+    "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "SYSTEM ONLINE",
     "| 当前状态 | 平台验证 | 公开范围 |",
     '<td width="50%"',
@@ -89,6 +133,26 @@ FORBIDDEN_TEXT = (
 )
 
 
+def validate_screenshot(path: Path) -> list[str]:
+    """Keep the one raster screenshot small and free of embedded metadata."""
+    if not path.exists():
+        return [f"missing screenshot asset: {path}"]
+    data = path.read_bytes()
+    problems: list[str] = []
+    if len(data) > MAX_SCREENSHOT_BYTES:
+        problems.append(f"{path.name} is {len(data)} bytes, over {MAX_SCREENSHOT_BYTES}")
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return problems + [f"{path.name} is not a PNG"]
+    offset = 8
+    while offset + 8 <= len(data):
+        (length,) = struct.unpack(">I", data[offset:offset + 4])
+        chunk = data[offset + 4:offset + 8]
+        if chunk in FORBIDDEN_PNG_CHUNKS:
+            problems.append(f"{path.name} carries a {chunk.decode()} metadata chunk")
+        offset += 12 + length
+    return problems
+
+
 def main() -> int:
     readme = README_PATH.read_text(encoding="utf-8")
     problems: list[str] = []
@@ -107,20 +171,41 @@ def main() -> int:
         problems.append("product facts must use the approved two-column mobile-readable table")
     if not re.search(r"yipan-flow-light\.svg\?v=9[^>]*>\n</picture>\n\n> 结构示意，非产品截图。\n\n\*\*Yi盘是一套", readme):
         problems.append("Yi盘 product diagram must keep the approved note before its description")
-    if readme.count('src="./assets/badge-') != 4:
-        problems.append("profile must contain exactly four local brand badges")
-    if readme.index("problem-solution-recorder-oss") > readme.index("// MORE EXPERIMENTS"):
-        problems.append("Problem Solution Recorder must remain a primary open build")
-    # The newest spotlight link appears in the <details> summary itself. Only
-    # the older full cards must be below that marker; the spotlight is required
-    # to occur at or after it and may be the first matching repository string.
-    experiments_marker = readme.index("// MORE EXPERIMENTS")
-    newest_spotlight = "raspberry-pi-home-environment-activity-monitoring-demo"
-    if readme.index(newest_spotlight) < experiments_marker:
-        problems.append(f"{newest_spotlight} must remain inside the folded experiments section")
-    for experiment in ("ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot", "pet-desktop-tauri"):
-        if readme.index(experiment) < experiments_marker:
-            problems.append(f"{experiment} must remain inside the folded experiments section")
+    if readme.count('src="./assets/badge-') != 7:
+        problems.append("profile must contain exactly seven local brand badges")
+
+    positions = [readme.find(marker) for marker in LANE_MARKERS]
+    if -1 not in positions:
+        if positions != sorted(positions):
+            problems.append("lanes must appear in order: " + " / ".join(LANE_MARKERS))
+        bounds = dict(zip(LANE_MARKERS, zip(positions, positions[1:] + [len(readme)])))
+        for marker, repositories in LANE_REPOSITORIES.items():
+            start, end = bounds[marker]
+            for repository in repositories:
+                first = readme.find(f"github.com/rongyishuaige7/{repository}")
+                if first != -1 and not start < first < end:
+                    problems.append(f"{repository} must first appear inside the {marker} lane")
+        # The newest spotlight carries long safety limits, so it stays folded
+        # inside the TOUCH lane instead of competing with the featured builds.
+        touch_start, touch_end = bounds["// 03 TOUCH"]
+        latest = readme.find("// LATEST BUILD")
+        spotlight = readme.find("raspberry-pi-home-environment-activity-monitoring-demo")
+        if not touch_start < latest < spotlight < touch_end:
+            problems.append("the newest hardware spotlight must stay folded inside the TOUCH lane")
+
+    count = re.search(r"\*\*(\d+) 个公开硬件项目\*\*", readme)
+    english = re.search(r"\*\*Touch:\*\* (\d+) public hardware prototypes", readme)
+    if count is None:
+        problems.append("TOUCH lane must state the public hardware project count")
+    else:
+        expected = count.group(1)
+        if english is None or english.group(1) != expected:
+            problems.append("English overview must state the same hardware project count")
+        for strip in STRIP_ASSETS:
+            if not strip.exists() or f">{expected} PROTOTYPES<" not in strip.read_text(encoding="utf-8"):
+                problems.append(f"{strip.name} must label the same {expected} hardware prototypes")
+
+    problems.extend(validate_screenshot(SCREENSHOT))
 
     referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))
     if referenced_assets != EXPECTED_ASSETS:

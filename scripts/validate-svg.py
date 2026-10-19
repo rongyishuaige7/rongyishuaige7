@@ -12,9 +12,14 @@ FORBIDDEN_VALUE = re.compile(r"(?:javascript:|data:|https?://)", re.IGNORECASE)
 FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNORECASE)
 EXPECTED_ASSETS = {
     "badge-build-log.svg",
+    "badge-dsh.svg",
     "badge-feedback.svg",
+    "badge-hardware.svg",
     "badge-product-facts.svg",
+    "badge-studio.svg",
     "badge-yipan.svg",
+    "hardware-strip-dark.svg",
+    "hardware-strip-light.svg",
     "hero-dark.svg",
     "hero-light.svg",
     "yipan-flow-dark.svg",
@@ -23,7 +28,26 @@ EXPECTED_ASSETS = {
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
+    ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
 )
+# Pairs rendered by scripts/render-svg.py must match element for element.
+GENERATED_PAIRS = {"hero-dark.svg", "hardware-strip-dark.svg"}
+GEOMETRY_ATTRIBUTES = (
+    "id",
+    "class",
+    "d",
+    "x",
+    "y",
+    "width",
+    "height",
+    "cx",
+    "cy",
+    "r",
+    "rx",
+    "transform",
+    "stroke-dashoffset",
+)
+PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
 
 
@@ -103,26 +127,38 @@ def validate(path: Path) -> list[str]:
                 problems.append(f"forbidden external or executable value in {attribute_name}")
 
     if path.name.startswith("hero-"):
-        for design_id in ("edge", "grid", "gridFade", "gridMask", "panelClip", "portable-sequence"):
+        hero_ids = (
+            "edge", "grid", "gridFade", "gridMask", "panelClip",
+            "studio-map", "map-frame", "zone-see", "zone-carry", "zone-touch",
+        )
+        for design_id in hero_ids:
             if design_id not in element_ids:
-                problems.append(f"hero is missing required frame or grid definition: {design_id}")
+                problems.append(f"hero is missing required frame, grid, or lane zone: {design_id}")
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hero must keep an outer shell, inset panel, and inner edge")
-        portable_sequence = next((element for element in root.iter() if element.get("id") == "portable-sequence"), None)
-        if portable_sequence is None or portable_sequence.get("transform") != "translate(-42 0)":
-            problems.append("hero portable sequence must preserve comfortable right-edge clearance")
-        drive_name = next((element for element in root.iter() if "drive-name" in element.get("class", "").split()), None)
-        drive_label = next((element for element in root.iter() if "drive-label" in element.get("class", "").split()), None)
-        if drive_name is None or drive_label is None:
-            problems.append("hero portable card must separate the Yi盘 name from its supporting label")
+        map_frame = next((element for element in root.iter() if element.get("id") == "map-frame"), None)
+        if map_frame is not None and float(map_frame.get("x", "0")) + float(map_frame.get("width", "0")) > 1150:
+            problems.append("hero studio map must preserve comfortable right-edge clearance")
+        core_name = next((element for element in root.iter() if "core-name" in element.get("class", "").split()), None)
+        core_label = next((element for element in root.iter() if "core-label" in element.get("class", "").split()), None)
+        if core_name is None or core_label is None:
+            problems.append("hero studio map must separate the Yi盘 core name from its supporting label")
         elif (
-            drive_name.get("x") != drive_label.get("x")
-            or drive_name.get("text-anchor") != "middle"
-            or drive_label.get("text-anchor") != "middle"
-            or float(drive_name.get("y", "0")) >= float(drive_label.get("y", "0"))
+            core_name.get("x") != core_label.get("x")
+            or core_name.get("text-anchor") != "middle"
+            or core_label.get("text-anchor") != "middle"
+            or float(core_name.get("y", "0")) >= float(core_label.get("y", "0"))
         ):
-            problems.append("hero portable card must center Yi盘 above PORTABLE CONTEXT")
+            problems.append("hero studio map must center Yi盘 above PORTABLE CONTEXT")
+
+    if path.name.startswith("hardware-strip-"):
+        for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):
+            if design_id not in element_ids:
+                problems.append(f"hardware strip is missing required element: {design_id}")
+        top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
+        if len(top_level_rects) < 3:
+            problems.append("hardware strip must keep an outer shell, inset panel, and inner edge")
 
     if path.name.startswith("yipan-flow-"):
         visible_text = "".join(root.itertext())
@@ -182,7 +218,7 @@ def validate(path: Path) -> list[str]:
                 "Yi盘 continuity return must run horizontally to the arrow axis, then turn vertically upward"
             )
 
-    if path.name in {"badge-yipan.svg", "badge-feedback.svg"}:
+    if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(badge_rects) < 2:
             problems.append("primary badge must keep a visible edge and inset highlight")
@@ -247,6 +283,19 @@ def main() -> int:
                 failed = True
                 print(f"FAIL {dark_name} / {light_name}")
                 print(f"  - mismatched {attribute}")
+        if dark_name in GENERATED_PAIRS:
+            dark_shape = [
+                (local_name(element.tag), tuple(element.get(attribute) for attribute in GEOMETRY_ATTRIBUTES))
+                for element in dark_root.iter()
+            ]
+            light_shape = [
+                (local_name(element.tag), tuple(element.get(attribute) for attribute in GEOMETRY_ATTRIBUTES))
+                for element in light_root.iter()
+            ]
+            if dark_shape != light_shape:
+                failed = True
+                print(f"FAIL {dark_name} / {light_name}")
+                print("  - generated pair geometry differs; edit scripts/render-svg.py, not the SVG")
         if dark_name == "yipan-flow-dark.svg":
             dark_by_id = {element.get("id"): element for element in dark_root.iter() if element.get("id")}
             light_by_id = {element.get("id"): element for element in light_root.iter() if element.get("id")}
