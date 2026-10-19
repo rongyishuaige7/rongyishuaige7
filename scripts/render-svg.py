@@ -560,6 +560,196 @@ ${style}
 </svg>
 """)
 
+SIGNAL_STYLE = """  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .bar { transform-box: fill-box; transform-origin: 50% 100%; }
+    .s2 { transform-box: fill-box; transform-origin: 50% 50%; }
+    .s1, .s2, .s3, .cost, .flag, .sweep-a, .sweep-b { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .bar-a { animation: bar-a 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .bar-b { animation: bar-b 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .s1 { animation: s1 6.8s ease-in-out infinite; }
+      .s2 { animation: s2 6.8s ease-in-out infinite; }
+      .s3 { animation: s3 6.8s ease-in-out infinite; }
+      .sweep-a { animation: sweep-a 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .sweep-b { animation: sweep-b 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+      .cost { animation: cost 6.8s ease-in-out infinite; }
+      .flag { animation: flag 6.8s ease-in-out infinite; }
+    }
+    @keyframes bar-a {
+      0%, 12% { transform: scaleY(0.06); opacity: 0.45; }
+      40%, 100% { transform: scaleY(1); opacity: 1; }
+    }
+    @keyframes bar-b {
+      0%, 48% { transform: scaleY(0.06); opacity: 0.45; }
+      76%, 100% { transform: scaleY(1); opacity: 1; }
+    }
+    @keyframes s1 {
+      0%, 2% { opacity: 0; }
+      3%, 16% { opacity: 1; }
+      17%, 100% { opacity: 0; }
+    }
+    @keyframes s2 {
+      0%, 48% { transform: scale(1); opacity: 0; }
+      50% { transform: scale(1); opacity: 0.8; }
+      60% { transform: scale(2.4); opacity: 0; }
+      61%, 100% { transform: scale(2.4); opacity: 0; }
+    }
+    @keyframes s3 {
+      0%, 52% { opacity: 0; }
+      54%, 72% { opacity: 1; }
+      74%, 100% { opacity: 0; }
+    }
+    @keyframes sweep-a {
+      0%, 13% { transform: translateX(0); opacity: 0; }
+      14% { transform: translateX(0); opacity: 1; }
+      37% { transform: translateX(180px); opacity: 1; }
+      38%, 100% { transform: translateX(180px); opacity: 0; }
+    }
+    @keyframes sweep-b {
+      0%, 50% { transform: translateX(0); opacity: 0; }
+      51% { transform: translateX(0); opacity: 1; }
+      73% { transform: translateX(176px); opacity: 1; }
+      75%, 100% { transform: translateX(176px); opacity: 0; }
+    }
+    @keyframes cost {
+      0%, 36% { opacity: 0; }
+      38%, 50% { opacity: 1; }
+      52%, 100% { opacity: 0; }
+    }
+    @keyframes flag {
+      0%, 74% { opacity: 0; }
+      76%, 90% { opacity: 1; }
+      92%, 100% { opacity: 0; }
+    }
+  </style>"""
+
+SIGNAL = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Usage 用量信号示意</title>
+  <desc id="desc">${theme_desc}用量信号卡。左侧三段会话依次亮起，中间十根半小时 Token 柱随扫描线生长，右侧显示推算费用、余额，以及无法确认价格时的明确标记。结构示意，非产品截图。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="${surface_a}"/>
+      <stop offset="1" stop-color="${surface_b}"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="${see}" stop-opacity="0.6"/>
+      <stop offset="0.35" stop-color="${see}" stop-opacity="0"/>
+      <stop offset="0.7" stop-color="${see_2}" stop-opacity="0"/>
+      <stop offset="1" stop-color="${see_2}" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="barFill" x1="0" y1="1" x2="0" y2="0">
+      <stop stop-color="${see}" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="${see_2}"/>
+    </linearGradient>
+    <linearGradient id="sweepGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="${see_2}" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="${see_2}" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="${see_2}" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.9" fill="${see}" opacity="0.16"/>
+    </pattern>
+    <clipPath id="panelClip">
+      <rect x="16" y="16" width="1168" height="288" rx="14"/>
+    </clipPath>
+  </defs>
+${style}
+
+  <rect x="0.5" y="0.5" width="1199" height="319" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="16" y="16" width="1168" height="288" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="16" y="16" width="1168" height="288" fill="url(#dots)"/>
+  </g>
+  <rect x="16.5" y="16.5" width="1167" height="287" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+
+  <text x="40" y="48" class="mono" fill="${see_text}" font-size="14" letter-spacing="1.6">DSH USAGE / SIGNAL SNAPSHOT</text>
+  <text x="1160" y="48" class="mono" fill="${faint}" font-size="12" letter-spacing="0.8" text-anchor="end">结构示意 · 非产品截图</text>
+
+  <g id="sessions">
+    <rect x="40" y="68" width="286" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <text x="58" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">SESSIONS</text>
+    <g>
+      <rect x="56" y="100" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <circle cx="74" cy="119" r="4" fill="${zone_fill}" stroke="${idle}"/>
+      <text x="88" y="124" fill="${ink}" font-size="12">SESSION 01</text>
+      <text x="298" y="124" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">RUN</text>
+      <g class="s1">
+        <rect x="56" y="100" width="254" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
+        <circle cx="74" cy="119" r="4" fill="${see_2}"/>
+      </g>
+    </g>
+    <g>
+      <rect x="56" y="142" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <circle cx="74" cy="161" r="4" fill="${zone_fill}" stroke="${idle}"/>
+      <text x="88" y="166" fill="${muted}" font-size="12">SESSION 02</text>
+      <text x="298" y="166" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">IDLE</text>
+      <circle class="s2" cx="74" cy="161" r="5" fill="none" stroke="${see}" stroke-width="2"/>
+    </g>
+    <g>
+      <rect x="56" y="184" width="254" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
+      <circle cx="74" cy="203" r="4" fill="${zone_fill}" stroke="${idle}"/>
+      <text x="88" y="208" fill="${ink}" font-size="12">SESSION 03</text>
+      <text x="298" y="208" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">DONE</text>
+      <g class="s3">
+        <rect x="56" y="184" width="254" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
+        <circle cx="74" cy="203" r="4" fill="${see_2}"/>
+      </g>
+    </g>
+    <text x="58" y="246" fill="${faint}" font-size="10">密钥只在本机使用</text>
+  </g>
+
+  <g id="usage-bars">
+    <rect x="346" y="68" width="430" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <text x="364" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">TOKENS / 30 MIN</text>
+    <text x="758" y="90" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">10 × 30 MIN</text>
+    <line x1="364" y1="238" x2="758" y2="238" stroke="${card_stroke}"/>
+${bars}
+    <g class="sweep-a">
+      <rect x="372" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
+      <rect x="379" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
+      <circle cx="380" cy="104" r="3" fill="${see_2}"/>
+    </g>
+    <g class="sweep-b">
+      <rect x="552" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
+      <rect x="559" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
+      <circle cx="560" cy="104" r="3" fill="${see_2}"/>
+    </g>
+  </g>
+
+  <g id="cost-readout">
+    <rect x="796" y="68" width="364" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
+    <text x="814" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">COST / 30 MIN</text>
+    <text x="814" y="140" fill="${ink}" font-size="30" font-weight="800">≈ ¥0.24</text>
+    <g class="cost">
+      <text x="814" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.24</text>
+    </g>
+    <rect x="814" y="150" width="120" height="2" rx="1" fill="${see}" opacity="0.35"/>
+    <text x="814" y="168" fill="${faint}" font-size="10">按公开 API 计价规则推算</text>
+    <line x1="814" y1="182" x2="1142" y2="182" stroke="${card_stroke}"/>
+    <text x="814" y="204" class="mono" fill="${faint}" font-size="10" letter-spacing="1">BALANCE</text>
+    <text x="814" y="232" fill="${muted}" font-size="20" font-weight="700">—</text>
+    <rect x="1000" y="204" width="142" height="24" rx="12" fill="none" stroke="${faint}" stroke-opacity="0.45"/>
+    <text x="1071" y="220" class="mono" fill="${faint}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
+    <g class="flag">
+      <rect x="1000" y="204" width="142" height="24" rx="12" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.6"/>
+      <text x="1071" y="220" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
+    </g>
+  </g>
+
+  <g id="legend">
+    <circle cx="44" cy="279" r="3" fill="${see}"/>
+    <text x="54" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">SESSION</text>
+    <circle cx="420" cy="279" r="3" fill="${see_2}"/>
+    <text x="430" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">TOKENS</text>
+    <circle cx="796" cy="279" r="3" fill="${see}"/>
+    <text x="806" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">COST / BALANCE</text>
+    <text x="1160" y="283" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">KEY STAYS LOCAL</text>
+  </g>
+</svg>
+""")
+
 BAR_RATIOS = (0.42, 0.78, 0.96, 0.55, 0.3, 0.62, 0.84, 0.48, 0.24, 0.7)
 
 
@@ -576,20 +766,38 @@ def hero_bars() -> str:
     return "\n".join(lines)
 
 
-def render(template: Template, style: str, palette: dict[str, str]) -> str:
+def signal_bars() -> str:
+    """Half-hour Token bars; three growth classes keep the refresh from looking uniform."""
+    lines = []
+    for index, ratio in enumerate(BAR_RATIOS):
+        x = 380 + index * 38
+        height = 126 * ratio
+        variant = "a" if index < 5 else "b"
+        lines.append(
+            f'    <rect class="bar bar-{variant}" x="{x}" y="{238 - height:.1f}" width="24" height="{height:.1f}" '
+            f'rx="3" fill="url(#barFill)"/>'
+        )
+    return "\n".join(lines)
+
+
+def render(template: Template, style: str, palette: dict[str, str], bars: str | None = None) -> str:
     tokens = dict(palette)
-    tokens.update(style=style, bars=hero_bars(), prototypes=str(HARDWARE_PROTOTYPES))
+    tokens.update(style=style, bars=bars() if bars is not None else hero_bars(), prototypes=str(HARDWARE_PROTOTYPES))
     return template.substitute(tokens)
 
 
 def main() -> int:
     check = "--check" in sys.argv[1:]
-    outputs = {"hero": (HERO, HERO_STYLE), "hardware-strip": (STRIP, STRIP_STYLE)}
+    outputs = {
+        "hero": (HERO, HERO_STYLE, hero_bars),
+        "hardware-strip": (STRIP, STRIP_STYLE, None),
+        "dsh-signal": (SIGNAL, SIGNAL_STYLE, signal_bars),
+    }
     stale: list[str] = []
-    for stem, (template, style) in outputs.items():
+    for stem, (template, style, bars) in outputs.items():
         for theme, palette in PALETTES.items():
             path = ASSETS / f"{stem}-{theme}.svg"
-            svg = render(template, style, palette)
+            svg = render(template, style, palette, bars)
             if check:
                 if not path.exists() or path.read_text(encoding="utf-8") != svg:
                     stale.append(str(path))
