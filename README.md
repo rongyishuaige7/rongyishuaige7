@@ -58,7 +58,7 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
 
 ### Agent 工作流
 
-- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** `SPEC` 规格驱动开发的 DSH 技能包：先写需求、设计和任务，再按规格实现与验收。`DSH Plugin` `npm` | MIT
+- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** `SPEC` 规格驱动开发的 DSH 插件，含写规格、实现、验收三个技能：先写需求、设计和任务，再按规格实现与验收。`DSH Plugin` `npm` | MIT
 - **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** `MENTOR` 把 AI 写好的代码讲透：架构意图、流转图、源码解剖和暗坑考查四阶带读。`Agent Skill` `Shell` | MIT
 - **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** `RECORD` 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/29339468636) | MIT
 - **[宁缺](https://github.com/rongyishuaige7/ningque)** `AI-LED` 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
