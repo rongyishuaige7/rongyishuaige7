@@ -19,8 +19,8 @@ FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=8",
-    "./assets/hero-light.svg?v=8",
+    "./assets/hero-dark.svg?v=9",
+    "./assets/hero-light.svg?v=9",
     "./assets/yipan-flow-dark.svg?v=9",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-dark.svg?v=1",
@@ -30,11 +30,10 @@ EXPECTED_ASSETS = {
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-product-facts.svg?v=1",
     "./assets/badge-feedback.svg?v=2",
-    "./assets/badge-dsh.svg?v=1",
     "./assets/badge-hardware.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=8",
+    "./assets/hero-light.svg?v=9",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
@@ -44,7 +43,6 @@ EXPECTED_IMG_ASSETS = {
     "./assets/badge-yipan.svg?v=2",
     "./assets/badge-product-facts.svg?v=1",
     "./assets/badge-feedback.svg?v=2",
-    "./assets/badge-dsh.svg?v=1",
     "./assets/badge-hardware.svg?v=1",
 }
 # The three homepage lanes, in order, then the folded English overview.
@@ -206,8 +204,8 @@ def main() -> int:
         problems.append("product facts must use the approved two-column mobile-readable table")
     if not re.search(r"yipan-flow-light\.svg\?v=9[^>]*>\n</picture>\n\n> 结构示意，非产品截图。\n\n\*\*Yi盘是一套", readme):
         problems.append("Yi盘 product diagram must keep the approved note before its description")
-    if readme.count('src="./assets/badge-') != 7:
-        problems.append("profile must contain exactly seven local brand badges")
+    if readme.count('src="./assets/badge-') != 6:
+        problems.append("profile must contain exactly six local brand badges")
 
     positions = [readme.find(marker) for marker in LANE_MARKERS]
     if -1 not in positions:

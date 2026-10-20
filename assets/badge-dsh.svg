@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="196" height="36" viewBox="0 0 196 36" role="img" aria-labelledby="title desc">
-  <title id="title">查看 DSH Usage</title>
-  <desc id="desc">前往 DSH Usage 公开仓库。</desc>
-  <rect x="0.5" y="0.5" width="195" height="35" rx="8" fill="#202631" stroke="#4d7fd6"/>
-  <text x="14" y="22" fill="#8fbaff" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">SEE</text>
-  <path d="M48 8V28" stroke="#4d7fd6" stroke-opacity="0.55"/>
-  <text x="62" y="23" fill="#f4f6f8" font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, sans-serif" font-size="14" font-weight="700">查看 DSH Usage</text>
-</svg>

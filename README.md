@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=8">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=8">
-  <img src="./assets/hero-light.svg?v=8" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。随身的上下文，看得见的 Agent，摸得着的硬件。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=9">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=9">
+  <img src="./assets/hero-light.svg?v=9" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。随身的上下文，看得见的 Agent，摸得着的硬件。">
 </picture>
 
 <div align="center">
@@ -44,11 +44,9 @@
 
 ## `// 02 SEE` 可见 · 看得见，才管得住。
 
-Agent 用了多少、花了多少、为什么这样写，都应该能查。下面是我给自己做、也公开发布的工具。
-
 ### [DSH Usage](https://github.com/rongyishuaige7/dsh-stats)
 
-`USAGE` DeepSeek Harness 插件：按项目整理 DSH 会话，Token、开发时长、模型费用和账户余额一屏看清。无法确认价格时明确标记，不硬猜；密钥只在本机使用。
+`USAGE` DeepSeek Harness 插件：按项目统计 DSH 会话的 Token、开发时长、费用和余额。未知价格会明确标出，密钥只在本机使用。
 
 `TypeScript` `DSH Plugin` `Local-first` | 以 `@rongyi7/dsh-stats` 发布在 npm | MIT
 
@@ -62,22 +60,18 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
 
 ### Agent 工作流
 
-- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** `SPEC` 规格驱动开发的 DSH 插件，含写规格、实现、验收三个技能：先写需求、设计和任务，再按规格实现与验收。`DSH Plugin` `npm` | MIT
-- **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** `MENTOR` 把 AI 写好的代码讲透：架构意图、流转图、源码解剖和暗坑考查四阶带读。`Agent Skill` `Shell` | MIT
+- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** `SPEC` 规格驱动开发的 DSH 插件，三个技能分别负责写规格（需求、设计、任务）、按规格实现和验收。`DSH Plugin` `npm` | MIT
+- **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** `MENTOR` 按架构意图、流转图、源码解剖、暗坑考查四个阶段，讲解 AI 写好的代码。`Agent Skill` `Shell` | MIT
 - **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** `RECORD` 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/29339468636) | MIT
 - **[宁缺](https://github.com/rongyishuaige7/ningque)** `AI-LED` 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
 
 ### 桌面工具
 
 - **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** `OBSERVE` 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
-- **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** `PSI` GNOME Shell 扩展：状态栏颜色跟随 PSI 卡顿时间而不是占用率，机器真的变慢时才提醒，并列出 Swap 大户。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
+- **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** `PSI` GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
 - **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** `PLAY` Linux 桌面宠物原型：React 负责设置界面，Rust + GTK 负责透明置顶窗口。`Tauri` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
-
-<div align="center">
-  <a href="https://github.com/rongyishuaige7/dsh-stats"><img src="./assets/badge-dsh.svg?v=1" height="36" alt="查看 DSH Usage"></a>
-</div>
 
 ---
 
@@ -152,6 +146,4 @@ I am **Rongyi**, an independent developer and the founder of **Yi盘**. My work 
   <a href="https://github.com/rongyishuaige7?tab=repositories"><strong>全部仓库</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7/hardware-lab"><strong>Hardware Lab</strong></a>
-  &nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><strong>提交 Yi盘反馈</strong></a>
 </div>

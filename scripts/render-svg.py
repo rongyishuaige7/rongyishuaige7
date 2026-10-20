@@ -259,14 +259,13 @@ ${style}
   </g>
 
   <g font-size="46" font-weight="800" letter-spacing="-1.2">
-    <text x="54" y="148" fill="${ink}"><tspan fill="${carry_text}">随身</tspan>的上下文，</text>
-    <text x="54" y="206" fill="${ink}"><tspan fill="${see_text}">看得见</tspan>的 Agent，</text>
-    <text x="54" y="264" fill="${ink}"><tspan fill="${touch_text}">摸得着</tspan>的硬件。</text>
+    <text x="54" y="162" fill="${ink}"><tspan fill="${carry_text}">随身</tspan>的上下文，</text>
+    <text x="54" y="220" fill="${ink}"><tspan fill="${see_text}">看得见</tspan>的 Agent，</text>
+    <text x="54" y="278" fill="${ink}"><tspan fill="${touch_text}">摸得着</tspan>的硬件。</text>
   </g>
-  <rect class="underline" x="55" y="158" width="88" height="4" rx="2" fill="${carry}" style="animation-delay: 0.3s"/>
-  <rect class="underline" x="55" y="216" width="134" height="4" rx="2" fill="${see}" style="animation-delay: 0.55s"/>
-  <rect class="underline" x="55" y="274" width="134" height="4" rx="2" fill="${touch}" style="animation-delay: 0.8s"/>
-  <text x="56" y="308" fill="${muted}" font-size="16">一个人做产品的独立开发者，主线是 Yi盘。</text>
+  <rect class="underline" x="55" y="172" width="88" height="4" rx="2" fill="${carry}" style="animation-delay: 0.3s"/>
+  <rect class="underline" x="55" y="230" width="134" height="4" rx="2" fill="${see}" style="animation-delay: 0.55s"/>
+  <rect class="underline" x="55" y="288" width="134" height="4" rx="2" fill="${touch}" style="animation-delay: 0.8s"/>
 
   <g id="studio-map">
     <rect id="map-frame" x="560" y="40" width="586" height="280" rx="14" fill="${card}" fill-opacity="0.72" stroke="${card_stroke}"/>

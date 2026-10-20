@@ -12,7 +12,6 @@ FORBIDDEN_VALUE = re.compile(r"(?:javascript:|data:|https?://)", re.IGNORECASE)
 FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNORECASE)
 EXPECTED_ASSETS = {
     "badge-build-log.svg",
-    "badge-dsh.svg",
     "badge-feedback.svg",
     "badge-hardware.svg",
     "badge-product-facts.svg",
