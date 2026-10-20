@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
-  <desc id="desc">浅色品牌横幅。左侧是三行主张：随身的上下文，看得见的 Agent，摸得着的硬件。右侧是三条线的工作室结构示意：Yi盘居中，左边列出三个公开 Agent 工具（DSH Usage、dsh-spec、DevFlow），右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
+  <desc id="desc">浅色品牌横幅。左侧列出三个项目：Yi盘，U 盘里的 AI 工作台，受控内测；DSH Usage，统计 DSH 会话、Token 与模型费用；Hardware Lab，22 个硬件原型。右侧是结构示意：Yi盘居中，资料留在盘内，左边列出三个公开 Agent 工具（DSH Usage、dsh-spec、DevFlow），右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#ffffff"/>
@@ -60,13 +60,13 @@
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .route { stroke-dasharray: 4 7; stroke-linecap: round; }
     .orbit { stroke-dasharray: 2 6; }
-    .underline, .core-pulse { transform-box: fill-box; }
-    .underline { transform-origin: 0 50%; }
+    .lane-bar, .core-pulse { transform-box: fill-box; }
+    .lane-bar { transform-origin: 50% 0; }
     .core-pulse { transform-origin: 50% 50%; }
     .orbit-a, .orbit-b, .orbit-c { transform-box: view-box; transform-origin: 853px 180px; }
     .packet, .activity, .lit, .core-pulse { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .underline { animation: underline 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+      .lane-bar { animation: lane-bar 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
       .orbit-a { animation: spin 14s linear infinite; }
       .orbit-b { animation: spin 20s linear infinite reverse; }
       .orbit-c { animation: spin 26s linear infinite; }
@@ -81,9 +81,9 @@
       .lit-b { animation: lit-b 7.2s ease-in-out infinite; }
       .lit-c { animation: lit-c 7.2s ease-in-out infinite; }
     }
-    @keyframes underline {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
+    @keyframes lane-bar {
+      from { transform: scaleY(0); }
+      to { transform: scaleY(1); }
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -166,25 +166,31 @@
     <text x="64" y="40" fill="#5f6876" font-size="13" letter-spacing="1.4">INDIE DEVELOPER · FOUNDER OF YI盘</text>
   </g>
 
-  <g font-size="46" font-weight="800" letter-spacing="-1.2">
-    <text x="54" y="162" fill="#18202a"><tspan fill="#c8452a">随身</tspan>的上下文，</text>
-    <text x="54" y="220" fill="#18202a"><tspan fill="#2559c4">看得见</tspan>的 Agent，</text>
-    <text x="54" y="278" fill="#18202a"><tspan fill="#0b7d50">摸得着</tspan>的硬件。</text>
+  <g id="projects">
+    <rect class="lane-bar" x="54" y="118" width="4" height="56" rx="2" fill="#e45738" style="animation-delay: 0.3s"/>
+    <rect class="lane-bar" x="54" y="190" width="4" height="56" rx="2" fill="#3d7be0" style="animation-delay: 0.55s"/>
+    <rect class="lane-bar" x="54" y="262" width="4" height="56" rx="2" fill="#1aa572" style="animation-delay: 0.8s"/>
+    <g font-size="34" font-weight="800" letter-spacing="-0.6" fill="#18202a">
+      <text x="74" y="146">Yi盘</text>
+      <text x="74" y="218">DSH Usage</text>
+      <text x="74" y="290">Hardware Lab</text>
+    </g>
+    <g font-size="16" fill="#5f6876">
+      <text x="74" y="170">U 盘里的 AI 工作台 · 受控内测</text>
+      <text x="74" y="242">DSH 会话、Token 与模型费用</text>
+      <text x="74" y="314">22 个硬件原型 · ESP32 / STM32 / 树莓派</text>
+    </g>
   </g>
-  <rect class="underline" x="55" y="172" width="88" height="4" rx="2" fill="#e45738" style="animation-delay: 0.3s"/>
-  <rect class="underline" x="55" y="230" width="134" height="4" rx="2" fill="#3d7be0" style="animation-delay: 0.55s"/>
-  <rect class="underline" x="55" y="288" width="134" height="4" rx="2" fill="#1aa572" style="animation-delay: 0.8s"/>
 
   <g id="studio-map">
     <rect id="map-frame" x="560" y="40" width="586" height="280" rx="14" fill="#ffffff" fill-opacity="0.72" stroke="#d5dbe4"/>
-    <text x="578" y="62" class="mono" fill="#6c7583" font-size="11" letter-spacing="1.2">RONGYI STUDIO / 三条线示意</text>
+    <text x="578" y="62" class="mono" fill="#6c7583" font-size="11" letter-spacing="1.2">RONGYI STUDIO</text>
     <text x="1128" y="62" fill="#6c7583" font-size="11" text-anchor="end">结构示意 · 非产品截图</text>
     <path d="M560 74H1146" stroke="#d5dbe4"/>
 
     <g id="zone-see">
       <rect x="578" y="90" width="196" height="212" rx="12" fill="#f8fafc" stroke="#3d7be0" stroke-opacity="0.45"/>
       <text x="594" y="114" fill="#18202a" font-size="14" font-weight="700">AGENT 工具</text>
-      <text x="758" y="114" fill="#2559c4" font-size="12" text-anchor="end">可见</text>
       <text x="594" y="138" class="mono" fill="#6c7583" font-size="10" letter-spacing="1">PUBLIC REPOS</text>
       <g fill="#ffffff" stroke="#d5dbe4">
         <rect x="588" y="150" width="176" height="42" rx="8"/>
@@ -232,14 +238,13 @@
       <circle class="core-pulse" cx="853" cy="180" r="32" fill="none" stroke="#e45738" stroke-width="2"/>
       <circle cx="853" cy="180" r="32" fill="url(#coreFill)" stroke="#e45738" stroke-width="1.5"/>
       <text class="core-name" x="853" y="187" fill="#18202a" font-size="20" font-weight="800" text-anchor="middle">YI<tspan fill="#c8452a">盘</tspan></text>
-      <text x="853" y="262" fill="#c8452a" font-size="13" font-weight="700" text-anchor="middle">随身</text>
-      <text class="mono core-label" x="853" y="280" fill="#6c7583" font-size="10" letter-spacing="1" text-anchor="middle">PORTABLE CONTEXT</text>
+      <text x="853" y="262" fill="#c8452a" font-size="13" font-weight="700" text-anchor="middle">资料留在盘内</text>
+      <text class="mono core-label" x="853" y="280" fill="#6c7583" font-size="10" letter-spacing="1" text-anchor="middle">DATA ON DRIVE</text>
     </g>
 
     <g id="zone-touch">
       <rect x="932" y="90" width="196" height="212" rx="12" fill="#f8fafc" stroke="#1aa572" stroke-opacity="0.45"/>
       <text x="948" y="114" fill="#18202a" font-size="14" font-weight="700">硬件原型</text>
-      <text x="1112" y="114" fill="#0b7d50" font-size="12" text-anchor="end">可触</text>
       <rect x="948" y="128" width="164" height="96" rx="8" fill="#f1faf5" stroke="#1aa572" stroke-opacity="0.5"/>
       <path d="M968 152V146M976 152V146M984 152V146M992 152V146M968 200V206M976 200V206M984 200V206M992 200V206" stroke="#1aa572" stroke-opacity="0.55" stroke-width="1.5"/>
       <rect x="960" y="152" width="40" height="48" rx="4" fill="#f8fafc" stroke="#1aa572" stroke-opacity="0.7"/>

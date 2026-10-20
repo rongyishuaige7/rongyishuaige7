@@ -10,6 +10,7 @@ import sys
 
 README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
+HERO_ASSETS = (Path("assets/hero-dark.svg"), Path("assets/hero-light.svg"))
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
 PHOTO_STRIP = Path("assets/hardware-featured.webp")
@@ -19,8 +20,8 @@ FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=9",
-    "./assets/hero-light.svg?v=9",
+    "./assets/hero-dark.svg?v=10",
+    "./assets/hero-light.svg?v=10",
     "./assets/yipan-flow-dark.svg?v=9",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-dark.svg?v=1",
@@ -33,7 +34,7 @@ EXPECTED_ASSETS = {
     "./assets/badge-hardware.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=9",
+    "./assets/hero-light.svg?v=10",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
@@ -54,7 +55,6 @@ REQUIRED_TEXT = (
     "核心实现、客户配置与制盘工具不公开",
     "结构示意，非产品截图",
     "主要调用云端模型",
-    "一个人做产品的独立开发者",
     "真实运行界面，夹具数据，项目名为占位",
     "Token 模式",
     "最终以 Provider 账单为准",
@@ -110,6 +110,18 @@ LANE_REPOSITORIES = {
         "esp32-s3-health-voice-terminal",
     ),
 }
+# Slogans and self-introductions retired at the user's request; project names and facts replace them.
+RETIRED_COPY = (
+    "随身的上下文",
+    "看得见的 Agent",
+    "摸得着的硬件",
+    "一个人做产品",
+    "跟着人走",
+    "看得见，才管得住",
+    "把代码烧进板子里",
+    "三条线",
+    "three lanes",
+)
 FORBIDDEN_TEXT = (
     "—",
     "–",
@@ -199,6 +211,12 @@ def main() -> int:
     for text in FORBIDDEN_TEXT:
         if text in readme:
             problems.append(f"forbidden stale or stylistic text: {text}")
+    for text in RETIRED_COPY:
+        if text in readme:
+            problems.append(f"retired slogan or self-introduction: {text}")
+        for hero in HERO_ASSETS:
+            if hero.exists() and text in hero.read_text(encoding="utf-8"):
+                problems.append(f"{hero.name} still uses retired copy: {text}")
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
@@ -227,7 +245,7 @@ def main() -> int:
             problems.append("the newest hardware spotlight must stay folded inside the TOUCH lane")
 
     count = re.search(r"\*\*(\d+) 个公开硬件项目\*\*", readme)
-    english = re.search(r"\*\*Touch:\*\* (\d+) public hardware prototypes", readme)
+    english = re.search(r"\*\*Hardware Lab:\*\* (\d+) public hardware prototypes", readme)
     if count is None:
         problems.append("TOUCH lane must state the public hardware project count")
     else:
@@ -237,6 +255,9 @@ def main() -> int:
         for strip in STRIP_ASSETS:
             if not strip.exists() or f">{expected} PROTOTYPES<" not in strip.read_text(encoding="utf-8"):
                 problems.append(f"{strip.name} must label the same {expected} hardware prototypes")
+        for hero in HERO_ASSETS:
+            if not hero.exists() or f">{expected} 个硬件原型" not in hero.read_text(encoding="utf-8"):
+                problems.append(f"{hero.name} must list the same {expected} hardware prototypes")
 
     for screenshot in SCREENSHOTS:
         problems.extend(validate_screenshot(screenshot))

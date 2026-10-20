@@ -133,9 +133,9 @@ def main() -> int:
         problems.append("flow does not use one 8.4s continuity cycle")
     if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
         problems.append("hero still duplicates the cloud-agent workflow semantics")
-    for text in ("随身", "看得见", "摸得着", "PORTABLE CONTEXT"):
+    for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<", ">DATA ON DRIVE<"):
         if text not in hero:
-            problems.append(f"hero is missing a studio lane: {text}")
+            problems.append(f"hero is missing a project entry or the Yi盘 label: {text.strip('<>')}")
 
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)

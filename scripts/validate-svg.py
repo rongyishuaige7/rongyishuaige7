@@ -149,7 +149,7 @@ def validate(path: Path) -> list[str]:
             or core_label.get("text-anchor") != "middle"
             or float(core_name.get("y", "0")) >= float(core_label.get("y", "0"))
         ):
-            problems.append("hero studio map must center Yi盘 above PORTABLE CONTEXT")
+            problems.append("hero studio map must center Yi盘 above its supporting label")
 
     if path.name.startswith("hardware-strip-"):
         for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):

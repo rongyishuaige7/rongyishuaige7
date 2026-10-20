@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=9">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=9">
-  <img src="./assets/hero-light.svg?v=9" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。随身的上下文，看得见的 Agent，摸得着的硬件。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=10">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=10">
+  <img src="./assets/hero-light.svg?v=10" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三个项目：Yi盘，U 盘里的 AI 工作台；DSH Usage，统计 DSH 会话、Token 与模型费用；Hardware Lab，ESP32、STM32 与树莓派硬件原型。右侧为三者关系的结构示意。">
 </picture>
 
 <div align="center">
@@ -10,11 +10,9 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
 </div>
 
-我是 **Rongyi**，一个人做产品的独立开发者。主线是 **Yi盘**：装在 U 盘里的随身 AI 工作台；同时做让 Agent 工作看得见的工具，以及 ESP32、STM32 与树莓派上的硬件原型。
-
 ---
 
-## `// 01 CARRY` 随身 · 上下文，跟着人走。
+## `// 01 CARRY` Yi盘
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=9">
@@ -42,7 +40,7 @@
 
 ---
 
-## `// 02 SEE` 可见 · 看得见，才管得住。
+## `// 02 SEE` DSH Usage 与开发工具
 
 ### [DSH Usage](https://github.com/rongyishuaige7/dsh-stats)
 
@@ -75,7 +73,7 @@
 
 ---
 
-## `// 03 TOUCH` 可触 · 把代码烧进板子里。
+## `// 03 TOUCH` Hardware Lab
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=1">
@@ -132,14 +130,14 @@
 <summary><b><code>// ENGLISH OVERVIEW</code></b></summary>
 <br>
 
-I am **Rongyi**, an independent developer and the founder of **Yi盘**. My work runs in three lanes. **Carry:** Yi盘 is a portable AI workspace designed to run from a USB drive; long-term files, task records, and primary outputs stay on the drive, while intelligent processing mainly uses cloud models. It is in controlled testing, with Linux coverage furthest along and Windows and macOS validation continuing on real machines. **See:** tools that make agent work visible, such as DSH Usage for per-project token, time, and cost tracking. **Touch:** 22 public hardware prototypes on ESP32, STM32, Raspberry Pi, and Arduino, indexed in Hardware Lab. Public repositories document verified facts, known limitations, and build evidence.
+**Yi盘:** a portable AI workspace designed to run from a USB drive. Long-term files, task records, and primary outputs stay on the drive, while intelligent processing mainly uses cloud models. It is in controlled testing, with Linux coverage furthest along and Windows and macOS validation continuing on real machines. **DSH Usage:** a DeepSeek Harness plugin for per-project token, time, and cost tracking, listed with other public agent and desktop tools. **Hardware Lab:** 22 public hardware prototypes on ESP32, STM32, Raspberry Pi, and Arduino. Public repositories document verified facts, known limitations, and build evidence.
 
 </details>
 
 ---
 
 <div align="center">
-  <strong>Rongyi Studio · 随身 / 可见 / 可触</strong>
+  <strong>Rongyi Studio</strong>
   <br><br>
   <a href="https://rongyishuaige7.github.io/"><strong>个人主页</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
