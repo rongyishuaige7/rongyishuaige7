@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+  # Weekly drift check: external links and the evidence runs pinned to other repositories' HEAD.
+  schedule:
+    - cron: "17 2 * * 1"
 
 permissions:
   contents: read
@@ -55,6 +58,8 @@ jobs:
 
   secrets:
     name: Secret scan
+    # History only changes on push, so the weekly run skips the scan.
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
