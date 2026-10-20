@@ -9,12 +9,10 @@ import sys
 FLOW = Path("assets/yipan-flow-light.svg")
 HERO = Path("assets/hero-light.svg")
 STRIP = Path("assets/hardware-strip-light.svg")
-SIGNAL = Path("assets/dsh-signal-light.svg")
 PAIR = {
     FLOW: Path("assets/yipan-flow-dark.svg"),
     HERO: Path("assets/hero-dark.svg"),
     STRIP: Path("assets/hardware-strip-dark.svg"),
-    SIGNAL: Path("assets/dsh-signal-dark.svg"),
 }
 # Each story is a list of stages that share one cycle. Classes inside a stage
 # run together (three traces, three LEDs); a stage may not start before the
@@ -45,13 +43,6 @@ STORIES = {
         ("chip-on",),
         ("sig-out-a", "sig-out-b", "sig-out-c"),
         ("led-a", "led-b", "led-c"),
-    )),
-    SIGNAL: ("6.8s", (
-        ("s1",),
-        ("sweep-a",),
-        ("s2", "s3", "sweep-b"),
-        ("cost",),
-        ("flag",),
     )),
 }
 FORBIDDEN_ANIMATED_PROPERTIES = re.compile(

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
-  <desc id="desc">深色品牌横幅。左侧是三行主张：随身的上下文，看得见的 Agent，摸得着的硬件。右侧是三条线的工作室结构示意：Yi盘居中，左边是 Agent 工具的用量柱和会话列表，右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
+  <desc id="desc">深色品牌横幅。左侧是三行主张：随身的上下文，看得见的 Agent，摸得着的硬件。右侧是三条线的工作室结构示意：Yi盘居中，左边列出三个公开 Agent 工具（DSH Usage、dsh-spec、DevFlow），右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="#111722"/>
@@ -17,10 +17,6 @@
       <stop stop-color="#ffffff" stop-opacity="0.22"/>
       <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.48"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0.78"/>
-    </linearGradient>
-    <linearGradient id="seeBar" x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="#6ea8ff"/>
-      <stop offset="1" stop-color="#9b8cff" stop-opacity="0.55"/>
     </linearGradient>
     <radialGradient id="washCarry">
       <stop stop-color="#ff6b4a" stop-opacity="0.18"/>
@@ -64,17 +60,13 @@
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .route { stroke-dasharray: 4 7; stroke-linecap: round; }
     .orbit { stroke-dasharray: 2 6; }
-    .bar, .underline, .ring, .core-pulse { transform-box: fill-box; }
-    .bar { transform-origin: 50% 100%; }
+    .underline, .core-pulse { transform-box: fill-box; }
     .underline { transform-origin: 0 50%; }
-    .ring, .core-pulse { transform-origin: 50% 50%; }
+    .core-pulse { transform-origin: 50% 50%; }
     .orbit-a, .orbit-b, .orbit-c { transform-box: view-box; transform-origin: 853px 180px; }
-    .packet, .activity, .lit, .ring, .core-pulse { opacity: 0; }
+    .packet, .activity, .lit, .core-pulse { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
       .underline { animation: underline 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-      .bar { animation: breathe 3.2s ease-in-out infinite; }
-      .ring { animation: ring 1.8s ease-out infinite; }
-      .cursor { animation: blink 1.1s linear infinite; }
       .orbit-a { animation: spin 14s linear infinite; }
       .orbit-b { animation: spin 20s linear infinite reverse; }
       .orbit-c { animation: spin 26s linear infinite; }
@@ -92,18 +84,6 @@
     @keyframes underline {
       from { transform: scaleX(0); }
       to { transform: scaleX(1); }
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scaleY(1); }
-      50% { transform: scaleY(0.55); }
-    }
-    @keyframes ring {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(2.6); opacity: 0; }
-    }
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -206,30 +186,32 @@
       <rect x="578" y="90" width="196" height="212" rx="12" fill="#0c121b" stroke="#6ea8ff" stroke-opacity="0.45"/>
       <text x="594" y="114" fill="#f3f6fa" font-size="14" font-weight="700">AGENT 工具</text>
       <text x="758" y="114" fill="#6ea8ff" font-size="12" text-anchor="end">可见</text>
-      <rect class="bar" x="594.0" y="163.1" width="12" height="26.9" rx="2" fill="url(#seeBar)" style="animation-delay: -0.00s"/>
-      <rect class="bar" x="610.4" y="140.1" width="12" height="49.9" rx="2" fill="url(#seeBar)" style="animation-delay: -0.27s"/>
-      <rect class="bar" x="626.8" y="128.6" width="12" height="61.4" rx="2" fill="url(#seeBar)" style="animation-delay: -0.54s"/>
-      <rect class="bar" x="643.2" y="154.8" width="12" height="35.2" rx="2" fill="url(#seeBar)" style="animation-delay: -0.81s"/>
-      <rect class="bar" x="659.6" y="170.8" width="12" height="19.2" rx="2" fill="url(#seeBar)" style="animation-delay: -1.08s"/>
-      <rect class="bar" x="676.0" y="150.3" width="12" height="39.7" rx="2" fill="url(#seeBar)" style="animation-delay: -1.35s"/>
-      <rect class="bar" x="692.4" y="136.2" width="12" height="53.8" rx="2" fill="url(#seeBar)" style="animation-delay: -1.62s"/>
-      <rect class="bar" x="708.8" y="159.3" width="12" height="30.7" rx="2" fill="url(#seeBar)" style="animation-delay: -1.89s"/>
-      <rect class="bar" x="725.2" y="174.6" width="12" height="15.4" rx="2" fill="url(#seeBar)" style="animation-delay: -2.16s"/>
-      <rect class="bar" x="741.6" y="145.2" width="12" height="44.8" rx="2" fill="url(#seeBar)" style="animation-delay: -2.43s"/>
-      <text x="594" y="204" class="mono" fill="#737e8e" font-size="10" letter-spacing="1">TOKENS / 30 MIN</text>
-      <rect class="activity activity-see" x="588" y="210" width="176" height="26" rx="8" fill="#6ea8ff" fill-opacity="0.12" stroke="#6ea8ff" stroke-width="1.5"/>
-      <g class="mono" font-size="11">
-        <circle cx="600" cy="224" r="4" fill="#6ea8ff"/>
-        <circle class="ring" cx="600" cy="224" r="4" fill="none" stroke="#6ea8ff" stroke-width="1.5"/>
-        <text x="612" y="228" fill="#f3f6fa">SESSION 01</text>
-        <rect class="cursor" x="684" y="219" width="6" height="11" fill="#6ea8ff"/>
-        <text x="758" y="228" fill="#6ea8ff" font-size="10" text-anchor="end">RUN</text>
-        <circle cx="600" cy="248" r="4" fill="#5d6878"/>
-        <text x="612" y="252" fill="#9da6b4">SESSION 02</text>
-        <text x="758" y="252" fill="#737e8e" font-size="10" text-anchor="end">IDLE</text>
-        <circle cx="600" cy="272" r="4" fill="#9b8cff"/>
-        <text x="612" y="276" fill="#9da6b4">SESSION 03</text>
-        <text x="758" y="276" fill="#737e8e" font-size="10" text-anchor="end">DONE</text>
+      <text x="594" y="138" class="mono" fill="#737e8e" font-size="10" letter-spacing="1">PUBLIC REPOS</text>
+      <g fill="#101722" stroke="#2a3341">
+        <rect x="588" y="150" width="176" height="42" rx="8"/>
+        <rect x="588" y="198" width="176" height="42" rx="8"/>
+        <rect x="588" y="246" width="176" height="42" rx="8"/>
+      </g>
+      <rect class="activity activity-see" x="588" y="150" width="176" height="42" rx="8" fill="#6ea8ff" fill-opacity="0.12" stroke="#6ea8ff" stroke-width="1.5"/>
+      <g fill="#6ea8ff">
+        <circle cx="601" cy="163" r="3.5"/>
+        <circle cx="601" cy="211" r="3.5"/>
+        <circle cx="601" cy="259" r="3.5"/>
+      </g>
+      <g font-size="13" font-weight="700" fill="#f3f6fa">
+        <text x="612" y="167">DSH Usage</text>
+        <text x="612" y="215">dsh-spec</text>
+        <text x="612" y="263">DevFlow</text>
+      </g>
+      <g font-size="11" fill="#9da6b4">
+        <text x="612" y="183">Token · 时长 · 费用</text>
+        <text x="612" y="231">规格 · 实现 · 验收</text>
+        <text x="612" y="279">窗口焦点 · 本地时间线</text>
+      </g>
+      <g class="mono" font-size="9" letter-spacing="0.8" fill="#6ea8ff" text-anchor="end">
+        <text x="754" y="167">USAGE</text>
+        <text x="754" y="215">SPEC</text>
+        <text x="754" y="263">OBSERVE</text>
       </g>
     </g>
 

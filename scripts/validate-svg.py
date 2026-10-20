@@ -18,8 +18,6 @@ EXPECTED_ASSETS = {
     "badge-product-facts.svg",
     "badge-studio.svg",
     "badge-yipan.svg",
-    "dsh-signal-dark.svg",
-    "dsh-signal-light.svg",
     "hardware-strip-dark.svg",
     "hardware-strip-light.svg",
     "hero-dark.svg",
@@ -31,10 +29,9 @@ THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
     ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
-    ("dsh-signal-dark.svg", "dsh-signal-light.svg"),
 )
 # Pairs rendered by scripts/render-svg.py must match element for element.
-GENERATED_PAIRS = {"hero-dark.svg", "hardware-strip-dark.svg", "dsh-signal-dark.svg"}
+GENERATED_PAIRS = {"hero-dark.svg", "hardware-strip-dark.svg"}
 GEOMETRY_ATTRIBUTES = (
     "id",
     "class",

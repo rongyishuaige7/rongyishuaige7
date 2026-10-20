@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=7">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=7">
-  <img src="./assets/hero-light.svg?v=7" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。随身的上下文，看得见的 Agent，摸得着的硬件。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=8">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=8">
+  <img src="./assets/hero-light.svg?v=8" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。随身的上下文，看得见的 Agent，摸得着的硬件。">
 </picture>
 
 <div align="center">
@@ -51,14 +51,6 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
 `USAGE` DeepSeek Harness 插件：按项目整理 DSH 会话，Token、开发时长、模型费用和账户余额一屏看清。无法确认价格时明确标记，不硬猜；密钥只在本机使用。
 
 `TypeScript` `DSH Plugin` `Local-first` | 以 `@rongyi7/dsh-stats` 发布在 npm | MIT
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-signal-dark.svg?v=3">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-signal-light.svg?v=3">
-  <img src="./assets/dsh-signal-light.svg?v=3" width="100%" alt="DSH Usage 用量信号示意：三段会话依次亮起，十根半小时 Token 柱随扫描线生长，右侧显示推算费用、余额，以及无法确认价格时的明确标记。">
-</picture>
-
-> 结构示意，非产品截图。
 
 <img src="./assets/dsh-timeline.png?v=1" width="100%" alt="DSH Usage 开发时间线界面：每半小时的费用柱与按项目排列的会话泳道">
 

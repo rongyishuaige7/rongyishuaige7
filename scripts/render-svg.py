@@ -34,7 +34,6 @@ PALETTES = {
         "ink": "#f3f6fa",
         "muted": "#9da6b4",
         "faint": "#737e8e",
-        "idle": "#5d6878",
         "packet_fill": "#fff7f2",
         "carry": "#ff6b4a",
         "carry_2": "#ff9a3d",
@@ -67,7 +66,6 @@ PALETTES = {
         "ink": "#18202a",
         "muted": "#5f6876",
         "faint": "#6c7583",
-        "idle": "#a3acb8",
         "packet_fill": "#ffffff",
         "carry": "#e45738",
         "carry_2": "#f08a2c",
@@ -93,17 +91,13 @@ HERO_STYLE = """  <style>
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .route { stroke-dasharray: 4 7; stroke-linecap: round; }
     .orbit { stroke-dasharray: 2 6; }
-    .bar, .underline, .ring, .core-pulse { transform-box: fill-box; }
-    .bar { transform-origin: 50% 100%; }
+    .underline, .core-pulse { transform-box: fill-box; }
     .underline { transform-origin: 0 50%; }
-    .ring, .core-pulse { transform-origin: 50% 50%; }
+    .core-pulse { transform-origin: 50% 50%; }
     .orbit-a, .orbit-b, .orbit-c { transform-box: view-box; transform-origin: 853px 180px; }
-    .packet, .activity, .lit, .ring, .core-pulse { opacity: 0; }
+    .packet, .activity, .lit, .core-pulse { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
       .underline { animation: underline 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-      .bar { animation: breathe 3.2s ease-in-out infinite; }
-      .ring { animation: ring 1.8s ease-out infinite; }
-      .cursor { animation: blink 1.1s linear infinite; }
       .orbit-a { animation: spin 14s linear infinite; }
       .orbit-b { animation: spin 20s linear infinite reverse; }
       .orbit-c { animation: spin 26s linear infinite; }
@@ -121,18 +115,6 @@ HERO_STYLE = """  <style>
     @keyframes underline {
       from { transform: scaleX(0); }
       to { transform: scaleX(1); }
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scaleY(1); }
-      50% { transform: scaleY(0.55); }
-    }
-    @keyframes ring {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(2.6); opacity: 0; }
-    }
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -200,7 +182,7 @@ HERO_STYLE = """  <style>
 
 HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
-  <desc id="desc">${theme_desc}品牌横幅。左侧是三行主张：随身的上下文，看得见的 Agent，摸得着的硬件。右侧是三条线的工作室结构示意：Yi盘居中，左边是 Agent 工具的用量柱和会话列表，右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
+  <desc id="desc">${theme_desc}品牌横幅。左侧是三行主张：随身的上下文，看得见的 Agent，摸得着的硬件。右侧是三条线的工作室结构示意：Yi盘居中，左边列出三个公开 Agent 工具（DSH Usage、dsh-spec、DevFlow），右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
@@ -217,10 +199,6 @@ HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="
       <stop stop-color="#ffffff" stop-opacity="0.22"/>
       <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.48"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0.78"/>
-    </linearGradient>
-    <linearGradient id="seeBar" x1="0" y1="0" x2="0" y2="1">
-      <stop stop-color="${see}"/>
-      <stop offset="1" stop-color="${see_2}" stop-opacity="0.55"/>
     </linearGradient>
     <radialGradient id="washCarry">
       <stop stop-color="${carry}" stop-opacity="${wash}"/>
@@ -298,21 +276,32 @@ ${style}
       <rect x="578" y="90" width="196" height="212" rx="12" fill="${zone_fill}" stroke="${see}" stroke-opacity="0.45"/>
       <text x="594" y="114" fill="${ink}" font-size="14" font-weight="700">AGENT 工具</text>
       <text x="758" y="114" fill="${see_text}" font-size="12" text-anchor="end">可见</text>
-${bars}
-      <text x="594" y="204" class="mono" fill="${faint}" font-size="10" letter-spacing="1">TOKENS / 30 MIN</text>
-      <rect class="activity activity-see" x="588" y="210" width="176" height="26" rx="8" fill="${see}" fill-opacity="0.12" stroke="${see}" stroke-width="1.5"/>
-      <g class="mono" font-size="11">
-        <circle cx="600" cy="224" r="4" fill="${see}"/>
-        <circle class="ring" cx="600" cy="224" r="4" fill="none" stroke="${see}" stroke-width="1.5"/>
-        <text x="612" y="228" fill="${ink}">SESSION 01</text>
-        <rect class="cursor" x="684" y="219" width="6" height="11" fill="${see}"/>
-        <text x="758" y="228" fill="${see_text}" font-size="10" text-anchor="end">RUN</text>
-        <circle cx="600" cy="248" r="4" fill="${idle}"/>
-        <text x="612" y="252" fill="${muted}">SESSION 02</text>
-        <text x="758" y="252" fill="${faint}" font-size="10" text-anchor="end">IDLE</text>
-        <circle cx="600" cy="272" r="4" fill="${see_2}"/>
-        <text x="612" y="276" fill="${muted}">SESSION 03</text>
-        <text x="758" y="276" fill="${faint}" font-size="10" text-anchor="end">DONE</text>
+      <text x="594" y="138" class="mono" fill="${faint}" font-size="10" letter-spacing="1">PUBLIC REPOS</text>
+      <g fill="${card}" stroke="${card_stroke}">
+        <rect x="588" y="150" width="176" height="42" rx="8"/>
+        <rect x="588" y="198" width="176" height="42" rx="8"/>
+        <rect x="588" y="246" width="176" height="42" rx="8"/>
+      </g>
+      <rect class="activity activity-see" x="588" y="150" width="176" height="42" rx="8" fill="${see}" fill-opacity="0.12" stroke="${see}" stroke-width="1.5"/>
+      <g fill="${see}">
+        <circle cx="601" cy="163" r="3.5"/>
+        <circle cx="601" cy="211" r="3.5"/>
+        <circle cx="601" cy="259" r="3.5"/>
+      </g>
+      <g font-size="13" font-weight="700" fill="${ink}">
+        <text x="612" y="167">DSH Usage</text>
+        <text x="612" y="215">dsh-spec</text>
+        <text x="612" y="263">DevFlow</text>
+      </g>
+      <g font-size="11" fill="${muted}">
+        <text x="612" y="183">Token · 时长 · 费用</text>
+        <text x="612" y="231">规格 · 实现 · 验收</text>
+        <text x="612" y="279">窗口焦点 · 本地时间线</text>
+      </g>
+      <g class="mono" font-size="9" letter-spacing="0.8" fill="${see_text}" text-anchor="end">
+        <text x="754" y="167">USAGE</text>
+        <text x="754" y="215">SPEC</text>
+        <text x="754" y="263">OBSERVE</text>
       </g>
     </g>
 
@@ -560,355 +549,6 @@ ${style}
 </svg>
 """)
 
-SIGNAL_STYLE = """  <style>
-    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .s2, .run-pulse { transform-box: fill-box; transform-origin: 50% 50%; }
-    .cost { transform-box: fill-box; transform-origin: 0 50%; }
-    .p1, .p2, .p3 { transform-box: fill-box; transform-origin: 0 50%; }
-    .s1, .s2, .s3, .cost, .cost-0, .cost-1, .cost-2, .cost-3, .flag, .sweep-a, .sweep-b { opacity: 0; }
-    .p1 { transform: scaleX(0.62); }
-    .p2 { transform: scaleX(0.12); }
-    .p3 { transform: scaleX(1); }
-    .run-pulse { opacity: 0.5; }
-    .glow { opacity: 0.08; }
-    @media (prefers-reduced-motion: no-preference) {
-      .reveal { animation: reveal 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .bright { animation: bright 6.8s ease-in-out infinite; }
-      .s1 { animation: s1 6.8s ease-in-out infinite; }
-      .s2 { animation: s2 6.8s ease-in-out infinite; }
-      .s3 { animation: s3 6.8s ease-in-out infinite; }
-      .sweep-a { animation: sweep-a 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .sweep-b { animation: sweep-b 6.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .cost { animation: cost 6.8s ease-in-out infinite; }
-      .cost-0 { animation: cost-0 6.8s steps(1, end) infinite; }
-      .cost-1 { animation: cost-1 6.8s steps(1, end) infinite; }
-      .cost-2 { animation: cost-2 6.8s steps(1, end) infinite; }
-      .cost-3 { animation: cost-3 6.8s steps(1, end) infinite; }
-      .p1 { animation: p1 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
-      .p2 { animation: p2 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
-      .p3 { animation: p3 6.8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
-      .flag { animation: flag 6.8s ease-in-out infinite; }
-      .packet-a { animation: packet 2.2s linear infinite; }
-      .packet-b { animation: packet 2.2s linear infinite; animation-delay: -1.1s; }
-      .glow { animation: glow 4.2s ease-in-out infinite; }
-      .run-pulse { animation: run-pulse 1.7s ease-out infinite; }
-      .cursor { animation: cursor 1.1s steps(1, end) infinite; }
-    }
-    @keyframes reveal {
-      0%, 8% { transform: translateX(-366px); }
-      38% { transform: translateX(-186px); }
-      39% { transform: translateX(-186px); }
-      74%, 100% { transform: translateX(0); }
-    }
-    @keyframes bright {
-      0%, 96% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    @keyframes s1 {
-      0%, 1% { opacity: 0; }
-      2%, 10% { opacity: 1; }
-      11%, 100% { opacity: 0; }
-    }
-    @keyframes s2 {
-      0%, 34% { transform: scale(1); opacity: 0; }
-      36% { transform: scale(1); opacity: 0.8; }
-      46% { transform: scale(2.4); opacity: 0; }
-      47%, 100% { transform: scale(2.4); opacity: 0; }
-    }
-    @keyframes s3 {
-      0%, 38% { opacity: 0; }
-      40%, 64% { opacity: 1; }
-      65%, 100% { opacity: 0; }
-    }
-    @keyframes sweep-a {
-      0%, 8% { transform: translateX(0); opacity: 0; }
-      9% { transform: translateX(0); opacity: 1; }
-      37.5% { transform: translateX(180px); opacity: 1; }
-      38%, 100% { transform: translateX(180px); opacity: 0; }
-    }
-    @keyframes sweep-b {
-      0%, 38% { transform: translateX(0); opacity: 0; }
-      39% { transform: translateX(0); opacity: 1; }
-      73% { transform: translateX(186px); opacity: 1; }
-      74%, 100% { transform: translateX(186px); opacity: 0; }
-    }
-    @keyframes cost-0 {
-      0% { opacity: 1; }
-      12%, 100% { opacity: 0; }
-    }
-    @keyframes cost-1 {
-      0%, 11.9% { opacity: 0; }
-      12%, 34.9% { opacity: 1; }
-      35%, 100% { opacity: 0; }
-    }
-    @keyframes cost-2 {
-      0%, 34.9% { opacity: 0; }
-      35%, 58.9% { opacity: 1; }
-      59%, 100% { opacity: 0; }
-    }
-    @keyframes cost-3 {
-      0%, 58.9% { opacity: 0; }
-      59%, 74.9% { opacity: 1; }
-      75%, 100% { opacity: 0; }
-    }
-    @keyframes p1 {
-      0% { transform: scaleX(0); opacity: 1; }
-      10%, 96% { transform: scaleX(1); opacity: 1; }
-      100% { transform: scaleX(1); opacity: 0; }
-    }
-    @keyframes p2 {
-      0%, 34% { transform: scaleX(0); opacity: 1; }
-      46%, 96% { transform: scaleX(0.18); opacity: 1; }
-      100% { transform: scaleX(0.18); opacity: 0; }
-    }
-    @keyframes p3 {
-      0%, 38% { transform: scaleX(0); opacity: 1; }
-      64%, 96% { transform: scaleX(1); opacity: 1; }
-      100% { transform: scaleX(1); opacity: 0; }
-    }
-    @keyframes cost {
-      0%, 73% { opacity: 0; transform: scale(1); }
-      75%, 76% { opacity: 1; transform: scale(1); }
-      79%, 84% { opacity: 1; transform: scale(1.04); }
-      87% { opacity: 1; transform: scale(1); }
-      88%, 100% { opacity: 0; transform: scale(1); }
-    }
-    @keyframes flag {
-      0%, 86% { opacity: 0; }
-      88%, 96% { opacity: 1; }
-      97%, 100% { opacity: 0; }
-    }
-    @keyframes packet {
-      0% { transform: translateX(0); opacity: 0; }
-      6% { opacity: 1; }
-      46% { transform: translateX(40px); opacity: 1; }
-      54%, 100% { transform: translateX(40px); opacity: 0; }
-    }
-    @keyframes glow {
-      0%, 100% { opacity: 0.05; }
-      50% { opacity: 0.24; }
-    }
-    @keyframes run-pulse {
-      0% { transform: scale(1); opacity: 0.9; }
-      70%, 100% { transform: scale(2.2); opacity: 0; }
-    }
-    @keyframes cursor {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-  </style>"""
-
-SIGNAL = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
-  <title id="title">DSH Usage 用量信号示意</title>
-  <desc id="desc">${theme_desc}用量信号卡。左侧三段会话依次亮起并显示各自的进度，信号经虚线通路进入中间的半小时 Token 柱，扫描线扫过的柱逐段点亮；右侧费用随扫描从 0 递增到 0.24，随后显示余额与无法确认价格时的明确标记。结构示意，非产品截图。</desc>
-  <defs>
-    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="${surface_a}"/>
-      <stop offset="1" stop-color="${surface_b}"/>
-    </linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
-      <stop stop-color="${see}" stop-opacity="0.6"/>
-      <stop offset="0.35" stop-color="${see}" stop-opacity="0"/>
-      <stop offset="0.7" stop-color="${see_2}" stop-opacity="0"/>
-      <stop offset="1" stop-color="${see_2}" stop-opacity="0.45"/>
-    </linearGradient>
-    <linearGradient id="barFill" x1="0" y1="1" x2="0" y2="0">
-      <stop stop-color="${see}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${see_2}"/>
-    </linearGradient>
-    <linearGradient id="sweepGlow" x1="0" y1="0" x2="1" y2="0">
-      <stop stop-color="${see_2}" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="${see_2}" stop-opacity="0.45"/>
-      <stop offset="1" stop-color="${see_2}" stop-opacity="0"/>
-    </linearGradient>
-    <radialGradient id="cardGlow">
-      <stop stop-color="${see}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${see}" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="packetGlow">
-      <stop stop-color="${see_2}" stop-opacity="0.6"/>
-      <stop offset="1" stop-color="${see_2}" stop-opacity="0"/>
-    </radialGradient>
-    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="12" cy="12" r="0.9" fill="${see}" opacity="0.12"/>
-    </pattern>
-    <clipPath id="panelClip">
-      <rect x="16" y="16" width="1168" height="288" rx="14"/>
-    </clipPath>
-    <clipPath id="revealClip">
-      <rect class="reveal" x="372" y="104" width="366" height="140"/>
-    </clipPath>
-  </defs>
-${style}
-
-  <rect x="0.5" y="0.5" width="1199" height="319" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="16" y="16" width="1168" height="288" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
-  <g clip-path="url(#panelClip)">
-    <rect x="16" y="16" width="1168" height="288" fill="url(#dots)"/>
-  </g>
-  <rect x="16.5" y="16.5" width="1167" height="287" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
-
-  <text x="40" y="48" class="mono" fill="${see_text}" font-size="14" letter-spacing="1.6">DSH USAGE / SIGNAL SNAPSHOT</text>
-  <text x="1160" y="48" class="mono" fill="${faint}" font-size="12" letter-spacing="0.8" text-anchor="end">结构示意 · 非产品截图</text>
-
-  <g id="sessions">
-    <rect x="40" y="68" width="270" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
-    <text x="58" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">SESSIONS</text>
-    <g>
-      <rect x="56" y="100" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
-      <circle cx="74" cy="119" r="4" fill="${zone_fill}" stroke="${idle}"/>
-      <text x="88" y="124" fill="${ink}" font-size="12">SESSION 01</text>
-      <text x="282" y="124" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">RUN</text>
-      <circle class="run-pulse" cx="74" cy="119" r="5" fill="none" stroke="${see_2}" stroke-width="1.5"/>
-      <rect x="64" y="134" width="222" height="3" rx="1.5" fill="${card_stroke}" opacity="0.7"/>
-      <rect class="p1" x="64" y="134" width="222" height="3" rx="1.5" fill="${see}"/>
-      <g class="s1">
-        <rect x="56" y="100" width="238" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
-        <circle cx="74" cy="119" r="4" fill="${see_2}"/>
-      </g>
-    </g>
-    <g>
-      <rect x="56" y="142" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
-      <circle cx="74" cy="161" r="4" fill="${zone_fill}" stroke="${idle}"/>
-      <text x="88" y="166" fill="${muted}" font-size="12">SESSION 02</text>
-      <text x="282" y="166" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">IDLE</text>
-      <circle class="s2" cx="74" cy="161" r="5" fill="none" stroke="${see}" stroke-width="2"/>
-      <rect x="64" y="176" width="222" height="3" rx="1.5" fill="${card_stroke}" opacity="0.7"/>
-      <rect class="p2" x="64" y="176" width="222" height="3" rx="1.5" fill="${see}"/>
-    </g>
-    <g>
-      <rect x="56" y="184" width="238" height="38" rx="8" fill="${zone_fill}" stroke="${card_stroke}"/>
-      <circle cx="74" cy="203" r="4" fill="${zone_fill}" stroke="${idle}"/>
-      <text x="88" y="208" fill="${ink}" font-size="12">SESSION 03</text>
-      <text x="282" y="208" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.8" text-anchor="end">DONE</text>
-      <g class="s3">
-        <rect x="56" y="184" width="238" height="38" rx="8" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.55"/>
-        <circle cx="74" cy="203" r="4" fill="${see_2}"/>
-      </g>
-      <rect x="64" y="218" width="222" height="3" rx="1.5" fill="${card_stroke}" opacity="0.7"/>
-      <rect class="p3" x="64" y="218" width="222" height="3" rx="1.5" fill="${see}"/>
-    </g>
-    <text x="58" y="246" fill="${faint}" font-size="10">密钥只在本机使用</text>
-  </g>
-
-  <g id="usage-bars">
-    <rect x="354" y="68" width="402" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
-    <ellipse class="glow" cx="555" cy="238" rx="176" ry="58" fill="url(#cardGlow)"/>
-    <text x="372" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">TOKENS / 30 MIN</text>
-    <text x="738" y="90" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">10 × 30 MIN</text>
-    <line x1="372" y1="238" x2="738" y2="238" stroke="${card_stroke}"/>
-${bars}
-    <g class="bright" clip-path="url(#revealClip)">
-${bars_bright}
-    </g>
-    <g class="sweep-a">
-      <rect x="364" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
-      <rect x="371" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
-      <circle cx="372" cy="104" r="3" fill="${see_2}"/>
-    </g>
-    <g class="sweep-b">
-      <rect x="544" y="104" width="16" height="134" fill="url(#sweepGlow)"/>
-      <rect x="551" y="104" width="2" height="134" rx="1" fill="${see_2}"/>
-      <circle cx="552" cy="104" r="3" fill="${see_2}"/>
-    </g>
-  </g>
-
-  <g id="cost-readout">
-    <rect x="800" y="68" width="360" height="194" rx="10" fill="${card}" stroke="${card_stroke}"/>
-    <text x="818" y="90" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">COST / 30 MIN</text>
-    <text x="818" y="140" fill="${ink}" font-size="30" font-weight="800">≈ ¥0.24</text>
-    <g class="cost-0">
-      <rect x="810" y="112" width="124" height="36" fill="${card}"/>
-      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.00</text>
-    </g>
-    <g class="cost-1">
-      <rect x="810" y="112" width="124" height="36" fill="${card}"/>
-      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.08</text>
-    </g>
-    <g class="cost-2">
-      <rect x="810" y="112" width="124" height="36" fill="${card}"/>
-      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.16</text>
-    </g>
-    <g class="cost-3">
-      <rect x="810" y="112" width="124" height="36" fill="${card}"/>
-      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.24</text>
-    </g>
-    <g class="cost">
-      <rect x="810" y="112" width="124" height="36" fill="${card}"/>
-      <text x="818" y="140" fill="${see_text}" font-size="30" font-weight="800">≈ ¥0.24</text>
-    </g>
-    <rect class="cursor" x="936" y="124" width="3" height="16" fill="${see_2}"/>
-    <rect x="818" y="150" width="120" height="2" rx="1" fill="${see}" opacity="0.35"/>
-    <text x="818" y="168" fill="${faint}" font-size="10">按公开 API 计价规则推算</text>
-    <line x1="818" y1="182" x2="1142" y2="182" stroke="${card_stroke}"/>
-    <text x="818" y="204" class="mono" fill="${faint}" font-size="10" letter-spacing="1">BALANCE</text>
-    <text x="818" y="232" fill="${muted}" font-size="20" font-weight="700">—</text>
-    <rect x="1004" y="204" width="138" height="24" rx="12" fill="none" stroke="${faint}" stroke-opacity="0.45"/>
-    <text x="1073" y="220" class="mono" fill="${faint}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
-    <g class="flag">
-      <rect x="1004" y="204" width="138" height="24" rx="12" fill="${see}" fill-opacity="0.1" stroke="${see}" stroke-opacity="0.6"/>
-      <text x="1073" y="220" class="mono" fill="${see_text}" font-size="10" letter-spacing="0.6" text-anchor="middle">PRICE UNKNOWN</text>
-    </g>
-  </g>
-
-  <g id="connectors">
-    <path d="M312 165H352" stroke="${see}" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 5" fill="none"/>
-    <path d="M758 165H798" stroke="${see}" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="3 5" fill="none"/>
-    <g class="packet-a">
-      <circle cx="312" cy="165" r="11" fill="url(#packetGlow)"/>
-      <circle cx="312" cy="165" r="5" fill="${see_2}"/>
-    </g>
-    <g class="packet-b">
-      <circle cx="758" cy="165" r="11" fill="url(#packetGlow)"/>
-      <circle cx="758" cy="165" r="5" fill="${see_2}"/>
-    </g>
-  </g>
-
-  <g id="legend">
-    <circle cx="44" cy="279" r="3" fill="${see}"/>
-    <text x="54" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">SESSION</text>
-    <circle cx="400" cy="279" r="3" fill="${see_2}"/>
-    <text x="410" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">TOKENS</text>
-    <circle cx="820" cy="279" r="3" fill="${see}"/>
-    <text x="830" y="283" class="mono" fill="${muted}" font-size="10" letter-spacing="0.8">COST / BALANCE</text>
-    <text x="1160" y="283" class="mono" fill="${faint}" font-size="10" letter-spacing="0.8" text-anchor="end">KEY STAYS LOCAL</text>
-  </g>
-</svg>
-""")
-BAR_RATIOS = (0.42, 0.78, 0.96, 0.55, 0.3, 0.62, 0.84, 0.48, 0.24, 0.7)
-
-
-def hero_bars() -> str:
-    """Usage bars for the SEE zone; staggered delays make them breathe out of phase."""
-    lines = []
-    for index, ratio in enumerate(BAR_RATIOS):
-        x = 594 + index * 16.4
-        height = 64 * ratio
-        lines.append(
-            f'      <rect class="bar" x="{x:.1f}" y="{190 - height:.1f}" width="12" height="{height:.1f}" '
-            f'rx="2" fill="url(#seeBar)" style="animation-delay: -{index * 0.27:.2f}s"/>'
-        )
-    return "\n".join(lines)
-
-
-def signal_bars(bright: bool = False) -> str:
-    """Half-hour Token bars; the bright copy is revealed behind the scan line."""
-    lines = []
-    for index, ratio in enumerate(BAR_RATIOS):
-        x = 372 + index * 36
-        height = 126 * ratio
-        opacity = "" if bright else ' opacity="0.34"'
-        lines.append(
-            f'    <rect class="bar" x="{x}" y="{238 - height:.1f}" width="22" height="{height:.1f}" '
-            f'rx="3" fill="url(#barFill)"{opacity}/>'
-        )
-    return "\n".join(lines)
-
-
-def signal_tokens() -> dict[str, str]:
-    return {"bars": signal_bars(False), "bars_bright": signal_bars(True)}
-
 
 def render(template: Template, style: str, palette: dict[str, str], extra: dict[str, str] | None = None) -> str:
     tokens = dict(palette)
@@ -920,9 +560,8 @@ def render(template: Template, style: str, palette: dict[str, str], extra: dict[
 def main() -> int:
     check = "--check" in sys.argv[1:]
     outputs = {
-        "hero": (HERO, HERO_STYLE, lambda: {"bars": hero_bars()}),
+        "hero": (HERO, HERO_STYLE, lambda: {}),
         "hardware-strip": (STRIP, STRIP_STYLE, lambda: {}),
-        "dsh-signal": (SIGNAL, SIGNAL_STYLE, signal_tokens),
     }
     stale: list[str] = []
     for stem, (template, style, extra) in outputs.items():
