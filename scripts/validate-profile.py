@@ -10,7 +10,7 @@ import sys
 
 README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
-SCREENSHOT = Path("assets/dsh-timeline.png")
+SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
@@ -33,7 +33,7 @@ EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=8",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-light.svg?v=1",
-    "./assets/dsh-timeline.png?v=1",
+    "./assets/dsh-timeline-light.png?v=1",
     "./assets/badge-studio.svg?v=1",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-yipan.svg?v=2",
@@ -53,6 +53,7 @@ REQUIRED_TEXT = (
     "主要调用云端模型",
     "一个人做产品的独立开发者",
     "真实运行界面，夹具数据，项目名为占位",
+    "Token 模式",
     "最终以 Provider 账单为准",
     "产品由 Codex 独立构思、设计与开发",
     "DevFlow 只检查 Web 单元测试与前端构建",
@@ -134,7 +135,7 @@ FORBIDDEN_TEXT = (
 
 
 def validate_screenshot(path: Path) -> list[str]:
-    """Keep the one raster screenshot small and free of embedded metadata."""
+    """Keep raster screenshots small and free of embedded metadata."""
     if not path.exists():
         return [f"missing screenshot asset: {path}"]
     data = path.read_bytes()
@@ -205,7 +206,11 @@ def main() -> int:
             if not strip.exists() or f">{expected} PROTOTYPES<" not in strip.read_text(encoding="utf-8"):
                 problems.append(f"{strip.name} must label the same {expected} hardware prototypes")
 
-    problems.extend(validate_screenshot(SCREENSHOT))
+    for screenshot in SCREENSHOTS:
+        problems.extend(validate_screenshot(screenshot))
+    for theme in ("dark", "light"):
+        if f'media="(prefers-color-scheme: {theme})" srcset="./assets/dsh-timeline-{theme}.png?v=1"' not in readme:
+            problems.append(f"DSH screenshot must offer the {theme} capture for the {theme} color scheme")
 
     referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))
     if referenced_assets != EXPECTED_ASSETS:

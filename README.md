@@ -52,9 +52,13 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
 
 `TypeScript` `DSH Plugin` `Local-first` | 以 `@rongyi7/dsh-stats` 发布在 npm | MIT
 
-<img src="./assets/dsh-timeline.png?v=1" width="100%" alt="DSH Usage 开发时间线界面：每半小时的费用柱与按项目排列的会话泳道">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=1">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-timeline-light.png?v=1">
+  <img src="./assets/dsh-timeline-light.png?v=1" width="100%" alt="DSH Usage 开发时间线界面：每半小时的 Token 柱与按项目排列的会话泳道">
+</picture>
 
-> 真实运行界面，夹具数据，项目名为占位。费用按公开 API 计价规则推算，最终以 Provider 账单为准。
+> 真实运行界面，夹具数据，项目名为占位；图中为 Token 模式。切换到费用时按公开 API 计价规则推算，最终以 Provider 账单为准。
 
 ### Agent 工作流
 

@@ -15,8 +15,10 @@ ASSETS = Path("assets")
 # Must match the "**N 个公开硬件项目**" fact in README.md (validate-profile.py checks it).
 HARDWARE_PROTOTYPES = 22
 
-# Lane colors follow the homepage: carry #ff6b4a/#ff9a3d, see #6ea8ff/#9b8cff,
-# touch #46d89c/#b6ec6a. Light text tokens are darkened for contrast on white.
+# Lane colors follow the homepage: carry #ff6b4a/#ff9a3d, see #6ea8ff/#63ccf8,
+# touch #46d89c/#b6ec6a. Each lane's second color is lighter and leans toward
+# yellow-green. Light text tokens are darkened for contrast on white; the light
+# see_2 keeps at least 3:1 against white like the other graphic tokens.
 PALETTES = {
     "dark": {
         "theme_desc": "深色",
@@ -39,7 +41,7 @@ PALETTES = {
         "carry_2": "#ff9a3d",
         "carry_text": "#ff6b4a",
         "see": "#6ea8ff",
-        "see_2": "#9b8cff",
+        "see_2": "#63ccf8",
         "see_text": "#6ea8ff",
         "touch": "#46d89c",
         "touch_2": "#b6ec6a",
@@ -71,7 +73,7 @@ PALETTES = {
         "carry_2": "#f08a2c",
         "carry_text": "#c8452a",
         "see": "#3d7be0",
-        "see_2": "#7a68e6",
+        "see_2": "#1e93cc",
         "see_text": "#2559c4",
         "touch": "#1aa572",
         "touch_2": "#7cc23a",
