@@ -223,11 +223,16 @@ def main() -> int:
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
+    # GitHub only keeps <picture> sources inside an HTML block. "<a ...><picture>" on one
+    # line starts a paragraph instead: the sanitizer drops the link and the sources, so
+    # dark mode shows the light image and the image links to its own file.
+    if re.search(r"<a\b[^>\n]*>[ \t]*<picture>|</picture>[ \t]*</a>", readme):
+        problems.append("a linked <picture> must put <a>, <picture>, </picture> and </a> on their own lines")
     # The Yi盘 card links to the public repository and carries the summary itself,
     # so the paragraph under it keeps only the one-sentence definition.
     if not re.search(
-        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase"><picture>\n(?:.*\n){2}'
-        r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=12\"[^>]*>\n</picture></a>\n\n"
+        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:.*\n){2}'
+        r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=12\"[^>]*>\n</picture>\n</a>\n\n"
         r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
         readme,
     ):
@@ -235,8 +240,8 @@ def main() -> int:
     # The DSH Usage card replaces the description and tag lines and sits above the screenshot.
     if not re.search(
         r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
-        r'<a href="https://github\.com/rongyishuaige7/dsh-stats"><picture>\n(?:.*\n){2}'
-        r'  <img src="\./assets/dsh-card-light\.svg\?v=1"[^>]*>\n</picture></a>\n\n'
+        r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:.*\n){2}'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=1"[^>]*>\n</picture>\n</a>\n\n'
         r"<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
         readme,
     ):

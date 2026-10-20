@@ -14,11 +14,13 @@
 
 ## `// 01 CARRY` Yi盘
 
-<a href="https://github.com/rongyishuaige7/yipan-showcase"><picture>
+<a href="https://github.com/rongyishuaige7/yipan-showcase">
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=12">
   <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=12">
   <img src="./assets/yipan-flow-light.svg?v=12" width="100%" alt="Yi盘卡片：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
-</picture></a>
+</picture>
+</a>
 
 > 结构示意，非产品截图。
 
@@ -44,11 +46,13 @@
 
 ### [DSH Usage](https://github.com/rongyishuaige7/dsh-stats)
 
-<a href="https://github.com/rongyishuaige7/dsh-stats"><picture>
+<a href="https://github.com/rongyishuaige7/dsh-stats">
+<picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=1">
   <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=1">
   <img src="./assets/dsh-card-light.svg?v=1" width="100%" alt="DSH Usage 卡片：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额；未知价格会明确标出，密钥只在本机使用。标签：TypeScript、DSH Plugin、Local-first；按钮：查看仓库；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右侧：统计视图 4 个，趋势范围近 7 / 30 / 90 天，导出格式 CSV/JSON；依次切换项目总览、开发时间线、用量趋势、账户余额四个视图。">
-</picture></a>
+</picture>
+</a>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=1">
