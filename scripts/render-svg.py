@@ -4,14 +4,19 @@
 hero-*.svg and hardware-strip-*.svg are generated: edit this file, then run
 `python3 scripts/render-svg.py`. CI runs `--check` so committed files cannot
 drift from the templates. Dark and light variants share geometry and motion
-CSS; only the palette tokens below differ.
+CSS; only the palette tokens below differ. The hero embeds the WebP files in
+media/hero/ as data URIs (GitHub serves README SVGs with default-src 'none',
+so external images would not load); the dark and light DSH captures are the
+only per-theme media.
 """
 
+import base64
 from pathlib import Path
 from string import Template
 import sys
 
 ASSETS = Path("assets")
+MEDIA = Path("media/hero")
 # Must match the "**N 个公开硬件项目**" fact in README.md (validate-profile.py checks it).
 HARDWARE_PROTOTYPES = 22
 
@@ -31,7 +36,6 @@ PALETTES = {
         "grid_line": "#526171",
         "grid_opacity": "0.5",
         "card": "#101722",
-        "card_stroke": "#2a3341",
         "zone_fill": "#0c121b",
         "ink": "#f3f6fa",
         "muted": "#9da6b4",
@@ -46,11 +50,22 @@ PALETTES = {
         "touch": "#46d89c",
         "touch_2": "#b6ec6a",
         "touch_text": "#46d89c",
-        "wash": "0.18",
         "board": "#0a1714",
         "led_off": "#183a2e",
         "led_on": "#b6ec6a",
         "pulse": "#b6ec6a",
+        "soft": "#c3cad4",
+        "tint": "0.12",
+        "drive_port": "#161a21",
+        "drive_face_a": "#20252d",
+        "drive_face_b": "#0d1117",
+        "drive_slot": "#232934",
+        "drive_slot_stroke": "#4e5663",
+        "drive_ink": "#f3f6fa",
+        "shine": "#ffffff",
+        "shine_opacity": "0.16",
+        "shadow_opacity": "0.45",
+        "shot_bg": "#161a21",
     },
     "light": {
         "theme_desc": "浅色",
@@ -63,7 +78,6 @@ PALETTES = {
         "grid_line": "#8795a3",
         "grid_opacity": "0.42",
         "card": "#ffffff",
-        "card_stroke": "#d5dbe4",
         "zone_fill": "#f8fafc",
         "ink": "#18202a",
         "muted": "#5f6876",
@@ -78,113 +92,77 @@ PALETTES = {
         "touch": "#1aa572",
         "touch_2": "#7cc23a",
         "touch_text": "#0b7d50",
-        "wash": "0.1",
         "board": "#f1faf5",
         "led_off": "#cfe9dc",
         "led_on": "#1aa572",
         "pulse": "#1aa572",
+        "soft": "#3a4350",
+        "tint": "0.08",
+        "drive_port": "#eef1f5",
+        "drive_face_a": "#ffffff",
+        "drive_face_b": "#eef1f6",
+        "drive_slot": "#dde3ea",
+        "drive_slot_stroke": "#b9c2cd",
+        "drive_ink": "#18202a",
+        "shine": "#f08a2c",
+        "shine_opacity": "0.2",
+        "shadow_opacity": "0.16",
+        "shot_bg": "#f3f5f8",
     },
 }
 
 # Motion CSS is palette-free so both themes share it byte for byte. Every
 # animation sits inside the no-preference guard; reduced motion shows a still frame.
+
+# The hero plays one entrance pass like the homepage entry cards, then holds the final frame:
+# cards rise in order, the drive face shines once, the DSH capture pans down and back, and the
+# photo deck fans out. Base styles are the final frame, so reduced motion shows it directly.
 HERO_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .route { stroke-dasharray: 4 7; stroke-linecap: round; }
-    .orbit { stroke-dasharray: 2 6; }
-    .lane-bar, .core-pulse { transform-box: fill-box; }
-    .lane-bar { transform-origin: 50% 0; }
-    .core-pulse { transform-origin: 50% 50%; }
-    .orbit-a, .orbit-b, .orbit-c { transform-box: view-box; transform-origin: 853px 180px; }
-    .packet, .activity, .lit, .core-pulse { opacity: 0; }
+    .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .lane-bar { animation: lane-bar 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-      .orbit-a { animation: spin 14s linear infinite; }
-      .orbit-b { animation: spin 20s linear infinite reverse; }
-      .orbit-c { animation: spin 26s linear infinite; }
-      .core-pulse { animation: core-pulse 7.2s ease-out infinite; }
-      .packet-see { animation: packet-see 7.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .activity-see { animation: activity-see 7.2s ease-in-out infinite; }
-      .packet-touch { animation: packet-touch 7.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .pulse-a { animation: pulse-a 7.2s linear infinite; }
-      .pulse-b { animation: pulse-b 7.2s linear infinite; }
-      .pulse-c { animation: pulse-c 7.2s linear infinite; }
-      .lit-a { animation: lit-a 7.2s ease-in-out infinite; }
-      .lit-b { animation: lit-b 7.2s ease-in-out infinite; }
-      .lit-c { animation: lit-c 7.2s ease-in-out infinite; }
+      .entry-carry { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both; }
+      .entry-see { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
+      .entry-touch { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
+      .drive-shine { animation: drive-shine 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both; }
+      .shot-pan { animation: shot-pan 2.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s both; }
+      .deck-1 { animation: deck-1 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
+      .deck-2 { animation: deck-2 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
+      .deck-3 { animation: deck-3 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
     }
-    @keyframes lane-bar {
-      from { transform: scaleY(0); }
-      to { transform: scaleY(1); }
+    @keyframes entry-in {
+      from { transform: translateY(14px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes drive-shine {
+      from { transform: translateX(0); }
+      to { transform: translateX(172px); }
     }
-    @keyframes core-pulse {
-      0%, 1% { transform: scale(1); opacity: 0; }
-      2% { transform: scale(1); opacity: 0.85; }
-      12%, 100% { transform: scale(1.7); opacity: 0; }
+    @keyframes shot-pan {
+      0% { transform: translateY(0); }
+      40%, 62% { transform: translateY(-72.5px); }
+      100% { transform: translateY(0); }
     }
-    @keyframes packet-see {
-      0%, 12% { transform: translateX(0); opacity: 0; }
-      13% { transform: translateX(0); opacity: 1; }
-      26% { transform: translateX(-49px); opacity: 1; }
-      27%, 100% { transform: translateX(-49px); opacity: 0; }
+    @keyframes deck-1 {
+      from { transform: rotate(8deg) translate(48px, -6px); }
+      to { transform: rotate(0deg) translate(0px, 0px); }
     }
-    @keyframes activity-see {
-      0%, 27% { opacity: 0; }
-      29%, 37% { opacity: 1; }
-      41%, 100% { opacity: 0; }
+    @keyframes deck-2 {
+      from { transform: rotate(-7deg) translate(-48px, -4px); }
+      to { transform: rotate(0deg) translate(0px, 0px); }
     }
-    @keyframes packet-touch {
-      0%, 41% { transform: translateX(0); opacity: 0; }
-      42% { transform: translateX(0); opacity: 1; }
-      55% { transform: translateX(49px); opacity: 1; }
-      56%, 100% { transform: translateX(49px); opacity: 0; }
-    }
-    @keyframes pulse-a {
-      0%, 56% { transform: translate(0, 0); opacity: 0; }
-      57% { transform: translate(0, 0); opacity: 1; }
-      61.5% { transform: translate(24px, 0); }
-      65.5% { transform: translate(38px, -14px); }
-      71% { transform: translate(71px, -14px); opacity: 1; }
-      72%, 100% { transform: translate(71px, -14px); opacity: 0; }
-    }
-    @keyframes pulse-b {
-      0%, 58% { transform: translateX(0); opacity: 0; }
-      59% { transform: translateX(0); opacity: 1; }
-      73% { transform: translateX(71px); opacity: 1; }
-      74%, 100% { transform: translateX(71px); opacity: 0; }
-    }
-    @keyframes pulse-c {
-      0%, 60% { transform: translate(0, 0); opacity: 0; }
-      61% { transform: translate(0, 0); opacity: 1; }
-      65.5% { transform: translate(24px, 0); }
-      69.5% { transform: translate(38px, 14px); }
-      75% { transform: translate(71px, 14px); opacity: 1; }
-      76%, 100% { transform: translate(71px, 14px); opacity: 0; }
-    }
-    @keyframes lit-a {
-      0%, 71% { opacity: 0; }
-      73%, 84% { opacity: 1; }
-      90%, 100% { opacity: 0; }
-    }
-    @keyframes lit-b {
-      0%, 73% { opacity: 0; }
-      75%, 86% { opacity: 1; }
-      92%, 100% { opacity: 0; }
-    }
-    @keyframes lit-c {
-      0%, 75% { opacity: 0; }
-      77%, 88% { opacity: 1; }
-      94%, 100% { opacity: 0; }
+    @keyframes deck-3 {
+      from { transform: rotate(1deg) translate(0px, 5px); }
+      to { transform: rotate(0deg) translate(0px, 0px); }
     }
   </style>"""
 
-HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+# Each deck photo is drawn centred on its own origin. The outer group holds the final fanned pose;
+# the animated inner group starts with the inverse rotation and offset, so all three begin stacked
+# at the deck centre (996, 266) and settle into the pose.
+HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
-  <desc id="desc">${theme_desc}品牌横幅。左侧列出三个项目：Yi盘，U 盘里的 AI 工作台，受控内测；DSH Usage，统计 DSH 会话、Token 与模型费用；Hardware Lab，${prototypes} 个硬件原型。右侧是结构示意：Yi盘居中，资料留在盘内，左边列出三个公开 Agent 工具（DSH Usage、dsh-spec、DevFlow），右边是硬件原型电路板，信号从中心依次流向两侧。结构示意，非产品截图。</desc>
+  <desc id="desc">${theme_desc}品牌横幅，三张项目入口卡。Yi盘：U 盘里的 AI 工作台，受控内测，配 U 盘功能示意。DSH Usage：会话、Token 与模型费用，配用量趋势页的运行截图，夹具数据。Hardware Lab：${prototypes} 个硬件原型，配三张历史原型照片：天气时钟、车流自适应交通信号、多传感器手环。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
@@ -202,182 +180,131 @@ HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="
       <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.48"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0.78"/>
     </linearGradient>
-    <radialGradient id="washCarry">
-      <stop stop-color="${carry}" stop-opacity="${wash}"/>
+    <radialGradient id="tintCarry" cx="0.5" cy="1" r="0.75">
+      <stop stop-color="${carry}" stop-opacity="${tint}"/>
       <stop offset="1" stop-color="${carry}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="washSee">
-      <stop stop-color="${see}" stop-opacity="${wash}"/>
+    <radialGradient id="tintSee" cx="0.5" cy="1" r="0.75">
+      <stop stop-color="${see}" stop-opacity="${tint}"/>
       <stop offset="1" stop-color="${see}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="washTouch">
-      <stop stop-color="${touch}" stop-opacity="${wash}"/>
+    <radialGradient id="tintTouch" cx="0.5" cy="1" r="0.75">
+      <stop stop-color="${touch}" stop-opacity="${tint}"/>
       <stop offset="1" stop-color="${touch}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="coreFill">
-      <stop stop-color="${carry}" stop-opacity="0.3"/>
-      <stop offset="1" stop-color="${carry}" stop-opacity="0.05"/>
-    </radialGradient>
-    <radialGradient id="ledGlow">
-      <stop stop-color="${led_on}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${led_on}" stop-opacity="0"/>
+    <linearGradient id="driveFace" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="${drive_face_a}"/>
+      <stop offset="1" stop-color="${drive_face_b}"/>
+    </linearGradient>
+    <linearGradient id="shineBand" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="${shine}" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="${shine}" stop-opacity="${shine_opacity}"/>
+      <stop offset="1" stop-color="${shine}" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="driveShadow">
+      <stop stop-color="#000000" stop-opacity="${shadow_opacity}"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="${grid_line}" stroke-width="0.6" opacity="${grid_opacity}"/>
-      <circle r="1" fill="${carry}" opacity="0.15"/>
     </pattern>
-    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="328">
-      <rect x="16" y="16" width="1168" height="328" fill="url(#gridFade)"/>
+    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="388">
+      <rect x="16" y="16" width="1168" height="388" fill="url(#gridFade)"/>
     </mask>
-    <marker id="arrowSee" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0 0 8 4 0 8Z" fill="${see}"/>
-    </marker>
-    <marker id="arrowTouch" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0 0 8 4 0 8Z" fill="${touch}"/>
-    </marker>
-    <clipPath id="panelClip">
-      <rect x="16" y="16" width="1168" height="328" rx="16"/>
-    </clipPath>
+    <clipPath id="panelClip"><rect x="16" y="16" width="1168" height="388" rx="16"/></clipPath>
+    <clipPath id="faceClip"><path d="M150 244H234A13 13 0 0 1 247 257V313A13 13 0 0 1 234 326H150Z"/></clipPath>
+    <clipPath id="shotClip"><rect x="414" y="196" width="396" height="144" rx="8"/></clipPath>
+    <clipPath id="photoClip"><rect x="-58" y="-43.5" width="116" height="87" rx="8"/></clipPath>
+    <filter id="photoShadow" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#000000" flood-opacity="${shadow_opacity}"/>
+    </filter>
   </defs>
 ${style}
 
-  <rect x="0.5" y="0.5" width="1199" height="359" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="16" y="16" width="1168" height="328" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <rect x="0.5" y="0.5" width="1199" height="419" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="16" y="16" width="1168" height="388" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
   <g clip-path="url(#panelClip)">
-    <rect x="16" y="16" width="1168" height="328" fill="url(#grid)" mask="url(#gridMask)"/>
-    <circle cx="674" cy="196" r="170" fill="url(#washSee)"/>
-    <circle cx="853" cy="180" r="210" fill="url(#washCarry)"/>
-    <circle cx="1032" cy="196" r="170" fill="url(#washTouch)"/>
+    <rect x="16" y="16" width="1168" height="388" fill="url(#grid)" mask="url(#gridMask)"/>
   </g>
-  <rect x="16.5" y="16.5" width="1167" height="327" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+  <rect x="16.5" y="16.5" width="1167" height="387" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
 
-  <g transform="translate(54 42)">
+  <g transform="translate(48 40)">
     <rect width="46" height="46" rx="12" fill="${card}" stroke="${carry}" stroke-width="2"/>
     <text x="23" y="31" fill="${carry_text}" font-size="24" font-weight="800" text-anchor="middle">R</text>
     <text x="64" y="18" fill="${ink}" font-size="16" font-weight="700" letter-spacing="3">RONGYI</text>
     <text x="64" y="40" fill="${muted}" font-size="13" letter-spacing="1.4">INDIE DEVELOPER · FOUNDER OF YI盘</text>
   </g>
 
-  <g id="projects">
-    <rect class="lane-bar" x="54" y="118" width="4" height="56" rx="2" fill="${carry}" style="animation-delay: 0.3s"/>
-    <rect class="lane-bar" x="54" y="190" width="4" height="56" rx="2" fill="${see}" style="animation-delay: 0.55s"/>
-    <rect class="lane-bar" x="54" y="262" width="4" height="56" rx="2" fill="${touch}" style="animation-delay: 0.8s"/>
-    <g font-size="34" font-weight="800" letter-spacing="-0.6" fill="${ink}">
-      <text x="74" y="146">Yi盘</text>
-      <text x="74" y="218">DSH Usage</text>
-      <text x="74" y="290">Hardware Lab</text>
+  <g id="entry-carry" class="entry-carry">
+    <rect x="48" y="114" width="320" height="274" rx="14" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+    <rect x="48" y="114" width="320" height="274" rx="14" fill="url(#tintCarry)"/>
+    <text x="72" y="162" fill="${carry_text}" font-size="28" font-weight="800" letter-spacing="-0.6">Yi盘</text>
+    <text x="72" y="188" fill="${soft}" font-size="14">U 盘里的 AI 工作台</text>
+    <text x="72" y="208" fill="${muted}" font-size="12">受控内测</text>
+    <g id="drive">
+      <ellipse cx="208" cy="342" rx="108" ry="10" fill="url(#driveShadow)"/>
+      <rect x="111" y="244" width="52" height="82" rx="11" fill="${drive_port}" stroke="${carry_2}" stroke-opacity="0.38"/>
+      <rect x="150" y="244" width="13" height="82" fill="${drive_port}"/>
+      <g fill="${drive_slot}" stroke="${drive_slot_stroke}">
+        <rect x="126" y="262" width="6" height="46"/>
+        <rect x="135" y="262" width="6" height="46"/>
+        <rect x="144" y="262" width="6" height="46"/>
+      </g>
+      <path d="M150 244H234A13 13 0 0 1 247 257V313A13 13 0 0 1 234 326H150Z" fill="url(#driveFace)" stroke="${carry_2}" stroke-opacity="0.42"/>
+      <text x="172" y="294" fill="${drive_ink}" font-size="26" font-weight="800">YI<tspan fill="${carry_text}">盘</tspan></text>
+      <g fill="${carry_2}">
+        <rect x="174" y="308" width="18" height="3" opacity="0.25"/>
+        <rect x="196" y="308" width="18" height="3" opacity="0.55"/>
+        <rect x="218" y="308" width="18" height="3"/>
+      </g>
+      <g clip-path="url(#faceClip)">
+        <path class="drive-shine" d="M110 244H150L120 326H80Z" fill="url(#shineBand)"/>
+      </g>
     </g>
-    <g font-size="16" fill="${muted}">
-      <text x="74" y="170">U 盘里的 AI 工作台 · 受控内测</text>
-      <text x="74" y="242">DSH 会话、Token 与模型费用</text>
-      <text x="74" y="314">${prototypes} 个硬件原型 · ESP32 / STM32 / 树莓派</text>
-    </g>
+    <text x="72" y="370" fill="${muted}" font-size="13">功能示意</text>
   </g>
 
-  <g id="studio-map">
-    <rect id="map-frame" x="560" y="40" width="586" height="280" rx="14" fill="${card}" fill-opacity="0.72" stroke="${card_stroke}"/>
-    <text x="578" y="62" class="mono" fill="${faint}" font-size="11" letter-spacing="1.2">RONGYI STUDIO</text>
-    <text x="1128" y="62" fill="${faint}" font-size="11" text-anchor="end">结构示意 · 非产品截图</text>
-    <path d="M560 74H1146" stroke="${card_stroke}"/>
+  <g id="entry-see" class="entry-see">
+    <rect x="392" y="114" width="440" height="274" rx="14" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
+    <rect x="392" y="114" width="440" height="274" rx="14" fill="url(#tintSee)"/>
+    <text x="416" y="162" fill="${see_text}" font-size="28" font-weight="800" letter-spacing="-0.6">DSH Usage</text>
+    <text x="416" y="188" fill="${soft}" font-size="14">会话、Token 与模型费用</text>
+    <g id="dsh-shot">
+      <rect x="414" y="196" width="396" height="144" rx="8" fill="${shot_bg}"/>
+      <g clip-path="url(#shotClip)">
+        <image class="shot-pan" x="414" y="196" width="396" height="216.5" preserveAspectRatio="xMidYMin slice" href="${dsh_trends}"/>
+      </g>
+      <rect x="414.5" y="196.5" width="395" height="143" rx="7.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
+    </g>
+    <text x="416" y="370" fill="${muted}" font-size="13">运行截图 · 夹具数据</text>
+  </g>
 
-    <g id="zone-see">
-      <rect x="578" y="90" width="196" height="212" rx="12" fill="${zone_fill}" stroke="${see}" stroke-opacity="0.45"/>
-      <text x="594" y="114" fill="${ink}" font-size="14" font-weight="700">AGENT 工具</text>
-      <text x="594" y="138" class="mono" fill="${faint}" font-size="10" letter-spacing="1">PUBLIC REPOS</text>
-      <g fill="${card}" stroke="${card_stroke}">
-        <rect x="588" y="150" width="176" height="42" rx="8"/>
-        <rect x="588" y="198" width="176" height="42" rx="8"/>
-        <rect x="588" y="246" width="176" height="42" rx="8"/>
+  <g id="entry-touch" class="entry-touch">
+    <rect x="856" y="114" width="280" height="274" rx="14" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
+    <rect x="856" y="114" width="280" height="274" rx="14" fill="url(#tintTouch)"/>
+    <text x="880" y="162" fill="${touch_text}" font-size="28" font-weight="800" letter-spacing="-0.6">Hardware Lab</text>
+    <text x="880" y="188" fill="${soft}" font-size="14">${prototypes} 个硬件原型</text>
+    <g id="photo-deck">
+      <g transform="translate(948 272) rotate(-8)">
+        <g class="deck-1">
+          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_weather}"/></g></g>
+          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+        </g>
       </g>
-      <rect class="activity activity-see" x="588" y="150" width="176" height="42" rx="8" fill="${see}" fill-opacity="0.12" stroke="${see}" stroke-width="1.5"/>
-      <g fill="${see}">
-        <circle cx="601" cy="163" r="3.5"/>
-        <circle cx="601" cy="211" r="3.5"/>
-        <circle cx="601" cy="259" r="3.5"/>
+      <g transform="translate(1044 270) rotate(7)">
+        <g class="deck-2">
+          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_traffic}"/></g></g>
+          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+        </g>
       </g>
-      <g font-size="13" font-weight="700" fill="${ink}">
-        <text x="612" y="167">DSH Usage</text>
-        <text x="612" y="215">dsh-spec</text>
-        <text x="612" y="263">DevFlow</text>
-      </g>
-      <g font-size="11" fill="${muted}">
-        <text x="612" y="183">Token · 时长 · 费用</text>
-        <text x="612" y="231">规格 · 实现 · 验收</text>
-        <text x="612" y="279">窗口焦点 · 本地时间线</text>
-      </g>
-      <g class="mono" font-size="9" letter-spacing="0.8" fill="${see_text}" text-anchor="end">
-        <text x="754" y="167">USAGE</text>
-        <text x="754" y="215">SPEC</text>
-        <text x="754" y="263">OBSERVE</text>
+      <g transform="translate(996 261) rotate(-1)">
+        <g class="deck-3">
+          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_band}"/></g></g>
+          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+        </g>
       </g>
     </g>
-
-    <g id="zone-carry">
-      <g class="orbit-a">
-        <circle class="orbit" cx="853" cy="180" r="42" fill="none" stroke="${carry}" stroke-opacity="0.45"/>
-        <circle cx="823.3" cy="150.3" r="3" fill="${carry_2}"/>
-      </g>
-      <g class="orbit-b">
-        <circle class="orbit" cx="853" cy="180" r="52" fill="none" stroke="${see}" stroke-opacity="0.32"/>
-        <circle cx="898" cy="206" r="2.6" fill="${see}"/>
-      </g>
-      <g class="orbit-c">
-        <circle class="orbit" cx="853" cy="180" r="62" fill="none" stroke="${touch}" stroke-opacity="0.28"/>
-        <circle cx="884" cy="126.3" r="2.6" fill="${touch}"/>
-      </g>
-      <path class="route" d="M821 180H780" fill="none" stroke="${see}" stroke-width="1.6" marker-end="url(#arrowSee)"/>
-      <path class="route" d="M885 180H926" fill="none" stroke="${touch}" stroke-width="1.6" marker-end="url(#arrowTouch)"/>
-      <circle class="core-pulse" cx="853" cy="180" r="32" fill="none" stroke="${carry}" stroke-width="2"/>
-      <circle cx="853" cy="180" r="32" fill="url(#coreFill)" stroke="${carry}" stroke-width="1.5"/>
-      <text class="core-name" x="853" y="187" fill="${ink}" font-size="20" font-weight="800" text-anchor="middle">YI<tspan fill="${carry_text}">盘</tspan></text>
-      <text x="853" y="262" fill="${carry_text}" font-size="13" font-weight="700" text-anchor="middle">资料留在盘内</text>
-      <text class="mono core-label" x="853" y="280" fill="${faint}" font-size="10" letter-spacing="1" text-anchor="middle">DATA ON DRIVE</text>
-    </g>
-
-    <g id="zone-touch">
-      <rect x="932" y="90" width="196" height="212" rx="12" fill="${zone_fill}" stroke="${touch}" stroke-opacity="0.45"/>
-      <text x="948" y="114" fill="${ink}" font-size="14" font-weight="700">硬件原型</text>
-      <rect x="948" y="128" width="164" height="96" rx="8" fill="${board}" stroke="${touch}" stroke-opacity="0.5"/>
-      <path d="M968 152V146M976 152V146M984 152V146M992 152V146M968 200V206M976 200V206M984 200V206M992 200V206" stroke="${touch}" stroke-opacity="0.55" stroke-width="1.5"/>
-      <rect x="960" y="152" width="40" height="48" rx="4" fill="${zone_fill}" stroke="${touch}" stroke-opacity="0.7"/>
-      <text x="980" y="180" class="mono" fill="${touch_text}" font-size="9" text-anchor="middle">MCU</text>
-      <g fill="none" stroke="${touch}" stroke-opacity="0.45" stroke-width="1.5">
-        <path d="M1000 162H1024L1038 148H1071"/>
-        <path d="M1000 176H1071"/>
-        <path d="M1000 190H1024L1038 204H1071"/>
-      </g>
-      <circle cx="1024" cy="162" r="2.2" fill="${touch}"/>
-      <circle cx="1024" cy="190" r="2.2" fill="${touch}"/>
-      <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">
-        <circle cx="1080" cy="148" r="5"/>
-        <circle cx="1080" cy="176" r="5"/>
-        <circle cx="1080" cy="204" r="5"/>
-      </g>
-      <g class="lit lit-a"><circle cx="1080" cy="148" r="13" fill="url(#ledGlow)"/><circle cx="1080" cy="148" r="5" fill="${led_on}"/></g>
-      <g class="lit lit-b"><circle cx="1080" cy="176" r="13" fill="url(#ledGlow)"/><circle cx="1080" cy="176" r="5" fill="${led_on}"/></g>
-      <g class="lit lit-c"><circle cx="1080" cy="204" r="13" fill="url(#ledGlow)"/><circle cx="1080" cy="204" r="5" fill="${led_on}"/></g>
-      <g fill="${pulse}">
-        <circle class="packet pulse-a" cx="1000" cy="162" r="2.6"/>
-        <circle class="packet pulse-b" cx="1000" cy="176" r="2.6"/>
-        <circle class="packet pulse-c" cx="1000" cy="190" r="2.6"/>
-      </g>
-      <g class="mono" font-size="10" fill="none" stroke="${touch}" stroke-opacity="0.45">
-        <rect x="948" y="238" width="50" height="18" rx="9"/>
-        <rect x="1004" y="238" width="50" height="18" rx="9"/>
-        <rect x="1060" y="238" width="40" height="18" rx="9"/>
-      </g>
-      <g class="mono" font-size="10" fill="${touch_text}" text-anchor="middle">
-        <text x="973" y="251">ESP32</text>
-        <text x="1029" y="251">STM32</text>
-        <text x="1080" y="251">RPi</text>
-      </g>
-      <text x="948" y="284" class="mono" fill="${faint}" font-size="10" letter-spacing="1">SENSOR → MCU → LED</text>
-    </g>
-
-    <g fill="${packet_fill}" stroke-width="2">
-      <circle class="packet packet-see" cx="825" cy="180" r="4" stroke="${see}"/>
-      <circle class="packet packet-touch" cx="881" cy="180" r="4" stroke="${touch}"/>
-    </g>
+    <text x="880" y="370" fill="${muted}" font-size="13">历史原型照片</text>
   </g>
 </svg>
 """)
@@ -556,6 +483,20 @@ ${style}
 """)
 
 
+def media_uri(name: str) -> str:
+    data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
+    return f"data:image/webp;base64,{data}"
+
+
+def hero_media(theme: str) -> dict[str, str]:
+    return {
+        "dsh_trends": media_uri(f"dsh-trends-{theme}.webp"),
+        "photo_weather": media_uri("esp32-weather-clock.webp"),
+        "photo_traffic": media_uri("adaptive-traffic-signal-system.webp"),
+        "photo_band": media_uri("esp32-c3-smart-band.webp"),
+    }
+
+
 def render(template: Template, style: str, palette: dict[str, str], extra: dict[str, str] | None = None) -> str:
     tokens = dict(palette)
     tokens.update(style=style, prototypes=str(HARDWARE_PROTOTYPES))
@@ -566,14 +507,14 @@ def render(template: Template, style: str, palette: dict[str, str], extra: dict[
 def main() -> int:
     check = "--check" in sys.argv[1:]
     outputs = {
-        "hero": (HERO, HERO_STYLE, lambda: {}),
-        "hardware-strip": (STRIP, STRIP_STYLE, lambda: {}),
+        "hero": (HERO, HERO_STYLE, hero_media),
+        "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
     }
     stale: list[str] = []
     for stem, (template, style, extra) in outputs.items():
         for theme, palette in PALETTES.items():
             path = ASSETS / f"{stem}-{theme}.svg"
-            svg = render(template, style, palette, extra())
+            svg = render(template, style, palette, extra(theme))
             if check:
                 if not path.exists() or path.read_text(encoding="utf-8") != svg:
                     stale.append(str(path))

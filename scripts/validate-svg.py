@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Validate local profile SVG assets without rendering or network access."""
 
+import base64
 from pathlib import Path
 import re
+import struct
 import sys
 import xml.etree.ElementTree as ET
 
@@ -48,6 +50,12 @@ GEOMETRY_ATTRIBUTES = (
 )
 PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
+# The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
+# external images). Each file stays small and carries no EXIF or XMP chunk.
+EMBEDDED_WEBP = re.compile(r"data:image/webp;base64,([A-Za-z0-9+/]+={0,2})")
+FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
+MAX_HERO_BYTES = 160 * 1024
+HERO_ENTRY_RIGHT_EDGE = 1160
 
 
 def local_name(name: str) -> str:
@@ -71,6 +79,27 @@ def validate_motion_css(style_text: str) -> list[str]:
         if motion_guard_depth is not None and depth < motion_guard_depth:
             motion_guard_depth = None
 
+    return problems
+
+
+def validate_embedded_webp(href: str) -> list[str]:
+    match = EMBEDDED_WEBP.fullmatch(href)
+    if match is None:
+        return ["embedded image must be a base64 WebP data URI"]
+    try:
+        data = base64.b64decode(match.group(1), validate=True)
+    except ValueError:
+        return ["embedded image is not valid base64"]
+    if data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        return ["embedded image is not a WebP file"]
+    problems: list[str] = []
+    offset = 12
+    while offset + 8 <= len(data):
+        chunk = data[offset:offset + 4]
+        (length,) = struct.unpack("<I", data[offset + 4:offset + 8])
+        if chunk in FORBIDDEN_WEBP_CHUNKS:
+            problems.append(f"embedded image carries a {chunk.decode().strip()} metadata chunk")
+        offset += 8 + length + (length & 1)
     return problems
 
 
@@ -114,42 +143,53 @@ def validate(path: Path) -> list[str]:
         problems.append("animated SVG does not honor prefers-reduced-motion")
     problems.extend(validate_motion_css(style_text))
 
+    is_hero = path.name.startswith("hero-")
+    embedded_images = 0
     for element in root.iter():
         tag = local_name(element.tag)
-        if tag in FORBIDDEN_TAGS:
+        hero_image = is_hero and tag == "image"
+        if tag in FORBIDDEN_TAGS and not hero_image:
             problems.append(f"forbidden element <{tag}>")
+        if hero_image:
+            embedded_images += 1
+            hrefs = [value for attribute, value in element.attrib.items() if local_name(attribute) == "href"]
+            if len(hrefs) != 1:
+                problems.append("hero image must carry exactly one href")
+            for href in hrefs:
+                problems.extend(validate_embedded_webp(href))
         for attribute, value in element.attrib.items():
             attribute_name = local_name(attribute).lower()
             if attribute_name.startswith("on"):
                 problems.append(f"forbidden event attribute {attribute_name}")
+            if hero_image and attribute_name == "href":
+                continue
             if attribute_name not in {"xmlns"} and FORBIDDEN_VALUE.search(value):
                 problems.append(f"forbidden external or executable value in {attribute_name}")
 
-    if path.name.startswith("hero-"):
+    if is_hero:
         hero_ids = (
             "edge", "grid", "gridFade", "gridMask", "panelClip",
-            "studio-map", "map-frame", "zone-see", "zone-carry", "zone-touch",
+            "entry-carry", "entry-see", "entry-touch", "drive", "dsh-shot", "photo-deck",
         )
         for design_id in hero_ids:
             if design_id not in element_ids:
-                problems.append(f"hero is missing required frame, grid, or lane zone: {design_id}")
+                problems.append(f"hero is missing required frame, grid, or entry card: {design_id}")
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hero must keep an outer shell, inset panel, and inner edge")
-        map_frame = next((element for element in root.iter() if element.get("id") == "map-frame"), None)
-        if map_frame is not None and float(map_frame.get("x", "0")) + float(map_frame.get("width", "0")) > 1150:
-            problems.append("hero studio map must preserve comfortable right-edge clearance")
-        core_name = next((element for element in root.iter() if "core-name" in element.get("class", "").split()), None)
-        core_label = next((element for element in root.iter() if "core-label" in element.get("class", "").split()), None)
-        if core_name is None or core_label is None:
-            problems.append("hero studio map must separate the Yi盘 core name from its supporting label")
-        elif (
-            core_name.get("x") != core_label.get("x")
-            or core_name.get("text-anchor") != "middle"
-            or core_label.get("text-anchor") != "middle"
-            or float(core_name.get("y", "0")) >= float(core_label.get("y", "0"))
-        ):
-            problems.append("hero studio map must center Yi盘 above its supporting label")
+        if embedded_images != 4:
+            problems.append(f"hero must embed one DSH capture and three hardware photos, found {embedded_images}")
+        entry_touch = next((element for element in root.iter() if element.get("id") == "entry-touch"), None)
+        card = entry_touch.find(f"{SVG_NAMESPACE}rect") if entry_touch is not None else None
+        if card is not None and float(card.get("x", "0")) + float(card.get("width", "0")) > HERO_ENTRY_RIGHT_EDGE:
+            problems.append("hero entry cards must preserve comfortable right-edge clearance")
+        # Captions say what each visual is, as the homepage does.
+        visible_text = "".join(root.itertext())
+        for caption in ("功能示意", "运行截图 · 夹具数据", "历史原型照片"):
+            if caption not in visible_text:
+                problems.append(f"hero entry card is missing its caption: {caption}")
+        if path.stat().st_size > MAX_HERO_BYTES:
+            problems.append(f"hero SVG is {path.stat().st_size} bytes, over {MAX_HERO_BYTES}")
 
     if path.name.startswith("hardware-strip-"):
         for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):

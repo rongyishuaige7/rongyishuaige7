@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=10">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=10">
-  <img src="./assets/hero-light.svg?v=10" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三个项目：Yi盘，U 盘里的 AI 工作台；DSH Usage，统计 DSH 会话、Token 与模型费用；Hardware Lab，ESP32、STM32 与树莓派硬件原型。右侧为三者关系的结构示意。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=11">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=11">
+  <img src="./assets/hero-light.svg?v=11" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
 </picture>
 
 <div align="center">

@@ -30,14 +30,6 @@ STORIES = {
         ("packet-continuity",),
         ("activity-context-return",),
     )),
-    HERO: ("7.2s", (
-        ("core-pulse",),
-        ("packet-see",),
-        ("activity-see",),
-        ("packet-touch",),
-        ("pulse-a", "pulse-b", "pulse-c"),
-        ("lit-a", "lit-b", "lit-c"),
-    )),
     STRIP: ("6s", (
         ("sig-in-a", "sig-in-b", "sig-in-c"),
         ("chip-on",),
@@ -45,6 +37,17 @@ STORIES = {
         ("led-a", "led-b", "led-c"),
     )),
 }
+# The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
+# on its own must end within 5 seconds). Classes start in this order: the three
+# entry cards, then the drive shine, the DSH capture pan, and the photo deck.
+HERO_ORDER = ("entry-carry", "entry-see", "entry-touch", "drive-shine", "shot-pan", "deck-1", "deck-2", "deck-3")
+HERO_BUDGET_SECONDS = 5.0
+# Base styles are the final frame, so reduced motion shows what the animation
+# ends on. The drive shine is the exception: it starts and ends outside the
+# clipped drive face, so its final frame is invisible either way.
+HERO_OFFSTAGE_END = {"drive-shine"}
+HERO_ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<value>[^;]+);")
+FINAL_KEYFRAME = re.compile(r"(?:^|[\s}])(?:to|100%)\s*\{(?P<body>[^}]*)\}")
 FORBIDDEN_ANIMATED_PROPERTIES = re.compile(
     r"(?:^|[;{])\s*(?:width|height|x|y|top|left|right|bottom|filter|stroke-width)\s*:",
     re.MULTILINE,
@@ -112,6 +115,54 @@ def check_story(path: Path, text: str, cycle: str, stages: tuple[tuple[str, ...]
     return problems
 
 
+def seconds(token: str) -> float:
+    return float(token[:-2]) / 1000 if token.endswith("ms") else float(token[:-1])
+
+
+def check_hero(path: Path, text: str) -> list[str]:
+    problems: list[str] = []
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    if set(declarations) != set(HERO_ORDER):
+        problems.append(
+            f"{path.name}: animated classes must be exactly {', '.join(HERO_ORDER)}; found {', '.join(sorted(declarations))}"
+        )
+    previous_delay = -1.0
+    for class_name in HERO_ORDER:
+        value = declarations.get(class_name)
+        if value is None:
+            continue
+        tokens = re.sub(r"cubic-bezier\([^)]*\)", "", value).split()
+        keyframe = tokens[0] if tokens else ""
+        if keyframe not in keyframes:
+            problems.append(f"{path.name}: {class_name} uses undefined keyframes {keyframe}")
+            continue
+        times = [seconds(token) for token in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", token)]
+        if len(times) != 2:
+            problems.append(f"{path.name}: {class_name} must declare one duration and one delay")
+            continue
+        duration, delay = times
+        if "infinite" in tokens or any(re.fullmatch(r"\d+(?:\.\d+)?", token) for token in tokens):
+            problems.append(f"{path.name}: {class_name} must play exactly once")
+        if not {"both", "forwards"} & set(tokens):
+            problems.append(f"{path.name}: {class_name} must hold its final frame (fill both or forwards)")
+        if delay + duration > HERO_BUDGET_SECONDS:
+            problems.append(f"{path.name}: {class_name} ends at {delay + duration:g}s, after {HERO_BUDGET_SECONDS:g}s")
+        if delay < previous_delay:
+            problems.append(f"{path.name}: {class_name} starts before the previous hero stage")
+        previous_delay = delay
+        if class_name in HERO_OFFSTAGE_END:
+            continue
+        final = FINAL_KEYFRAME.search(keyframes[keyframe])
+        body = final.group("body") if final else ""
+        transform = re.search(r"transform:\s*([^;]+)", body)
+        opacity = re.search(r"opacity:\s*([0-9.]+)", body)
+        moved = transform is not None and any(float(number) != 0 for number in re.findall(r"-?\d+(?:\.\d+)?", transform.group(1)))
+        if final is None or moved or (opacity is not None and float(opacity.group(1)) != 1):
+            problems.append(f"{path.name}: {keyframe} must end on the untransformed, fully opaque base frame")
+    return problems
+
+
 def main() -> int:
     problems: list[str] = []
 
@@ -124,6 +175,9 @@ def main() -> int:
             problems.append(f"{light.name} and {dark.name} do not share identical motion CSS")
         if light_css and FORBIDDEN_ANIMATED_PROPERTIES.search(light_css.group(1)):
             problems.append(f"{light.name} animates a property other than transform or opacity")
+        if light == HERO:
+            problems.extend(check_hero(light, light_text))
+            continue
         cycle, stages = STORIES[light]
         problems.extend(check_story(light, light_text, cycle, stages))
 
@@ -133,14 +187,14 @@ def main() -> int:
         problems.append("flow does not use one 8.4s continuity cycle")
     if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
         problems.append("hero still duplicates the cloud-agent workflow semantics")
-    for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<", ">DATA ON DRIVE<"):
+    for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<"):
         if text not in hero:
-            problems.append(f"hero is missing a project entry or the Yi盘 label: {text.strip('<>')}")
+            problems.append(f"hero is missing a project entry card: {text.strip('<>')}")
 
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero studio map, hardware strip, and the 8.4s continuity loop each tell one sequential story.")
+    print("Hero entry cards play once within 5s; the hardware strip and the 8.4s continuity loop each tell one sequential story.")
     return 0
 
 

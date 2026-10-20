@@ -20,8 +20,8 @@ FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=10",
-    "./assets/hero-light.svg?v=10",
+    "./assets/hero-dark.svg?v=11",
+    "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-dark.svg?v=9",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-dark.svg?v=1",
@@ -34,7 +34,7 @@ EXPECTED_ASSETS = {
     "./assets/badge-hardware.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=10",
+    "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
