@@ -12,6 +12,10 @@ README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
+PHOTO_STRIP = Path("assets/hardware-featured.webp")
+MAX_PHOTO_BYTES = 160 * 1024
+# WebP chunks that can carry EXIF or XMP metadata.
+FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
@@ -34,6 +38,7 @@ EXPECTED_IMG_ASSETS = {
     "./assets/yipan-flow-light.svg?v=9",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
+    "./assets/hardware-featured.webp?v=1",
     "./assets/badge-studio.svg?v=1",
     "./assets/badge-build-log.svg?v=1",
     "./assets/badge-yipan.svg?v=2",
@@ -64,6 +69,9 @@ REQUIRED_TEXT = (
     "ENABLE_CAMERA=false",
     "CI 不上传构建产物",
     "22 个公开硬件项目",
+    "历史原型照片，取自各项目公开仓库",
+    "不能用于真实道路信号控制",
+    "不是医疗器械，不做诊断、处方或急救",
     "医疗或养老看护、CO/燃气报警、跌倒或生命安全判断、身份认证、消费产品、无人值守控制或生产系统",
     "// LATEST BUILD",
     *LANE_MARKERS,
@@ -78,8 +86,9 @@ REQUIRED_REPOSITORIES = (
     "devflow-recorder",
     "memory-monitor",
     "pet-desktop-tauri",
-    "ESP32_RPS_Game",
     "esp32-s3-multimodal-smart-pot",
+    "adaptive-traffic-signal-system",
+    "esp32-s3-health-voice-terminal",
     "hardware-lab",
     "raspberry-pi-home-environment-activity-monitoring-demo",
 )
@@ -96,7 +105,12 @@ LANE_REPOSITORIES = {
         "memory-monitor",
         "pet-desktop-tauri",
     ),
-    "// 03 TOUCH": ("hardware-lab", "ESP32_RPS_Game", "esp32-s3-multimodal-smart-pot"),
+    "// 03 TOUCH": (
+        "hardware-lab",
+        "esp32-s3-multimodal-smart-pot",
+        "adaptive-traffic-signal-system",
+        "esp32-s3-health-voice-terminal",
+    ),
 }
 FORBIDDEN_TEXT = (
     "—",
@@ -154,6 +168,26 @@ def validate_screenshot(path: Path) -> list[str]:
     return problems
 
 
+def validate_photo_strip(path: Path) -> list[str]:
+    """Keep the featured hardware photo strip small, WebP, and free of EXIF or XMP."""
+    if not path.exists():
+        return [f"missing photo strip: {path}"]
+    data = path.read_bytes()
+    problems: list[str] = []
+    if len(data) > MAX_PHOTO_BYTES:
+        problems.append(f"{path.name} is {len(data)} bytes, over {MAX_PHOTO_BYTES}")
+    if data[:4] != b"RIFF" or data[8:12] != b"WEBP":
+        return problems + [f"{path.name} is not a WebP image"]
+    offset = 12
+    while offset + 8 <= len(data):
+        chunk = data[offset:offset + 4]
+        (length,) = struct.unpack("<I", data[offset + 4:offset + 8])
+        if chunk in FORBIDDEN_WEBP_CHUNKS:
+            problems.append(f"{path.name} carries a {chunk.decode().strip()} metadata chunk")
+        offset += 8 + length + (length & 1)
+    return problems
+
+
 def main() -> int:
     readme = README_PATH.read_text(encoding="utf-8")
     problems: list[str] = []
@@ -208,6 +242,7 @@ def main() -> int:
 
     for screenshot in SCREENSHOTS:
         problems.extend(validate_screenshot(screenshot))
+    problems.extend(validate_photo_strip(PHOTO_STRIP))
     for theme in ("dark", "light"):
         if f'media="(prefers-color-scheme: {theme})" srcset="./assets/dsh-timeline-{theme}.png?v=1"' not in readme:
             problems.append(f"DSH screenshot must offer the {theme} capture for the {theme} color scheme")

@@ -23,6 +23,8 @@ EXPECTED = {
     "hardware-lab": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "ESP32_RPS_Game": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
+    "adaptive-traffic-signal-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "esp32-s3-health-voice-terminal": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "pet-desktop-tauri": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-smart-agriculture-monitoring-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "stm32f103-wardrobe-environment-monitoring-ventilation-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},

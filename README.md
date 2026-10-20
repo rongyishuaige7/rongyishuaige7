@@ -91,17 +91,27 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
 
 完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。索引更新至 2026-10-20，[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/39375071963)。
 
-### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
+<img src="./assets/hardware-featured.webp?v=1" width="100%" alt="三张历史原型照片：多模态智能花盆的手机 App、本地彩屏与灌溉装置；车流自适应交通信号的桌面模型，PCB 上有信号灯、OLED 和 ESP32-CAM；健康科普语音终端的面包板原型、圆形屏和扬声器。">
 
-基于 ESP32-S3 的视觉猜拳硬件实验，包含摄像头识别、OLED、音频与 RGB 反馈。
+> 历史原型照片，取自各项目公开仓库：智能花盆（未注明日期）、交通信号（2026-05-14）、语音终端（2026-04-26）。
 
-`C++` `PlatformIO` `ESP32-S3` `OV3660` | [固件构建与 Artifact 上传通过](https://github.com/rongyishuaige7/ESP32_RPS_Game/actions/runs/29669939600) | 历史原理图资料 | MIT
-
-### [Multimodal Smart Pot](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
+### [多模态智能花盆](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
 
 独立完成的 ESP32-S3 + FreeRTOS 软硬件原型，包含环境感知、双泵灌溉、本地彩屏、局域网控制、语音和手势交互；公开固件、EDA/制造文件与项目实物照片。
 
 `C++` `PlatformIO` `FreeRTOS` `EasyEDA` | [固件 CI 通过](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot/actions/runs/29669976115) | 项目照片与 EDA 资料 | MIT
+
+### [车流自适应交通信号](https://github.com/rongyishuaige7/adaptive-traffic-signal-system)
+
+四路 ESP32-CAM 车流量自适应交通信号教学原型，包含 YOLOv8 跟踪与过线计数、FastAPI、Vue 3、WebSocket、12 路信号灯和四块 OLED。HTTP、MJPEG 与 WebSocket 没有认证或 TLS，只用于隔离的可信局域网教学，不能用于真实道路信号控制。
+
+`ESP32-CAM` `YOLOv8` `FastAPI` `Vue 3` | [后端、前端与五套固件构建通过](https://github.com/rongyishuaige7/adaptive-traffic-signal-system/actions/runs/38682970829) | 历史桌面模型照片与 EDA 资料 | MIT
+
+### [健康科普语音终端](https://github.com/rongyishuaige7/esp32-s3-health-voice-terminal)
+
+基于本地唤醒、讯飞流式 ASR/TTS、DeepSeek SSE、双 I²S 音频和 LVGL 显示的健康科普语音终端教学原型。不是医疗器械，不做诊断、处方或急救。
+
+`ESP32-S3` `ESP-IDF` `ESP-SR` `LVGL` | [空凭据下的源码契约与固件构建通过](https://github.com/rongyishuaige7/esp32-s3-health-voice-terminal/actions/runs/38683018748) | 历史终端原型照片 | MIT
 
 <details>
 <summary><b><code>// LATEST BUILD</code></b> 最新收录的硬件项目</summary>
