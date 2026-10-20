@@ -1,156 +1,190 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
-  <title id="title">Yi盘盘内连续性闭环</title>
-  <desc id="desc">盘内资料与任务进入 Yi盘工作台，需要智能处理时与云端模型双向交互，产出与任务记录留在盘内，经记录与沉淀成为下一次继续工作的基础。云端模型不是长期存储节点。结构示意，非产品截图。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="492" viewBox="0 0 1200 492" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘结构示意</title>
+  <desc id="desc">深色结构示意，非产品截图。虚线框表示 U 盘内：盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料，供下一次继续。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#101620"/>
+      <stop stop-color="#111722"/>
       <stop offset="1" stop-color="#0b1018"/>
     </linearGradient>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <path d="M0 0 8 4 0 8Z" fill="#ff6b4a"/>
-    </marker>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#526171" stroke-width="0.6" opacity="0.35"/>
+    </pattern>
+    <clipPath id="panelClip"><rect x="1" y="1" width="1198" height="490" rx="18"/></clipPath>
   </defs>
   <style>
-    text { font-family: Arial, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .route { stroke-dasharray: 6 10; stroke-linecap: round; stroke-linejoin: round; }
-    .packet, .activity { opacity: 0; }
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .lit, .packet { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .packet-context { animation: packet-context 8.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .packet-model-out { animation: packet-model-out 8.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .packet-model-back { animation: packet-model-back 8.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .packet-output { animation: packet-output 8.4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-      .packet-continuity { animation: packet-continuity 8.4s linear infinite; }
-      .activity-workspace-in { animation: workspace-in 8.4s ease-in-out infinite; }
-      .activity-model { animation: model-active 8.4s ease-in-out infinite; }
-      .activity-workspace-back { animation: workspace-back 8.4s ease-in-out infinite; }
-      .activity-output { animation: output-active 8.4s ease-in-out infinite; }
-      .activity-context-return { animation: context-return 8.4s ease-in-out infinite; }
+      .lit-context { animation: lit-context 8s ease-in-out infinite; }
+      .packet-retrieve { animation: packet-retrieve 8s linear infinite; }
+      .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out infinite; }
+      .packet-request { animation: packet-request 8s linear infinite; }
+      .lit-cloud { animation: lit-cloud 8s ease-in-out infinite; }
+      .packet-result { animation: packet-result 8s linear infinite; }
+      .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out infinite; }
+      .packet-generate { animation: packet-generate 8s linear infinite; }
+      .lit-output { animation: lit-output 8s ease-in-out infinite; }
+      .lit-rail { animation: lit-rail 8s ease-in-out infinite; }
     }
-    @keyframes packet-context {
-      0% { transform: translateX(0); opacity: 0; }
-      2% { opacity: 1; }
-      12% { transform: translateX(142px); opacity: 1; }
-      14%, 100% { transform: translateX(142px); opacity: 0; }
+    @keyframes lit-context {
+      0% { opacity: 0; }
+      2%, 7% { opacity: 1; }
+      9%, 100% { opacity: 0; }
     }
-    @keyframes workspace-in {
-      0%, 13%, 19%, 100% { opacity: 0; }
-      14%, 18% { opacity: 1; }
+    @keyframes packet-retrieve {
+      0%, 8% { opacity: 0; transform: translateY(0); }
+      9% { opacity: 1; transform: translateY(0); }
+      17% { opacity: 1; transform: translateY(38px); }
+      18%, 100% { opacity: 0; transform: translateY(38px); }
     }
-    @keyframes packet-model-out {
-      0%, 19% { transform: translateX(0); opacity: 0; }
-      20% { opacity: 1; }
-      31% { transform: translateX(140px); opacity: 1; }
-      32%, 100% { transform: translateX(140px); opacity: 0; }
+    @keyframes lit-workspace-in {
+      0%, 16% { opacity: 0; }
+      18%, 23% { opacity: 1; }
+      25%, 100% { opacity: 0; }
     }
-    @keyframes model-active {
-      0%, 32%, 38%, 100% { opacity: 0; }
-      33%, 37% { opacity: 1; }
+    @keyframes packet-request {
+      0%, 24% { opacity: 0; transform: translateX(0); }
+      25% { opacity: 1; transform: translateX(0); }
+      33% { opacity: 1; transform: translateX(86px); }
+      34%, 100% { opacity: 0; transform: translateX(86px); }
     }
-    @keyframes packet-model-back {
-      0%, 38% { transform: translateX(0); opacity: 0; }
-      39% { opacity: 1; }
-      49% { transform: translateX(-140px); opacity: 1; }
-      50%, 100% { transform: translateX(-140px); opacity: 0; }
+    @keyframes lit-cloud {
+      0%, 32% { opacity: 0; }
+      34%, 39% { opacity: 1; }
+      41%, 100% { opacity: 0; }
     }
-    @keyframes workspace-back {
-      0%, 50%, 56%, 100% { opacity: 0; }
-      51%, 55% { opacity: 1; }
+    @keyframes packet-result {
+      0%, 40% { opacity: 0; transform: translateX(0); }
+      41% { opacity: 1; transform: translateX(0); }
+      49% { opacity: 1; transform: translateX(-86px); }
+      50%, 100% { opacity: 0; transform: translateX(-86px); }
     }
-    @keyframes packet-output {
-      0%, 56% { transform: translateY(0); opacity: 0; }
-      57% { opacity: 1; }
-      65% { transform: translateY(36px); opacity: 1; }
-      66%, 100% { transform: translateY(36px); opacity: 0; }
+    @keyframes lit-workspace-back {
+      0%, 48% { opacity: 0; }
+      50%, 55% { opacity: 1; }
+      57%, 100% { opacity: 0; }
     }
-    @keyframes output-active {
-      0%, 66%, 72%, 100% { opacity: 0; }
-      67%, 71% { opacity: 1; }
+    @keyframes packet-generate {
+      0%, 56% { opacity: 0; transform: translateY(0); }
+      57% { opacity: 1; transform: translateY(0); }
+      65% { opacity: 1; transform: translateY(38px); }
+      66%, 100% { opacity: 0; transform: translateY(38px); }
     }
-    @keyframes packet-continuity {
-      0%, 73% { transform: translate(0, 0); opacity: 0; }
-      74% { transform: translate(0, 0); opacity: 1; }
-      77% { transform: translate(-50px, 0); }
-      80% { transform: translate(-100px, 0); }
-      83% { transform: translate(-150px, 0); }
-      86% { transform: translate(-200px, 0); }
-      88% { transform: translate(-229px, -4px); }
-      90% { transform: translate(-241px, -30px); }
-      91% { transform: translate(-241px, -74px); }
-      92%, 100% { transform: translate(-241px, -74px); opacity: 0; }
+    @keyframes lit-output {
+      0%, 64% { opacity: 0; }
+      66%, 71% { opacity: 1; }
+      73%, 100% { opacity: 0; }
     }
-    @keyframes context-return {
-      0%, 91%, 97%, 100% { opacity: 0; }
-      92%, 96% { opacity: 1; }
+    @keyframes lit-rail {
+      0%, 72% { opacity: 0; }
+      74%, 83% { opacity: 1; }
+      85%, 100% { opacity: 0; }
     }
   </style>
 
-  <rect x="1" y="1" width="1198" height="338" rx="20" fill="url(#surface)" stroke="#303846"/>
-  <path d="M792 1H1199V339H1034Z" fill="#ff6b4a" opacity="0.035"/>
-
-  <text x="42" y="45" class="mono" fill="#ff6b4a" font-size="14" letter-spacing="1.8">YI盘 / CONTINUITY LOOP</text>
-  <text x="1158" y="45" class="mono" fill="#778291" font-size="12" letter-spacing="1" text-anchor="end">DATA ON DRIVE / CLOUD ON DEMAND</text>
-
-  <g id="main-loop" fill="none" stroke="#ff6b4a" stroke-width="2" opacity="0.82">
-    <path id="context-to-workspace" class="route" d="M314 145H456" marker-end="url(#arrow)"/>
-    <path id="workspace-to-output" class="route" d="M600 192V228" marker-end="url(#arrow)"/>
-    <path id="continuity-loop" class="route" d="M422 268H199C189 268 181 260 181 250V194" stroke-dashoffset="-12" marker-end="url(#arrow)"/>
-  </g>
-  <g id="cloud-branch" fill="none" stroke="#ff6b4a" stroke-width="1.6" opacity="0.64">
-    <path id="workspace-to-model" class="route" d="M744 126H884" marker-end="url(#arrow)"/>
-    <path id="model-to-workspace" class="route" d="M884 163H744" marker-end="url(#arrow)"/>
+  <rect x="0.5" y="0.5" width="1199" height="491" rx="18" fill="url(#surface)" stroke="#303846"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="1" y="1" width="1198" height="490" fill="url(#grid)"/>
   </g>
 
-  <g class="mono" fill="#8792a2" font-size="11" letter-spacing="0.6">
-    <text x="385" y="126" text-anchor="middle">检索 / 继续</text>
-    <text x="814" y="111" text-anchor="middle">按需请求</text>
-    <text x="814" y="187" text-anchor="middle">返回结果</text>
-    <text x="620" y="218">生成 / 记录</text>
-    <text x="292" y="255" text-anchor="middle">记录 / 沉淀</text>
+  <g transform="translate(0 -28)">
+  <g id="drive">
+    <rect id="drive-boundary" x="180.5" y="84.5" width="599" height="407" rx="18" fill="#ff6b4a" fill-opacity="0.03" stroke="#ff6b4a" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+    <text x="776" y="72" fill="#ff9a3d" font-size="15" text-anchor="end">U 盘内</text>
+
+    <g id="continuity-rail">
+      <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="#ff6b4a" stroke-opacity="0.4"/>
+      <path d="M225 143.5V152.5L232 148Z" fill="#ff6b4a" fill-opacity="0.65"/>
+      <text fill="#737e8e" font-size="13" text-anchor="middle"><tspan x="218" y="253">记</tspan><tspan x="218" y="273">录</tspan><tspan x="218" y="293">·</tspan><tspan x="218" y="313">沉</tspan><tspan x="218" y="333">淀</tspan></text>
+      <g class="lit lit-rail">
+        <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="#ff9a3d" stroke-width="1.5"/>
+        <path d="M225 143.5V152.5L232 148Z" fill="#ff9a3d"/>
+      </g>
+    </g>
+
+    <g id="flow-context">
+      <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="#101722" stroke="#ff6b4a" stroke-opacity="0.32"/>
+      <g class="lit lit-context">
+        <rect x="229" y="103" width="526" height="90" rx="15" fill="none" stroke="#ff6b4a" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="none" stroke="#ff6b4a" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="142" fill="#f3f6fa" font-size="21" font-weight="700">盘内资料与任务</text>
+      <text x="256" y="168" fill="#9da6b4" font-size="15">Inbox 确认后写入长期知识</text>
+    </g>
+
+    <g id="step-retrieve">
+      <path d="M272 194V237" stroke="#ff6b4a" stroke-opacity="0.45"/>
+      <path d="M267 236H277L272 243Z" fill="#ff6b4a" fill-opacity="0.7"/>
+      <text x="292" y="223" fill="#737e8e" font-size="14">检索 / 继续</text>
+      <g class="packet packet-retrieve" fill="#ff9a3d">
+        <circle cx="272" cy="196" r="9" opacity="0.22"/>
+        <circle cx="272" cy="196" r="4.5"/>
+      </g>
+    </g>
+
+    <g id="flow-workspace">
+      <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="#101722" stroke="#ff6b4a" stroke-opacity="0.32"/>
+      <g class="lit lit-workspace-in">
+        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="#ff6b4a" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="#ff6b4a" stroke-width="1.5"/>
+      </g>
+      <g class="lit lit-workspace-back">
+        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="#ff6b4a" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="#ff6b4a" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="282" fill="#f3f6fa" font-size="21" font-weight="700">Yi盘工作台</text>
+      <text x="256" y="308" fill="#9da6b4" font-size="15">受管 Agent 处理当前任务</text>
+    </g>
+
+    <g id="step-generate">
+      <path d="M272 334V377" stroke="#ff6b4a" stroke-opacity="0.45"/>
+      <path d="M267 376H277L272 383Z" fill="#ff6b4a" fill-opacity="0.7"/>
+      <text x="292" y="363" fill="#737e8e" font-size="14">生成 / 记录</text>
+      <g class="packet packet-generate" fill="#ff9a3d">
+        <circle cx="272" cy="336" r="9" opacity="0.22"/>
+        <circle cx="272" cy="336" r="4.5"/>
+      </g>
+    </g>
+
+    <g id="flow-output">
+      <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="#101722" stroke="#ff6b4a" stroke-opacity="0.32"/>
+      <g class="lit lit-output">
+        <rect x="229" y="383" width="526" height="90" rx="15" fill="none" stroke="#ff6b4a" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="none" stroke="#ff6b4a" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="422" fill="#f3f6fa" font-size="21" font-weight="700">产出与任务记录</text>
+      <text x="256" y="448" fill="#9da6b4" font-size="15">留在盘内，随盘带走</text>
+    </g>
   </g>
 
-  <g fill="#fff3f0" stroke="#ff6b4a" stroke-width="2">
-    <circle id="packet-context" class="packet packet-context" cx="314" cy="145" r="4.5"/>
-    <circle id="packet-model-out" class="packet packet-model-out" cx="744" cy="126" r="4.5"/>
-    <circle id="packet-model-back" class="packet packet-model-back" cx="884" cy="163" r="4.5"/>
-    <circle id="packet-output" class="packet packet-output" cx="600" cy="192" r="4.5"/>
-    <circle id="packet-continuity" class="packet packet-continuity" cx="422" cy="268" r="4.5"/>
+  <g id="cloud-branch">
+    <g id="link-request">
+      <path d="M752 276H849" stroke="#45494f"/>
+      <path d="M848 271.5V280.5L855 276Z" fill="#85878b"/>
+      <text x="804" y="263" fill="#737e8e" font-size="14" text-anchor="middle">按需请求</text>
+      <g class="packet packet-request" fill="#e8edf3">
+        <circle cx="758" cy="276" r="8" opacity="0.2"/>
+        <circle cx="758" cy="276" r="4"/>
+      </g>
+    </g>
+    <g id="link-result">
+      <path d="M759 300H856" stroke="#45494f"/>
+      <path d="M760 295.5V304.5L753 300Z" fill="#85878b"/>
+      <text x="804" y="324" fill="#737e8e" font-size="14" text-anchor="middle">返回结果</text>
+      <g class="packet packet-result" fill="#e8edf3">
+        <circle cx="850" cy="300" r="8" opacity="0.2"/>
+        <circle cx="850" cy="300" r="4"/>
+      </g>
+    </g>
+    <g id="flow-cloud">
+      <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="#101722" stroke="#5a5f66" stroke-dasharray="6 5"/>
+      <g class="lit lit-cloud">
+        <rect x="853" y="239" width="174" height="98" rx="17" fill="none" stroke="#c7ced8" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="none" stroke="#c7ced8" stroke-width="1.5" stroke-dasharray="6 5"/>
+      </g>
+      <text x="940" y="282" fill="#f3f6fa" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
+      <text x="940" y="308" fill="#9da6b4" font-size="14" text-anchor="middle">按需推理</text>
+    </g>
   </g>
-
-  <g class="node context">
-    <rect x="48" y="96" width="266" height="98" rx="16" fill="#151b25" stroke="#414b5b"/>
-    <text x="74" y="126" class="mono" fill="#8792a2" font-size="13" letter-spacing="1.2">LOCAL CONTEXT</text>
-    <text x="74" y="158" fill="#f3f6fa" font-size="24" font-weight="700">盘内资料与任务</text>
-    <text x="74" y="181" fill="#8f99a8" font-size="14">长期资料 · 最近任务</text>
-    <rect id="activity-context-return" class="activity activity-context-return" x="43" y="91" width="276" height="108" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
-  </g>
-
-  <g class="workspace">
-    <rect x="456" y="82" width="288" height="110" rx="16" fill="#181820" stroke="#ff6b4a" stroke-width="2"/>
-    <rect x="470" y="96" width="52" height="82" rx="8" fill="#0e141d" stroke="#ff6b4a" stroke-opacity="0.42"/>
-    <rect x="482" y="111" width="7" height="50" fill="#ff6b4a" opacity="0.72"/>
-    <rect x="494" y="111" width="7" height="50" fill="#ff6b4a" opacity="0.42"/>
-    <rect x="506" y="111" width="7" height="50" fill="#ff6b4a" opacity="0.24"/>
-    <text x="550" y="123" class="mono" fill="#ff6b4a" font-size="13" letter-spacing="1.2">AGENT WORKSPACE</text>
-    <text x="550" y="158" fill="#f3f6fa" font-size="27" font-weight="800">Yi盘工作台</text>
-    <text x="550" y="181" fill="#9da6b4" font-size="14">检索资料，处理当前任务</text>
-    <rect id="activity-workspace-in" class="activity activity-workspace-in" x="451" y="77" width="298" height="120" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
-    <rect id="activity-workspace-back" class="activity activity-workspace-back" x="451" y="77" width="298" height="120" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
-  </g>
-
-  <g class="node model">
-    <rect x="884" y="96" width="268" height="98" rx="16" fill="#151b25" stroke="#414b5b"/>
-    <text x="910" y="126" class="mono" fill="#8792a2" font-size="13" letter-spacing="1.2">CLOUD MODELS</text>
-    <text x="910" y="158" fill="#f3f6fa" font-size="24" font-weight="700">云端模型</text>
-    <text x="910" y="181" fill="#8f99a8" font-size="14">需要智能处理时按需调用</text>
-    <rect id="activity-model" class="activity activity-model" x="879" y="91" width="278" height="108" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
-  </g>
-
-  <g class="node output">
-    <rect x="422" y="228" width="356" height="80" rx="16" fill="#151b25" stroke="#414b5b"/>
-    <text x="446" y="251" class="mono" fill="#8792a2" font-size="12" letter-spacing="1">LOCAL CONTINUITY</text>
-    <text x="446" y="275" fill="#f3f6fa" font-size="24" font-weight="700">产出与任务记录留在盘内</text>
-    <text x="446" y="298" fill="#8f99a8" font-size="14">数据随盘走</text>
-    <rect id="activity-output" class="activity activity-output" x="417" y="223" width="366" height="90" rx="20" fill="none" stroke="#ff6b4a" stroke-width="3"/>
   </g>
 </svg>

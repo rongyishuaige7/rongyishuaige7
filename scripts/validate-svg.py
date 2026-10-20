@@ -32,7 +32,7 @@ THEME_PAIRS = (
     ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
 )
 # Pairs rendered by scripts/render-svg.py must match element for element.
-GENERATED_PAIRS = {"hero-dark.svg", "hardware-strip-dark.svg"}
+GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "hardware-strip-dark.svg"}
 GEOMETRY_ATTRIBUTES = (
     "id",
     "class",
@@ -48,6 +48,11 @@ GEOMETRY_ATTRIBUTES = (
     "transform",
     "stroke-dashoffset",
 )
+# The Yi盘 diagram follows the homepage: local nodes inside the dashed U 盘 boundary,
+# the cloud model outside it, linked to the workspace in both directions.
+FLOW_LOCAL_IDS = {"drive-boundary", "continuity-rail", "flow-context", "step-retrieve", "flow-workspace", "step-generate", "flow-output"}
+FLOW_CLOUD_IDS = {"flow-cloud", "link-request", "link-result"}
+FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录")
 PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
 # The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
@@ -60,6 +65,11 @@ HERO_ENTRY_RIGHT_EDGE = 1160
 
 def local_name(name: str) -> str:
     return name.rsplit("}", 1)[-1]
+
+
+def drawn_text(root: ET.Element) -> str:
+    """Text a viewer sees: <text> elements only, never <title> or <desc>."""
+    return "\n".join("".join(element.itertext()) for element in root.iter() if local_name(element.tag) == "text")
 
 
 def validate_motion_css(style_text: str) -> list[str]:
@@ -184,7 +194,7 @@ def validate(path: Path) -> list[str]:
         if card is not None and float(card.get("x", "0")) + float(card.get("width", "0")) > HERO_ENTRY_RIGHT_EDGE:
             problems.append("hero entry cards must preserve comfortable right-edge clearance")
         # Captions say what each visual is, as the homepage does.
-        visible_text = "".join(root.itertext())
+        visible_text = drawn_text(root)
         for caption in ("功能示意", "运行截图 · 夹具数据", "历史原型照片"):
             if caption not in visible_text:
                 problems.append(f"hero entry card is missing its caption: {caption}")
@@ -200,62 +210,55 @@ def validate(path: Path) -> list[str]:
             problems.append("hardware strip must keep an outer shell, inset panel, and inner edge")
 
     if path.name.startswith("yipan-flow-"):
-        visible_text = "".join(root.itertext())
+        visible_text = drawn_text(root)
         required_flow_text = (
-            "YI盘 / CONTINUITY LOOP",
-            "DATA ON DRIVE / CLOUD ON DEMAND",
-            "盘内资料与任务",
-            "检索资料，处理当前任务",
-            "需要智能处理时按需调用",
-            "产出与任务记录留在盘内",
-            "数据随盘走",
-            "记录 / 沉淀",
+            "U 盘内",
+            *FLOW_TITLES,
+            "Inbox 确认后写入长期知识",
+            "受管 Agent 处理当前任务",
+            "留在盘内，随盘带走",
+            "检索 / 继续",
+            "生成 / 记录",
+            "记录·沉淀",
+            "按需请求",
+            "返回结果",
+            "云端模型",
+            "按需推理",
         )
         for required_text in required_flow_text:
             if required_text not in visible_text:
-                problems.append(f"Yi盘 continuity diagram is missing required text: {required_text}")
-        output_heading = next(
-            (element for element in root.iter() if "".join(element.itertext()).strip() == "产出与任务记录留在盘内"),
-            None,
-        )
-        if output_heading is None or output_heading.get("font-size") != "24":
-            problems.append("Yi盘 output heading must match the 24px peer-card heading scale")
-        required_flow_ids = {
-            "main-loop",
-            "context-to-workspace",
-            "workspace-to-output",
-            "continuity-loop",
-            "cloud-branch",
-            "workspace-to-model",
-            "model-to-workspace",
-            "packet-continuity",
-            "activity-context-return",
-        }
-        for required_id in sorted(required_flow_ids - element_ids):
-            problems.append(f"Yi盘 continuity diagram is missing structural element: {required_id}")
-
-        main_loop = next((element for element in root.iter() if element.get("id") == "main-loop"), None)
-        cloud_branch = next((element for element in root.iter() if element.get("id") == "cloud-branch"), None)
-        if main_loop is not None:
-            main_ids = {element.get("id") for element in main_loop.iter() if element.get("id")}
-            if not {"context-to-workspace", "workspace-to-output", "continuity-loop"}.issubset(main_ids):
-                problems.append("Yi盘 main loop must connect context, workspace, output, and continuity return")
+                problems.append(f"Yi盘 diagram is missing required text: {required_text}")
+        for required_id in sorted(({"drive", "cloud-branch"} | FLOW_LOCAL_IDS | FLOW_CLOUD_IDS) - element_ids):
+            problems.append(f"Yi盘 diagram is missing structural element: {required_id}")
+        by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+        drive = by_id.get("drive")
+        cloud_branch = by_id.get("cloud-branch")
+        if drive is not None:
+            drive_ids = {element.get("id") for element in drive.iter() if element.get("id")}
+            if not FLOW_LOCAL_IDS <= drive_ids:
+                problems.append("Yi盘 local nodes, steps, and the record rail must sit inside the drive boundary group")
+            if drive_ids & FLOW_CLOUD_IDS:
+                problems.append("Yi盘 cloud model must stay outside the drive boundary")
         if cloud_branch is not None:
             branch_ids = {element.get("id") for element in cloud_branch.iter() if element.get("id")}
-            if branch_ids != {"cloud-branch", "workspace-to-model", "model-to-workspace"}:
-                problems.append("Yi盘 cloud models must remain a separate bidirectional branch")
-        continuity_path = next((element for element in root.iter() if element.get("id") == "continuity-loop"), None)
-        if continuity_path is not None and (
-            local_name(continuity_path.tag) != "path" or not continuity_path.get("marker-end")
+            if branch_ids != FLOW_CLOUD_IDS | {"cloud-branch"}:
+                problems.append("Yi盘 cloud branch must hold only the cloud model and its request/result links")
+        boundary = by_id.get("drive-boundary")
+        cloud = by_id.get("flow-cloud")
+        cloud_rect = cloud.find(f"{SVG_NAMESPACE}rect") if cloud is not None else None
+        if boundary is not None and (local_name(boundary.tag) != "rect" or not boundary.get("stroke-dasharray")):
+            problems.append("Yi盘 drive boundary must be a dashed rectangle")
+        elif boundary is not None and cloud_rect is not None and (
+            float(cloud_rect.get("x", "0")) <= float(boundary.get("x", "0")) + float(boundary.get("width", "0"))
         ):
-            problems.append("Yi盘 continuity return must remain a visible directional path")
-        elif continuity_path is not None and (
-            continuity_path.get("d") != "M422 268H199C189 268 181 260 181 250V194"
-            or continuity_path.get("stroke-dashoffset") != "-12"
-        ):
-            problems.append(
-                "Yi盘 continuity return must run horizontally to the arrow axis, then turn vertically upward"
-            )
+            problems.append("Yi盘 cloud model must be drawn outside the drive boundary")
+        title_sizes = {
+            element.get("font-size")
+            for element in root.iter()
+            if local_name(element.tag) == "text" and "".join(element.itertext()).strip() in FLOW_TITLES
+        }
+        if len(title_sizes) != 1:
+            problems.append("Yi盘 node titles must share one heading size")
 
     if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
@@ -335,43 +338,6 @@ def main() -> int:
                 failed = True
                 print(f"FAIL {dark_name} / {light_name}")
                 print("  - generated pair geometry differs; edit scripts/render-svg.py, not the SVG")
-        if dark_name == "yipan-flow-dark.svg":
-            dark_by_id = {element.get("id"): element for element in dark_root.iter() if element.get("id")}
-            light_by_id = {element.get("id"): element for element in light_root.iter() if element.get("id")}
-            geometry_attributes = (
-                "class",
-                "d",
-                "x",
-                "y",
-                "width",
-                "height",
-                "cx",
-                "cy",
-                "r",
-                "stroke-dashoffset",
-            )
-            structural_ids = (
-                "main-loop",
-                "context-to-workspace",
-                "workspace-to-output",
-                "continuity-loop",
-                "cloud-branch",
-                "workspace-to-model",
-                "model-to-workspace",
-                "packet-continuity",
-                "activity-context-return",
-            )
-            for element_id in structural_ids:
-                dark_element = dark_by_id.get(element_id)
-                light_element = light_by_id.get(element_id)
-                if dark_element is None or light_element is None:
-                    continue
-                dark_geometry = tuple(dark_element.get(attribute) for attribute in geometry_attributes)
-                light_geometry = tuple(light_element.get(attribute) for attribute in geometry_attributes)
-                if local_name(dark_element.tag) != local_name(light_element.tag) or dark_geometry != light_geometry:
-                    failed = True
-                    print(f"FAIL {dark_name} / {light_name}")
-                    print(f"  - mismatched continuity geometry for {element_id}")
     return 1 if failed else 0
 
 

@@ -18,17 +18,17 @@ PAIR = {
 # run together (three traces, three LEDs); a stage may not start before the
 # previous stage has nearly finished, so the cause always precedes the effect.
 STORIES = {
-    FLOW: ("8.4s", (
-        ("packet-context",),
-        ("activity-workspace-in",),
-        ("packet-model-out",),
-        ("activity-model",),
-        ("packet-model-back",),
-        ("activity-workspace-back",),
-        ("packet-output",),
-        ("activity-output",),
-        ("packet-continuity",),
-        ("activity-context-return",),
+    FLOW: ("8s", (
+        ("lit-context",),
+        ("packet-retrieve",),
+        ("lit-workspace-in",),
+        ("packet-request",),
+        ("lit-cloud",),
+        ("packet-result",),
+        ("lit-workspace-back",),
+        ("packet-generate",),
+        ("lit-output",),
+        ("lit-rail",),
     )),
     STRIP: ("6s", (
         ("sig-in-a", "sig-in-b", "sig-in-c"),
@@ -183,8 +183,8 @@ def main() -> int:
 
     flow = FLOW.read_text(encoding="utf-8")
     hero = HERO.read_text(encoding="utf-8")
-    if "8.4s" not in flow or "6.8s" in flow:
-        problems.append("flow does not use one 8.4s continuity cycle")
+    if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", flow)) != {"8s"}:
+        problems.append("Yi盘 diagram does not use one 8s loop like the homepage")
     if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
         problems.append("hero still duplicates the cloud-agent workflow semantics")
     for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<"):
@@ -194,7 +194,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero entry cards play once within 5s; the hardware strip and the 8.4s continuity loop each tell one sequential story.")
+    print("Hero entry cards play once within 5s; the hardware strip and the 8s Yi盘 loop each tell one sequential story.")
     return 0
 
 

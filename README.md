@@ -15,9 +15,9 @@
 ## `// 01 CARRY` Yi盘
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=9">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=9">
-  <img src="./assets/yipan-flow-light.svg?v=9" width="100%" alt="Yi盘工作方式：盘内资料和任务进入 Yi盘工作台，需要智能处理时按需调用云端模型，产出和任务记录留在盘内，经记录或沉淀后成为下一次继续工作的基础，数据随盘走。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=10">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=10">
+  <img src="./assets/yipan-flow-light.svg?v=10" width="100%" alt="Yi盘结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
 </picture>
 
 > 结构示意，非产品截图。

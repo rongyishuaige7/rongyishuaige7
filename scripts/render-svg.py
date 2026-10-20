@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the generated profile SVG pairs from one template per asset.
 
-hero-*.svg and hardware-strip-*.svg are generated: edit this file, then run
+hero-*.svg, yipan-flow-*.svg and hardware-strip-*.svg are generated: edit this file, then run
 `python3 scripts/render-svg.py`. CI runs `--check` so committed files cannot
 drift from the templates. Dark and light variants share geometry and motion
 CSS; only the palette tokens below differ. The hero embeds the WebP files in
@@ -66,6 +66,14 @@ PALETTES = {
         "shine_opacity": "0.16",
         "shadow_opacity": "0.45",
         "shot_bg": "#161a21",
+        "flow_grid_opacity": "0.35",
+        "drive_fill": "0.03",
+        "flow_tag": "#ff9a3d",
+        "link_line": "#45494f",
+        "link_head": "#85878b",
+        "link_dot": "#e8edf3",
+        "cloud_stroke": "#5a5f66",
+        "cloud_lit": "#c7ced8",
     },
     "light": {
         "theme_desc": "浅色",
@@ -108,6 +116,14 @@ PALETTES = {
         "shine_opacity": "0.2",
         "shadow_opacity": "0.16",
         "shot_bg": "#f3f5f8",
+        "flow_grid_opacity": "0.3",
+        "drive_fill": "0.03",
+        "flow_tag": "#c25a12",
+        "link_line": "#b9c1cc",
+        "link_head": "#7d8794",
+        "link_dot": "#4c5562",
+        "cloud_stroke": "#9aa3ae",
+        "cloud_lit": "#4c5562",
     },
 }
 
@@ -483,6 +499,205 @@ ${style}
 """)
 
 
+# The Yi盘 diagram follows the homepage: the three nodes sit inside a dashed "U 盘内"
+# boundary and the cloud model stays outside it. One 8s loop lights each step in causal
+# order: context, retrieve, workspace, request, cloud, result, workspace, generate,
+# output, then the record rail back to the context. Reduced motion shows the still diagram.
+FLOW_STYLE = """  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .lit, .packet { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .lit-context { animation: lit-context 8s ease-in-out infinite; }
+      .packet-retrieve { animation: packet-retrieve 8s linear infinite; }
+      .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out infinite; }
+      .packet-request { animation: packet-request 8s linear infinite; }
+      .lit-cloud { animation: lit-cloud 8s ease-in-out infinite; }
+      .packet-result { animation: packet-result 8s linear infinite; }
+      .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out infinite; }
+      .packet-generate { animation: packet-generate 8s linear infinite; }
+      .lit-output { animation: lit-output 8s ease-in-out infinite; }
+      .lit-rail { animation: lit-rail 8s ease-in-out infinite; }
+    }
+    @keyframes lit-context {
+      0% { opacity: 0; }
+      2%, 7% { opacity: 1; }
+      9%, 100% { opacity: 0; }
+    }
+    @keyframes packet-retrieve {
+      0%, 8% { opacity: 0; transform: translateY(0); }
+      9% { opacity: 1; transform: translateY(0); }
+      17% { opacity: 1; transform: translateY(38px); }
+      18%, 100% { opacity: 0; transform: translateY(38px); }
+    }
+    @keyframes lit-workspace-in {
+      0%, 16% { opacity: 0; }
+      18%, 23% { opacity: 1; }
+      25%, 100% { opacity: 0; }
+    }
+    @keyframes packet-request {
+      0%, 24% { opacity: 0; transform: translateX(0); }
+      25% { opacity: 1; transform: translateX(0); }
+      33% { opacity: 1; transform: translateX(86px); }
+      34%, 100% { opacity: 0; transform: translateX(86px); }
+    }
+    @keyframes lit-cloud {
+      0%, 32% { opacity: 0; }
+      34%, 39% { opacity: 1; }
+      41%, 100% { opacity: 0; }
+    }
+    @keyframes packet-result {
+      0%, 40% { opacity: 0; transform: translateX(0); }
+      41% { opacity: 1; transform: translateX(0); }
+      49% { opacity: 1; transform: translateX(-86px); }
+      50%, 100% { opacity: 0; transform: translateX(-86px); }
+    }
+    @keyframes lit-workspace-back {
+      0%, 48% { opacity: 0; }
+      50%, 55% { opacity: 1; }
+      57%, 100% { opacity: 0; }
+    }
+    @keyframes packet-generate {
+      0%, 56% { opacity: 0; transform: translateY(0); }
+      57% { opacity: 1; transform: translateY(0); }
+      65% { opacity: 1; transform: translateY(38px); }
+      66%, 100% { opacity: 0; transform: translateY(38px); }
+    }
+    @keyframes lit-output {
+      0%, 64% { opacity: 0; }
+      66%, 71% { opacity: 1; }
+      73%, 100% { opacity: 0; }
+    }
+    @keyframes lit-rail {
+      0%, 72% { opacity: 0; }
+      74%, 83% { opacity: 1; }
+      85%, 100% { opacity: 0; }
+    }
+  </style>"""
+
+FLOW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="492" viewBox="0 0 1200 492" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘结构示意</title>
+  <desc id="desc">${theme_desc}结构示意，非产品截图。虚线框表示 U 盘内：盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料，供下一次继续。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="${surface_a}"/>
+      <stop offset="1" stop-color="${surface_b}"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="${grid_line}" stroke-width="0.6" opacity="${flow_grid_opacity}"/>
+    </pattern>
+    <clipPath id="panelClip"><rect x="1" y="1" width="1198" height="490" rx="18"/></clipPath>
+  </defs>
+${style}
+
+  <rect x="0.5" y="0.5" width="1199" height="491" rx="18" fill="url(#surface)" stroke="${shell_stroke}"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="1" y="1" width="1198" height="490" fill="url(#grid)"/>
+  </g>
+
+  <g transform="translate(0 -28)">
+  <g id="drive">
+    <rect id="drive-boundary" x="180.5" y="84.5" width="599" height="407" rx="18" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+    <text x="776" y="72" fill="${flow_tag}" font-size="15" text-anchor="end">U 盘内</text>
+
+    <g id="continuity-rail">
+      <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
+      <path d="M225 143.5V152.5L232 148Z" fill="${carry}" fill-opacity="0.65"/>
+      <text fill="${faint}" font-size="13" text-anchor="middle"><tspan x="218" y="253">记</tspan><tspan x="218" y="273">录</tspan><tspan x="218" y="293">·</tspan><tspan x="218" y="313">沉</tspan><tspan x="218" y="333">淀</tspan></text>
+      <g class="lit lit-rail">
+        <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="${carry_2}" stroke-width="1.5"/>
+        <path d="M225 143.5V152.5L232 148Z" fill="${carry_2}"/>
+      </g>
+    </g>
+
+    <g id="flow-context">
+      <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+      <g class="lit lit-context">
+        <rect x="229" y="103" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="142" fill="${ink}" font-size="21" font-weight="700">盘内资料与任务</text>
+      <text x="256" y="168" fill="${muted}" font-size="15">Inbox 确认后写入长期知识</text>
+    </g>
+
+    <g id="step-retrieve">
+      <path d="M272 194V237" stroke="${carry}" stroke-opacity="0.45"/>
+      <path d="M267 236H277L272 243Z" fill="${carry}" fill-opacity="0.7"/>
+      <text x="292" y="223" fill="${faint}" font-size="14">检索 / 继续</text>
+      <g class="packet packet-retrieve" fill="${carry_2}">
+        <circle cx="272" cy="196" r="9" opacity="0.22"/>
+        <circle cx="272" cy="196" r="4.5"/>
+      </g>
+    </g>
+
+    <g id="flow-workspace">
+      <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+      <g class="lit lit-workspace-in">
+        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
+      </g>
+      <g class="lit lit-workspace-back">
+        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="282" fill="${ink}" font-size="21" font-weight="700">Yi盘工作台</text>
+      <text x="256" y="308" fill="${muted}" font-size="15">受管 Agent 处理当前任务</text>
+    </g>
+
+    <g id="step-generate">
+      <path d="M272 334V377" stroke="${carry}" stroke-opacity="0.45"/>
+      <path d="M267 376H277L272 383Z" fill="${carry}" fill-opacity="0.7"/>
+      <text x="292" y="363" fill="${faint}" font-size="14">生成 / 记录</text>
+      <g class="packet packet-generate" fill="${carry_2}">
+        <circle cx="272" cy="336" r="9" opacity="0.22"/>
+        <circle cx="272" cy="336" r="4.5"/>
+      </g>
+    </g>
+
+    <g id="flow-output">
+      <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+      <g class="lit lit-output">
+        <rect x="229" y="383" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
+      </g>
+      <text x="256" y="422" fill="${ink}" font-size="21" font-weight="700">产出与任务记录</text>
+      <text x="256" y="448" fill="${muted}" font-size="15">留在盘内，随盘带走</text>
+    </g>
+  </g>
+
+  <g id="cloud-branch">
+    <g id="link-request">
+      <path d="M752 276H849" stroke="${link_line}"/>
+      <path d="M848 271.5V280.5L855 276Z" fill="${link_head}"/>
+      <text x="804" y="263" fill="${faint}" font-size="14" text-anchor="middle">按需请求</text>
+      <g class="packet packet-request" fill="${link_dot}">
+        <circle cx="758" cy="276" r="8" opacity="0.2"/>
+        <circle cx="758" cy="276" r="4"/>
+      </g>
+    </g>
+    <g id="link-result">
+      <path d="M759 300H856" stroke="${link_line}"/>
+      <path d="M760 295.5V304.5L753 300Z" fill="${link_head}"/>
+      <text x="804" y="324" fill="${faint}" font-size="14" text-anchor="middle">返回结果</text>
+      <g class="packet packet-result" fill="${link_dot}">
+        <circle cx="850" cy="300" r="8" opacity="0.2"/>
+        <circle cx="850" cy="300" r="4"/>
+      </g>
+    </g>
+    <g id="flow-cloud">
+      <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
+      <g class="lit lit-cloud">
+        <rect x="853" y="239" width="174" height="98" rx="17" fill="none" stroke="${cloud_lit}" stroke-opacity="0.18" stroke-width="4"/>
+        <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="none" stroke="${cloud_lit}" stroke-width="1.5" stroke-dasharray="6 5"/>
+      </g>
+      <text x="940" y="282" fill="${ink}" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
+      <text x="940" y="308" fill="${muted}" font-size="14" text-anchor="middle">按需推理</text>
+    </g>
+  </g>
+  </g>
+</svg>
+""")
+
+
 def media_uri(name: str) -> str:
     data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
     return f"data:image/webp;base64,{data}"
@@ -508,6 +723,7 @@ def main() -> int:
     check = "--check" in sys.argv[1:]
     outputs = {
         "hero": (HERO, HERO_STYLE, hero_media),
+        "yipan-flow": (FLOW, FLOW_STYLE, lambda theme: {}),
         "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
     }
     stale: list[str] = []
