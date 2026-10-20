@@ -22,8 +22,8 @@ FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
     "./assets/hero-dark.svg?v=11",
     "./assets/hero-light.svg?v=11",
-    "./assets/yipan-flow-dark.svg?v=11",
-    "./assets/yipan-flow-light.svg?v=11",
+    "./assets/yipan-flow-dark.svg?v=12",
+    "./assets/yipan-flow-light.svg?v=12",
     "./assets/hardware-strip-dark.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/badge-studio.svg?v=1",
@@ -35,7 +35,7 @@ EXPECTED_ASSETS = {
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=11",
-    "./assets/yipan-flow-light.svg?v=11",
+    "./assets/yipan-flow-light.svg?v=12",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
     "./assets/hardware-featured.webp?v=1",
@@ -220,8 +220,15 @@ def main() -> int:
 
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
-    if not re.search(r"yipan-flow-light\.svg\?v=11[^>]*>\n</picture>\n\n> 结构示意，非产品截图。\n\n\*\*Yi盘是一套", readme):
-        problems.append("Yi盘 product diagram must keep the approved note before its description")
+    # The Yi盘 card links to the public repository and carries the summary itself,
+    # so the paragraph under it keeps only the one-sentence definition.
+    if not re.search(
+        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase"><picture>\n(?:.*\n){2}'
+        r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=12\"[^>]*>\n</picture></a>\n\n"
+        r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
+        readme,
+    ):
+        problems.append("Yi盘 card must link to yipan-showcase and keep the approved note and one-sentence definition")
     if readme.count('src="./assets/badge-') != 6:
         problems.append("profile must contain exactly six local brand badges")
 

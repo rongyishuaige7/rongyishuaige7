@@ -1,19 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="492" viewBox="0 0 1200 492" role="img" aria-labelledby="title desc">
-  <title id="title">Yi盘结构示意</title>
-  <desc id="desc">浅色结构示意，非产品截图。虚线框表示 U 盘内：盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料，供下一次继续。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="476" viewBox="0 0 1200 476" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘：U 盘里的 AI 工作台</title>
+  <desc id="desc">浅色Yi盘项目卡。左栏：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；标签 U 盘存储、云端模型；"查看公开仓库"按钮；状态受控内测。右栏是结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
   <defs>
-    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#f7f8fa"/>
+    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="0.6">
+      <stop stop-color="#e45738" stop-opacity="0.06"/>
+      <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.018"/>
+      <stop offset="1" stop-color="#e45738" stop-opacity="0.03"/>
     </linearGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="#8795a3" stroke-width="0.6" opacity="0.3"/>
+    <radialGradient id="cardGlow" cx="0.16" cy="0.92" r="0.55">
+      <stop stop-color="#e45738" stop-opacity="0.07"/>
+      <stop offset="1" stop-color="#e45738" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ctaFill" x1="0" y1="0" x2="1" y2="0.2">
+      <stop stop-color="#e45738"/>
+      <stop offset="1" stop-color="#f08a2c"/>
+    </linearGradient>
+    <linearGradient id="ctaShine" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="trailDown" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#f08a2c" stop-opacity="0"/>
+      <stop offset="1" stop-color="#f08a2c" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="trailUp" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#f08a2c" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#f08a2c" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="trailRight" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#4c5562" stop-opacity="0"/>
+      <stop offset="1" stop-color="#4c5562" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="trailLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#4c5562" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#4c5562" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="figGrid" width="22" height="22" patternUnits="userSpaceOnUse">
+      <path d="M22 0H0V22" fill="none" stroke="#eef1f5"/>
     </pattern>
-    <clipPath id="panelClip"><rect x="1" y="1" width="1198" height="490" rx="18"/></clipPath>
+    <clipPath id="figClip"><rect x="489" y="49" width="662" height="378" rx="13.5"/></clipPath>
+    <filter id="ctaGlow" x="-30%" y="-40%" width="160%" height="230%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#e45738" flood-opacity="0.18"/>
+    </filter>
+    <clipPath id="ctaClip"><rect x="72" y="299" width="200" height="60" rx="14"/></clipPath>
   </defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .lit, .packet { opacity: 0; }
+    .lit, .packet, .pulse-ring { opacity: 0; }
+    .pulse-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .lit-context { animation: lit-context 8s ease-in-out infinite; }
       .packet-retrieve { animation: packet-retrieve 8s linear infinite; }
@@ -25,6 +60,9 @@
       .packet-generate { animation: packet-generate 8s linear infinite; }
       .lit-output { animation: lit-output 8s ease-in-out infinite; }
       .lit-rail { animation: lit-rail 8s ease-in-out infinite; }
+      .packet-rail { animation: packet-rail 8s linear infinite; }
+      .status-pulse { animation: status-pulse 8s ease-out infinite; }
+      .cta-shine { animation: cta-shine 8s ease-in-out infinite; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -34,8 +72,8 @@
     @keyframes packet-retrieve {
       0%, 8% { opacity: 0; transform: translateY(0); }
       9% { opacity: 1; transform: translateY(0); }
-      17% { opacity: 1; transform: translateY(38px); }
-      18%, 100% { opacity: 0; transform: translateY(38px); }
+      17% { opacity: 1; transform: translateY(32px); }
+      18%, 100% { opacity: 0; transform: translateY(32px); }
     }
     @keyframes lit-workspace-in {
       0%, 16% { opacity: 0; }
@@ -45,8 +83,8 @@
     @keyframes packet-request {
       0%, 24% { opacity: 0; transform: translateX(0); }
       25% { opacity: 1; transform: translateX(0); }
-      33% { opacity: 1; transform: translateX(86px); }
-      34%, 100% { opacity: 0; transform: translateX(86px); }
+      33% { opacity: 1; transform: translateX(76px); }
+      34%, 100% { opacity: 0; transform: translateX(76px); }
     }
     @keyframes lit-cloud {
       0%, 32% { opacity: 0; }
@@ -56,8 +94,8 @@
     @keyframes packet-result {
       0%, 40% { opacity: 0; transform: translateX(0); }
       41% { opacity: 1; transform: translateX(0); }
-      49% { opacity: 1; transform: translateX(-86px); }
-      50%, 100% { opacity: 0; transform: translateX(-86px); }
+      49% { opacity: 1; transform: translateX(-76px); }
+      50%, 100% { opacity: 0; transform: translateX(-76px); }
     }
     @keyframes lit-workspace-back {
       0%, 48% { opacity: 0; }
@@ -67,8 +105,8 @@
     @keyframes packet-generate {
       0%, 56% { opacity: 0; transform: translateY(0); }
       57% { opacity: 1; transform: translateY(0); }
-      65% { opacity: 1; transform: translateY(38px); }
-      66%, 100% { opacity: 0; transform: translateY(38px); }
+      65% { opacity: 1; transform: translateY(32px); }
+      66%, 100% { opacity: 0; transform: translateY(32px); }
     }
     @keyframes lit-output {
       0%, 64% { opacity: 0; }
@@ -80,111 +118,164 @@
       74%, 83% { opacity: 1; }
       85%, 100% { opacity: 0; }
     }
+    @keyframes packet-rail {
+      0%, 74% { opacity: 0; transform: translateY(0); }
+      75% { opacity: 1; transform: translateY(0); }
+      83% { opacity: 1; transform: translateY(-186px); }
+      84%, 100% { opacity: 0; transform: translateY(-186px); }
+    }
+    @keyframes status-pulse {
+      0%, 22%, 25%, 47%, 50%, 72%, 75%, 97%, 100% { opacity: 0; transform: scale(1); }
+      1%, 26%, 51%, 76% { opacity: 0.55; transform: scale(1); }
+      21%, 46%, 71%, 96% { opacity: 0; transform: scale(3); }
+    }
+    @keyframes cta-shine {
+      0%, 86% { transform: translateX(0); }
+      96%, 100% { transform: translateX(300px); }
+    }
   </style>
 
-  <rect x="0.5" y="0.5" width="1199" height="491" rx="18" fill="url(#surface)" stroke="#cbd2dc"/>
-  <g clip-path="url(#panelClip)">
-    <rect x="1" y="1" width="1198" height="490" fill="url(#grid)"/>
+  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardWash)"/>
+  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardGlow)"/>
+  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="none" stroke="#e45738" stroke-opacity="0.26"/>
+
+  <g transform="translate(0 -22)">
+  <g id="card-copy">
+    <text x="72" y="179" fill="#3a4350" font-size="23">资料、任务记录和产出保存在盘内，</text>
+    <text x="72" y="219" fill="#3a4350" font-size="23">智能处理主要调用云端模型。</text>
+  </g>
+  <g id="card-tags" font-size="15" text-anchor="middle">
+    <rect x="72.5" y="241.5" width="91" height="33" rx="8.5" fill="#f7f8fa" stroke="#d5dbe4"/>
+    <text x="118" y="263" fill="#5f6876">U 盘存储</text>
+    <rect x="173.5" y="241.5" width="87" height="33" rx="8.5" fill="#f7f8fa" stroke="#d5dbe4"/>
+    <text x="217" y="263" fill="#5f6876">云端模型</text>
+  </g>
+  <g id="card-cta">
+    <rect x="72" y="299" width="200" height="60" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
+    <g clip-path="url(#ctaClip)">
+      <path class="cta-shine" d="M24 299H64L44 359H4Z" fill="url(#ctaShine)"/>
+    </g>
+    <text x="96" y="336" fill="#17100d" font-size="19" font-weight="700">查看公开仓库</text>
+    <path d="M231 337L244 324M234 324H244V334" fill="none" stroke="#17100d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="card-status">
+    <circle cx="298" cy="329" r="8" fill="#e45738" opacity="0.18"/>
+    <circle class="pulse-ring status-pulse" cx="298" cy="329" r="4" fill="#e45738"/>
+    <circle cx="298" cy="329" r="4" fill="#e45738"/>
+    <text x="313" y="334" fill="#5f6876" font-size="15">受控内测</text>
+  </g>
   </g>
 
-  <g transform="translate(0 -28)">
-  <g id="drive">
-    <rect id="drive-boundary" x="180.5" y="84.5" width="599" height="407" rx="18" fill="#e45738" fill-opacity="0.03" stroke="#e45738" stroke-opacity="0.45" stroke-dasharray="6 5"/>
-    <text x="776" y="72" fill="#c25a12" font-size="16" text-anchor="end">U 盘内</text>
-
-    <g id="continuity-rail">
-      <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="#e45738" stroke-opacity="0.4"/>
-      <path d="M225 143.5V152.5L232 148Z" fill="#e45738" fill-opacity="0.65"/>
-      <text fill="#6c7583" font-size="14" text-anchor="middle"><tspan x="218" y="253">记</tspan><tspan x="218" y="273">录</tspan><tspan x="218" y="293">·</tspan><tspan x="218" y="313">沉</tspan><tspan x="218" y="333">淀</tspan></text>
-      <g class="lit lit-rail">
-        <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="#f08a2c" stroke-width="1.5"/>
-        <path d="M225 143.5V152.5L232 148Z" fill="#f08a2c"/>
-      </g>
+  <g id="flow-figure">
+    <rect x="488.5" y="48.5" width="663" height="379" rx="14" fill="#fbfcfd" stroke="#dfe3e8"/>
+    <g clip-path="url(#figClip)">
+      <rect x="489" y="49" width="662" height="378" fill="url(#figGrid)"/>
     </g>
 
-    <g id="flow-context">
-      <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.32"/>
-      <g class="lit lit-context">
-        <rect x="229" y="103" width="526" height="90" rx="15" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
-        <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="none" stroke="#e45738" stroke-width="1.5"/>
+    <g id="cloud-branch">
+      <g id="link-request">
+        <path d="M916 240H999" stroke="#b9c1cc"/>
+        <path d="M998 235.5V244.5L1005 240Z" fill="#7d8794"/>
+        <text x="971" y="228" fill="#6c7583" font-size="13" text-anchor="middle">按需请求</text>
+        <g class="packet packet-request">
+          <rect x="906" y="238.5" width="16" height="3" rx="1.5" fill="url(#trailRight)"/>
+          <circle cx="922" cy="240" r="7" fill="#4c5562" opacity="0.2"/>
+          <circle cx="922" cy="240" r="3.5" fill="#4c5562"/>
+        </g>
       </g>
-      <text x="256" y="142" fill="#18202a" font-size="24" font-weight="700">盘内资料与任务</text>
-      <text x="256" y="168" fill="#5f6876" font-size="16">Inbox 确认后写入长期知识</text>
-    </g>
-
-    <g id="step-retrieve">
-      <path d="M272 194V237" stroke="#e45738" stroke-opacity="0.45"/>
-      <path d="M267 236H277L272 243Z" fill="#e45738" fill-opacity="0.7"/>
-      <text x="292" y="223" fill="#6c7583" font-size="15">检索 / 继续</text>
-      <g class="packet packet-retrieve" fill="#f08a2c">
-        <circle cx="272" cy="196" r="9" opacity="0.22"/>
-        <circle cx="272" cy="196" r="4.5"/>
+      <g id="link-result">
+        <path d="M923 264H1007" stroke="#b9c1cc"/>
+        <path d="M923 259.5V268.5L916 264Z" fill="#7d8794"/>
+        <text x="971" y="285" fill="#6c7583" font-size="13" text-anchor="middle">返回结果</text>
+        <g class="packet packet-result">
+          <rect x="1001" y="262.5" width="16" height="3" rx="1.5" fill="url(#trailLeft)"/>
+          <circle cx="1001" cy="264" r="7" fill="#4c5562" opacity="0.2"/>
+          <circle cx="1001" cy="264" r="3.5" fill="#4c5562"/>
+        </g>
       </g>
-    </g>
-
-    <g id="flow-workspace">
-      <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.32"/>
-      <g class="lit lit-workspace-in">
-        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
-        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="#e45738" stroke-width="1.5"/>
-      </g>
-      <g class="lit lit-workspace-back">
-        <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
-        <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="#e45738" stroke-width="1.5"/>
-      </g>
-      <text x="256" y="282" fill="#18202a" font-size="24" font-weight="700">Yi盘工作台</text>
-      <text x="256" y="308" fill="#5f6876" font-size="16">受管 Agent 处理当前任务</text>
-    </g>
-
-    <g id="step-generate">
-      <path d="M272 334V377" stroke="#e45738" stroke-opacity="0.45"/>
-      <path d="M267 376H277L272 383Z" fill="#e45738" fill-opacity="0.7"/>
-      <text x="292" y="363" fill="#6c7583" font-size="15">生成 / 记录</text>
-      <g class="packet packet-generate" fill="#f08a2c">
-        <circle cx="272" cy="336" r="9" opacity="0.22"/>
-        <circle cx="272" cy="336" r="4.5"/>
+      <g id="flow-cloud">
+        <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="#ffffff" stroke="#9aa3ae" stroke-dasharray="6 5"/>
+        <g class="lit lit-cloud">
+          <rect x="1004" y="202" width="130" height="100" rx="16" fill="none" stroke="#4c5562" stroke-opacity="0.18" stroke-width="4"/>
+          <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="#4c5562" fill-opacity="0.06" stroke="#4c5562" stroke-width="1.5" stroke-dasharray="6 5"/>
+        </g>
+        <text x="1069" y="247" fill="#18202a" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
+        <text x="1069" y="273" fill="#5f6876" font-size="14" text-anchor="middle">按需推理</text>
       </g>
     </g>
 
-    <g id="flow-output">
-      <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.32"/>
-      <g class="lit lit-output">
-        <rect x="229" y="383" width="526" height="90" rx="15" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
-        <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="none" stroke="#e45738" stroke-width="1.5"/>
-      </g>
-      <text x="256" y="422" fill="#18202a" font-size="24" font-weight="700">产出与任务记录</text>
-      <text x="256" y="448" fill="#5f6876" font-size="16">留在盘内，随盘带走</text>
-    </g>
-  </g>
+    <g id="drive">
+      <rect id="drive-boundary" x="508.5" y="94.5" width="427" height="315" rx="14" fill="#e45738" fill-opacity="0.03" stroke="#e45738" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <text x="932" y="84" fill="#c25a12" font-size="14" text-anchor="end">U 盘内</text>
 
-  <g id="cloud-branch">
-    <g id="link-request">
-      <path d="M752 276H849" stroke="#b9c1cc"/>
-      <path d="M848 271.5V280.5L855 276Z" fill="#7d8794"/>
-      <text x="804" y="263" fill="#6c7583" font-size="15" text-anchor="middle">按需请求</text>
-      <g class="packet packet-request" fill="#4c5562">
-        <circle cx="758" cy="276" r="8" opacity="0.2"/>
-        <circle cx="758" cy="276" r="4"/>
+      <g id="continuity-rail">
+        <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="#e45738" stroke-opacity="0.4"/>
+        <path d="M549 137.5V146.5L556 142Z" fill="#e45738" fill-opacity="0.65"/>
+        <text fill="#6c7583" font-size="13" text-anchor="middle"><tspan x="542" y="221">记</tspan><tspan x="542" y="239">录</tspan><tspan x="542" y="257">·</tspan><tspan x="542" y="275">沉</tspan><tspan x="542" y="293">淀</tspan></text>
+        <g class="lit lit-rail">
+          <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="#f08a2c" stroke-width="1.5"/>
+          <path d="M549 137.5V146.5L556 142Z" fill="#f08a2c"/>
+        </g>
+        <g class="packet packet-rail">
+          <rect x="526.5" y="338" width="3" height="16" rx="1.5" fill="url(#trailUp)"/>
+          <circle cx="528" cy="338" r="7" fill="#f08a2c" opacity="0.22"/>
+          <circle cx="528" cy="338" r="3.5" fill="#f08a2c"/>
+        </g>
+      </g>
+
+      <g id="step-retrieve">
+        <path d="M596 178V212" stroke="#e45738" stroke-opacity="0.45"/>
+        <path d="M591 211H601L596 218Z" fill="#e45738" fill-opacity="0.7"/>
+        <text x="614" y="202" fill="#6c7583" font-size="13">检索 / 继续</text>
+        <g class="packet packet-retrieve">
+          <rect x="594.5" y="164" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="596" cy="180" r="7" fill="#f08a2c" opacity="0.22"/>
+          <circle cx="596" cy="180" r="3.5" fill="#f08a2c"/>
+        </g>
+      </g>
+      <g id="step-generate">
+        <path d="M596 288V322" stroke="#e45738" stroke-opacity="0.45"/>
+        <path d="M591 321H601L596 328Z" fill="#e45738" fill-opacity="0.7"/>
+        <text x="614" y="312" fill="#6c7583" font-size="13">生成 / 记录</text>
+        <g class="packet packet-generate">
+          <rect x="594.5" y="274" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="596" cy="290" r="7" fill="#f08a2c" opacity="0.22"/>
+          <circle cx="596" cy="290" r="3.5" fill="#f08a2c"/>
+        </g>
+      </g>
+
+      <g id="flow-context">
+        <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.3"/>
+        <g class="lit lit-context">
+          <rect x="553" y="106" width="366" height="72" rx="14" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
+          <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="#e45738" fill-opacity="0.08" stroke="#e45738" stroke-width="1.5"/>
+        </g>
+        <text x="576" y="137" fill="#18202a" font-size="20" font-weight="700">盘内资料与任务</text>
+        <text x="576" y="161" fill="#5f6876" font-size="14">Inbox 确认后写入长期知识</text>
+      </g>
+      <g id="flow-workspace">
+        <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.3"/>
+        <g class="lit lit-workspace-in">
+          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
+          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="#e45738" fill-opacity="0.08" stroke="#e45738" stroke-width="1.5"/>
+        </g>
+        <g class="lit lit-workspace-back">
+          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
+          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="#e45738" fill-opacity="0.08" stroke="#e45738" stroke-width="1.5"/>
+        </g>
+        <text x="576" y="247" fill="#18202a" font-size="20" font-weight="700">Yi盘工作台</text>
+        <text x="576" y="271" fill="#5f6876" font-size="14">受管 Agent 处理当前任务</text>
+      </g>
+      <g id="flow-output">
+        <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="#ffffff" stroke="#e45738" stroke-opacity="0.3"/>
+        <g class="lit lit-output">
+          <rect x="553" y="326" width="366" height="72" rx="14" fill="none" stroke="#e45738" stroke-opacity="0.18" stroke-width="4"/>
+          <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="#e45738" fill-opacity="0.08" stroke="#e45738" stroke-width="1.5"/>
+        </g>
+        <text x="576" y="357" fill="#18202a" font-size="20" font-weight="700">产出与任务记录</text>
+        <text x="576" y="381" fill="#5f6876" font-size="14">留在盘内，随盘带走</text>
       </g>
     </g>
-    <g id="link-result">
-      <path d="M759 300H856" stroke="#b9c1cc"/>
-      <path d="M760 295.5V304.5L753 300Z" fill="#7d8794"/>
-      <text x="804" y="324" fill="#6c7583" font-size="15" text-anchor="middle">返回结果</text>
-      <g class="packet packet-result" fill="#4c5562">
-        <circle cx="850" cy="300" r="8" opacity="0.2"/>
-        <circle cx="850" cy="300" r="4"/>
-      </g>
-    </g>
-    <g id="flow-cloud">
-      <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="#ffffff" stroke="#9aa3ae" stroke-dasharray="6 5"/>
-      <g class="lit lit-cloud">
-        <rect x="853" y="239" width="174" height="98" rx="17" fill="none" stroke="#4c5562" stroke-opacity="0.18" stroke-width="4"/>
-        <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="none" stroke="#4c5562" stroke-width="1.5" stroke-dasharray="6 5"/>
-      </g>
-      <text x="940" y="282" fill="#18202a" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
-      <text x="940" y="308" fill="#5f6876" font-size="15" text-anchor="middle">按需推理</text>
-    </g>
-  </g>
   </g>
 </svg>

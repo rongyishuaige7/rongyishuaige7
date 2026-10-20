@@ -48,8 +48,16 @@ GEOMETRY_ATTRIBUTES = (
     "transform",
     "stroke-dashoffset",
 )
-# The Yi盘 diagram follows the homepage: local nodes inside the dashed U 盘 boundary,
-# the cloud model outside it, linked to the workspace in both directions.
+# The Yi盘 card follows the homepage featured card: summary, tags, repo button and status
+# on the left, the diagram in its own panel on the right. In the diagram the local nodes
+# sit inside the dashed U 盘 boundary and the cloud model outside it, linked to the
+# workspace in both directions.
+FLOW_CARD_TEXT = {
+    "card-copy": ("资料、任务记录和产出保存在盘内，", "智能处理主要调用云端模型。"),
+    "card-tags": ("U 盘存储", "云端模型"),
+    "card-cta": ("查看公开仓库",),
+    "card-status": ("受控内测",),
+}
 FLOW_LOCAL_IDS = {"drive-boundary", "continuity-rail", "flow-context", "step-retrieve", "flow-workspace", "step-generate", "flow-output"}
 FLOW_CLOUD_IDS = {"flow-cloud", "link-request", "link-result"}
 FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录")
@@ -231,6 +239,23 @@ def validate(path: Path) -> list[str]:
         for required_id in sorted(({"drive", "cloud-branch"} | FLOW_LOCAL_IDS | FLOW_CLOUD_IDS) - element_ids):
             problems.append(f"Yi盘 diagram is missing structural element: {required_id}")
         by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+        for card_id, card_text in FLOW_CARD_TEXT.items():
+            part = by_id.get(card_id)
+            if part is None:
+                problems.append(f"Yi盘 card is missing element: {card_id}")
+                continue
+            for required_text in card_text:
+                if required_text not in drawn_text(part):
+                    problems.append(f"Yi盘 card {card_id} is missing text: {required_text}")
+        figure = by_id.get("flow-figure")
+        if figure is None:
+            problems.append("Yi盘 card is missing element: flow-figure")
+        else:
+            figure_ids = {element.get("id") for element in figure.iter() if element.get("id")}
+            if not {"drive", "cloud-branch"} <= figure_ids:
+                problems.append("Yi盘 diagram must sit inside the card's figure panel")
+            if figure_ids & set(FLOW_CARD_TEXT):
+                problems.append("Yi盘 card copy must stay outside the figure panel")
         drive = by_id.get("drive")
         cloud_branch = by_id.get("cloud-branch")
         if drive is not None:
