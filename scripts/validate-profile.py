@@ -24,6 +24,8 @@ EXPECTED_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-dark.svg?v=12",
     "./assets/yipan-flow-light.svg?v=12",
+    "./assets/dsh-card-dark.svg?v=1",
+    "./assets/dsh-card-light.svg?v=1",
     "./assets/hardware-strip-dark.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/badge-studio.svg?v=1",
@@ -36,6 +38,7 @@ EXPECTED_ASSETS = {
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-light.svg?v=12",
+    "./assets/dsh-card-light.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
     "./assets/hardware-featured.webp?v=1",
@@ -229,6 +232,18 @@ def main() -> int:
         readme,
     ):
         problems.append("Yi盘 card must link to yipan-showcase and keep the approved note and one-sentence definition")
+    # The DSH Usage card replaces the description and tag lines and sits above the screenshot.
+    if not re.search(
+        r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
+        r'<a href="https://github\.com/rongyishuaige7/dsh-stats"><picture>\n(?:.*\n){2}'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=1"[^>]*>\n</picture></a>\n\n'
+        r"<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
+        readme,
+    ):
+        problems.append("DSH Usage card must link to dsh-stats and sit between its heading and the screenshot")
+    for repeated in ("`USAGE` DeepSeek Harness 插件", "以 `@rongyi7/dsh-stats` 发布在 npm"):
+        if repeated in readme:
+            problems.append(f"DSH Usage card text is repeated in the README body: {repeated}")
     if readme.count('src="./assets/badge-') != 6:
         problems.append("profile must contain exactly six local brand badges")
 

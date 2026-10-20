@@ -44,9 +44,11 @@
 
 ### [DSH Usage](https://github.com/rongyishuaige7/dsh-stats)
 
-`USAGE` DeepSeek Harness 插件：按项目统计 DSH 会话的 Token、开发时长、费用和余额。未知价格会明确标出，密钥只在本机使用。
-
-`TypeScript` `DSH Plugin` `Local-first` | 以 `@rongyi7/dsh-stats` 发布在 npm | MIT
+<a href="https://github.com/rongyishuaige7/dsh-stats"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=1">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=1">
+  <img src="./assets/dsh-card-light.svg?v=1" width="100%" alt="DSH Usage 卡片：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额；未知价格会明确标出，密钥只在本机使用。标签：TypeScript、DSH Plugin、Local-first；按钮：查看仓库；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右侧：统计视图 4 个，趋势范围近 7 / 30 / 90 天，导出格式 CSV/JSON；依次切换项目总览、开发时间线、用量趋势、账户余额四个视图。">
+</picture></a>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=1">

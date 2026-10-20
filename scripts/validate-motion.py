@@ -9,8 +9,10 @@ import sys
 FLOW = Path("assets/yipan-flow-light.svg")
 HERO = Path("assets/hero-light.svg")
 STRIP = Path("assets/hardware-strip-light.svg")
+DSH = Path("assets/dsh-card-light.svg")
 PAIR = {
     FLOW: Path("assets/yipan-flow-dark.svg"),
+    DSH: Path("assets/dsh-card-dark.svg"),
     HERO: Path("assets/hero-dark.svg"),
     STRIP: Path("assets/hardware-strip-dark.svg"),
 }
@@ -30,6 +32,13 @@ STORIES = {
         ("lit-output",),
         ("lit-rail", "packet-rail"),
     )),
+    # The active DSH view moves left to right; each view runs its own timer bar.
+    DSH: ("8s", (
+        ("view-1", "timer-1"),
+        ("view-2", "timer-2"),
+        ("view-3", "timer-3"),
+        ("view-4", "timer-4"),
+    )),
     STRIP: ("6s", (
         ("sig-in-a", "sig-in-b", "sig-in-c"),
         ("chip-on",),
@@ -37,9 +46,12 @@ STORIES = {
         ("led-a", "led-b", "led-c"),
     )),
 }
-# The Yi盘 card's status dot and button shine run on the same 8s cycle but sit
-# outside the diagram story; any other animated class must belong to a stage.
-FLOW_AMBIENT = {"status-pulse", "cta-shine"}
+# The cards' status dots and button shines run on the same 8s cycle but sit outside
+# their stories; any other animated class must belong to a stage.
+CARD_AMBIENT = {
+    FLOW: {"status-pulse", "cta-shine"},
+    DSH: {"status-pulse", "cta-shine"},
+}
 # The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
 # on its own must end within 5 seconds). Classes start in this order: the three
 # entry cards, then the drive shine, the DSH capture pan, and the photo deck.
@@ -184,13 +196,14 @@ def main() -> int:
         cycle, stages = STORIES[light]
         problems.extend(check_story(light, light_text, cycle, stages))
 
-    flow = FLOW.read_text(encoding="utf-8")
+    for card, ambient in CARD_AMBIENT.items():
+        card_text = card.read_text(encoding="utf-8")
+        if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
+            problems.append(f"{card.name} does not use one 8s loop like the homepage")
+        story_classes = {name for stage in STORIES[card][1] for name in stage}
+        for class_name in sorted(set(dict(ANIMATION.findall(card_text))) - story_classes - ambient):
+            problems.append(f"{card.name}: {class_name} is animated outside its story")
     hero = HERO.read_text(encoding="utf-8")
-    if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", flow)) != {"8s"}:
-        problems.append("Yi盘 diagram does not use one 8s loop like the homepage")
-    story_classes = {name for stage in STORIES[FLOW][1] for name in stage}
-    for class_name in sorted(set(dict(ANIMATION.findall(flow))) - story_classes - FLOW_AMBIENT):
-        problems.append(f"{FLOW.name}: {class_name} is animated outside the Yi盘 story")
     if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
         problems.append("hero still duplicates the cloud-agent workflow semantics")
     for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<"):
@@ -200,7 +213,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero entry cards play once within 5s; the hardware strip and the 8s Yi盘 card loop each tell one sequential story.")
+    print("Hero entry cards play once within 5s; the hardware strip and the 8s Yi盘 and DSH Usage card loops each tell one sequential story.")
     return 0
 
 

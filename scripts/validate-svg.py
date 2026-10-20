@@ -21,6 +21,8 @@ EXPECTED_ASSETS = {
     "badge-yipan.svg",
     "hardware-strip-dark.svg",
     "hardware-strip-light.svg",
+    "dsh-card-dark.svg",
+    "dsh-card-light.svg",
     "hero-dark.svg",
     "hero-light.svg",
     "yipan-flow-dark.svg",
@@ -29,10 +31,11 @@ EXPECTED_ASSETS = {
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
+    ("dsh-card-dark.svg", "dsh-card-light.svg"),
     ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
 )
 # Pairs rendered by scripts/render-svg.py must match element for element.
-GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "hardware-strip-dark.svg"}
+GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "dsh-card-dark.svg", "hardware-strip-dark.svg"}
 GEOMETRY_ATTRIBUTES = (
     "id",
     "class",
@@ -61,6 +64,20 @@ FLOW_CARD_TEXT = {
 FLOW_LOCAL_IDS = {"drive-boundary", "continuity-rail", "flow-context", "step-retrieve", "flow-workspace", "step-generate", "flow-output"}
 FLOW_CLOUD_IDS = {"flow-cloud", "link-request", "link-result"}
 FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录")
+# The DSH Usage card follows the homepage SEE card. Its metrics are stable facts from the
+# dsh-stats README; download counts and version numbers would go stale in a static image.
+DSH_CARD_TEXT = {
+    "card-copy": ("USAGE", "按项目统计 DSH 会话的 Token、", "开发时长、费用和余额。", "未知价格会明确标出，密钥只在本机使用。"),
+    "card-tags": ("TypeScript", "DSH Plugin", "Local-first"),
+    "card-cta": ("查看仓库",),
+    "card-status": ("已发布到 npm · MIT", "@rongyi7/dsh-stats"),
+}
+DSH_VIEWS = ("项目总览", "开发时间线", "用量趋势", "账户余额")
+DSH_PANEL_TEXT = {
+    "card-metrics": ("统计视图", "4", "趋势范围", "7/30/90", "导出格式", "CSV/JSON"),
+    "card-views": DSH_VIEWS,
+}
+DSH_VOLATILE = re.compile(r"下载|最新版本|已发布版本|\bv?\d+\.\d+\.\d+\b")
 PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
 # The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
@@ -78,6 +95,36 @@ def local_name(name: str) -> str:
 def drawn_text(root: ET.Element) -> str:
     """Text a viewer sees: <text> elements only, never <title> or <desc>."""
     return "\n".join("".join(element.itertext()) for element in root.iter() if local_name(element.tag) == "text")
+
+
+def check_card(
+    root: ET.Element,
+    label: str,
+    copy: dict[str, tuple[str, ...]],
+    panel_id: str,
+    panel_parts: dict[str, tuple[str, ...]],
+) -> list[str]:
+    """A homepage-style card: copy groups outside the panel, panel parts inside it, each with its drawn text."""
+    problems: list[str] = []
+    by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+    for part_id, part_text in {**copy, **panel_parts}.items():
+        part = by_id.get(part_id)
+        if part is None:
+            problems.append(f"{label} card is missing element: {part_id}")
+            continue
+        for required_text in part_text:
+            if required_text not in drawn_text(part):
+                problems.append(f"{label} card {part_id} is missing text: {required_text}")
+    panel = by_id.get(panel_id)
+    if panel is None:
+        problems.append(f"{label} card is missing element: {panel_id}")
+    else:
+        panel_ids = {element.get("id") for element in panel.iter() if element.get("id")}
+        if not set(panel_parts) <= panel_ids:
+            problems.append(f"{label} card panel {panel_id} must hold " + ", ".join(sorted(panel_parts)))
+        if panel_ids & set(copy):
+            problems.append(f"{label} card copy must stay outside the panel {panel_id}")
+    return problems
 
 
 def validate_motion_css(style_text: str) -> list[str]:
@@ -239,23 +286,7 @@ def validate(path: Path) -> list[str]:
         for required_id in sorted(({"drive", "cloud-branch"} | FLOW_LOCAL_IDS | FLOW_CLOUD_IDS) - element_ids):
             problems.append(f"Yi盘 diagram is missing structural element: {required_id}")
         by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
-        for card_id, card_text in FLOW_CARD_TEXT.items():
-            part = by_id.get(card_id)
-            if part is None:
-                problems.append(f"Yi盘 card is missing element: {card_id}")
-                continue
-            for required_text in card_text:
-                if required_text not in drawn_text(part):
-                    problems.append(f"Yi盘 card {card_id} is missing text: {required_text}")
-        figure = by_id.get("flow-figure")
-        if figure is None:
-            problems.append("Yi盘 card is missing element: flow-figure")
-        else:
-            figure_ids = {element.get("id") for element in figure.iter() if element.get("id")}
-            if not {"drive", "cloud-branch"} <= figure_ids:
-                problems.append("Yi盘 diagram must sit inside the card's figure panel")
-            if figure_ids & set(FLOW_CARD_TEXT):
-                problems.append("Yi盘 card copy must stay outside the figure panel")
+        problems.extend(check_card(root, "Yi盘", FLOW_CARD_TEXT, "flow-figure", {"drive": (), "cloud-branch": ()}))
         drive = by_id.get("drive")
         cloud_branch = by_id.get("cloud-branch")
         if drive is not None:
@@ -284,6 +315,38 @@ def validate(path: Path) -> list[str]:
         }
         if len(title_sizes) != 1:
             problems.append("Yi盘 node titles must share one heading size")
+
+    if path.name.startswith("dsh-card-"):
+        problems.extend(check_card(root, "DSH Usage", DSH_CARD_TEXT, "dsh-panel", DSH_PANEL_TEXT))
+        by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+        views = by_id.get("card-views")
+        if views is not None:
+            labels = drawn_text(views)
+            positions = [labels.find(label) for label in DSH_VIEWS]
+            if positions != sorted(positions):
+                problems.append("DSH Usage view tabs must read " + " / ".join(DSH_VIEWS))
+            view_ids = {element.get("id") for element in views.iter() if element.get("id")}
+            for index, label in enumerate(DSH_VIEWS, start=1):
+                view = by_id.get(f"view-{index}")
+                if view is None or f"view-{index}" not in view_ids or f"view-{index}" not in view.get("class", "").split():
+                    problems.append(f"DSH Usage card is missing animated view group view-{index}")
+                    continue
+                if [other for other in DSH_VIEWS if other in drawn_text(view)] != [label]:
+                    problems.append(f"DSH Usage view-{index} must highlight {label} and no other view")
+        # Reduced motion keeps the base styles: the first view shows, the others stay hidden.
+        base_css = style_text.split("@media", 1)[0]
+        hidden = {
+            selector.strip()
+            for rule in re.findall(r"([^{}]+)\{\s*opacity:\s*0;\s*\}", base_css)
+            for selector in rule.split(",")
+        }
+        if ".view-1" in hidden or not {".view-2", ".view-3", ".view-4"} <= hidden:
+            problems.append("DSH Usage card must show only the first view without motion")
+        description_text = "".join(description.itertext()) if description is not None else ""
+        for source in (drawn_text(root), description_text):
+            stale = DSH_VOLATILE.search(source)
+            if stale:
+                problems.append(f"DSH Usage card must not carry figures that go stale: {stale.group(0)}")
 
     if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]

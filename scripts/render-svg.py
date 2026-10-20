@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the generated profile SVG pairs from one template per asset.
 
-hero-*.svg, yipan-flow-*.svg and hardware-strip-*.svg are generated: edit this file, then run
+hero-*.svg, yipan-flow-*.svg, dsh-card-*.svg and hardware-strip-*.svg are generated: edit this file, then run
 `python3 scripts/render-svg.py`. CI runs `--check` so committed files cannot
 drift from the templates. Dark and light variants share geometry and motion
 CSS; only the palette tokens below differ. The hero embeds the WebP files in
@@ -75,6 +75,12 @@ PALETTES = {
         "cta_ink": "#17100d",
         "tag_fill": "#12161d",
         "tag_stroke": "#2b3038",
+        "see_wash": "0.085",
+        "see_glow": "0.1",
+        "see_ink": "#0b1020",
+        "metric_bg": "#0a0e15",
+        "tab_bg": "#0b0f16",
+        "pill_fill": "#142033",
         "drive_fill": "0.03",
         "flow_tag": "#ff9a3d",
         "link_line": "#45494f",
@@ -133,6 +139,12 @@ PALETTES = {
         "cta_ink": "#17100d",
         "tag_fill": "#f7f8fa",
         "tag_stroke": "#d5dbe4",
+        "see_wash": "0.06",
+        "see_glow": "0.07",
+        "see_ink": "#0b1020",
+        "metric_bg": "#ffffff",
+        "tab_bg": "#f4f6f9",
+        "pill_fill": "#e8f0fd",
         "drive_fill": "0.03",
         "flow_tag": "#c25a12",
         "link_line": "#b9c1cc",
@@ -808,6 +820,212 @@ ${style}
 """)
 
 
+# The DSH Usage card follows the homepage SEE card: summary, tags, the repo button and
+# npm status on the left; on the right a metric strip with stable facts from the dsh-stats
+# README and the four view tabs. One 8s loop moves the active tab through the views, each
+# with a timer bar like the homepage window tabs; the status dot breathes and the button
+# shines once per loop. Each view fades out before the next fades in, so captions never
+# overlap. Reduced motion shows the still card on the first view.
+DSH_STYLE = """  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .view-2, .view-3, .view-4, .timer, .pulse-ring { opacity: 0; }
+    .timer, .pulse-ring { transform-box: fill-box; }
+    .timer { transform-origin: left center; }
+    .pulse-ring { transform-origin: center; }
+    @media (prefers-reduced-motion: no-preference) {
+      .view-1 { animation: view-1 8s linear infinite; }
+      .timer-1 { animation: timer-1 8s linear infinite; }
+      .view-2 { animation: view-2 8s linear infinite; }
+      .timer-2 { animation: timer-2 8s linear infinite; }
+      .view-3 { animation: view-3 8s linear infinite; }
+      .timer-3 { animation: timer-3 8s linear infinite; }
+      .view-4 { animation: view-4 8s linear infinite; }
+      .timer-4 { animation: timer-4 8s linear infinite; }
+      .status-pulse { animation: status-pulse 8s ease-out infinite; }
+      .cta-shine { animation: cta-shine 8s ease-in-out infinite; }
+    }
+    @keyframes view-1 {
+      0%, 23% { opacity: 1; }
+      24%, 99% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes timer-1 {
+      0% { opacity: 1; transform: scaleX(0.02); }
+      23% { opacity: 1; transform: scaleX(1); }
+      24% { opacity: 0; transform: scaleX(1); }
+      25%, 99% { opacity: 0; transform: scaleX(0.02); }
+      100% { opacity: 1; transform: scaleX(0.02); }
+    }
+    @keyframes view-2 {
+      0%, 24% { opacity: 0; }
+      25%, 48% { opacity: 1; }
+      49%, 100% { opacity: 0; }
+    }
+    @keyframes timer-2 {
+      0%, 24% { opacity: 0; transform: scaleX(0.02); }
+      25% { opacity: 1; transform: scaleX(0.02); }
+      48% { opacity: 1; transform: scaleX(1); }
+      49%, 100% { opacity: 0; transform: scaleX(1); }
+    }
+    @keyframes view-3 {
+      0%, 49% { opacity: 0; }
+      50%, 73% { opacity: 1; }
+      74%, 100% { opacity: 0; }
+    }
+    @keyframes timer-3 {
+      0%, 49% { opacity: 0; transform: scaleX(0.02); }
+      50% { opacity: 1; transform: scaleX(0.02); }
+      73% { opacity: 1; transform: scaleX(1); }
+      74%, 100% { opacity: 0; transform: scaleX(1); }
+    }
+    @keyframes view-4 {
+      0%, 74% { opacity: 0; }
+      75%, 98% { opacity: 1; }
+      99%, 100% { opacity: 0; }
+    }
+    @keyframes timer-4 {
+      0%, 74% { opacity: 0; transform: scaleX(0.02); }
+      75% { opacity: 1; transform: scaleX(0.02); }
+      98% { opacity: 1; transform: scaleX(1); }
+      99%, 100% { opacity: 0; transform: scaleX(1); }
+    }
+    @keyframes status-pulse {
+      0%, 22%, 25%, 47%, 50%, 72%, 75%, 97%, 100% { opacity: 0; transform: scale(1); }
+      1%, 26%, 51%, 76% { opacity: 0.55; transform: scale(1); }
+      21%, 46%, 71%, 96% { opacity: 0; transform: scale(3); }
+    }
+    @keyframes cta-shine {
+      0%, 86% { transform: translateX(0); }
+      96%, 100% { transform: translateX(260px); }
+    }
+  </style>"""
+
+DSH = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="410" viewBox="0 0 1200 410" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Usage：按项目统计 DSH 会话用量</title>
+  <desc id="desc">${theme_desc}DSH Usage 项目卡。左栏：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额，未知价格会明确标出，密钥只在本机使用；标签 TypeScript、DSH Plugin、Local-first；"查看仓库"按钮；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右栏：统计视图 4 个，趋势范围近 7 / 30 / 90 天，导出格式 CSV/JSON；下方依次切换四个视图：项目总览、开发时间线、用量趋势、账户余额，并各配一句说明。</desc>
+  <defs>
+    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="0.6">
+      <stop stop-color="${see}" stop-opacity="${see_wash}"/>
+      <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.018"/>
+      <stop offset="1" stop-color="${see}" stop-opacity="0.03"/>
+    </linearGradient>
+    <radialGradient id="cardGlow" cx="0.84" cy="0.1" r="0.55">
+      <stop stop-color="${see}" stop-opacity="${see_glow}"/>
+      <stop offset="1" stop-color="${see}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ctaFill" x1="0" y1="0" x2="1" y2="0.2">
+      <stop stop-color="${see}"/>
+      <stop offset="1" stop-color="${see_2}"/>
+    </linearGradient>
+    <linearGradient id="ctaShine" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="figGrid" width="22" height="22" patternUnits="userSpaceOnUse">
+      <path d="M22 0H0V22" fill="none" stroke="${fig_grid}"/>
+    </pattern>
+    <clipPath id="figClip"><rect x="489" y="59" width="662" height="291" rx="13.5"/></clipPath>
+    <filter id="ctaGlow" x="-30%" y="-40%" width="160%" height="230%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="${see}" flood-opacity="0.18"/>
+    </filter>
+    <clipPath id="ctaClip"><rect x="72" y="283" width="160" height="60" rx="14"/></clipPath>
+  </defs>
+${style}
+
+  <rect x="0.5" y="0.5" width="1199" height="409" rx="18" fill="${page_bg}"/>
+  <rect x="0.5" y="0.5" width="1199" height="409" rx="18" fill="url(#cardWash)"/>
+  <rect x="0.5" y="0.5" width="1199" height="409" rx="18" fill="url(#cardGlow)"/>
+  <rect x="0.5" y="0.5" width="1199" height="409" rx="18" fill="none" stroke="${see}" stroke-opacity="0.26"/>
+
+  <g id="card-copy">
+    <text x="72" y="88" fill="${see_text}" font-size="14" letter-spacing="2" class="mono">USAGE</text>
+    <text x="134" y="88" fill="${muted}" font-size="14">· DeepSeek Harness 插件</text>
+    <text x="72" y="134" fill="${soft}" font-size="23">按项目统计 DSH 会话的 Token、</text>
+    <text x="72" y="170" fill="${soft}" font-size="23">开发时长、费用和余额。</text>
+    <text x="72" y="204" fill="${muted}" font-size="15">未知价格会明确标出，密钥只在本机使用。</text>
+  </g>
+  <g id="card-tags" font-size="15" text-anchor="middle">
+    <rect x="72.5" y="226.5" width="95" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
+    <text x="120" y="248" fill="${muted}">TypeScript</text>
+    <rect x="177.5" y="226.5" width="102" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
+    <text x="228.5" y="248" fill="${muted}">DSH Plugin</text>
+    <rect x="289.5" y="226.5" width="89" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
+    <text x="334" y="248" fill="${muted}">Local-first</text>
+  </g>
+  <g id="card-cta">
+    <rect x="72" y="283" width="160" height="60" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
+    <g clip-path="url(#ctaClip)">
+      <path class="cta-shine" d="M24 283H64L44 343H4Z" fill="url(#ctaShine)"/>
+    </g>
+    <text x="96" y="320" fill="${see_ink}" font-size="19" font-weight="700">查看仓库</text>
+    <path d="M193 321L206 308M196 308H206V318" fill="none" stroke="${see_ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="card-status">
+    <circle cx="258" cy="313" r="8" fill="${see}" opacity="0.18"/>
+    <circle class="pulse-ring status-pulse" cx="258" cy="313" r="4" fill="${see}"/>
+    <circle cx="258" cy="313" r="4" fill="${see}"/>
+    <text x="273" y="308" fill="${muted}" font-size="15">已发布到 npm · MIT</text>
+    <text x="273" y="330" fill="${faint}" font-size="14" class="mono">@rongyi7/dsh-stats</text>
+  </g>
+
+  <g id="dsh-panel">
+    <rect x="488.5" y="58.5" width="663" height="292" rx="14" fill="${fig_bg}" stroke="${fig_stroke}"/>
+    <rect x="489" y="59" width="662" height="291" fill="url(#figGrid)" clip-path="url(#figClip)"/>
+    <g id="card-metrics">
+      <rect x="512.5" y="82.5" width="615" height="95" rx="12" fill="${metric_bg}" stroke="${see}" stroke-opacity="0.22"/>
+      <path d="M718 83V177M923 83V177" stroke="${see}" stroke-opacity="0.16"/>
+      <text x="536" y="114" fill="${faint}" font-size="13">统计视图</text>
+      <text x="536" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">4</text>
+      <text x="741" y="114" fill="${faint}" font-size="13">趋势范围</text>
+      <text x="741" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">7/30/90<tspan dx="6" fill="${muted}" font-size="16" font-weight="400">天</tspan></text>
+      <text x="946" y="114" fill="${faint}" font-size="13">导出格式</text>
+      <text x="946" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">CSV/JSON</text>
+    </g>
+    <g id="card-views">
+      <rect x="512.5" y="199.5" width="615" height="55" rx="12" fill="${tab_bg}" stroke="${see}" stroke-opacity="0.16"/>
+      <g font-size="16" font-weight="600" text-anchor="middle" fill="${faint}">
+        <text x="589.5" y="232">项目总览</text>
+        <text x="743.5" y="232">开发时间线</text>
+        <text x="896.5" y="232">用量趋势</text>
+        <text x="1050.5" y="232">账户余额</text>
+      </g>
+      <rect x="512" y="280" width="3" height="50" rx="1.5" fill="${see}"/>
+      <g id="view-1" class="view-1">
+        <rect x="517" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
+        <text x="589.5" y="232" fill="${ink}" font-size="16" font-weight="600" text-anchor="middle">项目总览</text>
+        <text x="528" y="298" fill="${soft}" font-size="16">每个项目用了多少 Token、时间和费用</text>
+        <text x="528" y="323" fill="${faint}" font-size="13">项目表里展开会话明细，可导出 CSV/JSON</text>
+      </g>
+      <g id="view-2" class="view-2">
+        <rect x="671" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
+        <text x="743.5" y="232" fill="${ink}" font-size="16" font-weight="600" text-anchor="middle">开发时间线</text>
+        <text x="528" y="298" fill="${soft}" font-size="16">按日查看项目泳道、费用/Token 柱和半小时明细</text>
+        <text x="528" y="323" fill="${faint}" font-size="13">全部模式用日历矩阵按 30 天分页</text>
+      </g>
+      <g id="view-3" class="view-3">
+        <rect x="824" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
+        <text x="896.5" y="232" fill="${ink}" font-size="16" font-weight="600" text-anchor="middle">用量趋势</text>
+        <text x="528" y="298" fill="${soft}" font-size="16">每日柱图和活动热力图，找出最常用的模型和项目</text>
+        <text x="528" y="323" fill="${faint}" font-size="13">指标可在费用和 Token 之间切换</text>
+      </g>
+      <g id="view-4" class="view-4">
+        <rect x="978" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
+        <text x="1050.5" y="232" fill="${ink}" font-size="16" font-weight="600" text-anchor="middle">账户余额</text>
+        <text x="528" y="298" fill="${soft}" font-size="16">查看已配置平台的余额和套餐额度</text>
+        <text x="528" y="323" fill="${faint}" font-size="13">额度快用完、凭证失效的账户排在最前面</text>
+      </g>
+      <rect class="timer timer-1" x="533" y="243" width="113" height="2" rx="1" fill="${see}"/>
+      <rect class="timer timer-2" x="687" y="243" width="113" height="2" rx="1" fill="${see}"/>
+      <rect class="timer timer-3" x="840" y="243" width="113" height="2" rx="1" fill="${see}"/>
+      <rect class="timer timer-4" x="994" y="243" width="113" height="2" rx="1" fill="${see}"/>
+    </g>
+  </g>
+</svg>
+""")
+
+
 def media_uri(name: str) -> str:
     data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
     return f"data:image/webp;base64,{data}"
@@ -834,6 +1052,7 @@ def main() -> int:
     outputs = {
         "hero": (HERO, HERO_STYLE, hero_media),
         "yipan-flow": (FLOW, FLOW_STYLE, lambda theme: {}),
+        "dsh-card": (DSH, DSH_STYLE, lambda theme: {}),
         "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
     }
     stale: list[str] = []
