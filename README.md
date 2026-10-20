@@ -93,7 +93,7 @@ Agent 用了多少、花了多少、为什么这样写，都应该能查。下�
   <img src="./assets/hardware-strip-light.svg?v=1" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
 </picture>
 
-完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。索引更新至 2026-07-19，[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/29670721789)。
+完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。索引更新至 2026-10-20，[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/39375071963)。
 
 ### [ESP32 RPS Game](https://github.com/rongyishuaige7/ESP32_RPS_Game)
 

@@ -8,6 +8,8 @@ import re
 import shutil
 import subprocess
 import sys
+import time
+from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 OWNER = "rongyishuaige7"
@@ -28,7 +30,7 @@ EXPECTED = {
 }
 
 
-def api(path: str) -> dict:
+def api_once(path: str) -> dict:
     token = os.environ.get("GITHUB_TOKEN")
     if not token and shutil.which("gh"):
         completed = subprocess.run(
@@ -36,6 +38,7 @@ def api(path: str) -> dict:
             check=True,
             capture_output=True,
             text=True,
+            timeout=25,
         )
         return json.loads(completed.stdout)
 
@@ -52,6 +55,21 @@ def api(path: str) -> dict:
     )
     with urlopen(request, timeout=20) as response:
         return json.load(response)
+
+
+def api(path: str) -> dict:
+    for attempt in range(3):
+        try:
+            return api_once(path)
+        except (subprocess.SubprocessError, URLError, TimeoutError, json.JSONDecodeError) as error:
+            if attempt < 2:
+                time.sleep((0.5, 1.5)[attempt])
+                continue
+            # Never dump response bodies or authentication diagnostics.
+            detail = getattr(error, "stderr", "") or ""
+            status = re.search(r"HTTP (\d{3})", detail)
+            code = status.group(1) if status else getattr(error, "code", type(error).__name__)
+            raise RuntimeError(f"GitHub {path}: request failed after 3 attempts ({code})") from None
 
 
 def main() -> int:
@@ -90,4 +108,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except RuntimeError as error:
+        print(error, file=sys.stderr)
+        raise SystemExit(1)
