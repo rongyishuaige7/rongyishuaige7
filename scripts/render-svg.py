@@ -597,12 +597,12 @@ ${style}
   <g transform="translate(0 -28)">
   <g id="drive">
     <rect id="drive-boundary" x="180.5" y="84.5" width="599" height="407" rx="18" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
-    <text x="776" y="72" fill="${flow_tag}" font-size="15" text-anchor="end">U 盘内</text>
+    <text x="776" y="72" fill="${flow_tag}" font-size="16" text-anchor="end">U 盘内</text>
 
     <g id="continuity-rail">
       <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
       <path d="M225 143.5V152.5L232 148Z" fill="${carry}" fill-opacity="0.65"/>
-      <text fill="${faint}" font-size="13" text-anchor="middle"><tspan x="218" y="253">记</tspan><tspan x="218" y="273">录</tspan><tspan x="218" y="293">·</tspan><tspan x="218" y="313">沉</tspan><tspan x="218" y="333">淀</tspan></text>
+      <text fill="${faint}" font-size="14" text-anchor="middle"><tspan x="218" y="253">记</tspan><tspan x="218" y="273">录</tspan><tspan x="218" y="293">·</tspan><tspan x="218" y="313">沉</tspan><tspan x="218" y="333">淀</tspan></text>
       <g class="lit lit-rail">
         <path d="M232 428H212A8 8 0 0 1 204 420V156A8 8 0 0 1 212 148H225" fill="none" stroke="${carry_2}" stroke-width="1.5"/>
         <path d="M225 143.5V152.5L232 148Z" fill="${carry_2}"/>
@@ -615,14 +615,14 @@ ${style}
         <rect x="229" y="103" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
         <rect x="232.5" y="106.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
       </g>
-      <text x="256" y="142" fill="${ink}" font-size="21" font-weight="700">盘内资料与任务</text>
-      <text x="256" y="168" fill="${muted}" font-size="15">Inbox 确认后写入长期知识</text>
+      <text x="256" y="142" fill="${ink}" font-size="24" font-weight="700">盘内资料与任务</text>
+      <text x="256" y="168" fill="${muted}" font-size="16">Inbox 确认后写入长期知识</text>
     </g>
 
     <g id="step-retrieve">
       <path d="M272 194V237" stroke="${carry}" stroke-opacity="0.45"/>
       <path d="M267 236H277L272 243Z" fill="${carry}" fill-opacity="0.7"/>
-      <text x="292" y="223" fill="${faint}" font-size="14">检索 / 继续</text>
+      <text x="292" y="223" fill="${faint}" font-size="15">检索 / 继续</text>
       <g class="packet packet-retrieve" fill="${carry_2}">
         <circle cx="272" cy="196" r="9" opacity="0.22"/>
         <circle cx="272" cy="196" r="4.5"/>
@@ -639,14 +639,14 @@ ${style}
         <rect x="229" y="243" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
         <rect x="232.5" y="246.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
       </g>
-      <text x="256" y="282" fill="${ink}" font-size="21" font-weight="700">Yi盘工作台</text>
-      <text x="256" y="308" fill="${muted}" font-size="15">受管 Agent 处理当前任务</text>
+      <text x="256" y="282" fill="${ink}" font-size="24" font-weight="700">Yi盘工作台</text>
+      <text x="256" y="308" fill="${muted}" font-size="16">受管 Agent 处理当前任务</text>
     </g>
 
     <g id="step-generate">
       <path d="M272 334V377" stroke="${carry}" stroke-opacity="0.45"/>
       <path d="M267 376H277L272 383Z" fill="${carry}" fill-opacity="0.7"/>
-      <text x="292" y="363" fill="${faint}" font-size="14">生成 / 记录</text>
+      <text x="292" y="363" fill="${faint}" font-size="15">生成 / 记录</text>
       <g class="packet packet-generate" fill="${carry_2}">
         <circle cx="272" cy="336" r="9" opacity="0.22"/>
         <circle cx="272" cy="336" r="4.5"/>
@@ -659,8 +659,8 @@ ${style}
         <rect x="229" y="383" width="526" height="90" rx="15" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
         <rect x="232.5" y="386.5" width="519" height="83" rx="11.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
       </g>
-      <text x="256" y="422" fill="${ink}" font-size="21" font-weight="700">产出与任务记录</text>
-      <text x="256" y="448" fill="${muted}" font-size="15">留在盘内，随盘带走</text>
+      <text x="256" y="422" fill="${ink}" font-size="24" font-weight="700">产出与任务记录</text>
+      <text x="256" y="448" fill="${muted}" font-size="16">留在盘内，随盘带走</text>
     </g>
   </g>
 
@@ -668,7 +668,7 @@ ${style}
     <g id="link-request">
       <path d="M752 276H849" stroke="${link_line}"/>
       <path d="M848 271.5V280.5L855 276Z" fill="${link_head}"/>
-      <text x="804" y="263" fill="${faint}" font-size="14" text-anchor="middle">按需请求</text>
+      <text x="804" y="263" fill="${faint}" font-size="15" text-anchor="middle">按需请求</text>
       <g class="packet packet-request" fill="${link_dot}">
         <circle cx="758" cy="276" r="8" opacity="0.2"/>
         <circle cx="758" cy="276" r="4"/>
@@ -677,7 +677,7 @@ ${style}
     <g id="link-result">
       <path d="M759 300H856" stroke="${link_line}"/>
       <path d="M760 295.5V304.5L753 300Z" fill="${link_head}"/>
-      <text x="804" y="324" fill="${faint}" font-size="14" text-anchor="middle">返回结果</text>
+      <text x="804" y="324" fill="${faint}" font-size="15" text-anchor="middle">返回结果</text>
       <g class="packet packet-result" fill="${link_dot}">
         <circle cx="850" cy="300" r="8" opacity="0.2"/>
         <circle cx="850" cy="300" r="4"/>
@@ -689,8 +689,8 @@ ${style}
         <rect x="853" y="239" width="174" height="98" rx="17" fill="none" stroke="${cloud_lit}" stroke-opacity="0.18" stroke-width="4"/>
         <rect x="856.5" y="242.5" width="167" height="91" rx="13.5" fill="none" stroke="${cloud_lit}" stroke-width="1.5" stroke-dasharray="6 5"/>
       </g>
-      <text x="940" y="282" fill="${ink}" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
-      <text x="940" y="308" fill="${muted}" font-size="14" text-anchor="middle">按需推理</text>
+      <text x="940" y="282" fill="${ink}" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
+      <text x="940" y="308" fill="${muted}" font-size="15" text-anchor="middle">按需推理</text>
     </g>
   </g>
   </g>
