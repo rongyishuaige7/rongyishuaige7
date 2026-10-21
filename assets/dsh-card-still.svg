@@ -18,9 +18,9 @@
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .signal-reveal { transform-box: fill-box; transform-origin: left center; }
-    
-    
-    
+
+
+
   </style>
   <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="var(--page_bg)"/>
   <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="url(#cardWash)" stroke="var(--see)" stroke-opacity="0.26"/>

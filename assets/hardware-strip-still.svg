@@ -31,17 +31,17 @@
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
     .signal, .chip-on, .led-on { opacity: 0; }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
   </style>
 
   <rect x="0.5" y="0.5" width="1199" height="169" rx="20" fill="var(--shell)" stroke="var(--shell_stroke)"/>

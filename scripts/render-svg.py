@@ -962,7 +962,7 @@ def still_style(style: str) -> str:
         if depth:
             raise ValueError("unbalanced motion CSS")
         style = style[:match.start()] + style[cursor:]
-    return style
+    return "\n".join(line.rstrip() for line in style.splitlines())
 
 
 def adaptive_style(style: str) -> str:

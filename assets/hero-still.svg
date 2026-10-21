@@ -64,13 +64,13 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
   </style>
 
   <rect x="0.5" y="0.5" width="1199" height="419" rx="20" fill="var(--shell)" stroke="var(--shell_stroke)"/>
