@@ -1,0 +1,67 @@
+name: Refresh npm figures
+
+# Daily refresh of the DSH Usage card's npm figures. Pushes made with GITHUB_TOKEN do not
+# trigger validate.yml, so this job runs the local checks itself before committing. It skips
+# the Actions evidence check, which tracks other repositories and has nothing to do with npm.
+on:
+  schedule:
+    - cron: "41 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh-npm-card
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Fetch, render, validate, commit
+    # Manual runs from another branch must not push that branch's tree to main.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Fetch npm figures
+        run: python3 scripts/fetch-npm-stats.py
+
+      - name: Render SVG assets
+        run: python3 scripts/render-svg.py
+
+      - name: Check generated SVG assets
+        run: python3 scripts/render-svg.py --check
+
+      - name: Validate local SVG assets
+        run: python3 scripts/validate-svg.py
+
+      - name: Validate SVG motion contracts
+        run: python3 scripts/validate-motion.py
+
+      - name: Validate profile content contracts
+        run: python3 scripts/validate-profile.py
+
+      - name: Commit changed figures
+        run: |
+          allowed="data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg"
+          changed="$(git status --porcelain --untracked-files=all | cut -c4-)"
+          if [ -z "$changed" ]; then
+            echo "npm figures unchanged; nothing to commit."
+            exit 0
+          fi
+          for path in $changed; do
+            case " $allowed " in
+              *" $path "*) ;;
+              *) echo "::error::refresh changed an unexpected file: $path"; exit 1 ;;
+            esac
+          done
+          git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "chore: refresh npm figures on the DSH Usage card"
+          git push origin HEAD:main

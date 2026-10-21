@@ -20,6 +20,11 @@ MAX_PHOTO_BYTES = 160 * 1024
 # only a window ending more than NPM_STALE_DAYS ago means the refresh has stopped.
 NPM_STATS = Path("data/npm-stats.json")
 NPM_STALE_DAYS = 9
+# Only the scheduled npm refresh may write, only from its own job, and only these files.
+WORKFLOWS = Path(".github/workflows")
+NPM_REFRESH = WORKFLOWS / "refresh-npm-card.yml"
+NPM_REFRESH_TRIGGERS = {"schedule", "workflow_dispatch"}
+NPM_REFRESH_FILES = "git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg"
 # WebP chunks that can carry EXIF or XMP metadata.
 FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
@@ -206,6 +211,42 @@ def validate_photo_strip(path: Path) -> list[str]:
     return problems
 
 
+def top_level_block(workflow: str, key: str) -> str | None:
+    """The indented lines under a top-level YAML key, or None when the key is absent."""
+    match = re.search(rf"^{key}:[^\n]*\n((?:[ \t]+[^\n]*\n|[ \t]*\n)*)", workflow, re.MULTILINE)
+    return match.group(1) if match else None
+
+
+def validate_workflows() -> list[str]:
+    """Every workflow defaults to read-only; the npm refresh job alone may write, and only the card files."""
+    problems: list[str] = []
+    if not NPM_REFRESH.exists():
+        return [f"missing scheduled npm refresh workflow: {NPM_REFRESH}"]
+    for path in sorted(WORKFLOWS.glob("*.yml")):
+        workflow = path.read_text(encoding="utf-8")
+        defaults = top_level_block(workflow, "permissions")
+        if defaults is None or [line.strip() for line in defaults.splitlines() if line.strip()] != ["contents: read"]:
+            problems.append(f"{path.name} must default to top-level permissions contents: read")
+        writes = re.findall(r"^\s*(?:[\w-]+:\s*write\b|permissions:\s*write-all\b)", workflow, re.MULTILINE)
+        if path == NPM_REFRESH:
+            jobs = top_level_block(workflow, "jobs") or ""
+            if len(writes) != 1 or not re.search(r"^\s+contents:\s*write\s*$", jobs, re.MULTILINE):
+                problems.append(f"{path.name} must grant contents: write once, inside its job")
+        elif writes:
+            problems.append(f"{path.name} must not grant write permissions")
+    refresh = NPM_REFRESH.read_text(encoding="utf-8")
+    triggers = top_level_block(refresh, "on") or ""
+    trigger_names = set(re.findall(r"^  ([\w-]+):", triggers, re.MULTILINE))
+    if trigger_names != NPM_REFRESH_TRIGGERS:
+        problems.append(f"{NPM_REFRESH.name} may only run on " + " and ".join(sorted(NPM_REFRESH_TRIGGERS)))
+    if "if: github.ref == 'refs/heads/main'" not in refresh:
+        problems.append(f"{NPM_REFRESH.name} must only run from main")
+    adds = re.findall(r"git add\b[^\n]*", refresh)
+    if adds != [NPM_REFRESH_FILES]:
+        problems.append(f"{NPM_REFRESH.name} must stage only the npm data file and the two DSH cards")
+    return problems
+
+
 def main() -> int:
     readme = README_PATH.read_text(encoding="utf-8")
     problems: list[str] = []
@@ -271,6 +312,7 @@ def main() -> int:
             problems.append(f"npm download window ends in the future: {npm_end}")
         elif npm_age > NPM_STALE_DAYS:
             problems.append(f"npm figures are stale: the download window ended {npm_age} days ago ({npm_end})")
+    problems.extend(validate_workflows())
     if readme.count('src="./assets/badge-') != 6:
         problems.append("profile must contain exactly six local brand badges")
 
