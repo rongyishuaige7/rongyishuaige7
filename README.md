@@ -1,4 +1,5 @@
 <picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=1">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=11">
   <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=11">
   <img src="./assets/hero-light.svg?v=11" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
@@ -16,6 +17,7 @@
 
 <a href="https://github.com/rongyishuaige7/yipan-showcase">
 <picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=1">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=12">
   <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=12">
   <img src="./assets/yipan-flow-light.svg?v=12" width="100%" alt="Yi盘卡片：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
@@ -48,11 +50,18 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=2">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=2">
-  <img src="./assets/dsh-card-light.svg?v=2" width="100%" alt="DSH Usage 卡片：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额；未知价格会明确标出，密钥只在本机使用。标签：TypeScript、DSH Plugin、Local-first；按钮：查看仓库；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右侧：npm 近 30 天下载量、最新版本和已发布版本数，并注明下载统计的截止日期；依次切换项目总览、开发时间线、用量趋势、账户余额四个视图，用量趋势可选近 7 / 30 / 90 天，项目明细可导出 CSV/JSON。">
+  <source media="(max-width: 1200px)" srcset="./assets/dsh-card-mobile.svg?v=1">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=1">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=3">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=3">
+  <img src="./assets/dsh-card-light.svg?v=3" width="100%" alt="DSH Usage：DeepSeek Harness 插件，按项目统计 Token、开发时长、费用和余额。项目总览可导出 CSV/JSON，用量趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
 </picture>
 </a>
+
+<!-- npm-snapshot:start -->
+npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.4.3** · 已发布 **94** 个版本。
+下载统计截至 **2026-10-18** · [刷新结果](https://github.com/rongyishuaige7/rongyishuaige7/actions/workflows/refresh-npm-card.yml)
+<!-- npm-snapshot:end -->
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=1">
@@ -82,6 +91,7 @@
 ## `// 03 TOUCH` Hardware Lab
 
 <picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=1">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=1">
   <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=1">
   <img src="./assets/hardware-strip-light.svg?v=1" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">

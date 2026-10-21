@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="170" viewBox="0 0 1200 170" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Lab 电路走线示意</title>
+  <desc id="desc">深浅主题自适应电路板横条。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 22 PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="var(--surface_a)"/>
+      <stop offset="1" stop-color="var(--surface_b)"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="var(--touch)" stop-opacity="0.6"/>
+      <stop offset="0.35" stop-color="var(--touch)" stop-opacity="0"/>
+      <stop offset="0.7" stop-color="var(--touch_2)" stop-opacity="0"/>
+      <stop offset="1" stop-color="var(--touch_2)" stop-opacity="0.45"/>
+    </linearGradient>
+    <radialGradient id="ledGlow">
+      <stop stop-color="var(--led_on)" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="var(--led_on)" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.9" fill="var(--touch)" opacity="0.18"/>
+    </pattern>
+    <clipPath id="panelClip">
+      <rect x="16" y="16" width="1168" height="138" rx="14"/>
+    </clipPath>
+  </defs>
+  <style>
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #6c7583; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #c25a12; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    .theme-dark { display: none; }
+    @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_on: #b6ec6a; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
+
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .signal, .chip-on, .led-on { opacity: 0; }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  </style>
+
+  <rect x="0.5" y="0.5" width="1199" height="169" rx="20" fill="var(--shell)" stroke="var(--shell_stroke)"/>
+  <rect x="16" y="16" width="1168" height="138" rx="14" fill="url(#surface)" stroke="var(--panel_stroke)"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="16" y="16" width="1168" height="138" fill="url(#dots)"/>
+  </g>
+  <rect x="16.5" y="16.5" width="1167" height="137" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+
+  <text x="40" y="46" class="mono" fill="var(--touch_text)" font-size="14" letter-spacing="1.6">HARDWARE LAB / SENSOR TO OUTPUT</text>
+  <text x="1160" y="46" class="mono" fill="var(--faint)" font-size="13" letter-spacing="1" text-anchor="end">ESP32 · STM32 · RPi · ARDUINO</text>
+
+  <g id="traces-in" fill="none" stroke="var(--touch)" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
+    <path d="M60 82H280L298 100H520"/>
+    <path d="M60 108H520"/>
+    <path d="M60 134H280L298 116H520"/>
+  </g>
+  <g id="traces-out" fill="none" stroke="var(--touch)" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
+    <path d="M680 100H902L920 82H1130"/>
+    <path d="M680 108H1130"/>
+    <path d="M680 116H902L920 134H1130"/>
+  </g>
+  <g fill="var(--zone_fill)" stroke="var(--touch)" stroke-width="2">
+    <circle cx="54" cy="82" r="6"/>
+    <circle cx="54" cy="108" r="6"/>
+    <circle cx="54" cy="134" r="6"/>
+  </g>
+  <g fill="var(--touch)">
+    <circle cx="280" cy="82" r="3.5"/>
+    <circle cx="280" cy="134" r="3.5"/>
+    <circle cx="920" cy="82" r="3.5"/>
+    <circle cx="920" cy="134" r="3.5"/>
+  </g>
+  <g fill="var(--board)" stroke="var(--touch)" stroke-opacity="0.6">
+    <rect x="170" y="100" width="40" height="16" rx="2"/>
+    <rect x="990" y="100" width="40" height="16" rx="2"/>
+  </g>
+
+  <g id="strip-chip">
+    <path d="M540 72V64M560 72V64M580 72V64M600 72V64M620 72V64M640 72V64M660 72V64M540 144V152M560 144V152M580 144V152M600 144V152M620 144V152M640 144V152M660 144V152" stroke="var(--touch)" stroke-opacity="0.6" stroke-width="2"/>
+    <rect x="520" y="72" width="160" height="72" rx="6" fill="var(--board)" stroke="var(--touch)" stroke-width="1.5"/>
+    <rect class="chip-on" x="513" y="65" width="174" height="86" rx="11" fill="none" stroke="var(--touch)" stroke-width="2"/>
+    <text x="600" y="104" fill="var(--ink)" font-size="16" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
+    <text class="mono" x="600" y="126" fill="var(--touch_text)" font-size="12" letter-spacing="1" text-anchor="middle">22 PROTOTYPES</text>
+  </g>
+
+  <g fill="var(--led_off)" stroke="var(--touch)" stroke-opacity="0.5">
+    <circle cx="1138" cy="82" r="6"/>
+    <circle cx="1138" cy="108" r="6"/>
+    <circle cx="1138" cy="134" r="6"/>
+  </g>
+  <g class="led-on led-a"><circle cx="1138" cy="82" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="82" r="6" fill="var(--led_on)"/></g>
+  <g class="led-on led-b"><circle cx="1138" cy="108" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="108" r="6" fill="var(--led_on)"/></g>
+  <g class="led-on led-c"><circle cx="1138" cy="134" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="134" r="6" fill="var(--led_on)"/></g>
+
+  <g fill="var(--packet_fill)" stroke="var(--pulse)" stroke-width="2">
+    <circle class="signal sig-in-a" cx="60" cy="82" r="3.5"/>
+    <circle class="signal sig-in-b" cx="60" cy="108" r="3.5"/>
+    <circle class="signal sig-in-c" cx="60" cy="134" r="3.5"/>
+    <circle class="signal sig-out-a" cx="680" cy="100" r="3.5"/>
+    <circle class="signal sig-out-b" cx="680" cy="108" r="3.5"/>
+    <circle class="signal sig-out-c" cx="680" cy="116" r="3.5"/>
+  </g>
+</svg>

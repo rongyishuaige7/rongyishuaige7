@@ -11,7 +11,7 @@ import sys
 import xml.etree.ElementTree as ET
 
 SVG_NAMESPACE = "{http://www.w3.org/2000/svg}"
-FORBIDDEN_TAGS = {"script", "foreignObject", "iframe", "image", "use"}
+FORBIDDEN_TAGS = {"script", "foreignObject", "iframe", "image", "use", "animate", "animateTransform", "set"}
 FORBIDDEN_VALUE = re.compile(r"(?:javascript:|data:|https?://)", re.IGNORECASE)
 FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNORECASE)
 EXPECTED_ASSETS = {
@@ -29,6 +29,8 @@ EXPECTED_ASSETS = {
     "hero-light.svg",
     "yipan-flow-dark.svg",
     "yipan-flow-light.svg",
+    "hero-still.svg", "yipan-flow-still.svg", "hardware-strip-still.svg",
+    "dsh-card-still.svg", "dsh-card-mobile.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
@@ -70,14 +72,14 @@ FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录
 # data/npm-stats.json, which the scheduled refresh workflow rewrites; the stable facts they
 # replaced (trend ranges, export formats) now sit in the view captions.
 DSH_CARD_TEXT = {
-    "card-copy": ("USAGE", "按项目统计 DSH 会话的 Token、", "开发时长、费用和余额。", "未知价格会明确标出，密钥只在本机使用。"),
+    "card-copy": ("DSH Usage", "DeepSeek Harness 插件", "按项目统计 Token、开发时长、", "费用和余额。", "未知价格明确标出，密钥仅在本机使用。"),
     "card-tags": ("TypeScript", "DSH Plugin", "Local-first"),
     "card-cta": ("查看仓库",),
     "card-status": ("已发布到 npm · MIT", "@rongyi7/dsh-stats"),
 }
 DSH_VIEWS = ("项目总览", "开发时间线", "用量趋势", "账户余额")
 DSH_PANEL_TEXT = {
-    "card-metrics": ("近 30 天下载", "npm 最新版本", "已发布版本"),
+    "card-metrics": ("近 30 天下载", "npm 最新版本"),
     "card-views": DSH_VIEWS,
     "npm-as-of": ("npm 下载统计截至",),
 }
@@ -281,8 +283,9 @@ def validate(path: Path) -> list[str]:
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hero must keep an outer shell, inset panel, and inner edge")
-        if embedded_images != 4:
-            problems.append(f"hero must embed one DSH capture and three hardware photos, found {embedded_images}")
+        expected_images = 5 if path.name == "hero-still.svg" else 4
+        if embedded_images != expected_images:
+            problems.append(f"hero must embed its themed DSH capture(s) and three hardware photos, found {embedded_images}")
         entry_touch = next((element for element in root.iter() if element.get("id") == "entry-touch"), None)
         card = entry_touch.find(f"{SVG_NAMESPACE}rect") if entry_touch is not None else None
         if card is not None and float(card.get("x", "0")) + float(card.get("width", "0")) > HERO_ENTRY_RIGHT_EDGE:
@@ -356,58 +359,49 @@ def validate(path: Path) -> list[str]:
             problems.append("Yi盘 node titles must share one heading size")
 
     if path.name.startswith("dsh-card-"):
-        problems.extend(check_card(root, "DSH Usage", DSH_CARD_TEXT, "dsh-panel", DSH_PANEL_TEXT))
+        mobile = path.name == "dsh-card-mobile.svg"
         by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
-        views = by_id.get("card-views")
-        if views is not None:
-            labels = drawn_text(views)
-            positions = [labels.find(label) for label in DSH_VIEWS]
-            if positions != sorted(positions):
-                problems.append("DSH Usage view tabs must read " + " / ".join(DSH_VIEWS))
-            view_ids = {element.get("id") for element in views.iter() if element.get("id")}
+        if not mobile:
+            problems.extend(check_card(root, "DSH Usage", DSH_CARD_TEXT, "dsh-panel", DSH_PANEL_TEXT))
             for index, label in enumerate(DSH_VIEWS, start=1):
                 view = by_id.get(f"view-{index}")
-                if view is None or f"view-{index}" not in view_ids or f"view-{index}" not in view.get("class", "").split():
-                    problems.append(f"DSH Usage card is missing animated view group view-{index}")
-                    continue
-                if [other for other in DSH_VIEWS if other in drawn_text(view)] != [label]:
-                    problems.append(f"DSH Usage view-{index} must highlight {label} and no other view")
-                if index in DSH_VIEW_FACTS and DSH_VIEW_FACTS[index] not in drawn_text(view):
-                    problems.append(f"DSH Usage view-{index} caption must keep: {DSH_VIEW_FACTS[index]}")
-        # Reduced motion keeps the base styles: the first view shows, the others stay hidden.
-        base_css = style_text.split("@media", 1)[0]
-        hidden = {
-            selector.strip()
-            for rule in re.findall(r"([^{}]+)\{\s*opacity:\s*0;\s*\}", base_css)
-            for selector in rule.split(",")
-        }
-        if ".view-1" in hidden or not {".view-2", ".view-3", ".view-4"} <= hidden:
-            problems.append("DSH Usage card must show only the first view without motion")
-        # The npm metrics and their date must be exactly what data/npm-stats.json holds,
-        # drawn in the metrics grid and repeated in the description for screen readers.
+                if view is None or label not in drawn_text(view):
+                    problems.append(f"DSH Usage is missing persistent view {label}")
+                elif index in DSH_VIEW_FACTS and DSH_VIEW_FACTS[index] not in drawn_text(view):
+                    problems.append(f"DSH Usage view-{index} must keep: {DSH_VIEW_FACTS[index]}")
+            if re.search(r"\.view-[1-4][^{}]*\{[^}]*opacity:\s*0", style_text):
+                problems.append("DSH Usage feature text must remain visible")
+        else:
+            for element in root.iter(f"{SVG_NAMESPACE}text"):
+                if float(element.get("font-size", "0")) < 17:
+                    problems.append("mobile DSH card text must be at least 17 viewBox units")
+            for fact in ("DSH Usage", "DeepSeek Harness 插件", "近 30 天下载", "最新版本"):
+                if fact not in drawn_text(root):
+                    problems.append(f"mobile DSH card is missing {fact}")
         stats, stats_problems = load_npm_stats()
         problems.extend(stats_problems)
         if stats and not stats_problems:
-            expected = {
-                "npm-downloads": f"{stats['downloads_last_month']:,}",
-                "npm-latest": stats["latest"],
-                "npm-versions": f"{stats['version_count']:,}",
-            }
+            expected = {"npm-downloads": f"{stats['downloads_last_month']:,}", "npm-latest": stats["latest"]}
             metrics = by_id.get("card-metrics")
             metric_ids = {element.get("id") for element in metrics.iter()} if metrics is not None else set()
             for metric_id, value in expected.items():
                 metric = by_id.get(metric_id)
-                if metric is None or metric_id not in metric_ids:
-                    problems.append(f"DSH Usage card-metrics is missing {metric_id}")
-                elif "".join(metric.itertext()).strip() != value:
+                if metric is None or metric_id not in metric_ids or "".join(metric.itertext()).strip() != value:
                     problems.append(f"DSH Usage {metric_id} must read {value} from {NPM_STATS}")
             as_of = by_id.get("npm-as-of")
-            if as_of is not None and "".join(as_of.itertext()).strip() != f"npm 下载统计截至 {stats['downloads_end']}":
+            prefix = "统计截至" if mobile else "npm 下载统计截至"
+            if as_of is None or "".join(as_of.itertext()).strip() != f"{prefix} {stats['downloads_end']}":
                 problems.append(f"DSH Usage npm-as-of must name the download window end {stats['downloads_end']}")
             description_text = "".join(description.itertext()) if description is not None else ""
-            for value in (*expected.values(), stats["downloads_end"]):
+            for value in (*expected.values(), f"{stats['version_count']:,}", stats["downloads_end"]):
                 if value not in description_text:
                     problems.append(f"DSH Usage description must repeat the npm figure {value}")
+
+    if path.stem.endswith(("-still", "-mobile")):
+        if "animation:" in style_text or "@keyframes" in style_text:
+            problems.append("static/adaptive SVG must not contain motion")
+        if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:
+            problems.append("static/adaptive SVG must provide both inherited color schemes")
 
     if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]

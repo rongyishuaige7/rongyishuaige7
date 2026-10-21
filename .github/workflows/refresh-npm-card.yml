@@ -49,9 +49,12 @@ jobs:
       - name: Validate profile content contracts
         run: python3 scripts/validate-profile.py
 
+      - name: Verify generated file boundaries
+        run: python3 scripts/validate-npm-refresh.py
+
       - name: Commit changed figures
         run: |
-          allowed="data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg"
+          allowed="data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg assets/dsh-card-still.svg assets/dsh-card-mobile.svg README.md"
           changed="$(git status --porcelain --untracked-files=all | cut -c4-)"
           if [ -z "$changed" ]; then
             echo "npm figures unchanged; nothing to commit."
@@ -63,7 +66,7 @@ jobs:
               *) echo "::error::refresh changed an unexpected file: $path"; exit 1 ;;
             esac
           done
-          git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg
+          git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg assets/dsh-card-still.svg assets/dsh-card-mobile.svg README.md
           git -c user.name="github-actions[bot]" \
             -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             commit -m "chore: refresh npm figures on the DSH Usage card"

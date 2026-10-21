@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Usage：按项目统计 DSH 会话用量</title>
+  <desc id="desc">深浅主题自适应DSH Usage 项目卡。DeepSeek Harness 插件，按项目统计 Token、开发时长、费用和余额；未知价格明确标出，密钥仅在本机使用。TypeScript、DSH Plugin、Local-first，MIT 许可。npm 近 30 天下载 1,031 次，最新版本 0.4.3，已发布 94 个版本，下载统计截至 2026-10-18。项目总览可导出 CSV/JSON；开发时间线、近 7 / 30 / 90 天用量趋势与账户余额常驻显示。</desc>
+  <defs>
+    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="var(--see)" stop-opacity="var(--see_wash)"/>
+      <stop offset="1" stop-color="var(--see)" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="ctaFill"><stop stop-color="var(--see)"/><stop offset="1" stop-color="var(--see_2)"/></linearGradient>
+    <linearGradient id="ctaShine"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.45"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+    <clipPath id="ctaClip"><rect x="64" y="281" width="144" height="54" rx="12"/></clipPath>
+  </defs>
+  <style>
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #6c7583; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #c25a12; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    .theme-dark { display: none; }
+    @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_on: #b6ec6a; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
+
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .signal-reveal { transform-box: fill-box; transform-origin: left center; }
+    
+    
+    
+  </style>
+  <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="var(--page_bg)"/>
+  <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="url(#cardWash)" stroke="var(--see)" stroke-opacity="0.26"/>
+  <g id="card-copy">
+    <text x="64" y="74" fill="var(--ink)" font-size="34" font-weight="700">DSH Usage</text>
+    <text x="64" y="108" fill="var(--see_text)" font-size="18">DeepSeek Harness 插件</text>
+    <text x="64" y="157" fill="var(--soft)" font-size="23">按项目统计 Token、开发时长、</text>
+    <text x="64" y="190" fill="var(--soft)" font-size="23">费用和余额。</text>
+    <text x="64" y="221" fill="var(--muted)" font-size="16">未知价格明确标出，密钥仅在本机使用。</text>
+  </g>
+  <g id="card-tags"><text x="64" y="250" fill="var(--muted)" font-size="16">TypeScript · DSH Plugin · Local-first</text></g>
+  <g id="card-cta">
+    <rect x="64" y="281" width="144" height="54" rx="12" fill="url(#ctaFill)"/>
+    <g clip-path="url(#ctaClip)"><path class="cta-shine" d="M16 281H56L36 335H-4Z" fill="url(#ctaShine)"/></g>
+    <text x="86" y="315" fill="var(--see_ink)" font-size="19" font-weight="700">查看仓库 ↗</text>
+  </g>
+  <g id="card-status">
+    <text x="232" y="300" fill="var(--muted)" font-size="16">已发布到 npm · MIT</text>
+    <text x="232" y="327" fill="var(--faint)" font-size="16" class="mono">@rongyi7/dsh-stats</text>
+  </g>
+  <g id="dsh-panel">
+    <rect x="475.5" y="40.5" width="678" height="299" rx="14" fill="var(--fig_bg)" stroke="var(--fig_stroke)"/>
+    <g id="card-metrics">
+      <rect x="499.5" y="64.5" width="630" height="99" rx="12" fill="var(--metric_bg)" stroke="var(--see)" stroke-opacity="0.22"/>
+      <path d="M815 65V163" stroke="var(--see)" stroke-opacity="0.16"/>
+      <text x="523" y="96" fill="var(--muted)" font-size="18">近 30 天下载</text>
+      <text id="npm-downloads" x="523" y="140" fill="var(--ink)" font-size="34" font-weight="600" class="mono">1,031</text>
+      <text x="839" y="96" fill="var(--muted)" font-size="18">npm 最新版本</text>
+      <text id="npm-latest" x="839" y="140" fill="var(--ink)" font-size="34" font-weight="600" class="mono">0.4.3</text>
+    </g>
+    <g id="card-views" fill="var(--soft)" font-size="18">
+      <g id="view-1" class="view-1"><text x="523" y="216">项目总览 · 可导出 CSV/JSON</text></g>
+      <g id="view-2" class="view-2"><text x="839" y="216">开发时间线</text></g>
+      <g id="view-3" class="view-3"><text x="523" y="265">用量趋势 · 近 7 / 30 / 90 天</text></g>
+      <g id="view-4" class="view-4"><text x="839" y="265">账户余额</text></g>
+      <rect class="signal-reveal" x="499" y="286" width="630" height="2" rx="1" fill="var(--see)" opacity="0.65"/>
+    </g>
+    <text id="npm-as-of" x="523" y="322" fill="var(--muted)" font-size="17">npm 下载统计截至 2026-10-18</text>
+  </g>
+</svg>

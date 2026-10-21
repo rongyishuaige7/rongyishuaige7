@@ -32,13 +32,6 @@ STORIES = {
         ("lit-output",),
         ("lit-rail", "packet-rail"),
     )),
-    # The active DSH view moves left to right; each view runs its own timer bar.
-    DSH: ("8s", (
-        ("view-1", "timer-1"),
-        ("view-2", "timer-2"),
-        ("view-3", "timer-3"),
-        ("view-4", "timer-4"),
-    )),
     STRIP: ("6s", (
         ("sig-in-a", "sig-in-b", "sig-in-c"),
         ("chip-on",),
@@ -50,7 +43,6 @@ STORIES = {
 # their stories; any other animated class must belong to a stage.
 CARD_AMBIENT = {
     FLOW: {"status-pulse", "cta-shine"},
-    DSH: {"status-pulse", "cta-shine"},
 }
 # The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
 # on its own must end within 5 seconds). Classes start in this order: the three
@@ -193,6 +185,15 @@ def main() -> int:
         if light == HERO:
             problems.extend(check_hero(light, light_text))
             continue
+        if light == DSH:
+            declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(light_text)}
+            if set(declarations) != {"signal-reveal", "cta-shine"}:
+                problems.append("DSH motion must be limited to the signal line and CTA")
+            for class_name, value in declarations.items():
+                times = [seconds(t) for t in value.split() if re.fullmatch(r"\d+(?:\.\d+)?m?s", t)]
+                if "infinite" in value or len(times) != 2 or sum(times) > 5:
+                    problems.append(f"DSH {class_name} must play once and finish within 5s")
+            continue
         cycle, stages = STORIES[light]
         problems.extend(check_story(light, light_text, cycle, stages))
 
@@ -213,7 +214,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero entry cards play once within 5s; the hardware strip and the 8s Yi盘 and DSH Usage card loops each tell one sequential story.")
+    print("Hero and DSH motion end within 5s; Yi盘 and hardware keep causal stories. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

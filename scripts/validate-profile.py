@@ -8,6 +8,8 @@ import re
 import struct
 import sys
 
+from npm_snapshot import split_snapshot, format_snapshot
+
 
 README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
@@ -20,11 +22,11 @@ MAX_PHOTO_BYTES = 160 * 1024
 # only a window ending more than NPM_STALE_DAYS ago means the refresh has stopped.
 NPM_STATS = Path("data/npm-stats.json")
 NPM_STALE_DAYS = 9
-# Only the scheduled npm refresh may write, only from its own job, and only these files.
+# Only the scheduled npm refresh may write, only from its own job, and only its generated files and marked README paragraph.
 WORKFLOWS = Path(".github/workflows")
 NPM_REFRESH = WORKFLOWS / "refresh-npm-card.yml"
 NPM_REFRESH_TRIGGERS = {"schedule", "workflow_dispatch"}
-NPM_REFRESH_FILES = "git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg"
+NPM_REFRESH_FILES = "git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg assets/dsh-card-still.svg assets/dsh-card-mobile.svg README.md"
 # WebP chunks that can carry EXIF or XMP metadata.
 FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
@@ -34,8 +36,8 @@ EXPECTED_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-dark.svg?v=12",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-dark.svg?v=2",
-    "./assets/dsh-card-light.svg?v=2",
+    "./assets/dsh-card-dark.svg?v=3",
+    "./assets/dsh-card-light.svg?v=3",
     "./assets/hardware-strip-dark.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/badge-studio.svg?v=1",
@@ -44,11 +46,16 @@ EXPECTED_ASSETS = {
     "./assets/badge-product-facts.svg?v=1",
     "./assets/badge-feedback.svg?v=2",
     "./assets/badge-hardware.svg?v=1",
+    "./assets/hero-still.svg?v=1",
+    "./assets/yipan-flow-still.svg?v=1",
+    "./assets/hardware-strip-still.svg?v=1",
+    "./assets/dsh-card-still.svg?v=1",
+    "./assets/dsh-card-mobile.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-light.svg?v=2",
+    "./assets/dsh-card-light.svg?v=3",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
     "./assets/hardware-featured.webp?v=1",
@@ -218,7 +225,7 @@ def top_level_block(workflow: str, key: str) -> str | None:
 
 
 def validate_workflows() -> list[str]:
-    """Every workflow defaults to read-only; the npm refresh job alone may write, and only the card files."""
+    """Every workflow defaults to read-only; the npm refresh job alone may write, and generated npm files and the marked README paragraph."""
     problems: list[str] = []
     if not NPM_REFRESH.exists():
         return [f"missing scheduled npm refresh workflow: {NPM_REFRESH}"]
@@ -243,7 +250,9 @@ def validate_workflows() -> list[str]:
         problems.append(f"{NPM_REFRESH.name} must only run from main")
     adds = re.findall(r"git add\b[^\n]*", refresh)
     if adds != [NPM_REFRESH_FILES]:
-        problems.append(f"{NPM_REFRESH.name} must stage only the npm data file and the two DSH cards")
+        problems.append(f"{NPM_REFRESH.name} must stage only npm data, generated DSH variants and the marked README paragraph")
+    if "python3 scripts/validate-npm-refresh.py" not in refresh:
+        problems.append("npm refresh must reject README changes outside the generated markers")
     return problems
 
 
@@ -277,7 +286,7 @@ def main() -> int:
     # The Yi盘 card links to the public repository and carries the summary itself,
     # so the paragraph under it keeps only the one-sentence definition.
     if not re.search(
-        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:.*\n){2}'
+        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:.*\n){3}'
         r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=12\"[^>]*>\n</picture>\n</a>\n\n"
         r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
         readme,
@@ -286,22 +295,32 @@ def main() -> int:
     # The DSH Usage card replaces the description and tag lines and sits above the screenshot.
     if not re.search(
         r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
-        r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:.*\n){2}'
-        r'  <img src="\./assets/dsh-card-light\.svg\?v=2"[^>]*>\n</picture>\n</a>\n\n'
-        r"<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
+        r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:.*\n){4}'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=3"[^>]*>\n</picture>\n</a>\n\n'
+        r"<!-- npm-snapshot:start -->\n(?:.*\n)+?<!-- npm-snapshot:end -->\n\n<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
         readme,
     ):
         problems.append("DSH Usage card must link to dsh-stats and sit between its heading and the screenshot")
     for repeated in ("`USAGE` DeepSeek Harness 插件", "以 `@rongyi7/dsh-stats` 发布在 npm"):
         if repeated in readme:
             problems.append(f"DSH Usage card text is repeated in the README body: {repeated}")
-    # The card's npm figures change daily but the README does not, so its alt text names
-    # the metrics and never their values.
-    dsh_alt = re.search(r'<img src="\./assets/dsh-card-light\.svg[^"]*"[^>]*alt="([^"]*)"', readme)
-    if dsh_alt is None or not all(name in dsh_alt.group(1) for name in ("近 30 天下载量", "最新版本", "已发布版本数")):
-        problems.append("DSH Usage card alt must name the npm downloads, latest version and version count")
-    elif re.search(r"\d+\.\d+\.\d+|\d,\d{3}|\d+ 次", dsh_alt.group(1)):
-        problems.append("DSH Usage card alt must not carry npm figures that the daily refresh changes")
+    # Visible native Markdown carries the changing figures; alt names the product.
+    try:
+        _, snapshot, _ = split_snapshot(readme)
+        stats = json.loads(NPM_STATS.read_text(encoding="utf-8"))
+        if snapshot != format_snapshot(stats):
+            problems.append("native npm paragraph must match data/npm-stats.json")
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        problems.append(f"cannot validate native npm paragraph: {error}")
+    for stem in ("hero", "yipan-flow", "dsh-card", "hardware-strip"):
+        block = next((b for b in re.findall(r"<picture>\n(.*?)</picture>", readme, re.DOTALL)
+                      if f'src="./assets/{stem}-light.svg' in b), "")
+        sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)">', block)
+        expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg?v=1")]
+        if stem == "dsh-card":
+            expected.insert(0, ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg?v=1"))
+        if sources[:len(expected)] != expected:
+            problems.append(f"{stem} must select static width/motion sources before theme sources")
     try:
         npm_end = date.fromisoformat(json.loads(NPM_STATS.read_text(encoding="utf-8"))["downloads_end"])
     except (OSError, ValueError, KeyError, TypeError) as error:

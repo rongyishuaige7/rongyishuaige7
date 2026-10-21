@@ -7,10 +7,13 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from npm_snapshot import START, END, replace_snapshot
 
 def load_script(name: str):
     spec = importlib.util.spec_from_file_location(name.replace("-", "_"), Path(__file__).with_name(f"{name}.py"))
@@ -21,6 +24,7 @@ def load_script(name: str):
 
 fetch = load_script("fetch-npm-stats")
 validate = load_script("validate-svg")
+refresh = load_script("validate-npm-refresh")
 
 
 class DownloadWindowTests(unittest.TestCase):
@@ -68,6 +72,36 @@ class DownloadWindowTests(unittest.TestCase):
                 path.write_text(json.dumps(stats))
                 with self.subTest(start=start), patch.object(validate, "NPM_STATS", path):
                     self.assertTrue(validate.load_npm_stats()[1])
+
+
+class SnapshotBoundaryTests(unittest.TestCase):
+    base = f"project introduction\n{START}\nold figures\n{END}\nother evidence links\n"
+
+    def test_allows_only_the_generated_paragraph_and_card_variants(self):
+        current = self.base.replace("old figures", "new figures")
+        self.assertEqual(refresh.validate_changes(refresh.ALLOWED, self.base, current), [])
+        self.assertEqual(refresh.validate_changes(set(), self.base, self.base), [])
+
+    def test_rejects_readme_edits_outside_the_generated_paragraph(self):
+        for current in (self.base.replace("project introduction", "changed intro"),
+                        self.base.replace("other evidence links", "different CI links"),
+                        self.base.replace(START, ""), self.base + START,
+                        self.base.replace(START, "TEMP_START").replace(END, START).replace("TEMP_START", END)):
+            with self.subTest(current=current):
+                self.assertTrue(refresh.validate_changes({"README.md"}, self.base, current))
+
+    def test_rejects_unexpected_tracked_or_untracked_files(self):
+        for path in ("scripts/render-svg.py", ".github/workflows/refresh-npm-card.yml", "unexpected.txt"):
+            with self.subTest(path=path):
+                self.assertTrue(refresh.validate_changes({path}, self.base, self.base))
+
+    def test_generation_preserves_the_rest_of_the_readme(self):
+        stats = {"downloads_last_month": 1031, "latest": "0.4.3", "version_count": 94, "downloads_end": "2026-10-18"}
+        current = replace_snapshot(self.base, stats)
+        self.assertEqual(refresh.validate_changes({"README.md"}, self.base, current), [])
+        self.assertIn("**1,031**", current)
+        self.assertIn("**2026-10-18**", current)
+        self.assertEqual(replace_snapshot(current, stats), current)
 
 
 if __name__ == "__main__":
