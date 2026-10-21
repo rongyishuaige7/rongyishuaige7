@@ -73,7 +73,7 @@
 
 - **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** `OBSERVE` 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
 - **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** `PSI` GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
-- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** `PLAY` Linux 桌面宠物原型：React 负责设置界面，Rust + GTK 负责透明置顶窗口。`Tauri` `Rust` `GTK` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/29339475309) | MIT
+- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** `PLAY` Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39578050395) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
@@ -87,7 +87,7 @@
   <img src="./assets/hardware-strip-light.svg?v=1" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
 </picture>
 
-完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。索引更新至 2026-10-20，[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/39375071963)。
+完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/39541556874)。
 
 <img src="./assets/hardware-featured.webp?v=1" width="100%" alt="三张历史原型照片：多模态智能花盆的手机 App、本地彩屏与灌溉装置；车流自适应交通信号的桌面模型，PCB 上有信号灯、OLED 和 ESP32-CAM；健康科普语音终端的面包板原型、圆形屏和扬声器。">
 
