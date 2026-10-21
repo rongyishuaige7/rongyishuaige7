@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="360" height="310" viewBox="0 0 360 310" role="img" aria-labelledby="title desc">
-  <title id="title">DSH Usage</title>
-  <desc id="desc">DeepSeek Harness 插件，按项目统计 Token、开发时长、费用和余额。npm 近 30 天下载 1,031 次，最新版本 0.4.3，已发布 94 个版本；下载统计截至 2026-10-18。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="374" viewBox="0 0 360 374" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Usage：按项目统计会话用量</title>
+  <desc id="desc">DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。会话到项目时间线为功能示意，非产品截图，不代表真实用量。npm 近 30 天下载 1,031 次，最新版本 0.4.3，已发布 94 个版本；下载统计截至 2026-10-18。</desc>
   <style>
     :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #6c7583; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #c25a12; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
     .theme-dark { display: none; }
@@ -8,23 +8,86 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal-reveal { transform-box: fill-box; transform-origin: left center; }
-
-
-
+    .record, .usage-bars, .time-lane { transform-box: fill-box; }
+    .usage-bars { transform-origin: center bottom; }
+    .time-lane { transform-origin: left center; }
+    .packet, .timeline-scan { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .record-a { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s backwards; }
+      .record-b { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s backwards; }
+      .record-c { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+      .packet-a { animation: packet-forward 0.95s ease-in-out 0.65s backwards; }
+      .packet-b { animation: packet-forward 0.95s ease-in-out 0.82s backwards; }
+      .packet-c { animation: packet-forward 0.95s ease-in-out 0.99s backwards; }
+      .project-a { animation: project-on 0.55s ease-out 1.4s backwards; }
+      .project-b { animation: project-on 0.55s ease-out 1.57s backwards; }
+      .project-c { animation: project-on 0.55s ease-out 1.74s backwards; }
+      .usage-a { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2s backwards; }
+      .usage-b { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.12s backwards; }
+      .usage-c { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.24s backwards; }
+      .lane-a { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.7s backwards; }
+      .lane-b { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.85s backwards; }
+      .lane-c { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 3s backwards; }
+      .timeline-scan { animation: timeline-scan 0.92s ease-in-out 3.55s backwards; }
+      .cta-arrow { animation: cta-nudge 0.55s ease-out 4s backwards; }
+    }
+    @keyframes record-in {
+      from { opacity: 0.3; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes packet-forward {
+      0% { opacity: 0; transform: translateX(0); }
+      15%, 85% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
+    }
+    @keyframes project-on {
+      from { opacity: 0.35; }
+      to { opacity: 1; }
+    }
+    @keyframes usage-grow {
+      from { opacity: 0.3; transform: scaleY(0.12); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes lane-extend {
+      from { opacity: 0.3; transform: scaleX(0.08); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes timeline-scan {
+      0% { opacity: 0; transform: translateX(0); }
+      15%, 80% { opacity: 0.75; }
+      100% { opacity: 0; transform: translateX(290px); }
+    }
+    @keyframes cta-nudge {
+      0% { transform: translateX(0); }
+      40% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
   </style>
-  <rect x="0.5" y="0.5" width="359" height="309" rx="18" fill="var(--page_bg)" stroke="var(--see)" stroke-opacity="0.35"/>
-  <text x="24" y="43" fill="var(--ink)" font-size="27" font-weight="700">DSH Usage</text>
-  <text x="24" y="77" fill="var(--soft)" font-size="18">按项目统计 Token、时长与费用</text>
-  <text x="24" y="105" fill="var(--see_text)" font-size="17">DeepSeek Harness 插件 · MIT</text>
-  <g id="card-metrics">
-    <rect x="20.5" y="128.5" width="319" height="96" rx="12" fill="var(--metric_bg)" stroke="var(--see)" stroke-opacity="0.22"/>
-    <path d="M180 129V224" stroke="var(--see)" stroke-opacity="0.16"/>
-    <text x="36" y="158" fill="var(--muted)" font-size="17">近 30 天下载</text>
-    <text id="npm-downloads" x="36" y="201" fill="var(--ink)" font-size="30" font-weight="600" class="mono">1,031</text>
-    <text x="198" y="158" fill="var(--muted)" font-size="17">最新版本</text>
-    <text id="npm-latest" x="198" y="201" fill="var(--ink)" font-size="30" font-weight="600" class="mono">0.4.3</text>
+  <rect x="0.5" y="0.5" width="359" height="373" rx="18" fill="var(--page_bg)" stroke="var(--see)" stroke-opacity="0.35"/>
+  <text x="24" y="45" fill="var(--ink)" font-size="27" font-weight="700">DSH Usage</text>
+  <text x="24" y="77" fill="var(--soft)" font-size="18">按项目统计会话用量</text>
+  <text x="24" y="108" fill="var(--muted)" font-size="17">Token · 时长 · 预估费用</text>
+  <g id="mobile-illustration">
+    <text x="24" y="145" fill="var(--muted)" font-size="17">会话</text>
+    <text x="164" y="145" fill="var(--muted)" font-size="17">项目时间线</text>
+    <rect x="24" y="160" width="69" height="54" rx="8" fill="var(--pill_fill)" stroke="var(--fig_stroke)"/>
+    <text x="39" y="195" fill="var(--see_text)" font-size="24" class="mono">{ }</text>
+    <path d="M93 187H164" stroke="var(--link_line)"/>
+    <rect class="packet packet-a" x="102" y="184" width="10" height="6" rx="3" fill="var(--see)" style="--packet-distance: 52px"/>
+    <rect x="164" y="157" width="172" height="62" rx="8" fill="var(--fig_bg)" stroke="var(--fig_stroke)"/>
+    <g fill="var(--see)">
+      <rect class="time-lane lane-a" x="177" y="169" width="104" height="6" rx="3"/>
+      <rect class="time-lane lane-b" x="177" y="185" width="75" height="6" rx="3"/>
+      <rect class="time-lane lane-c" x="177" y="201" width="136" height="6" rx="3"/>
+    </g>
+    <text id="flow-caption" x="336" y="245" fill="var(--muted)" font-size="17" text-anchor="end">功能示意</text>
   </g>
-  <text x="24" y="254" fill="var(--soft)" font-size="17">项目明细 · 时间线 · 趋势 · 余额</text>
-  <text id="npm-as-of" x="24" y="285" fill="var(--muted)" font-size="17">统计截至 2026-10-18</text>
+  <path d="M24 260H336" stroke="var(--fig_stroke)"/>
+  <g id="card-metrics">
+    <text x="24" y="286" fill="var(--muted)" font-size="17">近 30 天下载</text>
+    <text x="202" y="286" fill="var(--muted)" font-size="17">最新版本</text>
+    <text id="npm-downloads" x="24" y="322" fill="var(--ink)" font-size="30" font-weight="600" class="mono">1,031</text>
+    <text id="npm-latest" x="202" y="322" fill="var(--ink)" font-size="30" font-weight="600" class="mono">0.4.3</text>
+  </g>
+  <text id="npm-as-of" x="24" y="355" fill="var(--muted)" font-size="17">统计截至 2026-10-18</text>
 </svg>

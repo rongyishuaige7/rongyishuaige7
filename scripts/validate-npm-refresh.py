@@ -9,7 +9,7 @@ from npm_snapshot import split_snapshot
 
 ALLOWED = {
     "data/npm-stats.json", "assets/dsh-card-dark.svg", "assets/dsh-card-light.svg",
-    "assets/dsh-card-still.svg", "assets/dsh-card-mobile.svg", "README.md",
+    "assets/dsh-card-still.svg", "assets/dsh-card-mobile.svg", "assets/dsh-card-mobile-still.svg", "README.md",
 }
 
 

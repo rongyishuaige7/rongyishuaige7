@@ -4,6 +4,7 @@
 from pathlib import Path
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 
 FLOW = Path("assets/yipan-flow-light.svg")
@@ -49,6 +50,19 @@ CARD_AMBIENT = {
 # entry cards, then the drive shine, the DSH capture pan, and the photo deck.
 HERO_ORDER = ("entry-carry", "entry-see", "entry-touch", "drive-shine", "shot-pan", "deck-1", "deck-2", "deck-3")
 HERO_BUDGET_SECONDS = 5.0
+# Functional DSH stages may overlap at their edges, but their first starts must
+# follow this causal order. npm figures and persistent feature captions never move.
+DSH_PHASES = (
+    ("record-a", "record-b", "record-c"),
+    ("packet-a", "packet-b", "packet-c"),
+    ("project-a", "project-b", "project-c"),
+    ("usage-a", "usage-b", "usage-c"),
+    ("lane-a", "lane-b", "lane-c"),
+    ("timeline-scan",),
+    ("cta-arrow",),
+)
+DSH_TRANSIENT = {"packet-a", "packet-b", "packet-c", "timeline-scan"}
+DSH_MOBILE_CLASSES = {"packet-a", "lane-a", "lane-b", "lane-c"}
 # Base styles are the final frame, so reduced motion shows what the animation
 # ends on. The drive shine is the exception: it starts and ends outside the
 # clipped drive face, so its final frame is invisible either way.
@@ -170,6 +184,61 @@ def check_hero(path: Path, text: str) -> list[str]:
     return problems
 
 
+def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
+    problems: list[str] = []
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    expected = {name for phase in DSH_PHASES for name in phase}
+    if set(declarations) != expected:
+        problems.append(f"{path.name}: DSH motion must cover its functional story and CTA only")
+    starts: dict[str, float] = {}
+    for class_name, value in declarations.items():
+        tokens = re.sub(r"cubic-bezier\([^)]*\)", "", value).split()
+        name = tokens[0]
+        times = [seconds(t) for t in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", t)]
+        if name not in keyframes or len(times) != 2:
+            problems.append(f"{path.name}: {class_name} needs defined keyframes, one duration and one delay")
+            continue
+        duration, delay = times
+        starts[class_name] = delay
+        iterations = [t for t in tokens if re.fullmatch(r"\d+(?:\.\d+)?", t)]
+        if "infinite" in tokens or any(float(t) != 1 for t in iterations) or duration + delay > 5:
+            problems.append(f"{path.name}: {class_name} must play once and end within 5s")
+        if "backwards" not in tokens:
+            problems.append(f"{path.name}: {class_name} must restore its complete base frame after playback")
+        body = keyframes[name]
+        properties = set(re.findall(r"([\w-]+)\s*:", body))
+        if properties - {"transform", "opacity"}:
+            problems.append(f"{path.name}: {name} must animate transform/opacity only")
+        final = FINAL_KEYFRAME.search(body)
+        end = final.group("body") if final else ""
+        opacity = re.search(r"opacity:\s*([\d.]+)", end)
+        transform = re.search(r"transform:\s*([^;]+)", end)
+        if class_name in DSH_TRANSIENT:
+            if final is None or opacity is None or float(opacity.group(1)) != 0:
+                problems.append(f"{path.name}: transient {class_name} must disappear at the end")
+        elif final is None or (opacity and float(opacity.group(1)) != 1) or (
+            transform and transform.group(1).strip() not in {"none", "translateX(0)", "translateY(0)"}
+        ):
+            problems.append(f"{path.name}: {class_name} must end on its complete base frame")
+    previous = -1.0
+    for phase in DSH_PHASES:
+        phase_starts = [starts[name] for name in phase if name in starts]
+        if phase_starts:
+            if min(phase_starts) <= previous:
+                problems.append(f"{path.name}: DSH phases must start in causal order")
+            previous = min(phase_starts)
+    root = ET.fromstring(text)
+    used = {name for element in root.iter() for name in element.get("class", "").split()} & set(declarations)
+    if used != (DSH_MOBILE_CLASSES if mobile else expected):
+        problems.append(f"{path.name}: DSH illustration is missing an animated stage")
+    for element in root.iter():
+        if element.get("id") in {"card-copy", "card-tags", "card-metrics", "npm-as-of", "flow-caption", "view-1", "view-2", "view-3", "view-4"}:
+            if any(set(child.get("class", "").split()) & set(declarations) for child in element.iter()):
+                problems.append(f"{path.name}: {element.get('id')} must remain still and visible")
+    return problems
+
+
 def main() -> int:
     problems: list[str] = []
 
@@ -186,17 +255,13 @@ def main() -> int:
             problems.extend(check_hero(light, light_text))
             continue
         if light == DSH:
-            declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(light_text)}
-            if set(declarations) != {"signal-reveal", "cta-shine"}:
-                problems.append("DSH motion must be limited to the signal line and CTA")
-            for class_name, value in declarations.items():
-                times = [seconds(t) for t in value.split() if re.fullmatch(r"\d+(?:\.\d+)?m?s", t)]
-                if "infinite" in value or len(times) != 2 or sum(times) > 5:
-                    problems.append(f"DSH {class_name} must play once and finish within 5s")
+            problems.extend(check_dsh(light, light_text))
             continue
         cycle, stages = STORIES[light]
         problems.extend(check_story(light, light_text, cycle, stages))
 
+    mobile = Path("assets/dsh-card-mobile.svg")
+    problems.extend(check_dsh(mobile, mobile.read_text(encoding="utf-8"), mobile=True))
     for card, ambient in CARD_AMBIENT.items():
         card_text = card.read_text(encoding="utf-8")
         if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:

@@ -1,68 +1,131 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
-  <title id="title">DSH Usage：按项目统计 DSH 会话用量</title>
-  <desc id="desc">深色DSH Usage 项目卡。DeepSeek Harness 插件，按项目统计 Token、开发时长、费用和余额；未知价格明确标出，密钥仅在本机使用。TypeScript、DSH Plugin、Local-first，MIT 许可。npm 近 30 天下载 1,031 次，最新版本 0.4.3，已发布 94 个版本，下载统计截至 2026-10-18。项目总览可导出 CSV/JSON；开发时间线、近 7 / 30 / 90 天用量趋势与账户余额常驻显示。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">DSH Usage：按项目统计会话用量</title>
+  <desc id="desc">深色DSH Usage 项目卡。DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。右侧为功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线；图形不代表真实用量。项目总览可导出 CSV/JSON，用量趋势可选近 7 / 30 / 90 天。npm 近 30 天下载 1,031 次，最新版本 0.4.3，已发布 94 个版本，下载统计截至 2026-10-18。包名 @rongyi7/dsh-stats，MIT 许可。</desc>
   <defs>
-    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#6ea8ff" stop-opacity="0.085"/>
-      <stop offset="1" stop-color="#6ea8ff" stop-opacity="0.02"/>
-    </linearGradient>
-    <linearGradient id="ctaFill"><stop stop-color="#6ea8ff"/><stop offset="1" stop-color="#63ccf8"/></linearGradient>
-    <linearGradient id="ctaShine"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.45"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
-    <clipPath id="ctaClip"><rect x="64" y="281" width="144" height="54" rx="12"/></clipPath>
+    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6ea8ff" stop-opacity="0.12"/><stop offset="1" stop-color="#6ea8ff" stop-opacity="0.02"/></linearGradient>
+    <linearGradient id="laneFill"><stop stop-color="#6ea8ff"/><stop offset="1" stop-color="#63ccf8"/></linearGradient>
   </defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal-reveal { transform-box: fill-box; transform-origin: left center; }
+    .record, .usage-bars, .time-lane { transform-box: fill-box; }
+    .usage-bars { transform-origin: center bottom; }
+    .time-lane { transform-origin: left center; }
+    .packet, .timeline-scan { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .signal-reveal { animation: signal-reveal 1.4s ease-out 0.3s both; }
-      .cta-shine { animation: cta-shine 0.9s ease-in-out 1.8s both; }
+      .record-a { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s backwards; }
+      .record-b { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s backwards; }
+      .record-c { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
+      .packet-a { animation: packet-forward 0.95s ease-in-out 0.65s backwards; }
+      .packet-b { animation: packet-forward 0.95s ease-in-out 0.82s backwards; }
+      .packet-c { animation: packet-forward 0.95s ease-in-out 0.99s backwards; }
+      .project-a { animation: project-on 0.55s ease-out 1.4s backwards; }
+      .project-b { animation: project-on 0.55s ease-out 1.57s backwards; }
+      .project-c { animation: project-on 0.55s ease-out 1.74s backwards; }
+      .usage-a { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2s backwards; }
+      .usage-b { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.12s backwards; }
+      .usage-c { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.24s backwards; }
+      .lane-a { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.7s backwards; }
+      .lane-b { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.85s backwards; }
+      .lane-c { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 3s backwards; }
+      .timeline-scan { animation: timeline-scan 0.92s ease-in-out 3.55s backwards; }
+      .cta-arrow { animation: cta-nudge 0.55s ease-out 4s backwards; }
     }
-    @keyframes signal-reveal {
-      from { transform: scaleX(0); opacity: 0; }
-      to { transform: scaleX(1); opacity: 1; }
+    @keyframes record-in {
+      from { opacity: 0.3; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes cta-shine {
-      from { transform: translateX(0); }
-      to { transform: translateX(260px); }
+    @keyframes packet-forward {
+      0% { opacity: 0; transform: translateX(0); }
+      15%, 85% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
+    }
+    @keyframes project-on {
+      from { opacity: 0.35; }
+      to { opacity: 1; }
+    }
+    @keyframes usage-grow {
+      from { opacity: 0.3; transform: scaleY(0.12); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes lane-extend {
+      from { opacity: 0.3; transform: scaleX(0.08); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes timeline-scan {
+      0% { opacity: 0; transform: translateX(0); }
+      15%, 80% { opacity: 0.75; }
+      100% { opacity: 0; transform: translateX(290px); }
+    }
+    @keyframes cta-nudge {
+      0% { transform: translateX(0); }
+      40% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
     }
   </style>
-  <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="#0d1117"/>
-  <rect x="0.5" y="0.5" width="1199" height="379" rx="18" fill="url(#cardWash)" stroke="#6ea8ff" stroke-opacity="0.26"/>
+  <rect x="0.5" y="0.5" width="1199" height="419" rx="18" fill="#0d1117"/>
+  <rect x="0.5" y="0.5" width="1199" height="419" rx="18" fill="url(#cardWash)" stroke="#6ea8ff" stroke-opacity="0.26"/>
   <g id="card-copy">
-    <text x="64" y="74" fill="#f3f6fa" font-size="34" font-weight="700">DSH Usage</text>
-    <text x="64" y="108" fill="#6ea8ff" font-size="18">DeepSeek Harness 插件</text>
-    <text x="64" y="157" fill="#c3cad4" font-size="23">按项目统计 Token、开发时长、</text>
-    <text x="64" y="190" fill="#c3cad4" font-size="23">费用和余额。</text>
-    <text x="64" y="221" fill="#9da6b4" font-size="16">未知价格明确标出，密钥仅在本机使用。</text>
+    <text x="48" y="72" fill="#f3f6fa" font-size="37" font-weight="700">DSH Usage</text>
+    <text x="48" y="107" fill="#6ea8ff" font-size="18">DeepSeek Harness 用量插件</text>
+    <text x="48" y="157" fill="#f3f6fa" font-size="23">按项目统计会话用量</text>
   </g>
-  <g id="card-tags"><text x="64" y="250" fill="#9da6b4" font-size="16">TypeScript · DSH Plugin · Local-first</text></g>
+  <g id="card-tags"><text x="48" y="191" fill="#c3cad4" font-size="18">Token · 开发时长 · 预估费用</text></g>
+  <path d="M48 222H350M397 48V372" fill="none" stroke="#262c35"/>
+  <g id="card-metrics">
+    <text x="48" y="253" fill="#9da6b4" font-size="17">近 30 天下载</text>
+    <text x="218" y="253" fill="#9da6b4" font-size="17">npm 最新版本</text>
+    <text id="npm-downloads" x="48" y="293" fill="#f3f6fa" font-size="32" font-weight="600" class="mono">1,031</text>
+    <text id="npm-latest" x="218" y="293" fill="#f3f6fa" font-size="32" font-weight="600" class="mono">0.4.3</text>
+  </g>
+  <text id="npm-as-of" x="48" y="324" fill="#9da6b4" font-size="17">统计截至 2026-10-18</text>
   <g id="card-cta">
-    <rect x="64" y="281" width="144" height="54" rx="12" fill="url(#ctaFill)"/>
-    <g clip-path="url(#ctaClip)"><path class="cta-shine" d="M16 281H56L36 335H-4Z" fill="url(#ctaShine)"/></g>
-    <text x="86" y="315" fill="#0b1020" font-size="19" font-weight="700">查看仓库 ↗</text>
+    <text x="48" y="377" fill="#6ea8ff" font-size="19" font-weight="600">查看仓库</text>
+    <g class="cta-arrow"><text x="139" y="377" fill="#6ea8ff" font-size="23">↗</text></g>
   </g>
-  <g id="card-status">
-    <text x="232" y="300" fill="#9da6b4" font-size="16">已发布到 npm · MIT</text>
-    <text x="232" y="327" fill="#737e8e" font-size="16" class="mono">@rongyi7/dsh-stats</text>
-  </g>
+  <g id="card-status"><text x="350" y="377" fill="#9da6b4" font-size="17" text-anchor="end">npm · MIT</text></g>
   <g id="dsh-panel">
-    <rect x="475.5" y="40.5" width="678" height="299" rx="14" fill="#080b10" stroke="#262c35"/>
-    <g id="card-metrics">
-      <rect x="499.5" y="64.5" width="630" height="99" rx="12" fill="#0a0e15" stroke="#6ea8ff" stroke-opacity="0.22"/>
-      <path d="M815 65V163" stroke="#6ea8ff" stroke-opacity="0.16"/>
-      <text x="523" y="96" fill="#9da6b4" font-size="18">近 30 天下载</text>
-      <text id="npm-downloads" x="523" y="140" fill="#f3f6fa" font-size="34" font-weight="600" class="mono">1,031</text>
-      <text x="839" y="96" fill="#9da6b4" font-size="18">npm 最新版本</text>
-      <text id="npm-latest" x="839" y="140" fill="#f3f6fa" font-size="34" font-weight="600" class="mono">0.4.3</text>
+    <text x="443" y="75" fill="#f3f6fa" font-size="24" font-weight="600">会话 → 项目 → 时间线</text>
+    <text id="flow-caption" x="1148" y="75" fill="#9da6b4" font-size="17" text-anchor="end">功能示意</text>
+    <text id="session-source" x="443" y="128" fill="#9da6b4" font-size="17">会话记录</text>
+    <text id="project-grouping" x="637" y="128" fill="#9da6b4" font-size="17">按项目归集</text>
+    <g id="card-views">
+      <g id="view-2"><text x="850" y="128" fill="#9da6b4" font-size="17">开发时间线</text></g>
+      <g id="session-records" fill="#142033" stroke="#262c35">
+        <g class="record record-a"><rect x="443" y="152" width="104" height="46" rx="8"/><text x="457" y="181" fill="#c3cad4" stroke="none" font-size="18">会话 A</text></g>
+        <g class="record record-b"><rect x="443" y="214" width="104" height="46" rx="8"/><text x="457" y="243" fill="#c3cad4" stroke="none" font-size="18">会话 B</text></g>
+        <g class="record record-c"><rect x="443" y="276" width="104" height="46" rx="8"/><text x="457" y="305" fill="#c3cad4" stroke="none" font-size="18">会话 C</text></g>
+      </g>
+      <g id="session-links" fill="none" stroke="#45494f"><path d="M548 175H645M548 237H645M548 299H645"/><path d="M755 175H815M755 237H815M755 299H815"/></g>
+      <g id="session-packets" fill="#63ccf8">
+        <rect class="packet packet-a" x="552" y="172" width="12" height="6" rx="3"/>
+        <rect class="packet packet-b" x="552" y="234" width="12" height="6" rx="3"/>
+        <rect class="packet packet-c" x="552" y="296" width="12" height="6" rx="3"/>
+      </g>
+      <g id="project-groups" fill="#080b10" stroke="#6ea8ff" stroke-opacity="0.6">
+        <g class="project-a"><rect x="645" y="152" width="109" height="46" rx="8"/><text x="661" y="181" fill="#f3f6fa" stroke="none" font-size="18">项目 A</text></g>
+        <g class="project-b"><rect x="645" y="214" width="109" height="46" rx="8"/><text x="661" y="243" fill="#f3f6fa" stroke="none" font-size="18">项目 B</text></g>
+        <g class="project-c"><rect x="645" y="276" width="109" height="46" rx="8"/><text x="661" y="305" fill="#f3f6fa" stroke="none" font-size="18">项目 C</text></g>
+      </g>
+      <g fill="#63ccf8"><circle cx="798" cy="175" r="3"/><circle cx="798" cy="237" r="3"/><circle cx="798" cy="299" r="3"/></g>
+      <g id="timeline-illustration">
+        <rect x="815" y="151" width="333" height="173" rx="11" fill="#080b10" stroke="#262c35"/>
+        <path d="M854 166V308M906 166V308M958 166V308M1010 166V308M1062 166V308M1114 166V308M834 231H1129" fill="none" stroke="#141920"/>
+        <g fill="#6ea8ff">
+          <g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g>
+          <g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g>
+          <g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g>
+        </g>
+        <g fill="url(#laneFill)">
+          <g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g>
+          <g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g>
+          <g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g>
+        </g>
+        <g class="timeline-scan"><path d="M835 163V312" stroke="#63ccf8" stroke-width="2"/><rect x="835" y="163" width="12" height="149" fill="#63ccf8" opacity="0.08"/></g>
+      </g>
+      <g id="view-1"><text x="443" y="375" fill="#9da6b4" font-size="17">项目总览 · CSV/JSON 导出</text></g>
+      <g id="view-3"><text x="710" y="375" fill="#9da6b4" font-size="17">用量趋势 · 近 7 / 30 / 90 天</text></g>
+      <g id="view-4"><text x="1148" y="375" fill="#9da6b4" font-size="17" text-anchor="end">账户余额查询</text></g>
     </g>
-    <g id="card-views" fill="#c3cad4" font-size="18">
-      <g id="view-1" class="view-1"><text x="523" y="216">项目总览 · 可导出 CSV/JSON</text></g>
-      <g id="view-2" class="view-2"><text x="839" y="216">开发时间线</text></g>
-      <g id="view-3" class="view-3"><text x="523" y="265">用量趋势 · 近 7 / 30 / 90 天</text></g>
-      <g id="view-4" class="view-4"><text x="839" y="265">账户余额</text></g>
-      <rect class="signal-reveal" x="499" y="286" width="630" height="2" rx="1" fill="#6ea8ff" opacity="0.65"/>
-    </g>
-    <text id="npm-as-of" x="523" y="322" fill="#9da6b4" font-size="17">npm 下载统计截至 2026-10-18</text>
   </g>
 </svg>

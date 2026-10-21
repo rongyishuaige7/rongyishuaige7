@@ -30,7 +30,7 @@ EXPECTED_ASSETS = {
     "yipan-flow-dark.svg",
     "yipan-flow-light.svg",
     "hero-still.svg", "yipan-flow-still.svg", "hardware-strip-still.svg",
-    "dsh-card-still.svg", "dsh-card-mobile.svg",
+    "dsh-card-still.svg", "dsh-card-mobile.svg", "dsh-card-mobile-still.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
@@ -68,22 +68,24 @@ FLOW_CARD_TEXT = {
 FLOW_LOCAL_IDS = {"drive-boundary", "continuity-rail", "flow-context", "step-retrieve", "flow-workspace", "step-generate", "flow-output"}
 FLOW_CLOUD_IDS = {"flow-cloud", "link-request", "link-result"}
 FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录")
-# The DSH Usage card follows the homepage SEE card. Its three metrics come from
-# data/npm-stats.json, which the scheduled refresh workflow rewrites; the stable facts they
-# replaced (trend ranges, export formats) now sit in the view captions.
+# The npm snapshot stays outside the animated functional illustration. All five
+# variants read the same data; export formats and trend ranges remain visible.
 DSH_CARD_TEXT = {
-    "card-copy": ("DSH Usage", "DeepSeek Harness 插件", "按项目统计 Token、开发时长、", "费用和余额。", "未知价格明确标出，密钥仅在本机使用。"),
-    "card-tags": ("TypeScript", "DSH Plugin", "Local-first"),
+    "card-copy": ("DSH Usage", "DeepSeek Harness 用量插件", "按项目统计会话用量"),
+    "card-tags": ("Token", "开发时长", "预估费用"),
     "card-cta": ("查看仓库",),
-    "card-status": ("已发布到 npm · MIT", "@rongyi7/dsh-stats"),
+    "card-status": ("npm · MIT",),
+    "card-metrics": ("近 30 天下载", "npm 最新版本"),
+    "npm-as-of": ("统计截至",),
 }
 DSH_VIEWS = ("项目总览", "开发时间线", "用量趋势", "账户余额")
 DSH_PANEL_TEXT = {
-    "card-metrics": ("近 30 天下载", "npm 最新版本"),
     "card-views": DSH_VIEWS,
-    "npm-as-of": ("npm 下载统计截至",),
+    "session-source": ("会话记录",),
+    "project-grouping": ("按项目归集",),
+    "flow-caption": ("功能示意",),
 }
-DSH_VIEW_FACTS = {1: "可导出 CSV/JSON", 3: "近 7 / 30 / 90 天"}
+DSH_VIEW_FACTS = {1: "CSV/JSON 导出", 3: "近 7 / 30 / 90 天", 4: "账户余额查询"}
 NPM_STATS = Path("data/npm-stats.json")
 NPM_STATS_KEYS = {"package", "downloads_last_month", "downloads_start", "downloads_end", "latest", "version_count"}
 NPM_PACKAGE = "@rongyi7/dsh-stats"
@@ -359,7 +361,7 @@ def validate(path: Path) -> list[str]:
             problems.append("Yi盘 node titles must share one heading size")
 
     if path.name.startswith("dsh-card-"):
-        mobile = path.name == "dsh-card-mobile.svg"
+        mobile = path.name.startswith("dsh-card-mobile")
         by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
         if not mobile:
             problems.extend(check_card(root, "DSH Usage", DSH_CARD_TEXT, "dsh-panel", DSH_PANEL_TEXT))
@@ -375,9 +377,13 @@ def validate(path: Path) -> list[str]:
             for element in root.iter(f"{SVG_NAMESPACE}text"):
                 if float(element.get("font-size", "0")) < 17:
                     problems.append("mobile DSH card text must be at least 17 viewBox units")
-            for fact in ("DSH Usage", "DeepSeek Harness 插件", "近 30 天下载", "最新版本"):
+            for fact in ("DSH Usage", "按项目统计会话用量", "预估费用", "项目时间线", "近 30 天下载", "最新版本"):
                 if fact not in drawn_text(root):
                     problems.append(f"mobile DSH card is missing {fact}")
+        if "功能示意" not in drawn_text(root) or description is None or any(
+            fact not in "".join(description.itertext()) for fact in ("非产品截图", "不代表真实用量", "账户余额查询")
+        ):
+            problems.append("DSH must distinguish its illustration from real usage and independent account queries")
         stats, stats_problems = load_npm_stats()
         problems.extend(stats_problems)
         if stats and not stats_problems:
@@ -389,17 +395,16 @@ def validate(path: Path) -> list[str]:
                 if metric is None or metric_id not in metric_ids or "".join(metric.itertext()).strip() != value:
                     problems.append(f"DSH Usage {metric_id} must read {value} from {NPM_STATS}")
             as_of = by_id.get("npm-as-of")
-            prefix = "统计截至" if mobile else "npm 下载统计截至"
-            if as_of is None or "".join(as_of.itertext()).strip() != f"{prefix} {stats['downloads_end']}":
+            if as_of is None or "".join(as_of.itertext()).strip() != f"统计截至 {stats['downloads_end']}":
                 problems.append(f"DSH Usage npm-as-of must name the download window end {stats['downloads_end']}")
             description_text = "".join(description.itertext()) if description is not None else ""
             for value in (*expected.values(), f"{stats['version_count']:,}", stats["downloads_end"]):
                 if value not in description_text:
                     problems.append(f"DSH Usage description must repeat the npm figure {value}")
 
-    if path.stem.endswith(("-still", "-mobile")):
-        if "animation:" in style_text or "@keyframes" in style_text:
-            problems.append("static/adaptive SVG must not contain motion")
+    if path.stem.endswith("-still") or path.name == "dsh-card-mobile.svg":
+        if path.stem.endswith("-still") and ("animation:" in style_text or "@keyframes" in style_text):
+            problems.append("static SVG must not contain motion")
         if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:
             problems.append("static/adaptive SVG must provide both inherited color schemes")
 

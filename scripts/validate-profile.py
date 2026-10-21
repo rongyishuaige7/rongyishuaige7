@@ -26,7 +26,7 @@ NPM_STALE_DAYS = 9
 WORKFLOWS = Path(".github/workflows")
 NPM_REFRESH = WORKFLOWS / "refresh-npm-card.yml"
 NPM_REFRESH_TRIGGERS = {"schedule", "workflow_dispatch"}
-NPM_REFRESH_FILES = "git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg assets/dsh-card-still.svg assets/dsh-card-mobile.svg README.md"
+NPM_REFRESH_FILES = "git add data/npm-stats.json assets/dsh-card-dark.svg assets/dsh-card-light.svg assets/dsh-card-still.svg assets/dsh-card-mobile.svg assets/dsh-card-mobile-still.svg README.md"
 # WebP chunks that can carry EXIF or XMP metadata.
 FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
@@ -36,8 +36,8 @@ EXPECTED_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-dark.svg?v=12",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-dark.svg?v=3",
-    "./assets/dsh-card-light.svg?v=3",
+    "./assets/dsh-card-dark.svg?v=4",
+    "./assets/dsh-card-light.svg?v=4",
     "./assets/hardware-strip-dark.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/badge-studio.svg?v=1",
@@ -49,13 +49,14 @@ EXPECTED_ASSETS = {
     "./assets/hero-still.svg?v=1",
     "./assets/yipan-flow-still.svg?v=1",
     "./assets/hardware-strip-still.svg?v=1",
-    "./assets/dsh-card-still.svg?v=1",
-    "./assets/dsh-card-mobile.svg?v=1",
+    "./assets/dsh-card-still.svg?v=2",
+    "./assets/dsh-card-mobile.svg?v=2",
+    "./assets/dsh-card-mobile-still.svg?v=1",
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-light.svg?v=3",
+    "./assets/dsh-card-light.svg?v=4",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
     "./assets/hardware-featured.webp?v=1",
@@ -295,8 +296,8 @@ def main() -> int:
     # The DSH Usage card replaces the description and tag lines and sits above the screenshot.
     if not re.search(
         r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
-        r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:.*\n){4}'
-        r'  <img src="\./assets/dsh-card-light\.svg\?v=3"[^>]*>\n</picture>\n</a>\n\n'
+        r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:  <source [^\n]+>\n){5}'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=4"[^>]*>\n</picture>\n</a>\n\n'
         r"<!-- npm-snapshot:start -->\n(?:.*\n)+?<!-- npm-snapshot:end -->\n\n<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
         readme,
     ):
@@ -318,9 +319,13 @@ def main() -> int:
         sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)">', block)
         expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg?v=1")]
         if stem == "dsh-card":
-            expected.insert(0, ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg?v=1"))
+            expected = [
+                ("(max-width: 1200px) and (prefers-reduced-motion: reduce)", "./assets/dsh-card-mobile-still.svg?v=1"),
+                ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg?v=2"),
+                ("(prefers-reduced-motion: reduce)", "./assets/dsh-card-still.svg?v=2"),
+            ]
         if sources[:len(expected)] != expected:
-            problems.append(f"{stem} must select static width/motion sources before theme sources")
+            problems.append(f"{stem} must select adaptive width/motion sources before theme sources")
     try:
         npm_end = date.fromisoformat(json.loads(NPM_STATS.read_text(encoding="utf-8"))["downloads_end"])
     except (OSError, ValueError, KeyError, TypeError) as error:

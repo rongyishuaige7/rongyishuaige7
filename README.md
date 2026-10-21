@@ -50,11 +50,12 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(max-width: 1200px)" srcset="./assets/dsh-card-mobile.svg?v=1">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=1">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=3">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=3">
-  <img src="./assets/dsh-card-light.svg?v=3" width="100%" alt="DSH Usage：DeepSeek Harness 插件，按项目统计 Token、开发时长、费用和余额。项目总览可导出 CSV/JSON，用量趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
+  <source media="(max-width: 1200px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=1">
+  <source media="(max-width: 1200px)" srcset="./assets/dsh-card-mobile.svg?v=2">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=2">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=4">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=4">
+  <img src="./assets/dsh-card-light.svg?v=4" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
 </picture>
 </a>
 
