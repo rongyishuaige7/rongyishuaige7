@@ -42,8 +42,10 @@
     @keyframes sig-in-a {
       0%, 1% { transform: translate(0, 0); opacity: 0; }
       2% { transform: translate(0, 0); opacity: 1; }
+      14% { transform: translate(210px, 0); }
       15% { transform: translate(220px, 0); }
       16.5% { transform: translate(238px, 18px); }
+      17.5% { transform: translate(248px, 18px); }
       30% { transform: translate(460px, 18px); opacity: 1; }
       31%, 100% { transform: translate(460px, 18px); opacity: 0; }
     }
@@ -56,21 +58,27 @@
     @keyframes sig-in-c {
       0%, 5% { transform: translate(0, 0); opacity: 0; }
       6% { transform: translate(0, 0); opacity: 1; }
+      18% { transform: translate(210px, 0); }
       19% { transform: translate(220px, 0); }
       20.5% { transform: translate(238px, -18px); }
+      21.5% { transform: translate(248px, -18px); }
       34% { transform: translate(460px, -18px); opacity: 1; }
       35%, 100% { transform: translate(460px, -18px); opacity: 0; }
     }
     @keyframes chip-on {
       0%, 34% { opacity: 0; }
-      36%, 46% { opacity: 1; }
+      36% { opacity: 1; }
+      37.5% { opacity: 0.72; }
+      39%, 46% { opacity: 1; }
       50%, 100% { opacity: 0; }
     }
     @keyframes sig-out-a {
       0%, 45% { transform: translate(0, 0); opacity: 0; }
       46% { transform: translate(0, 0); opacity: 1; }
+      57.5% { transform: translate(212px, 0); }
       58.5% { transform: translate(222px, 0); }
       60% { transform: translate(240px, -18px); }
+      61% { transform: translate(250px, -18px); }
       72% { transform: translate(450px, -18px); opacity: 1; }
       73%, 100% { transform: translate(450px, -18px); opacity: 0; }
     }
@@ -83,24 +91,35 @@
     @keyframes sig-out-c {
       0%, 49% { transform: translate(0, 0); opacity: 0; }
       50% { transform: translate(0, 0); opacity: 1; }
+      61.5% { transform: translate(212px, 0); }
       62.5% { transform: translate(222px, 0); }
       64% { transform: translate(240px, 18px); }
+      65% { transform: translate(250px, 18px); }
       76% { transform: translate(450px, 18px); opacity: 1; }
       77%, 100% { transform: translate(450px, 18px); opacity: 0; }
     }
     @keyframes led-a {
       0%, 72% { opacity: 0; }
-      74%, 86% { opacity: 1; }
+      74%, 80% { opacity: 1; }
+      83% { opacity: 0.72; }
+      86% { opacity: 0.38; }
+      89% { opacity: 0.12; }
       92%, 100% { opacity: 0; }
     }
     @keyframes led-b {
       0%, 74% { opacity: 0; }
-      76%, 88% { opacity: 1; }
+      76%, 82% { opacity: 1; }
+      85% { opacity: 0.72; }
+      88% { opacity: 0.38; }
+      91% { opacity: 0.12; }
       94%, 100% { opacity: 0; }
     }
     @keyframes led-c {
       0%, 76% { opacity: 0; }
-      78%, 90% { opacity: 1; }
+      78%, 84% { opacity: 1; }
+      87% { opacity: 0.72; }
+      90% { opacity: 0.38; }
+      93% { opacity: 0.12; }
       96%, 100% { opacity: 0; }
     }
   </style>

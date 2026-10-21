@@ -375,8 +375,10 @@ STRIP_STYLE = """  <style>
     @keyframes sig-in-a {
       0%, 1% { transform: translate(0, 0); opacity: 0; }
       2% { transform: translate(0, 0); opacity: 1; }
+      14% { transform: translate(210px, 0); }
       15% { transform: translate(220px, 0); }
       16.5% { transform: translate(238px, 18px); }
+      17.5% { transform: translate(248px, 18px); }
       30% { transform: translate(460px, 18px); opacity: 1; }
       31%, 100% { transform: translate(460px, 18px); opacity: 0; }
     }
@@ -389,21 +391,27 @@ STRIP_STYLE = """  <style>
     @keyframes sig-in-c {
       0%, 5% { transform: translate(0, 0); opacity: 0; }
       6% { transform: translate(0, 0); opacity: 1; }
+      18% { transform: translate(210px, 0); }
       19% { transform: translate(220px, 0); }
       20.5% { transform: translate(238px, -18px); }
+      21.5% { transform: translate(248px, -18px); }
       34% { transform: translate(460px, -18px); opacity: 1; }
       35%, 100% { transform: translate(460px, -18px); opacity: 0; }
     }
     @keyframes chip-on {
       0%, 34% { opacity: 0; }
-      36%, 46% { opacity: 1; }
+      36% { opacity: 1; }
+      37.5% { opacity: 0.72; }
+      39%, 46% { opacity: 1; }
       50%, 100% { opacity: 0; }
     }
     @keyframes sig-out-a {
       0%, 45% { transform: translate(0, 0); opacity: 0; }
       46% { transform: translate(0, 0); opacity: 1; }
+      57.5% { transform: translate(212px, 0); }
       58.5% { transform: translate(222px, 0); }
       60% { transform: translate(240px, -18px); }
+      61% { transform: translate(250px, -18px); }
       72% { transform: translate(450px, -18px); opacity: 1; }
       73%, 100% { transform: translate(450px, -18px); opacity: 0; }
     }
@@ -416,24 +424,35 @@ STRIP_STYLE = """  <style>
     @keyframes sig-out-c {
       0%, 49% { transform: translate(0, 0); opacity: 0; }
       50% { transform: translate(0, 0); opacity: 1; }
+      61.5% { transform: translate(212px, 0); }
       62.5% { transform: translate(222px, 0); }
       64% { transform: translate(240px, 18px); }
+      65% { transform: translate(250px, 18px); }
       76% { transform: translate(450px, 18px); opacity: 1; }
       77%, 100% { transform: translate(450px, 18px); opacity: 0; }
     }
     @keyframes led-a {
       0%, 72% { opacity: 0; }
-      74%, 86% { opacity: 1; }
+      74%, 80% { opacity: 1; }
+      83% { opacity: 0.72; }
+      86% { opacity: 0.38; }
+      89% { opacity: 0.12; }
       92%, 100% { opacity: 0; }
     }
     @keyframes led-b {
       0%, 74% { opacity: 0; }
-      76%, 88% { opacity: 1; }
+      76%, 82% { opacity: 1; }
+      85% { opacity: 0.72; }
+      88% { opacity: 0.38; }
+      91% { opacity: 0.12; }
       94%, 100% { opacity: 0; }
     }
     @keyframes led-c {
       0%, 76% { opacity: 0; }
-      78%, 90% { opacity: 1; }
+      78%, 84% { opacity: 1; }
+      87% { opacity: 0.72; }
+      90% { opacity: 0.38; }
+      93% { opacity: 0.12; }
       96%, 100% { opacity: 0; }
     }
   </style>"""
@@ -564,6 +583,9 @@ FLOW_STYLE = """  <style>
     @keyframes packet-retrieve {
       0%, 8% { opacity: 0; transform: translateY(0); }
       9% { opacity: 1; transform: translateY(0); }
+      11% { transform: translateY(3px); }
+      13% { transform: translateY(12px); }
+      15% { transform: translateY(24px); }
       17% { opacity: 1; transform: translateY(32px); }
       18%, 100% { opacity: 0; transform: translateY(32px); }
     }
@@ -575,17 +597,26 @@ FLOW_STYLE = """  <style>
     @keyframes packet-request {
       0%, 24% { opacity: 0; transform: translateX(0); }
       25% { opacity: 1; transform: translateX(0); }
+      27% { transform: translateX(8px); }
+      29% { transform: translateX(32px); }
+      31% { transform: translateX(62px); }
       33% { opacity: 1; transform: translateX(76px); }
       34%, 100% { opacity: 0; transform: translateX(76px); }
     }
     @keyframes lit-cloud {
       0%, 32% { opacity: 0; }
-      34%, 39% { opacity: 1; }
+      34% { opacity: 1; }
+      36% { opacity: 0.72; }
+      37.5% { opacity: 1; }
+      39% { opacity: 0.88; }
       41%, 100% { opacity: 0; }
     }
     @keyframes packet-result {
       0%, 40% { opacity: 0; transform: translateX(0); }
       41% { opacity: 1; transform: translateX(0); }
+      43% { transform: translateX(-8px); }
+      45% { transform: translateX(-32px); }
+      47% { transform: translateX(-62px); }
       49% { opacity: 1; transform: translateX(-76px); }
       50%, 100% { opacity: 0; transform: translateX(-76px); }
     }
@@ -597,6 +628,9 @@ FLOW_STYLE = """  <style>
     @keyframes packet-generate {
       0%, 56% { opacity: 0; transform: translateY(0); }
       57% { opacity: 1; transform: translateY(0); }
+      59% { transform: translateY(3px); }
+      61% { transform: translateY(12px); }
+      63% { transform: translateY(24px); }
       65% { opacity: 1; transform: translateY(32px); }
       66%, 100% { opacity: 0; transform: translateY(32px); }
     }
@@ -607,12 +641,17 @@ FLOW_STYLE = """  <style>
     }
     @keyframes lit-rail {
       0%, 72% { opacity: 0; }
-      74%, 83% { opacity: 1; }
+      74% { opacity: 0.65; }
+      76%, 81% { opacity: 1; }
+      83% { opacity: 0.75; }
       85%, 100% { opacity: 0; }
     }
     @keyframes packet-rail {
       0%, 74% { opacity: 0; transform: translateY(0); }
       75% { opacity: 1; transform: translateY(0); }
+      77% { transform: translateY(-16px); }
+      79% { transform: translateY(-74px); }
+      81% { transform: translateY(-148px); }
       83% { opacity: 1; transform: translateY(-186px); }
       84%, 100% { opacity: 0; transform: translateY(-186px); }
     }
@@ -855,8 +894,9 @@ DSH_STYLE = """  <style>
       .cta-arrow { animation: cta-nudge 0.55s ease-out 4s backwards; }
     }
     @keyframes record-in {
-      from { opacity: 0.3; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      0% { opacity: 0.3; transform: translateY(8px); }
+      70% { opacity: 1; transform: translateY(-1px); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes packet-forward {
       0% { opacity: 0; transform: translateX(0); }
@@ -868,21 +908,27 @@ DSH_STYLE = """  <style>
       to { opacity: 1; }
     }
     @keyframes usage-grow {
-      from { opacity: 0.3; transform: scaleY(0.12); }
-      to { opacity: 1; transform: none; }
+      0% { opacity: 0.3; transform: scaleY(0.12); }
+      68% { opacity: 1; transform: scaleY(1.06); }
+      84% { transform: scaleY(0.98); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes lane-extend {
-      from { opacity: 0.3; transform: scaleX(0.08); }
-      to { opacity: 1; transform: none; }
+      0% { opacity: 0.3; transform: scaleX(0.08); }
+      72% { opacity: 1; transform: scaleX(1.03); }
+      88% { transform: scaleX(0.99); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes timeline-scan {
       0% { opacity: 0; transform: translateX(0); }
-      15%, 80% { opacity: 0.75; }
+      12% { opacity: 0.85; }
+      82% { opacity: 0.85; }
       100% { opacity: 0; transform: translateX(290px); }
     }
     @keyframes cta-nudge {
       0% { transform: translateX(0); }
-      40% { transform: translateX(5px); }
+      35% { transform: translateX(5px); }
+      70% { transform: translateX(1px); }
       100% { transform: translateX(0); }
     }
   </style>"""

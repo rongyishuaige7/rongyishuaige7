@@ -72,6 +72,9 @@
     @keyframes packet-retrieve {
       0%, 8% { opacity: 0; transform: translateY(0); }
       9% { opacity: 1; transform: translateY(0); }
+      11% { transform: translateY(3px); }
+      13% { transform: translateY(12px); }
+      15% { transform: translateY(24px); }
       17% { opacity: 1; transform: translateY(32px); }
       18%, 100% { opacity: 0; transform: translateY(32px); }
     }
@@ -83,17 +86,26 @@
     @keyframes packet-request {
       0%, 24% { opacity: 0; transform: translateX(0); }
       25% { opacity: 1; transform: translateX(0); }
+      27% { transform: translateX(8px); }
+      29% { transform: translateX(32px); }
+      31% { transform: translateX(62px); }
       33% { opacity: 1; transform: translateX(76px); }
       34%, 100% { opacity: 0; transform: translateX(76px); }
     }
     @keyframes lit-cloud {
       0%, 32% { opacity: 0; }
-      34%, 39% { opacity: 1; }
+      34% { opacity: 1; }
+      36% { opacity: 0.72; }
+      37.5% { opacity: 1; }
+      39% { opacity: 0.88; }
       41%, 100% { opacity: 0; }
     }
     @keyframes packet-result {
       0%, 40% { opacity: 0; transform: translateX(0); }
       41% { opacity: 1; transform: translateX(0); }
+      43% { transform: translateX(-8px); }
+      45% { transform: translateX(-32px); }
+      47% { transform: translateX(-62px); }
       49% { opacity: 1; transform: translateX(-76px); }
       50%, 100% { opacity: 0; transform: translateX(-76px); }
     }
@@ -105,6 +117,9 @@
     @keyframes packet-generate {
       0%, 56% { opacity: 0; transform: translateY(0); }
       57% { opacity: 1; transform: translateY(0); }
+      59% { transform: translateY(3px); }
+      61% { transform: translateY(12px); }
+      63% { transform: translateY(24px); }
       65% { opacity: 1; transform: translateY(32px); }
       66%, 100% { opacity: 0; transform: translateY(32px); }
     }
@@ -115,12 +130,17 @@
     }
     @keyframes lit-rail {
       0%, 72% { opacity: 0; }
-      74%, 83% { opacity: 1; }
+      74% { opacity: 0.65; }
+      76%, 81% { opacity: 1; }
+      83% { opacity: 0.75; }
       85%, 100% { opacity: 0; }
     }
     @keyframes packet-rail {
       0%, 74% { opacity: 0; transform: translateY(0); }
       75% { opacity: 1; transform: translateY(0); }
+      77% { transform: translateY(-16px); }
+      79% { transform: translateY(-74px); }
+      81% { transform: translateY(-148px); }
       83% { opacity: 1; transform: translateY(-186px); }
       84%, 100% { opacity: 0; transform: translateY(-186px); }
     }

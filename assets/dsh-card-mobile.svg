@@ -32,8 +32,9 @@
       .cta-arrow { animation: cta-nudge 0.55s ease-out 4s backwards; }
     }
     @keyframes record-in {
-      from { opacity: 0.3; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      0% { opacity: 0.3; transform: translateY(8px); }
+      70% { opacity: 1; transform: translateY(-1px); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes packet-forward {
       0% { opacity: 0; transform: translateX(0); }
@@ -45,21 +46,27 @@
       to { opacity: 1; }
     }
     @keyframes usage-grow {
-      from { opacity: 0.3; transform: scaleY(0.12); }
-      to { opacity: 1; transform: none; }
+      0% { opacity: 0.3; transform: scaleY(0.12); }
+      68% { opacity: 1; transform: scaleY(1.06); }
+      84% { transform: scaleY(0.98); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes lane-extend {
-      from { opacity: 0.3; transform: scaleX(0.08); }
-      to { opacity: 1; transform: none; }
+      0% { opacity: 0.3; transform: scaleX(0.08); }
+      72% { opacity: 1; transform: scaleX(1.03); }
+      88% { transform: scaleX(0.99); }
+      100% { opacity: 1; transform: none; }
     }
     @keyframes timeline-scan {
       0% { opacity: 0; transform: translateX(0); }
-      15%, 80% { opacity: 0.75; }
+      12% { opacity: 0.85; }
+      82% { opacity: 0.85; }
       100% { opacity: 0; transform: translateX(290px); }
     }
     @keyframes cta-nudge {
       0% { transform: translateX(0); }
-      40% { transform: translateX(5px); }
+      35% { transform: translateX(5px); }
+      70% { transform: translateX(1px); }
       100% { transform: translateX(0); }
     }
   </style>
