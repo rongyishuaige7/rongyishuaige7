@@ -68,6 +68,8 @@ def collect() -> dict:
     end = iso_day(downloads.get("end"), "downloads end")
     if not start < end <= date.today():
         fail(f"downloads window {start}..{end} is not a past range")
+    if (end - start).days + 1 != 30:
+        fail(f"downloads window {start}..{end} must cover exactly 30 days, inclusive")
 
     if registry.get("name") != PACKAGE:
         fail(f"registry response names {registry.get('name')!r}")

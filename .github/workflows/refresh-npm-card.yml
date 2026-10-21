@@ -31,6 +31,9 @@ jobs:
       - name: Fetch npm figures
         run: python3 scripts/fetch-npm-stats.py
 
+      - name: Test npm download windows
+        run: python3 scripts/test-npm-stats.py
+
       - name: Render SVG assets
         run: python3 scripts/render-svg.py
 

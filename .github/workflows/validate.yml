@@ -32,6 +32,9 @@ jobs:
           globs: |
             README.md
 
+      - name: Test npm download windows
+        run: python3 scripts/test-npm-stats.py
+
       - name: Check generated SVG assets
         run: python3 scripts/render-svg.py --check
 

@@ -2,6 +2,7 @@
 """Validate local profile SVG assets without rendering or network access."""
 
 import base64
+from datetime import date
 import json
 from pathlib import Path
 import re
@@ -124,8 +125,14 @@ def load_npm_stats() -> tuple[dict, list[str]]:
     days = [stats[key] for key in ("downloads_start", "downloads_end")]
     if not all(isinstance(day, str) and ISO_DATE.fullmatch(day) for day in days):
         problems.append(f"{NPM_STATS} download window must be two YYYY-MM-DD dates")
-    elif not days[0] < days[1]:
-        problems.append(f"{NPM_STATS} download window must start before it ends")
+    else:
+        try:
+            start, end = (date.fromisoformat(day) for day in days)
+        except ValueError:
+            problems.append(f"{NPM_STATS} download window must contain valid calendar dates")
+        else:
+            if (end - start).days + 1 != 30:
+                problems.append(f"{NPM_STATS} download window must cover exactly 30 days, inclusive")
     return stats, problems
 
 
