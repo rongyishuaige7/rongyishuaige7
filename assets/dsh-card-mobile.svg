@@ -38,12 +38,16 @@
     }
     @keyframes packet-forward {
       0% { opacity: 0; transform: translateX(0); }
-      15%, 85% { opacity: 1; }
+      15% { opacity: 1; transform: translateX(8px); }
+      50% { opacity: 1; transform: translateX(45px); }
+      85% { opacity: 1; transform: translateX(85px); }
       100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
     }
     @keyframes project-on {
-      from { opacity: 0.35; }
-      to { opacity: 1; }
+      0% { opacity: 0.35; }
+      40% { opacity: 1; }
+      70% { opacity: 0.85; }
+      100% { opacity: 1; }
     }
     @keyframes usage-grow {
       0% { opacity: 0.3; transform: scaleY(0.12); }

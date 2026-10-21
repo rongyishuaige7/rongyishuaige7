@@ -61,18 +61,19 @@
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .entry-carry { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both; }
-      .entry-see { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
-      .entry-touch { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
-      .drive-shine { animation: drive-shine 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both; }
+      .entry-carry { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+      .entry-see { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+      .entry-touch { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+      .drive-shine { animation: drive-shine 0.85s cubic-bezier(0.25, 1, 0.5, 1) 0.9s both; }
       .shot-pan { animation: shot-pan 2.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s both; }
-      .deck-1 { animation: deck-1 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
-      .deck-2 { animation: deck-2 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
-      .deck-3 { animation: deck-3 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
+      .deck-1 { animation: deck-1 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.6s both; }
+      .deck-2 { animation: deck-2 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.75s both; }
+      .deck-3 { animation: deck-3 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both; }
     }
     @keyframes entry-in {
-      from { transform: translateY(14px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      0% { transform: translateY(14px); opacity: 0; }
+      75% { transform: translateY(-1px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 1; }
     }
     @keyframes drive-shine {
       from { transform: translateX(0); }
@@ -84,16 +85,19 @@
       100% { transform: translateY(0); }
     }
     @keyframes deck-1 {
-      from { transform: rotate(8deg) translate(48px, -6px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(8deg) translate(48px, -6px); }
+      80% { transform: rotate(-0.8deg) translate(-2px, 0.5px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
     @keyframes deck-2 {
-      from { transform: rotate(-7deg) translate(-48px, -4px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(-7deg) translate(-48px, -4px); }
+      80% { transform: rotate(0.8deg) translate(2px, 0.5px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
     @keyframes deck-3 {
-      from { transform: rotate(1deg) translate(0px, 5px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(1deg) translate(0px, 5px); }
+      80% { transform: rotate(-0.3deg) translate(0px, -1px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
   </style>
 

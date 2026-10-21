@@ -168,18 +168,19 @@ HERO_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .entry-carry { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s both; }
-      .entry-see { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s both; }
-      .entry-touch { animation: entry-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
-      .drive-shine { animation: drive-shine 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both; }
+      .entry-carry { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+      .entry-see { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+      .entry-touch { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+      .drive-shine { animation: drive-shine 0.85s cubic-bezier(0.25, 1, 0.5, 1) 0.9s both; }
       .shot-pan { animation: shot-pan 2.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s both; }
-      .deck-1 { animation: deck-1 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
-      .deck-2 { animation: deck-2 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
-      .deck-3 { animation: deck-3 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.6s both; }
+      .deck-1 { animation: deck-1 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.6s both; }
+      .deck-2 { animation: deck-2 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.75s both; }
+      .deck-3 { animation: deck-3 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both; }
     }
     @keyframes entry-in {
-      from { transform: translateY(14px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      0% { transform: translateY(14px); opacity: 0; }
+      75% { transform: translateY(-1px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 1; }
     }
     @keyframes drive-shine {
       from { transform: translateX(0); }
@@ -191,16 +192,19 @@ HERO_STYLE = """  <style>
       100% { transform: translateY(0); }
     }
     @keyframes deck-1 {
-      from { transform: rotate(8deg) translate(48px, -6px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(8deg) translate(48px, -6px); }
+      80% { transform: rotate(-0.8deg) translate(-2px, 0.5px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
     @keyframes deck-2 {
-      from { transform: rotate(-7deg) translate(-48px, -4px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(-7deg) translate(-48px, -4px); }
+      80% { transform: rotate(0.8deg) translate(2px, 0.5px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
     @keyframes deck-3 {
-      from { transform: rotate(1deg) translate(0px, 5px); }
-      to { transform: rotate(0deg) translate(0px, 0px); }
+      0% { transform: rotate(1deg) translate(0px, 5px); }
+      80% { transform: rotate(-0.3deg) translate(0px, -1px); }
+      100% { transform: rotate(0deg) translate(0px, 0px); }
     }
   </style>"""
 
@@ -385,6 +389,9 @@ STRIP_STYLE = """  <style>
     @keyframes sig-in-b {
       0%, 3% { transform: translateX(0); opacity: 0; }
       4% { transform: translateX(0); opacity: 1; }
+      10% { transform: translateX(70px); }
+      18% { transform: translateX(230px); }
+      26% { transform: translateX(390px); }
       32% { transform: translateX(460px); opacity: 1; }
       33%, 100% { transform: translateX(460px); opacity: 0; }
     }
@@ -418,6 +425,9 @@ STRIP_STYLE = """  <style>
     @keyframes sig-out-b {
       0%, 47% { transform: translateX(0); opacity: 0; }
       48% { transform: translateX(0); opacity: 1; }
+      54% { transform: translateX(65px); }
+      62% { transform: translateX(225px); }
+      70% { transform: translateX(385px); }
       74% { transform: translateX(450px); opacity: 1; }
       75%, 100% { transform: translateX(450px); opacity: 0; }
     }
@@ -591,7 +601,9 @@ FLOW_STYLE = """  <style>
     }
     @keyframes lit-workspace-in {
       0%, 16% { opacity: 0; }
-      18%, 23% { opacity: 1; }
+      18% { opacity: 1; }
+      20.5% { opacity: 0.78; }
+      23% { opacity: 1; }
       25%, 100% { opacity: 0; }
     }
     @keyframes packet-request {
@@ -622,7 +634,9 @@ FLOW_STYLE = """  <style>
     }
     @keyframes lit-workspace-back {
       0%, 48% { opacity: 0; }
-      50%, 55% { opacity: 1; }
+      50% { opacity: 1; }
+      52.5% { opacity: 0.78; }
+      55% { opacity: 1; }
       57%, 100% { opacity: 0; }
     }
     @keyframes packet-generate {
@@ -636,7 +650,9 @@ FLOW_STYLE = """  <style>
     }
     @keyframes lit-output {
       0%, 64% { opacity: 0; }
-      66%, 71% { opacity: 1; }
+      66% { opacity: 1; }
+      68.5% { opacity: 0.82; }
+      71% { opacity: 1; }
       73%, 100% { opacity: 0; }
     }
     @keyframes lit-rail {
@@ -900,12 +916,16 @@ DSH_STYLE = """  <style>
     }
     @keyframes packet-forward {
       0% { opacity: 0; transform: translateX(0); }
-      15%, 85% { opacity: 1; }
+      15% { opacity: 1; transform: translateX(8px); }
+      50% { opacity: 1; transform: translateX(45px); }
+      85% { opacity: 1; transform: translateX(85px); }
       100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
     }
     @keyframes project-on {
-      from { opacity: 0.35; }
-      to { opacity: 1; }
+      0% { opacity: 0.35; }
+      40% { opacity: 1; }
+      70% { opacity: 0.85; }
+      100% { opacity: 1; }
     }
     @keyframes usage-grow {
       0% { opacity: 0.3; transform: scaleY(0.12); }

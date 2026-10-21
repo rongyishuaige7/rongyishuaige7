@@ -80,7 +80,9 @@
     }
     @keyframes lit-workspace-in {
       0%, 16% { opacity: 0; }
-      18%, 23% { opacity: 1; }
+      18% { opacity: 1; }
+      20.5% { opacity: 0.78; }
+      23% { opacity: 1; }
       25%, 100% { opacity: 0; }
     }
     @keyframes packet-request {
@@ -111,7 +113,9 @@
     }
     @keyframes lit-workspace-back {
       0%, 48% { opacity: 0; }
-      50%, 55% { opacity: 1; }
+      50% { opacity: 1; }
+      52.5% { opacity: 0.78; }
+      55% { opacity: 1; }
       57%, 100% { opacity: 0; }
     }
     @keyframes packet-generate {
@@ -125,7 +129,9 @@
     }
     @keyframes lit-output {
       0%, 64% { opacity: 0; }
-      66%, 71% { opacity: 1; }
+      66% { opacity: 1; }
+      68.5% { opacity: 0.82; }
+      71% { opacity: 1; }
       73%, 100% { opacity: 0; }
     }
     @keyframes lit-rail {

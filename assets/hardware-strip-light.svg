@@ -52,6 +52,9 @@
     @keyframes sig-in-b {
       0%, 3% { transform: translateX(0); opacity: 0; }
       4% { transform: translateX(0); opacity: 1; }
+      10% { transform: translateX(70px); }
+      18% { transform: translateX(230px); }
+      26% { transform: translateX(390px); }
       32% { transform: translateX(460px); opacity: 1; }
       33%, 100% { transform: translateX(460px); opacity: 0; }
     }
@@ -85,6 +88,9 @@
     @keyframes sig-out-b {
       0%, 47% { transform: translateX(0); opacity: 0; }
       48% { transform: translateX(0); opacity: 1; }
+      54% { transform: translateX(65px); }
+      62% { transform: translateX(225px); }
+      70% { transform: translateX(385px); }
       74% { transform: translateX(450px); opacity: 1; }
       75%, 100% { transform: translateX(450px); opacity: 0; }
     }
