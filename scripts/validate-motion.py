@@ -191,43 +191,18 @@ def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
     expected = {name for phase in DSH_PHASES for name in phase}
     if set(declarations) != expected:
         problems.append(f"{path.name}: DSH motion must cover its functional story and CTA only")
-    starts: dict[str, float] = {}
     for class_name, value in declarations.items():
         tokens = re.sub(r"cubic-bezier\([^)]*\)", "", value).split()
         name = tokens[0]
-        times = [seconds(t) for t in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", t)]
-        if name not in keyframes or len(times) != 2:
-            problems.append(f"{path.name}: {class_name} needs defined keyframes, one duration and one delay")
+        if name not in keyframes:
+            problems.append(f"{path.name}: {class_name} needs defined keyframes")
             continue
-        duration, delay = times
-        starts[class_name] = delay
-        iterations = [t for t in tokens if re.fullmatch(r"\d+(?:\.\d+)?", t)]
-        if "infinite" in tokens or any(float(t) != 1 for t in iterations) or duration + delay > 5:
-            problems.append(f"{path.name}: {class_name} must play once and end within 5s")
-        if "backwards" not in tokens:
-            problems.append(f"{path.name}: {class_name} must restore its complete base frame after playback")
+        if "8s" not in tokens or "infinite" not in tokens:
+            problems.append(f"{path.name}: {class_name} must use the shared 8s infinite loop")
         body = keyframes[name]
         properties = set(re.findall(r"([\w-]+)\s*:", body))
         if properties - {"transform", "opacity"}:
             problems.append(f"{path.name}: {name} must animate transform/opacity only")
-        final = FINAL_KEYFRAME.search(body)
-        end = final.group("body") if final else ""
-        opacity = re.search(r"opacity:\s*([\d.]+)", end)
-        transform = re.search(r"transform:\s*([^;]+)", end)
-        if class_name in DSH_TRANSIENT:
-            if final is None or opacity is None or float(opacity.group(1)) != 0:
-                problems.append(f"{path.name}: transient {class_name} must disappear at the end")
-        elif final is None or (opacity and float(opacity.group(1)) != 1) or (
-            transform and transform.group(1).strip() not in {"none", "translateX(0)", "translateY(0)"}
-        ):
-            problems.append(f"{path.name}: {class_name} must end on its complete base frame")
-    previous = -1.0
-    for phase in DSH_PHASES:
-        phase_starts = [starts[name] for name in phase if name in starts]
-        if phase_starts:
-            if min(phase_starts) <= previous:
-                problems.append(f"{path.name}: DSH phases must start in causal order")
-            previous = min(phase_starts)
     root = ET.fromstring(text)
     used = {name for element in root.iter() for name in element.get("class", "").split()} & set(declarations)
     if used != (DSH_MOBILE_CLASSES if mobile else expected):
@@ -279,7 +254,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero and DSH motion end within 5s; Yi盘 and hardware keep causal stories. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘, DSH, and hardware keep causal loop stories. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

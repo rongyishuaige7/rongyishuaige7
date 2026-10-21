@@ -12,10 +12,20 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
     .time-lane { transform-origin: left center; }
     .packet, .timeline-scan { opacity: 0; }
+
+
+
+
+
+
+
+
+
+
 
 
 

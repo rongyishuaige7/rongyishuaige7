@@ -8,70 +8,142 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
     .time-lane { transform-origin: left center; }
     .packet, .timeline-scan { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
-      .record-a { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s backwards; }
-      .record-b { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s backwards; }
-      .record-c { animation: record-in 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s backwards; }
-      .packet-a { animation: packet-forward 0.95s ease-in-out 0.65s backwards; }
-      .packet-b { animation: packet-forward 0.95s ease-in-out 0.82s backwards; }
-      .packet-c { animation: packet-forward 0.95s ease-in-out 0.99s backwards; }
-      .project-a { animation: project-on 0.55s ease-out 1.4s backwards; }
-      .project-b { animation: project-on 0.55s ease-out 1.57s backwards; }
-      .project-c { animation: project-on 0.55s ease-out 1.74s backwards; }
-      .usage-a { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2s backwards; }
-      .usage-b { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.12s backwards; }
-      .usage-c { animation: usage-grow 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.24s backwards; }
-      .lane-a { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.7s backwards; }
-      .lane-b { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 2.85s backwards; }
-      .lane-c { animation: lane-extend 0.72s cubic-bezier(0.2, 0.7, 0.2, 1) 3s backwards; }
-      .timeline-scan { animation: timeline-scan 0.92s ease-in-out 3.55s backwards; }
-      .cta-arrow { animation: cta-nudge 0.55s ease-out 4s backwards; }
+      .record-a { animation: record-a 8s ease-in-out infinite; }
+      .record-b { animation: record-b 8s ease-in-out infinite; }
+      .record-c { animation: record-c 8s ease-in-out infinite; }
+      .packet-a { animation: packet-a 8s linear infinite; }
+      .packet-b { animation: packet-b 8s linear infinite; }
+      .packet-c { animation: packet-c 8s linear infinite; }
+      .project-a { animation: project-a 8s ease-in-out infinite; }
+      .project-b { animation: project-b 8s ease-in-out infinite; }
+      .project-c { animation: project-c 8s ease-in-out infinite; }
+      .usage-a { animation: usage-a 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .usage-b { animation: usage-b 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .usage-c { animation: usage-c 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .lane-a { animation: lane-a 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .lane-b { animation: lane-b 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .lane-c { animation: lane-c 8s cubic-bezier(0.2, 0.7, 0.2, 1) infinite; }
+      .timeline-scan { animation: timeline-scan 8s ease-in-out infinite; }
+      .cta-arrow { animation: cta-nudge 8s ease-out infinite; }
     }
-    @keyframes record-in {
-      0% { opacity: 0.3; transform: translateY(8px); }
-      70% { opacity: 1; transform: translateY(-1px); }
-      100% { opacity: 1; transform: none; }
+    @keyframes record-a {
+      0%, 3% { opacity: 0.35; transform: translateY(8px); }
+      7%, 88% { opacity: 1; transform: translateY(0); }
+      94%, 100% { opacity: 0.35; transform: translateY(8px); }
     }
-    @keyframes packet-forward {
-      0% { opacity: 0; transform: translateX(0); }
-      15% { opacity: 1; transform: translateX(8px); }
-      50% { opacity: 1; transform: translateX(45px); }
-      85% { opacity: 1; transform: translateX(85px); }
-      100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
+    @keyframes record-b {
+      0%, 5% { opacity: 0.35; transform: translateY(8px); }
+      9%, 88% { opacity: 1; transform: translateY(0); }
+      94%, 100% { opacity: 0.35; transform: translateY(8px); }
     }
-    @keyframes project-on {
-      0% { opacity: 0.35; }
-      40% { opacity: 1; }
-      70% { opacity: 0.85; }
-      100% { opacity: 1; }
+    @keyframes record-c {
+      0%, 7% { opacity: 0.35; transform: translateY(8px); }
+      11%, 88% { opacity: 1; transform: translateY(0); }
+      94%, 100% { opacity: 0.35; transform: translateY(8px); }
     }
-    @keyframes usage-grow {
-      0% { opacity: 0.3; transform: scaleY(0.12); }
-      68% { opacity: 1; transform: scaleY(1.06); }
-      84% { transform: scaleY(0.98); }
-      100% { opacity: 1; transform: none; }
+    @keyframes packet-a {
+      0%, 17% { opacity: 0; transform: translateX(0); }
+      18% { opacity: 1; transform: translateX(0); }
+      21% { transform: translateX(12px); }
+      26% { transform: translateX(55px); }
+      30% { opacity: 1; transform: translateX(85px); }
+      31%, 100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
     }
-    @keyframes lane-extend {
-      0% { opacity: 0.3; transform: scaleX(0.08); }
-      72% { opacity: 1; transform: scaleX(1.03); }
-      88% { transform: scaleX(0.99); }
-      100% { opacity: 1; transform: none; }
+    @keyframes packet-b {
+      0%, 20% { opacity: 0; transform: translateX(0); }
+      21% { opacity: 1; transform: translateX(0); }
+      24% { transform: translateX(12px); }
+      29% { transform: translateX(55px); }
+      33% { opacity: 1; transform: translateX(85px); }
+      34%, 100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
+    }
+    @keyframes packet-c {
+      0%, 23% { opacity: 0; transform: translateX(0); }
+      24% { opacity: 1; transform: translateX(0); }
+      27% { transform: translateX(12px); }
+      32% { transform: translateX(55px); }
+      36% { opacity: 1; transform: translateX(85px); }
+      37%, 100% { opacity: 0; transform: translateX(var(--packet-distance, 98px)); }
+    }
+    @keyframes project-a {
+      0%, 29% { opacity: 0.4; }
+      31% { opacity: 1; }
+      34% { opacity: 0.75; }
+      37%, 88% { opacity: 1; }
+      94%, 100% { opacity: 0.4; }
+    }
+    @keyframes project-b {
+      0%, 32% { opacity: 0.4; }
+      34% { opacity: 1; }
+      37% { opacity: 0.75; }
+      40%, 88% { opacity: 1; }
+      94%, 100% { opacity: 0.4; }
+    }
+    @keyframes project-c {
+      0%, 35% { opacity: 0.4; }
+      37% { opacity: 1; }
+      40% { opacity: 0.75; }
+      43%, 88% { opacity: 1; }
+      94%, 100% { opacity: 0.4; }
+    }
+    @keyframes usage-a {
+      0%, 41% { opacity: 0.35; transform: scaleY(0.15); }
+      47% { opacity: 1; transform: scaleY(1.08); }
+      51% { transform: scaleY(0.97); }
+      54%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleY(0.15); }
+    }
+    @keyframes usage-b {
+      0%, 44% { opacity: 0.35; transform: scaleY(0.15); }
+      50% { opacity: 1; transform: scaleY(1.08); }
+      54% { transform: scaleY(0.97); }
+      57%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleY(0.15); }
+    }
+    @keyframes usage-c {
+      0%, 47% { opacity: 0.35; transform: scaleY(0.15); }
+      53% { opacity: 1; transform: scaleY(1.08); }
+      57% { transform: scaleY(0.97); }
+      60%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleY(0.15); }
+    }
+    @keyframes lane-a {
+      0%, 51% { opacity: 0.35; transform: scaleX(0.1); }
+      57% { opacity: 1; transform: scaleX(1.04); }
+      61% { transform: scaleX(0.99); }
+      64%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleX(0.1); }
+    }
+    @keyframes lane-b {
+      0%, 54% { opacity: 0.35; transform: scaleX(0.1); }
+      60% { opacity: 1; transform: scaleX(1.04); }
+      64% { transform: scaleX(0.99); }
+      67%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleX(0.1); }
+    }
+    @keyframes lane-c {
+      0%, 57% { opacity: 0.35; transform: scaleX(0.1); }
+      63% { opacity: 1; transform: scaleX(1.04); }
+      67% { transform: scaleX(0.99); }
+      70%, 88% { opacity: 1; transform: none; }
+      94%, 100% { opacity: 0.35; transform: scaleX(0.1); }
     }
     @keyframes timeline-scan {
-      0% { opacity: 0; transform: translateX(0); }
-      12% { opacity: 0.85; }
-      82% { opacity: 0.85; }
-      100% { opacity: 0; transform: translateX(290px); }
+      0%, 67% { opacity: 0; transform: translateX(0); }
+      69% { opacity: 0.95; transform: translateX(0); }
+      85% { opacity: 0.95; transform: translateX(290px); }
+      87%, 100% { opacity: 0; transform: translateX(290px); }
     }
     @keyframes cta-nudge {
-      0% { transform: translateX(0); }
-      35% { transform: translateX(5px); }
-      70% { transform: translateX(1px); }
-      100% { transform: translateX(0); }
+      0%, 87% { transform: translateX(0); }
+      90% { transform: translateX(6px); }
+      93% { transform: translateX(1px); }
+      96%, 100% { transform: translateX(0); }
     }
   </style>
   <rect x="0.5" y="0.5" width="359" height="373" rx="18" fill="var(--page_bg)" stroke="var(--see)" stroke-opacity="0.35"/>
