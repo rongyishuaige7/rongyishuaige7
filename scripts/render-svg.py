@@ -7,16 +7,20 @@ drift from the templates. Dark and light variants share geometry and motion
 CSS; only the palette tokens below differ. The hero embeds the WebP files in
 media/hero/ as data URIs (GitHub serves README SVGs with default-src 'none',
 so external images would not load); the dark and light DSH captures are the
-only per-theme media.
+only per-theme media. dsh-card reads its npm figures from data/npm-stats.json, written
+by scripts/fetch-npm-stats.py.
 """
 
 import base64
+import json
 from pathlib import Path
 from string import Template
 import sys
+from xml.sax.saxutils import escape
 
 ASSETS = Path("assets")
 MEDIA = Path("media/hero")
+NPM_STATS = Path("data/npm-stats.json")
 # Must match the "**N 个公开硬件项目**" fact in README.md (validate-profile.py checks it).
 HARDWARE_PROTOTYPES = 22
 
@@ -821,8 +825,9 @@ ${style}
 
 
 # The DSH Usage card follows the homepage SEE card: summary, tags, the repo button and
-# npm status on the left; on the right a metric strip with stable facts from the dsh-stats
-# README and the four view tabs. One 8s loop moves the active tab through the views, each
+# npm status on the left; on the right the homepage's three npm metrics from
+# data/npm-stats.json, dated by the end of npm's download window, and the four view
+# tabs. One 8s loop moves the active tab through the views, each
 # with a timer bar like the homepage window tabs; the status dot breathes and the button
 # shines once per loop. Each view fades out before the next fades in, so captions never
 # overlap. Reduced motion shows the still card on the first view.
@@ -903,7 +908,7 @@ DSH_STYLE = """  <style>
 
 DSH = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="410" viewBox="0 0 1200 410" role="img" aria-labelledby="title desc">
   <title id="title">DSH Usage：按项目统计 DSH 会话用量</title>
-  <desc id="desc">${theme_desc}DSH Usage 项目卡。左栏：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额，未知价格会明确标出，密钥只在本机使用；标签 TypeScript、DSH Plugin、Local-first；"查看仓库"按钮；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右栏：统计视图 4 个，趋势范围近 7 / 30 / 90 天，导出格式 CSV/JSON；下方依次切换四个视图：项目总览、开发时间线、用量趋势、账户余额，并各配一句说明。</desc>
+  <desc id="desc">${theme_desc}DSH Usage 项目卡。左栏：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额，未知价格会明确标出，密钥只在本机使用；标签 TypeScript、DSH Plugin、Local-first；"查看仓库"按钮；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右栏：npm 近 30 天下载 ${npm_downloads} 次，最新版本 ${npm_latest}，已发布 ${npm_versions} 个版本，下载统计截至 ${npm_as_of}；下方依次切换四个视图：项目总览、开发时间线、用量趋势、账户余额，并各配一句说明。</desc>
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="0.6">
       <stop stop-color="${see}" stop-opacity="${see_wash}"/>
@@ -976,12 +981,12 @@ ${style}
     <g id="card-metrics">
       <rect x="512.5" y="82.5" width="615" height="95" rx="12" fill="${metric_bg}" stroke="${see}" stroke-opacity="0.22"/>
       <path d="M718 83V177M923 83V177" stroke="${see}" stroke-opacity="0.16"/>
-      <text x="536" y="114" fill="${faint}" font-size="13">统计视图</text>
-      <text x="536" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">4</text>
-      <text x="741" y="114" fill="${faint}" font-size="13">趋势范围</text>
-      <text x="741" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">7/30/90<tspan dx="6" fill="${muted}" font-size="16" font-weight="400">天</tspan></text>
-      <text x="946" y="114" fill="${faint}" font-size="13">导出格式</text>
-      <text x="946" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">CSV/JSON</text>
+      <text x="536" y="114" fill="${faint}" font-size="13">近 30 天下载</text>
+      <text id="npm-downloads" x="536" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">${npm_downloads}</text>
+      <text x="741" y="114" fill="${faint}" font-size="13">npm 最新版本</text>
+      <text id="npm-latest" x="741" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">${npm_latest}</text>
+      <text x="946" y="114" fill="${faint}" font-size="13">已发布版本</text>
+      <text id="npm-versions" x="946" y="154" fill="${ink}" font-size="30" font-weight="600" class="mono">${npm_versions}</text>
     </g>
     <g id="card-views">
       <rect x="512.5" y="199.5" width="615" height="55" rx="12" fill="${tab_bg}" stroke="${see}" stroke-opacity="0.16"/>
@@ -1008,7 +1013,7 @@ ${style}
         <rect x="824" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
         <text x="896.5" y="232" fill="${ink}" font-size="16" font-weight="600" text-anchor="middle">用量趋势</text>
         <text x="528" y="298" fill="${soft}" font-size="16">每日柱图和活动热力图，找出最常用的模型和项目</text>
-        <text x="528" y="323" fill="${faint}" font-size="13">指标可在费用和 Token 之间切换</text>
+        <text x="528" y="323" fill="${faint}" font-size="13">范围可选近 7 / 30 / 90 天，指标可在费用和 Token 之间切换</text>
       </g>
       <g id="view-4" class="view-4">
         <rect x="978" y="204" width="145" height="46" rx="9" fill="${pill_fill}" stroke="${see}" stroke-opacity="0.3"/>
@@ -1021,6 +1026,7 @@ ${style}
       <rect class="timer timer-3" x="840" y="243" width="113" height="2" rx="1" fill="${see}"/>
       <rect class="timer timer-4" x="994" y="243" width="113" height="2" rx="1" fill="${see}"/>
     </g>
+    <text id="npm-as-of" x="1128" y="323" fill="${faint}" font-size="12" text-anchor="end">npm 下载统计截至 ${npm_as_of}</text>
   </g>
 </svg>
 """)
@@ -1029,6 +1035,17 @@ ${style}
 def media_uri(name: str) -> str:
     data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
     return f"data:image/webp;base64,{data}"
+
+
+def npm_figures(theme: str) -> dict[str, str]:
+    """The DSH card's npm metrics, formatted like the homepage (validate-svg.py re-checks them)."""
+    stats = json.loads(NPM_STATS.read_text(encoding="utf-8"))
+    return {
+        "npm_downloads": f"{int(stats['downloads_last_month']):,}",
+        "npm_latest": escape(str(stats["latest"])),
+        "npm_versions": f"{int(stats['version_count']):,}",
+        "npm_as_of": escape(str(stats["downloads_end"])),
+    }
 
 
 def hero_media(theme: str) -> dict[str, str]:
@@ -1052,7 +1069,7 @@ def main() -> int:
     outputs = {
         "hero": (HERO, HERO_STYLE, hero_media),
         "yipan-flow": (FLOW, FLOW_STYLE, lambda theme: {}),
-        "dsh-card": (DSH, DSH_STYLE, lambda theme: {}),
+        "dsh-card": (DSH, DSH_STYLE, npm_figures),
         "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
     }
     stale: list[str] = []

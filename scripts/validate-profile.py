@@ -2,6 +2,7 @@
 """Validate profile-specific content, accessibility, and freshness contracts."""
 
 from datetime import date
+import json
 from pathlib import Path
 import re
 import struct
@@ -15,6 +16,10 @@ SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-l
 MAX_SCREENSHOT_BYTES = 150 * 1024
 PHOTO_STRIP = Path("assets/hardware-featured.webp")
 MAX_PHOTO_BYTES = 160 * 1024
+# The scheduled refresh rewrites this daily; npm's download window lags a few days, so
+# only a window ending more than NPM_STALE_DAYS ago means the refresh has stopped.
+NPM_STATS = Path("data/npm-stats.json")
+NPM_STALE_DAYS = 9
 # WebP chunks that can carry EXIF or XMP metadata.
 FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
@@ -24,8 +29,8 @@ EXPECTED_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-dark.svg?v=12",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-dark.svg?v=1",
-    "./assets/dsh-card-light.svg?v=1",
+    "./assets/dsh-card-dark.svg?v=2",
+    "./assets/dsh-card-light.svg?v=2",
     "./assets/hardware-strip-dark.svg?v=1",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/badge-studio.svg?v=1",
@@ -38,7 +43,7 @@ EXPECTED_ASSETS = {
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg?v=11",
     "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-light.svg?v=1",
+    "./assets/dsh-card-light.svg?v=2",
     "./assets/hardware-strip-light.svg?v=1",
     "./assets/dsh-timeline-light.png?v=1",
     "./assets/hardware-featured.webp?v=1",
@@ -241,7 +246,7 @@ def main() -> int:
     if not re.search(
         r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
         r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:.*\n){2}'
-        r'  <img src="\./assets/dsh-card-light\.svg\?v=1"[^>]*>\n</picture>\n</a>\n\n'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=2"[^>]*>\n</picture>\n</a>\n\n'
         r"<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
         readme,
     ):
@@ -249,6 +254,23 @@ def main() -> int:
     for repeated in ("`USAGE` DeepSeek Harness 插件", "以 `@rongyi7/dsh-stats` 发布在 npm"):
         if repeated in readme:
             problems.append(f"DSH Usage card text is repeated in the README body: {repeated}")
+    # The card's npm figures change daily but the README does not, so its alt text names
+    # the metrics and never their values.
+    dsh_alt = re.search(r'<img src="\./assets/dsh-card-light\.svg[^"]*"[^>]*alt="([^"]*)"', readme)
+    if dsh_alt is None or not all(name in dsh_alt.group(1) for name in ("近 30 天下载量", "最新版本", "已发布版本数")):
+        problems.append("DSH Usage card alt must name the npm downloads, latest version and version count")
+    elif re.search(r"\d+\.\d+\.\d+|\d,\d{3}|\d+ 次", dsh_alt.group(1)):
+        problems.append("DSH Usage card alt must not carry npm figures that the daily refresh changes")
+    try:
+        npm_end = date.fromisoformat(json.loads(NPM_STATS.read_text(encoding="utf-8"))["downloads_end"])
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        problems.append(f"cannot read the npm download window end from {NPM_STATS}: {error}")
+    else:
+        npm_age = (date.today() - npm_end).days
+        if npm_age < -1:
+            problems.append(f"npm download window ends in the future: {npm_end}")
+        elif npm_age > NPM_STALE_DAYS:
+            problems.append(f"npm figures are stale: the download window ended {npm_age} days ago ({npm_end})")
     if readme.count('src="./assets/badge-') != 6:
         problems.append("profile must contain exactly six local brand badges")
 

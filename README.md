@@ -48,9 +48,9 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=1">
-  <img src="./assets/dsh-card-light.svg?v=1" width="100%" alt="DSH Usage 卡片：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额；未知价格会明确标出，密钥只在本机使用。标签：TypeScript、DSH Plugin、Local-first；按钮：查看仓库；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右侧：统计视图 4 个，趋势范围近 7 / 30 / 90 天，导出格式 CSV/JSON；依次切换项目总览、开发时间线、用量趋势、账户余额四个视图。">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=2">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=2">
+  <img src="./assets/dsh-card-light.svg?v=2" width="100%" alt="DSH Usage 卡片：DeepSeek Harness 插件，按项目统计 DSH 会话的 Token、开发时长、费用和余额；未知价格会明确标出，密钥只在本机使用。标签：TypeScript、DSH Plugin、Local-first；按钮：查看仓库；已发布到 npm，包名 @rongyi7/dsh-stats，MIT 许可。右侧：npm 近 30 天下载量、最新版本和已发布版本数，并注明下载统计的截止日期；依次切换项目总览、开发时间线、用量趋势、账户余额四个视图，用量趋势可选近 7 / 30 / 90 天，项目明细可导出 CSV/JSON。">
 </picture>
 </a>
 

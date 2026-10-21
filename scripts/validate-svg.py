@@ -2,6 +2,7 @@
 """Validate local profile SVG assets without rendering or network access."""
 
 import base64
+import json
 from pathlib import Path
 import re
 import struct
@@ -64,8 +65,9 @@ FLOW_CARD_TEXT = {
 FLOW_LOCAL_IDS = {"drive-boundary", "continuity-rail", "flow-context", "step-retrieve", "flow-workspace", "step-generate", "flow-output"}
 FLOW_CLOUD_IDS = {"flow-cloud", "link-request", "link-result"}
 FLOW_TITLES = ("盘内资料与任务", "Yi盘工作台", "产出与任务记录")
-# The DSH Usage card follows the homepage SEE card. Its metrics are stable facts from the
-# dsh-stats README; download counts and version numbers would go stale in a static image.
+# The DSH Usage card follows the homepage SEE card. Its three metrics come from
+# data/npm-stats.json, which the scheduled refresh workflow rewrites; the stable facts they
+# replaced (trend ranges, export formats) now sit in the view captions.
 DSH_CARD_TEXT = {
     "card-copy": ("USAGE", "按项目统计 DSH 会话的 Token、", "开发时长、费用和余额。", "未知价格会明确标出，密钥只在本机使用。"),
     "card-tags": ("TypeScript", "DSH Plugin", "Local-first"),
@@ -74,10 +76,16 @@ DSH_CARD_TEXT = {
 }
 DSH_VIEWS = ("项目总览", "开发时间线", "用量趋势", "账户余额")
 DSH_PANEL_TEXT = {
-    "card-metrics": ("统计视图", "4", "趋势范围", "7/30/90", "导出格式", "CSV/JSON"),
+    "card-metrics": ("近 30 天下载", "npm 最新版本", "已发布版本"),
     "card-views": DSH_VIEWS,
+    "npm-as-of": ("npm 下载统计截至",),
 }
-DSH_VOLATILE = re.compile(r"下载|最新版本|已发布版本|\bv?\d+\.\d+\.\d+\b")
+DSH_VIEW_FACTS = {1: "可导出 CSV/JSON", 3: "近 7 / 30 / 90 天"}
+NPM_STATS = Path("data/npm-stats.json")
+NPM_STATS_KEYS = {"package", "downloads_last_month", "downloads_start", "downloads_end", "latest", "version_count"}
+NPM_PACKAGE = "@rongyi7/dsh-stats"
+ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+SEMVER = re.compile(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?")
 PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
 # The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
@@ -95,6 +103,30 @@ def local_name(name: str) -> str:
 def drawn_text(root: ET.Element) -> str:
     """Text a viewer sees: <text> elements only, never <title> or <desc>."""
     return "\n".join("".join(element.itertext()) for element in root.iter() if local_name(element.tag) == "text")
+
+
+def load_npm_stats() -> tuple[dict, list[str]]:
+    """data/npm-stats.json as written by scripts/fetch-npm-stats.py, with its schema checked."""
+    try:
+        stats = json.loads(NPM_STATS.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        return {}, [f"cannot read {NPM_STATS}: {error}"]
+    if not isinstance(stats, dict) or set(stats) != NPM_STATS_KEYS:
+        return {}, [f"{NPM_STATS} must hold exactly: " + ", ".join(sorted(NPM_STATS_KEYS))]
+    problems: list[str] = []
+    if stats["package"] != NPM_PACKAGE:
+        problems.append(f"{NPM_STATS} names {stats['package']!r}, not {NPM_PACKAGE}")
+    for key in ("downloads_last_month", "version_count"):
+        if type(stats[key]) is not int or stats[key] < 0:
+            problems.append(f"{NPM_STATS} {key} must be a non-negative integer")
+    if not isinstance(stats["latest"], str) or not SEMVER.fullmatch(stats["latest"]):
+        problems.append(f"{NPM_STATS} latest must be a semver version")
+    days = [stats[key] for key in ("downloads_start", "downloads_end")]
+    if not all(isinstance(day, str) and ISO_DATE.fullmatch(day) for day in days):
+        problems.append(f"{NPM_STATS} download window must be two YYYY-MM-DD dates")
+    elif not days[0] < days[1]:
+        problems.append(f"{NPM_STATS} download window must start before it ends")
+    return stats, problems
 
 
 def check_card(
@@ -333,6 +365,8 @@ def validate(path: Path) -> list[str]:
                     continue
                 if [other for other in DSH_VIEWS if other in drawn_text(view)] != [label]:
                     problems.append(f"DSH Usage view-{index} must highlight {label} and no other view")
+                if index in DSH_VIEW_FACTS and DSH_VIEW_FACTS[index] not in drawn_text(view):
+                    problems.append(f"DSH Usage view-{index} caption must keep: {DSH_VIEW_FACTS[index]}")
         # Reduced motion keeps the base styles: the first view shows, the others stay hidden.
         base_css = style_text.split("@media", 1)[0]
         hidden = {
@@ -342,11 +376,31 @@ def validate(path: Path) -> list[str]:
         }
         if ".view-1" in hidden or not {".view-2", ".view-3", ".view-4"} <= hidden:
             problems.append("DSH Usage card must show only the first view without motion")
-        description_text = "".join(description.itertext()) if description is not None else ""
-        for source in (drawn_text(root), description_text):
-            stale = DSH_VOLATILE.search(source)
-            if stale:
-                problems.append(f"DSH Usage card must not carry figures that go stale: {stale.group(0)}")
+        # The npm metrics and their date must be exactly what data/npm-stats.json holds,
+        # drawn in the metrics grid and repeated in the description for screen readers.
+        stats, stats_problems = load_npm_stats()
+        problems.extend(stats_problems)
+        if stats and not stats_problems:
+            expected = {
+                "npm-downloads": f"{stats['downloads_last_month']:,}",
+                "npm-latest": stats["latest"],
+                "npm-versions": f"{stats['version_count']:,}",
+            }
+            metrics = by_id.get("card-metrics")
+            metric_ids = {element.get("id") for element in metrics.iter()} if metrics is not None else set()
+            for metric_id, value in expected.items():
+                metric = by_id.get(metric_id)
+                if metric is None or metric_id not in metric_ids:
+                    problems.append(f"DSH Usage card-metrics is missing {metric_id}")
+                elif "".join(metric.itertext()).strip() != value:
+                    problems.append(f"DSH Usage {metric_id} must read {value} from {NPM_STATS}")
+            as_of = by_id.get("npm-as-of")
+            if as_of is not None and "".join(as_of.itertext()).strip() != f"npm 下载统计截至 {stats['downloads_end']}":
+                problems.append(f"DSH Usage npm-as-of must name the download window end {stats['downloads_end']}")
+            description_text = "".join(description.itertext()) if description is not None else ""
+            for value in (*expected.values(), stats["downloads_end"]):
+                if value not in description_text:
+                    problems.append(f"DSH Usage description must repeat the npm figure {value}")
 
     if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]
