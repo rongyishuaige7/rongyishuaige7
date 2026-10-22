@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="170" viewBox="0 0 1200 170" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Lab 电路走线示意</title>
+  <desc id="desc">浅色电路板横条。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 22 PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
+  <defs>
+    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f7f8fa"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#1aa572" stop-opacity="0.6"/>
+      <stop offset="0.35" stop-color="#1aa572" stop-opacity="0"/>
+      <stop offset="0.7" stop-color="#7cc23a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#7cc23a" stop-opacity="0.45"/>
+    </linearGradient>
+    <radialGradient id="ledGlow">
+      <stop stop-color="#1aa572" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1aa572" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="0.9" fill="#1aa572" opacity="0.18"/>
+    </pattern>
+    <clipPath id="panelClip">
+      <rect x="16" y="16" width="1168" height="138" rx="14"/>
+    </clipPath>
+  </defs>
+  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .signal, .chip-on, .led-on { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .sig-in-a { animation: sig-in-a 6s linear infinite; }
+      .sig-in-b { animation: sig-in-b 6s linear infinite; }
+      .sig-in-c { animation: sig-in-c 6s linear infinite; }
+      .chip-on { animation: chip-on 6s ease-in-out infinite; }
+      .sig-out-a { animation: sig-out-a 6s linear infinite; }
+      .sig-out-b { animation: sig-out-b 6s linear infinite; }
+      .sig-out-c { animation: sig-out-c 6s linear infinite; }
+      .led-a { animation: led-a 6s ease-in-out infinite; }
+      .led-b { animation: led-b 6s ease-in-out infinite; }
+      .led-c { animation: led-c 6s ease-in-out infinite; }
+    }
+    @keyframes sig-in-a {
+      0%, 1% { transform: translate(0, 0); opacity: 0; }
+      2% { transform: translate(0, 0); opacity: 1; }
+      14% { transform: translate(210px, 0); }
+      15% { transform: translate(220px, 0); }
+      16.5% { transform: translate(238px, 18px); }
+      17.5% { transform: translate(248px, 18px); }
+      30% { transform: translate(460px, 18px); opacity: 1; }
+      31%, 100% { transform: translate(460px, 18px); opacity: 0; }
+    }
+    @keyframes sig-in-b {
+      0%, 3% { transform: translateX(0); opacity: 0; }
+      4% { transform: translateX(0); opacity: 1; }
+      10% { transform: translateX(70px); }
+      18% { transform: translateX(230px); }
+      26% { transform: translateX(390px); }
+      32% { transform: translateX(460px); opacity: 1; }
+      33%, 100% { transform: translateX(460px); opacity: 0; }
+    }
+    @keyframes sig-in-c {
+      0%, 5% { transform: translate(0, 0); opacity: 0; }
+      6% { transform: translate(0, 0); opacity: 1; }
+      18% { transform: translate(210px, 0); }
+      19% { transform: translate(220px, 0); }
+      20.5% { transform: translate(238px, -18px); }
+      21.5% { transform: translate(248px, -18px); }
+      34% { transform: translate(460px, -18px); opacity: 1; }
+      35%, 100% { transform: translate(460px, -18px); opacity: 0; }
+    }
+    @keyframes chip-on {
+      0%, 34% { opacity: 0; }
+      36% { opacity: 1; }
+      37.5% { opacity: 0.72; }
+      39%, 46% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes sig-out-a {
+      0%, 45% { transform: translate(0, 0); opacity: 0; }
+      46% { transform: translate(0, 0); opacity: 1; }
+      57.5% { transform: translate(212px, 0); }
+      58.5% { transform: translate(222px, 0); }
+      60% { transform: translate(240px, -18px); }
+      61% { transform: translate(250px, -18px); }
+      72% { transform: translate(450px, -18px); opacity: 1; }
+      73%, 100% { transform: translate(450px, -18px); opacity: 0; }
+    }
+    @keyframes sig-out-b {
+      0%, 47% { transform: translateX(0); opacity: 0; }
+      48% { transform: translateX(0); opacity: 1; }
+      54% { transform: translateX(65px); }
+      62% { transform: translateX(225px); }
+      70% { transform: translateX(385px); }
+      74% { transform: translateX(450px); opacity: 1; }
+      75%, 100% { transform: translateX(450px); opacity: 0; }
+    }
+    @keyframes sig-out-c {
+      0%, 49% { transform: translate(0, 0); opacity: 0; }
+      50% { transform: translate(0, 0); opacity: 1; }
+      61.5% { transform: translate(212px, 0); }
+      62.5% { transform: translate(222px, 0); }
+      64% { transform: translate(240px, 18px); }
+      65% { transform: translate(250px, 18px); }
+      76% { transform: translate(450px, 18px); opacity: 1; }
+      77%, 100% { transform: translate(450px, 18px); opacity: 0; }
+    }
+    @keyframes led-a {
+      0%, 72% { opacity: 0; }
+      74%, 80% { opacity: 1; }
+      83% { opacity: 0.72; }
+      86% { opacity: 0.38; }
+      89% { opacity: 0.12; }
+      92%, 100% { opacity: 0; }
+    }
+    @keyframes led-b {
+      0%, 74% { opacity: 0; }
+      76%, 82% { opacity: 1; }
+      85% { opacity: 0.72; }
+      88% { opacity: 0.38; }
+      91% { opacity: 0.12; }
+      94%, 100% { opacity: 0; }
+    }
+    @keyframes led-c {
+      0%, 76% { opacity: 0; }
+      78%, 84% { opacity: 1; }
+      87% { opacity: 0.72; }
+      90% { opacity: 0.38; }
+      93% { opacity: 0.12; }
+      96%, 100% { opacity: 0; }
+    }
+  </style>
+
+  <rect x="0.5" y="0.5" width="1199" height="169" rx="20" fill="#edf0f4" stroke="#cbd2dc"/>
+  <rect x="16" y="16" width="1168" height="138" rx="14" fill="url(#surface)" stroke="#cbd2dc"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="16" y="16" width="1168" height="138" fill="url(#dots)"/>
+  </g>
+  <rect x="16.5" y="16.5" width="1167" height="137" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+
+  <text x="40" y="48" class="mono" fill="#0b7d50" font-size="17" letter-spacing="1.6">HARDWARE LAB / SENSOR TO OUTPUT</text>
+  <text x="1160" y="48" class="mono" fill="#5f6876" font-size="17" letter-spacing="1" text-anchor="end">ESP32 · STM32 · RPi · ARDUINO</text>
+
+  <g id="traces-in" fill="none" stroke="#1aa572" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
+    <path d="M60 82H280L298 100H520"/>
+    <path d="M60 108H520"/>
+    <path d="M60 134H280L298 116H520"/>
+  </g>
+  <g id="traces-out" fill="none" stroke="#1aa572" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
+    <path d="M680 100H902L920 82H1130"/>
+    <path d="M680 108H1130"/>
+    <path d="M680 116H902L920 134H1130"/>
+  </g>
+  <g fill="#f8fafc" stroke="#1aa572" stroke-width="2">
+    <circle cx="54" cy="82" r="6"/>
+    <circle cx="54" cy="108" r="6"/>
+    <circle cx="54" cy="134" r="6"/>
+  </g>
+  <g fill="#1aa572">
+    <circle cx="280" cy="82" r="3.5"/>
+    <circle cx="280" cy="134" r="3.5"/>
+    <circle cx="920" cy="82" r="3.5"/>
+    <circle cx="920" cy="134" r="3.5"/>
+  </g>
+  <g fill="#f1faf5" stroke="#1aa572" stroke-opacity="0.6">
+    <rect x="170" y="100" width="40" height="16" rx="2"/>
+    <rect x="990" y="100" width="40" height="16" rx="2"/>
+  </g>
+
+  <g id="strip-chip">
+    <path d="M540 72V64M560 72V64M580 72V64M600 72V64M620 72V64M640 72V64M660 72V64M540 144V152M560 144V152M580 144V152M600 144V152M620 144V152M640 144V152M660 144V152" stroke="#1aa572" stroke-opacity="0.6" stroke-width="2"/>
+    <rect x="520" y="72" width="160" height="72" rx="6" fill="#f1faf5" stroke="#1aa572" stroke-width="1.5"/>
+    <rect class="chip-on" x="513" y="65" width="174" height="86" rx="11" fill="none" stroke="#1aa572" stroke-width="2"/>
+    <text x="600" y="104" fill="#18202a" font-size="20" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
+    <text class="mono" x="600" y="131" fill="#0b7d50" font-size="17" letter-spacing="0.5" text-anchor="middle">22 PROTOTYPES</text>
+  </g>
+
+  <g fill="#cfe9dc" stroke="#1aa572" stroke-opacity="0.5">
+    <circle cx="1138" cy="82" r="6"/>
+    <circle cx="1138" cy="108" r="6"/>
+    <circle cx="1138" cy="134" r="6"/>
+  </g>
+  <g class="led-on led-a"><circle cx="1138" cy="82" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="82" r="6" fill="#1aa572"/></g>
+  <g class="led-on led-b"><circle cx="1138" cy="108" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="108" r="6" fill="#1aa572"/></g>
+  <g class="led-on led-c"><circle cx="1138" cy="134" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="134" r="6" fill="#1aa572"/></g>
+
+  <g fill="#ffffff" stroke="#1aa572" stroke-width="2">
+    <circle class="signal sig-in-a" cx="60" cy="82" r="3.5"/>
+    <circle class="signal sig-in-b" cx="60" cy="108" r="3.5"/>
+    <circle class="signal sig-in-c" cx="60" cy="134" r="3.5"/>
+    <circle class="signal sig-out-a" cx="680" cy="100" r="3.5"/>
+    <circle class="signal sig-out-b" cx="680" cy="108" r="3.5"/>
+    <circle class="signal sig-out-c" cx="680" cy="116" r="3.5"/>
+  </g>
+</svg>

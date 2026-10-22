@@ -21,19 +21,18 @@ FLOW_MOBILE_STAGES = (
     ("lit-output",),
     ("lit-rail",),
 )
-# The Hardware Lab bars grow once in order, then the values fade in; the chart holds.
-HARDWARE = Path("assets/hardware-card-light.svg")
-HARDWARE_MOBILE = Path("assets/hardware-card-mobile.svg")
-HARDWARE_ORDER = ("bar-1", "bar-2", "bar-3", "bar-4", "value")
+# The Hardware Lab strip loops its circuit story; the narrow strip tells the same story.
+STRIP = Path("assets/hardware-strip-light.svg")
+STRIP_MOBILE = Path("assets/hardware-strip-mobile.svg")
 DSH = Path("assets/dsh-card-light.svg")
 PAIR = {
     FLOW: Path("assets/yipan-flow-dark.svg"),
     DSH: Path("assets/dsh-card-dark.svg"),
     HERO: Path("assets/hero-dark.svg"),
-    HARDWARE: Path("assets/hardware-card-dark.svg"),
+    STRIP: Path("assets/hardware-strip-dark.svg"),
 }
 # Each story is a list of stages that share one cycle. Classes inside a stage
-# run together (the rail light and its packet); a stage may not start before the
+# run together (three traces, three LEDs); a stage may not start before the
 # previous stage has nearly finished, so the cause always precedes the effect.
 STORIES = {
     FLOW: ("8s", (
@@ -48,6 +47,12 @@ STORIES = {
         ("lit-output",),
         ("lit-rail", "packet-rail"),
     )),
+    STRIP: ("6s", (
+        ("sig-in-a", "sig-in-b", "sig-in-c"),
+        ("chip-on",),
+        ("sig-out-a", "sig-out-b", "sig-out-c"),
+        ("led-a", "led-b", "led-c"),
+    )),
 }
 # Looping cards play a fixed number of passes, then every animation stops on the base
 # frame (the complete static card) instead of moving beside the README text forever.
@@ -58,9 +63,9 @@ LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3", DSH: "3", DSH_MOBILE: "3"}
 CARD_AMBIENT = {
     FLOW: {"status-pulse", "cta-shine"},
 }
-# The hero and the Hardware Lab card play once and hold their final frame (WCAG 2.2.2:
-# motion that starts on its own must end within 5 seconds). Hero classes start in this
-# order: the three entry cards, then the drive shine, the DSH capture pan, and the photo deck.
+# The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
+# on its own must end within 5 seconds). Classes start in this order: the three
+# entry cards, then the drive shine, the DSH capture pan, and the photo deck.
 HERO_ORDER = ("entry-carry", "entry-see", "entry-touch", "drive-shine", "shot-pan", "deck-1", "deck-2", "deck-3")
 ONE_SHOT_BUDGET_SECONDS = 5.0
 # Functional DSH stages may overlap at their edges, but their first starts must
@@ -265,9 +270,6 @@ def main() -> int:
         if light == HERO:
             problems.extend(check_once(light, light_text, HERO_ORDER, HERO_OFFSTAGE_END))
             continue
-        if light == HARDWARE:
-            problems.extend(check_once(light, light_text, HARDWARE_ORDER))
-            continue
         if light == DSH:
             problems.extend(check_dsh(light, light_text))
             continue
@@ -279,15 +281,17 @@ def main() -> int:
     problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
     for card, passes in LOOP_PASSES.items():
         problems.extend(check_passes(card, card.read_text(encoding="utf-8"), passes))
-    for narrow, order, offstage_end in (
-        (HERO_MOBILE, HERO_ORDER, HERO_OFFSTAGE_END),
-        (HARDWARE_MOBILE, HARDWARE_ORDER, frozenset()),
-    ):
-        narrow_text = narrow.read_text(encoding="utf-8")
-        narrow_css = re.search(r"<style>(.*?)</style>", narrow_text, re.DOTALL)
+    for narrow in (HERO_MOBILE, STRIP_MOBILE):
+        narrow_css = re.search(r"<style>(.*?)</style>", narrow.read_text(encoding="utf-8"), re.DOTALL)
         if narrow_css and FORBIDDEN_ANIMATED_PROPERTIES.search(narrow_css.group(1)):
             problems.append(f"{narrow.name} animates a property other than transform or opacity")
-        problems.extend(check_once(narrow, narrow_text, order, offstage_end))
+    problems.extend(check_once(HERO_MOBILE, HERO_MOBILE.read_text(encoding="utf-8"), HERO_ORDER, HERO_OFFSTAGE_END))
+    strip_mobile = STRIP_MOBILE.read_text(encoding="utf-8")
+    problems.extend(check_story(STRIP_MOBILE, strip_mobile, *STORIES[STRIP]))
+    strip_css = re.search(r"<style>(.*?)</style>", STRIP.read_text(encoding="utf-8"), re.DOTALL)
+    for timing in re.findall(r"\.[\w-]+\s*\{\s*animation:[^;]+;", strip_css.group(1) if strip_css else ""):
+        if timing not in strip_mobile:
+            problems.append(f"{STRIP_MOBILE.name} must keep the desktop strip timing: {timing}")
     for card, ambient in CARD_AMBIENT.items():
         card_text = card.read_text(encoding="utf-8")
         if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
@@ -306,7 +310,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero and Hardware Lab motion ends within 5s; Yi盘 and DSH play three causal passes. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 
