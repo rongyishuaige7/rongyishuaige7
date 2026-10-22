@@ -54,7 +54,8 @@ STORIES = {
 }
 # Looping cards play a fixed number of passes, then every animation stops on the base
 # frame (the complete static card) instead of moving beside the README text forever.
-LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3"}
+DSH_MOBILE = Path("assets/dsh-card-mobile.svg")
+LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3", DSH: "3", DSH_MOBILE: "3"}
 # The cards' status dots and button shines run on the same 8s cycle but sit outside
 # their stories; any other animated class must belong to a stage.
 CARD_AMBIENT = {
@@ -221,9 +222,22 @@ def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
         if name not in keyframes:
             problems.append(f"{path.name}: {class_name} needs defined keyframes")
             continue
-        if "8s" not in tokens or "infinite" not in tokens:
-            problems.append(f"{path.name}: {class_name} must use the shared 8s infinite loop")
+        if "8s" not in tokens:
+            problems.append(f"{path.name}: {class_name} must use the shared 8s cycle")
         body = keyframes[name]
+        # Passes join seamlessly and the card stops on its base frame: transient
+        # packets and the scan end hidden, everything else ends complete and in place.
+        final = FINAL_KEYFRAME.search(body)
+        final_body = final.group("body") if final else ""
+        opacity = re.search(r"opacity:\s*([0-9.]+)", final_body)
+        transform = re.search(r"transform:\s*([^;]+)", final_body)
+        if class_name in DSH_TRANSIENT:
+            if final is None or opacity is None or float(opacity.group(1)) != 0:
+                problems.append(f"{path.name}: {name} must end hidden")
+        elif final is None or (opacity is not None and float(opacity.group(1)) != 1) or (
+            transform is not None and any(float(number) != 0 for number in re.findall(r"-?\d+(?:\.\d+)?", transform.group(1)))
+        ):
+            problems.append(f"{path.name}: {name} must end on the complete base frame")
         properties = set(re.findall(r"([\w-]+)\s*:", body))
         if properties - {"transform", "opacity"}:
             problems.append(f"{path.name}: {name} must animate transform/opacity only")
@@ -259,8 +273,7 @@ def main() -> int:
         cycle, stages = STORIES[light]
         problems.extend(check_story(light, light_text, cycle, stages))
 
-    mobile = Path("assets/dsh-card-mobile.svg")
-    problems.extend(check_dsh(mobile, mobile.read_text(encoding="utf-8"), mobile=True))
+    problems.extend(check_dsh(DSH_MOBILE, DSH_MOBILE.read_text(encoding="utf-8"), mobile=True))
     flow_mobile = FLOW_MOBILE.read_text(encoding="utf-8")
     problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
     for card, passes in LOOP_PASSES.items():
@@ -288,7 +301,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 plays three causal passes; DSH and hardware keep causal loop stories. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

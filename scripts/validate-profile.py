@@ -17,7 +17,7 @@ HERO_ASSETS = tuple(Path(f"assets/hero-{variant}.svg") for variant in ("dark", "
 # Below GitHub's two-column profile layout (1012px) the README column (398-685px) is too
 # narrow for 17-unit labels on 1200-wide cards, so these cards switch to 360-wide variants.
 NARROW_MEDIA = "(max-width: 1011px)"
-NARROW_CARDS = ("hero", "yipan-flow")
+NARROW_CARDS = ("hero", "yipan-flow", "dsh-card")
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
 PHOTO_STRIP = Path("assets/hardware-featured.webp")
@@ -336,12 +336,6 @@ def main() -> int:
                 (f"{NARROW_MEDIA} and (prefers-reduced-motion: reduce)", f"./assets/{stem}-mobile-still.svg"),
                 (NARROW_MEDIA, f"./assets/{stem}-mobile.svg"),
                 ("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg"),
-            ]
-        if stem == "dsh-card":
-            expected = [
-                ("(max-width: 1200px) and (prefers-reduced-motion: reduce)", "./assets/dsh-card-mobile-still.svg"),
-                ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg"),
-                ("(prefers-reduced-motion: reduce)", "./assets/dsh-card-still.svg"),
             ]
         if sources[:len(expected)] != expected:
             problems.append(f"{stem} must select adaptive width/motion sources before theme sources")

@@ -53,16 +53,16 @@
   <text id="npm-as-of" x="48" y="324" fill="var(--muted)" font-size="17">统计截至 2026-10-18</text>
   <g id="card-cta">
     <text x="48" y="377" fill="var(--see_text)" font-size="19" font-weight="600">查看仓库</text>
-    <g class="cta-arrow"><text x="139" y="377" fill="var(--see_text)" font-size="23">↗</text></g>
+    <path class="cta-arrow" d="M137 377L150 364M140 364H150V374" fill="none" stroke="var(--see_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status"><text x="350" y="377" fill="var(--muted)" font-size="17" text-anchor="end">npm · MIT</text></g>
   <g id="dsh-panel">
     <text x="443" y="75" fill="var(--ink)" font-size="24" font-weight="600">会话 → 项目 → 时间线</text>
     <text id="flow-caption" x="1148" y="75" fill="var(--muted)" font-size="17" text-anchor="end">功能示意</text>
     <text id="session-source" x="443" y="128" fill="var(--muted)" font-size="17">会话记录</text>
-    <text id="project-grouping" x="637" y="128" fill="var(--muted)" font-size="17">按项目归集</text>
+    <text id="project-grouping" x="645" y="128" fill="var(--muted)" font-size="17">按项目归集</text>
     <g id="card-views">
-      <g id="view-2"><text x="850" y="128" fill="var(--muted)" font-size="17">开发时间线</text></g>
+      <g id="view-2"><text x="815" y="128" fill="var(--muted)" font-size="17">开发时间线</text></g>
       <g id="session-records" fill="var(--pill_fill)" stroke="var(--fig_stroke)">
         <g class="record record-a"><rect x="443" y="152" width="104" height="46" rx="8"/><text x="457" y="181" fill="var(--soft)" stroke="none" font-size="18">会话 A</text></g>
         <g class="record record-b"><rect x="443" y="214" width="104" height="46" rx="8"/><text x="457" y="243" fill="var(--soft)" stroke="none" font-size="18">会话 B</text></g>

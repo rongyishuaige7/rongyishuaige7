@@ -105,7 +105,7 @@ ADAPTIVE_HEROES = {"hero-still.svg", "hero-mobile.svg", "hero-mobile-still.svg"}
 # Every label on these cards stays readable when GitHub scales the image down:
 # at least 17 viewBox units.
 MIN_FONT = 17
-MIN_FONT_CARDS = ("hero-", "yipan-flow-", "dsh-card-mobile")
+MIN_FONT_CARDS = ("hero-", "yipan-flow-", "dsh-card-")
 # The narrow Yi盘 card keeps the summary, the three local nodes and the cloud.
 FLOW_MOBILE_TEXT = ("Yi盘", "U 盘里的 AI 工作台", "U 盘内", *FLOW_TITLES, "云端", "模型", "受控内测", "查看公开仓库")
 
