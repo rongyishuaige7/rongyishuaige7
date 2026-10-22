@@ -1,14 +1,14 @@
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=1">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=11">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=11">
-  <img src="./assets/hero-light.svg?v=11" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=e8653150">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=0d77e02f">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=4987d436">
+  <img src="./assets/hero-light.svg?v=4987d436" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
 </picture>
 
 <div align="center">
-  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=1" height="36" alt="访问 Rongyi Studio 主页"></a>
+  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=29894910" height="36" alt="访问 Rongyi Studio 主页"></a>
   &nbsp;&nbsp;
-  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=1" height="36" alt="查看开发记录"></a>
+  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=7b438333" height="36" alt="查看开发记录"></a>
 </div>
 
 ---
@@ -17,10 +17,10 @@
 
 <a href="https://github.com/rongyishuaige7/yipan-showcase">
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=1">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=12">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=12">
-  <img src="./assets/yipan-flow-light.svg?v=12" width="100%" alt="Yi盘卡片：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=0928d188">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=322733cd">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=3430af33">
+  <img src="./assets/yipan-flow-light.svg?v=3430af33" width="100%" alt="Yi盘卡片：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
 </picture>
 </a>
 
@@ -35,11 +35,11 @@
 | 公开范围 | 产品事实、已知限制和开发复盘公开；核心实现、客户配置与制盘工具不公开 |
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/yipan-showcase"><img src="./assets/badge-yipan.svg?v=2" height="36" alt="了解 Yi盘"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase"><img src="./assets/badge-yipan.svg?v=db43b0d0" height="36" alt="了解 Yi盘"></a>
   &nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=1" height="36" alt="查看 Yi盘产品事实与限制"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=c3d899ed" height="36" alt="查看 Yi盘产品事实与限制"></a>
   &nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=2" height="36" alt="提交 Yi盘反馈"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=84e8e468" height="36" alt="提交 Yi盘反馈"></a>
 </div>
 
 ---
@@ -50,12 +50,12 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(max-width: 1200px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=1">
-  <source media="(max-width: 1200px)" srcset="./assets/dsh-card-mobile.svg?v=2">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=2">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=4">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=4">
-  <img src="./assets/dsh-card-light.svg?v=4" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
+  <source media="(max-width: 1200px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=62056c2c">
+  <source media="(max-width: 1200px)" srcset="./assets/dsh-card-mobile.svg?v=1de6f07d">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=a0ae0531">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=458f6d7f">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=26327c9b">
+  <img src="./assets/dsh-card-light.svg?v=26327c9b" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
 </picture>
 </a>
 
@@ -65,9 +65,9 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 <!-- npm-snapshot:end -->
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-timeline-light.png?v=1">
-  <img src="./assets/dsh-timeline-light.png?v=1" width="100%" alt="DSH Usage 开发时间线界面：每半小时的 Token 柱与按项目排列的会话泳道">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-timeline-dark.png?v=22712571">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-timeline-light.png?v=59ef2d3d">
+  <img src="./assets/dsh-timeline-light.png?v=59ef2d3d" width="100%" alt="DSH Usage 开发时间线界面：每半小时的 Token 柱与按项目排列的会话泳道">
 </picture>
 
 > 真实运行界面，夹具数据，项目名为占位；图中为 Token 模式。切换到费用时按公开 API 计价规则推算，最终以 Provider 账单为准。
@@ -92,15 +92,15 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 ## `// 03 TOUCH` Hardware Lab
 
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=1">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=1">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=1">
-  <img src="./assets/hardware-strip-light.svg?v=1" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=8577ccca">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=17a0d7b3">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=8e075280">
+  <img src="./assets/hardware-strip-light.svg?v=8e075280" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
 </picture>
 
 完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/YI-Hardware-Lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。[索引与公开证据校验通过](https://github.com/rongyishuaige7/YI-Hardware-Lab/actions/runs/39606815032)。
 
-<img src="./assets/hardware-featured.webp?v=1" width="100%" alt="三张历史原型照片：多模态智能花盆的手机 App、本地彩屏与灌溉装置；车流自适应交通信号的桌面模型，PCB 上有信号灯、OLED 和 ESP32-CAM；健康科普语音终端的面包板原型、圆形屏和扬声器。">
+<img src="./assets/hardware-featured.webp?v=dcb69462" width="100%" alt="三张历史原型照片：多模态智能花盆的手机 App、本地彩屏与灌溉装置；车流自适应交通信号的桌面模型，PCB 上有信号灯、OLED 和 ESP32-CAM；健康科普语音终端的面包板原型、圆形屏和扬声器。">
 
 > 历史原型照片，取自各项目公开仓库：智能花盆（未注明日期）、交通信号（2026-05-14）、语音终端（2026-04-26）。
 
@@ -138,7 +138,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 > **构建说明：** 各项目的 GitHub Actions 负责固定配置下的构建与仓库检查；对应的精确构建链接、公开资料和使用限制以 [Hardware Lab](https://github.com/rongyishuaige7/YI-Hardware-Lab) 为准。部分项目上传的 Actions Artifact 按平台保留期自动过期。
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><img src="./assets/badge-hardware.svg?v=1" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
+  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><img src="./assets/badge-hardware.svg?v=706a5b4f" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
 </div>
 
 ---

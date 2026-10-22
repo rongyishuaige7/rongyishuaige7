@@ -4,10 +4,13 @@
 Dark/light pairs share geometry; width/reduced-motion sources use adaptive
 SVGs so GitHub's manual theme rewrite cannot erase their media guards.
 The hero embeds real WebP media because GitHub's SVG CSP blocks external images.
+README asset links carry ?v=<content hash> so GitHub never serves a stale image;
+DSH hashes leave out the daily npm figures, so the bot only touches the snapshot.
 Run this script after editing templates or npm data; CI checks generated output.
 """
 
 import base64
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -878,11 +881,10 @@ ${style}
 """)
 
 
-# DSH's functional illustration plays once and holds its complete base frame.
-# npm metrics and product facts stay visible throughout; transient packets and
-# the scanner are hidden in the base frame and in both static alternatives.
-# Backwards fill releases animation compositing after completion, so the final
-# pixels match the static images instead of retaining scaled intermediate layers.
+# DSH's functional illustration loops through its causal story (sessions, packets,
+# projects, usage bars, timeline lanes, scan). npm metrics and product facts stay
+# visible throughout; transient packets and the scanner are hidden in the base
+# frame and in both static alternatives.
 DSH_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
@@ -1203,6 +1205,35 @@ def render_adaptive(template: Template, style: str, extra: dict[str, str], *, mo
     return render(template, adaptive_style(style if motion else still_style(style)), palette, extra)
 
 
+def both_captures(svg: str) -> str:
+    """Adaptive heroes carry both real DSH captures; CSS shows the one matching the theme."""
+    image = re.search(r'<image class="shot-pan"[^>]+/>', svg).group(0)
+    light_image = image.replace('class="shot-pan"', 'class="shot-pan theme-light"')
+    dark_image = image.replace('class="shot-pan"', 'class="shot-pan theme-dark"').replace(
+        media_uri('dsh-trends-light.webp'), media_uri('dsh-trends-dark.webp'))
+    return svg.replace(image, light_image + "\n        " + dark_image)
+
+
+# Placeholder npm figures for version hashes: the daily refresh changes the numbers
+# inside the DSH SVGs, but not their ?v= in README, so the bot stays inside its markers.
+NPM_PLACEHOLDER = {"npm_downloads": "0", "npm_latest": "0.0.0", "npm_versions": "0", "npm_as_of": "0000-00-00"}
+VERSIONED_ASSET = re.compile(r"(\./assets/([\w.-]+))\?v=[0-9A-Za-z]+")
+
+
+def stamp_versions(readme: str, hash_sources: dict[Path, str]) -> str:
+    """Point every README asset link at ?v=<first 8 hex of its content hash>."""
+    def version(match: re.Match) -> str:
+        path = ASSETS / match.group(2)
+        if path in hash_sources:
+            content = hash_sources[path].encode("utf-8")
+        elif path.exists():
+            content = path.read_bytes()
+        else:
+            raise SystemExit(f"README references a missing asset: {path}")
+        return f"{match.group(1)}?v={hashlib.sha256(content).hexdigest()[:8]}"
+    return VERSIONED_ASSET.sub(version, readme)
+
+
 def main() -> int:
     check = "--check" in sys.argv[1:]
     outputs = {
@@ -1212,23 +1243,26 @@ def main() -> int:
         "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
     }
     rendered: dict[Path, str] = {}
+    hash_sources: dict[Path, str] = {}
     for stem, (template, style, extra) in outputs.items():
+        npm = stem == "dsh-card"
         for theme, palette in PALETTES.items():
             path = ASSETS / f"{stem}-{theme}.svg"
             rendered[path] = render(template, style, palette, extra(theme))
-        rendered[ASSETS / f"{stem}-still.svg"] = render_adaptive(template, style, extra('light'))
-    # The static hero carries both real captures; CSS selects the matching one.
+            if npm:
+                hash_sources[path] = render(template, style, palette, NPM_PLACEHOLDER)
+        path = ASSETS / f"{stem}-still.svg"
+        rendered[path] = render_adaptive(template, style, extra('light'))
+        if npm:
+            hash_sources[path] = render_adaptive(template, style, NPM_PLACEHOLDER)
     hero_path = ASSETS / "hero-still.svg"
-    hero = rendered[hero_path]
-    image = re.search(r'<image class="shot-pan"[^>]+/>', hero).group(0)
-    light_image = image.replace('class="shot-pan"', 'class="shot-pan theme-light"')
-    dark_image = image.replace('class="shot-pan"', 'class="shot-pan theme-dark"').replace(
-        media_uri('dsh-trends-light.webp'), media_uri('dsh-trends-dark.webp'))
-    rendered[hero_path] = hero.replace(image, light_image + "\n        " + dark_image)
-    rendered[ASSETS / "dsh-card-mobile.svg"] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=True)
-    rendered[ASSETS / "dsh-card-mobile-still.svg"] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'))
+    rendered[hero_path] = both_captures(rendered[hero_path])
+    for name, motion in (("dsh-card-mobile.svg", True), ("dsh-card-mobile-still.svg", False)):
+        rendered[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=motion)
+        hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)
     readme = Path('README.md')
-    rendered[readme] = replace_snapshot(readme.read_text(encoding='utf-8'), json.loads(NPM_STATS.read_text()))
+    stamped = stamp_versions(readme.read_text(encoding='utf-8'), {**rendered, **hash_sources})
+    rendered[readme] = replace_snapshot(stamped, json.loads(NPM_STATS.read_text()))
     stale: list[str] = []
     for path, content in rendered.items():
         if check:
@@ -1239,12 +1273,12 @@ def main() -> int:
             print(f"wrote {path}")
     if stale:
         print(
-            "Generated SVG assets or npm text are out of date; run python3 scripts/render-svg.py:\n- " + "\n- ".join(stale),
+            "Generated SVG assets, asset versions or npm text are out of date; run python3 scripts/render-svg.py:\n- " + "\n- ".join(stale),
             file=sys.stderr,
         )
         return 1
     if check:
-        print("Generated SVG assets and npm text match scripts/render-svg.py.")
+        print("Generated SVG assets, README asset versions and npm text match scripts/render-svg.py.")
     return 0
 
 

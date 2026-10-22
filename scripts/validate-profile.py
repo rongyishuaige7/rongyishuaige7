@@ -32,40 +32,40 @@ FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 # PNG chunks that can carry EXIF, comments, or editor metadata.
 FORBIDDEN_PNG_CHUNKS = {b"eXIf", b"tEXt", b"iTXt", b"zTXt", b"tIME"}
 EXPECTED_ASSETS = {
-    "./assets/hero-dark.svg?v=11",
-    "./assets/hero-light.svg?v=11",
-    "./assets/yipan-flow-dark.svg?v=12",
-    "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-dark.svg?v=4",
-    "./assets/dsh-card-light.svg?v=4",
-    "./assets/hardware-strip-dark.svg?v=1",
-    "./assets/hardware-strip-light.svg?v=1",
-    "./assets/badge-studio.svg?v=1",
-    "./assets/badge-build-log.svg?v=1",
-    "./assets/badge-yipan.svg?v=2",
-    "./assets/badge-product-facts.svg?v=1",
-    "./assets/badge-feedback.svg?v=2",
-    "./assets/badge-hardware.svg?v=1",
-    "./assets/hero-still.svg?v=1",
-    "./assets/yipan-flow-still.svg?v=1",
-    "./assets/hardware-strip-still.svg?v=1",
-    "./assets/dsh-card-still.svg?v=2",
-    "./assets/dsh-card-mobile.svg?v=2",
-    "./assets/dsh-card-mobile-still.svg?v=1",
+    "./assets/hero-dark.svg",
+    "./assets/hero-light.svg",
+    "./assets/yipan-flow-dark.svg",
+    "./assets/yipan-flow-light.svg",
+    "./assets/dsh-card-dark.svg",
+    "./assets/dsh-card-light.svg",
+    "./assets/hardware-strip-dark.svg",
+    "./assets/hardware-strip-light.svg",
+    "./assets/badge-studio.svg",
+    "./assets/badge-build-log.svg",
+    "./assets/badge-yipan.svg",
+    "./assets/badge-product-facts.svg",
+    "./assets/badge-feedback.svg",
+    "./assets/badge-hardware.svg",
+    "./assets/hero-still.svg",
+    "./assets/yipan-flow-still.svg",
+    "./assets/hardware-strip-still.svg",
+    "./assets/dsh-card-still.svg",
+    "./assets/dsh-card-mobile.svg",
+    "./assets/dsh-card-mobile-still.svg",
 }
 EXPECTED_IMG_ASSETS = {
-    "./assets/hero-light.svg?v=11",
-    "./assets/yipan-flow-light.svg?v=12",
-    "./assets/dsh-card-light.svg?v=4",
-    "./assets/hardware-strip-light.svg?v=1",
-    "./assets/dsh-timeline-light.png?v=1",
-    "./assets/hardware-featured.webp?v=1",
-    "./assets/badge-studio.svg?v=1",
-    "./assets/badge-build-log.svg?v=1",
-    "./assets/badge-yipan.svg?v=2",
-    "./assets/badge-product-facts.svg?v=1",
-    "./assets/badge-feedback.svg?v=2",
-    "./assets/badge-hardware.svg?v=1",
+    "./assets/hero-light.svg",
+    "./assets/yipan-flow-light.svg",
+    "./assets/dsh-card-light.svg",
+    "./assets/hardware-strip-light.svg",
+    "./assets/dsh-timeline-light.png",
+    "./assets/hardware-featured.webp",
+    "./assets/badge-studio.svg",
+    "./assets/badge-build-log.svg",
+    "./assets/badge-yipan.svg",
+    "./assets/badge-product-facts.svg",
+    "./assets/badge-feedback.svg",
+    "./assets/badge-hardware.svg",
 }
 # The three homepage lanes, in order, then the folded English overview.
 LANE_MARKERS = ("// 01 CARRY", "// 02 SEE", "// 03 TOUCH", "// ENGLISH OVERVIEW")
@@ -288,7 +288,7 @@ def main() -> int:
     # so the paragraph under it keeps only the one-sentence definition.
     if not re.search(
         r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:.*\n){3}'
-        r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=12\"[^>]*>\n</picture>\n</a>\n\n"
+        r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=[0-9a-f]{8}\"[^>]*>\n</picture>\n</a>\n\n"
         r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
         readme,
     ):
@@ -297,7 +297,7 @@ def main() -> int:
     if not re.search(
         r"### \[DSH Usage\]\(https://github\.com/rongyishuaige7/dsh-stats\)\n\n"
         r'<a href="https://github\.com/rongyishuaige7/dsh-stats">\n<picture>\n(?:  <source [^\n]+>\n){5}'
-        r'  <img src="\./assets/dsh-card-light\.svg\?v=4"[^>]*>\n</picture>\n</a>\n\n'
+        r'  <img src="\./assets/dsh-card-light\.svg\?v=[0-9a-f]{8}"[^>]*>\n</picture>\n</a>\n\n'
         r"<!-- npm-snapshot:start -->\n(?:.*\n)+?<!-- npm-snapshot:end -->\n\n<picture>\n  <source [^\n]*dsh-timeline-dark\.png",
         readme,
     ):
@@ -316,13 +316,13 @@ def main() -> int:
     for stem in ("hero", "yipan-flow", "dsh-card", "hardware-strip"):
         block = next((b for b in re.findall(r"<picture>\n(.*?)</picture>", readme, re.DOTALL)
                       if f'src="./assets/{stem}-light.svg' in b), "")
-        sources = re.findall(r'<source media="([^"]+)" srcset="([^"]+)">', block)
-        expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg?v=1")]
+        sources = re.findall(r'<source media="([^"]+)" srcset="([^"?]+)(?:\?v=[^"]*)?">', block)
+        expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg")]
         if stem == "dsh-card":
             expected = [
-                ("(max-width: 1200px) and (prefers-reduced-motion: reduce)", "./assets/dsh-card-mobile-still.svg?v=1"),
-                ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg?v=2"),
-                ("(prefers-reduced-motion: reduce)", "./assets/dsh-card-still.svg?v=2"),
+                ("(max-width: 1200px) and (prefers-reduced-motion: reduce)", "./assets/dsh-card-mobile-still.svg"),
+                ("(max-width: 1200px)", "./assets/dsh-card-mobile.svg"),
+                ("(prefers-reduced-motion: reduce)", "./assets/dsh-card-still.svg"),
             ]
         if sources[:len(expected)] != expected:
             problems.append(f"{stem} must select adaptive width/motion sources before theme sources")
@@ -378,10 +378,14 @@ def main() -> int:
         problems.extend(validate_screenshot(screenshot))
     problems.extend(validate_photo_strip(PHOTO_STRIP))
     for theme in ("dark", "light"):
-        if f'media="(prefers-color-scheme: {theme})" srcset="./assets/dsh-timeline-{theme}.png?v=1"' not in readme:
+        if not re.search(rf'media="\(prefers-color-scheme: {theme}\)" srcset="\./assets/dsh-timeline-{theme}\.png\?v=[0-9a-f]{{8}}"', readme):
             problems.append(f"DSH screenshot must offer the {theme} capture for the {theme} color scheme")
 
-    referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"]+\.svg\?v=\d+)"', readme))
+    # render-svg.py stamps ?v=<content hash>; --check proves each hash matches its file.
+    for reference in re.findall(r'(?:src|srcset)="(\./assets/[^"]+)"', readme):
+        if not re.fullmatch(r"\./assets/[\w.-]+\?v=[0-9a-f]{8}", reference):
+            problems.append(f"asset link needs a ?v= content hash from render-svg.py: {reference}")
+    referenced_assets = set(re.findall(r'(?:src|srcset)="(\./assets/[^"?]+\.svg)(?:\?v=[^"]*)?"', readme))
     if referenced_assets != EXPECTED_ASSETS:
         missing = sorted(EXPECTED_ASSETS - referenced_assets)
         unexpected = sorted(referenced_assets - EXPECTED_ASSETS)
@@ -402,7 +406,7 @@ def main() -> int:
         if src is None or not src.group(1).startswith("./assets/"):
             problems.append("img must use a local asset")
         elif src is not None:
-            image_sources.add(src.group(1))
+            image_sources.add(src.group(1).split("?", 1)[0])
     if image_sources != EXPECTED_IMG_ASSETS:
         problems.append("img asset set does not match the approved local assets")
 
