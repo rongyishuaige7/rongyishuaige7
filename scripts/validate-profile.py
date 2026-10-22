@@ -108,7 +108,7 @@ REQUIRED_REPOSITORIES = (
     "esp32-s3-multimodal-smart-pot",
     "adaptive-traffic-signal-system",
     "esp32-s3-health-voice-terminal",
-    "hardware-lab",
+    "YI-Hardware-Lab",
     "raspberry-pi-home-environment-activity-monitoring-demo",
 )
 # Repositories whose first README mention must sit inside a given lane.
@@ -125,7 +125,7 @@ LANE_REPOSITORIES = {
         "pet-desktop-tauri",
     ),
     "// 03 TOUCH": (
-        "hardware-lab",
+        "YI-Hardware-Lab",
         "esp32-s3-multimodal-smart-pot",
         "adaptive-traffic-signal-system",
         "esp32-s3-health-voice-terminal",

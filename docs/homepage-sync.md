@@ -390,3 +390,21 @@ GitHub README 的限制：不能用脚本、悬停和暂停按钮；图片不懒
 - 动效校验的 9 种负向变体均被拒绝，涵盖循环、超时、阶段倒序、结束隐藏内容、信号残留、缺失关键帧、布局动画、移动 npm 数字和缺失阶段。
 - 临时克隆重放真实提交步骤，唯一替换为打印的是推送命令：无变化时不提交；测试数字变化时恰好提交数据、5 张卡片与 README 共 7 个文件；多出未预期文件时边界校验和提交步骤均失败。没有向线上写入测试数字。
 - 没有启动本地服务。Safari、Firefox、真机和读屏软件仍未实测；推送后的 CI 与实际线上素材另外核验。
+
+## Hardware Lab 仓库改名同步（2026-10-21）
+
+GitHub 上的硬件索引仓库已改名为 `YI-Hardware-Lab`，README、校验脚本和站点采集仍写 `hardware-lab`，一直靠 301 跳转。本轮只改指向，不动内容、版式和证据口径。
+
+范围：
+
+- 个人主页 README 的四处链接改到 `YI-Hardware-Lab`：项目段、构建说明、徽章和页脚。
+- `validate-profile.py` 的必需仓库与 TOUCH 分区、`validate-evidence-links.py` 的固定证据表同步改名。
+- 站点 `fetch-github-status.mjs`、`check-github-status.mjs`、`fetch-studio-data.mjs` 和 `index.astro` 的 slug 改为 `YI-Hardware-Lab`，再用真实接口重新生成 `github-status.json` 与 `studio.json`。
+- 索引证据从旧 HEAD `a277f59` 的运行 `39541556874` 换成当前默认分支 HEAD `3e3a920` 的 push 运行 `39606815032`；旧链接在新仓库名下仍可跳转，但不对应当前提交。
+
+验证：
+
+- 生成检查、SVG、动效和内容校验通过；固定证据核对中 hardware-lab 已对上 HEAD，只剩 pet-desktop-tauri 的既有漂移（其运行 `39578050395` 落后于 `188d46f`），与本轮无关，未处理。
+- 站点 19 项测试、`status:check`、Astro 检查 0 错误 0 警告、静态构建通过；构建产物里旧仓库名 0 处、新名 4 处，硬件信号行显示“当前提交索引检查通过 · 2026.10.22”。
+
+未处理：Markdown 只在本地做了结构检查，markdownlint 仍由 CI 运行；仓库改名后旧链接的跳转行为没有逐个在浏览器里点过。

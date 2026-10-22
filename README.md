@@ -98,7 +98,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
   <img src="./assets/hardware-strip-light.svg?v=1" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
 </picture>
 
-完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。[索引与公开证据校验通过](https://github.com/rongyishuaige7/hardware-lab/actions/runs/39541556874)。
+完整的 **22 个公开硬件项目**统一收录在 [Hardware Lab](https://github.com/rongyishuaige7/YI-Hardware-Lab)：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个，每个都附项目介绍、构建证据、公开资料与实际使用注意事项。[索引与公开证据校验通过](https://github.com/rongyishuaige7/YI-Hardware-Lab/actions/runs/39606815032)。
 
 <img src="./assets/hardware-featured.webp?v=1" width="100%" alt="三张历史原型照片：多模态智能花盆的手机 App、本地彩屏与灌溉装置；车流自适应交通信号的桌面模型，PCB 上有信号灯、OLED 和 ESP32-CAM；健康科普语音终端的面包板原型、圆形屏和扬声器。">
 
@@ -135,10 +135,10 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 </details>
 
-> **构建说明：** 各项目的 GitHub Actions 负责固定配置下的构建与仓库检查；对应的精确构建链接、公开资料和使用限制以 [Hardware Lab](https://github.com/rongyishuaige7/hardware-lab) 为准。部分项目上传的 Actions Artifact 按平台保留期自动过期。
+> **构建说明：** 各项目的 GitHub Actions 负责固定配置下的构建与仓库检查；对应的精确构建链接、公开资料和使用限制以 [Hardware Lab](https://github.com/rongyishuaige7/YI-Hardware-Lab) 为准。部分项目上传的 Actions Artifact 按平台保留期自动过期。
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/hardware-lab"><img src="./assets/badge-hardware.svg?v=1" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
+  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><img src="./assets/badge-hardware.svg?v=1" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
 </div>
 
 ---
@@ -160,5 +160,5 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
   &nbsp;&nbsp;|&nbsp;&nbsp;
   <a href="https://github.com/rongyishuaige7?tab=repositories"><strong>全部仓库</strong></a>
   &nbsp;&nbsp;|&nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/hardware-lab"><strong>Hardware Lab</strong></a>
+  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><strong>Hardware Lab</strong></a>
 </div>

@@ -20,7 +20,7 @@ EXPECTED = {
     "problem-solution-recorder-oss": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "devflow-recorder": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "memory-monitor": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
-    "hardware-lab": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
+    "YI-Hardware-Lab": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
     "ESP32_RPS_Game": {"workflow": "ci.yml", "events": {"push", "workflow_dispatch"}},
     "esp32-s3-multimodal-smart-pot": {"workflow": "firmware.yml", "events": {"push", "workflow_dispatch"}},
     "adaptive-traffic-signal-system": {"workflow": "validate.yml", "events": {"push", "workflow_dispatch"}},
