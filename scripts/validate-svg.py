@@ -93,6 +93,9 @@ NPM_PACKAGE = "@rongyi7/dsh-stats"
 ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 SEMVER = re.compile(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?")
 PRIMARY_BADGES = {"badge-feedback.svg", "badge-studio.svg"}
+# Every badge uses the card font stack and 10px labels; outlined badges follow the page theme.
+SECONDARY_BADGES = {"badge-build-log.svg", "badge-product-facts.svg"}
+BADGE_LABEL_SIZE = "10"
 MAX_BADGE_BYTES = 20 * 1024
 # The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
 # external images). Each file stays small and carries no EXIF or XMP chunk.
@@ -468,6 +471,15 @@ def validate(path: Path) -> list[str]:
             problems.append("static SVG must not contain motion")
         if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:
             problems.append("static/adaptive SVG must provide both inherited color schemes")
+
+    if path.name.startswith("badge-"):
+        if '"PingFang SC"' not in style_text:
+            problems.append("badge must use the shared font stack with PingFang SC")
+        labels = [element for element in root.iter(f"{SVG_NAMESPACE}text") if element.get("class") == "label"]
+        if len(labels) != 1 or labels[0].get("font-size") != BADGE_LABEL_SIZE:
+            problems.append(f"badge needs one {BADGE_LABEL_SIZE}px label")
+    if path.name in SECONDARY_BADGES and "@media (prefers-color-scheme: dark)" not in style_text:
+        problems.append("secondary badge must follow the page color scheme")
 
     if path.name in PRIMARY_BADGES:
         badge_rects = [element for element in root if local_name(element.tag) == "rect"]

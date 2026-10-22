@@ -10,9 +10,9 @@
 </a>
 
 <div align="center">
-  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=29894910" height="36" alt="访问 Rongyi Studio 主页"></a>
+  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=33ccb169" height="36" alt="访问 Rongyi Studio 主页"></a>
   &nbsp;&nbsp;
-  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=7b438333" height="36" alt="查看开发记录"></a>
+  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=9c6280f1" height="36" alt="查看开发记录"></a>
 </div>
 
 ---
@@ -30,7 +30,7 @@
 </picture>
 </a>
 
-> 结构示意，非产品截图。
+<sub>结构示意，非产品截图。</sub>
 
 **Yi盘是一套装在 U 盘里的随身 AI 工作台。**
 
@@ -41,9 +41,9 @@
 | 公开范围 | 产品事实、已知限制和开发复盘公开；核心实现、客户配置与制盘工具不公开 |
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=c3d899ed" height="36" alt="查看 Yi盘产品事实与限制"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=e325048b" height="36" alt="查看 Yi盘产品事实与限制"></a>
   &nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=84e8e468" height="36" alt="提交 Yi盘反馈"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=5c5fc6ca" height="36" alt="提交 Yi盘反馈"></a>
 </div>
 
 ---
@@ -74,20 +74,20 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
   <img src="./assets/dsh-timeline-light.png?v=59ef2d3d" width="100%" alt="DSH Usage 开发时间线界面：每半小时的 Token 柱与按项目排列的会话泳道">
 </picture>
 
-> 真实运行界面，夹具数据，项目名为占位；图中为 Token 模式。切换到费用时按公开 API 计价规则推算，最终以 Provider 账单为准。
+<sub>真实运行界面，夹具数据，项目名为占位；图中为 Token 模式。切换到费用时按公开 API 计价规则推算，最终以 Provider 账单为准。</sub>
 
-### Agent 工作流
+### Agent 技能与实验
 
-- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** `SPEC` 规格驱动开发的 DSH 插件，三个技能分别负责写规格（需求、设计、任务）、按规格实现和验收。`DSH Plugin` `npm` | MIT
-- **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** `MENTOR` 按架构意图、流转图、源码解剖、暗坑考查四个阶段，讲解 AI 写好的代码。`Agent Skill` `Shell` | MIT
-- **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** `RECORD` 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/29339468636) | MIT
-- **[宁缺](https://github.com/rongyishuaige7/ningque)** `AI-LED` 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
+- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** 规格驱动开发的 DSH 插件，三个技能分别负责写规格（需求、设计、任务）、按规格实现和验收。`DSH Plugin` `npm` | MIT
+- **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** 按架构意图、流转图、源码解剖、暗坑考查四个阶段，讲解 AI 写好的代码。`Agent Skill` `Shell` | MIT
+- **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/29339468636) | MIT
+- **[宁缺](https://github.com/rongyishuaige7/ningque)** 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
 
 ### 桌面工具
 
-- **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** `OBSERVE` 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
-- **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** `PSI` GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
-- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** `PLAY` Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39578050395) | MIT
+- **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
+- **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
+- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39578050395) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
@@ -114,7 +114,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
   <a href="https://github.com/rongyishuaige7/esp32-s3-health-voice-terminal"><img src="./assets/photo-voice-terminal.webp?v=2ef1f084" width="32%" alt="健康科普语音终端的历史原型照片：面包板、圆形屏和扬声器。"></a>
 </p>
 
-> 历史原型照片，取自各项目公开仓库：智能花盆（未注明日期）、交通信号（2026-05-14）、语音终端（2026-04-26）。
+<sub>历史原型照片，取自各项目公开仓库：智能花盆（未注明日期）、交通信号（2026-05-14）、语音终端（2026-04-26）。</sub>
 
 ### [多模态智能花盆](https://github.com/rongyishuaige7/esp32-s3-multimodal-smart-pot)
 

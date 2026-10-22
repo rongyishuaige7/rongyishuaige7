@@ -144,6 +144,12 @@ LANE_REPOSITORIES = {
         "esp32-s3-health-voice-terminal",
     ),
 }
+# Captions say what the image above shows, so they sit under it as small text; blockquotes
+# are kept for notes about the section.
+CAPTIONS = ("结构示意，非产品截图", "真实运行界面，夹具数据", "历史原型照片，取自各项目公开仓库")
+# Uppercase role chips such as `SPEC` or `PLAY` after a tool name read as decoration; the
+# description and technology tags carry the facts.
+ROLE_CHIP = re.compile(r"^- \*\*\[[^\]]+\]\([^)]+\)\*\* `[A-Z][A-Z-]+`", re.MULTILINE)
 # Slogans and self-introductions retired at the user's request; project names and facts replace them.
 RETIRED_COPY = (
     "随身的上下文",
@@ -165,6 +171,7 @@ FORBIDDEN_TEXT = (
     "// LAB NOTES",
     "// OPEN BUILDS",
     "// MORE EXPERIMENTS",
+    "### Agent 工作流",
     "// YI盘 PRODUCT",
     "也持续发布本地优先的桌面工具和有趣的硬件项目",
     "SYSTEM ONLINE",
@@ -290,6 +297,11 @@ def main() -> int:
             if hero.exists() and text in hero.read_text(encoding="utf-8"):
                 problems.append(f"{hero.name} still uses retired copy: {text}")
 
+    for caption in CAPTIONS:
+        if not re.search(rf"^<sub>{re.escape(caption)}[^\n]*</sub>$", readme, re.MULTILINE):
+            problems.append(f"image caption must be small text directly under its image: {caption}")
+    if ROLE_CHIP.search(readme):
+        problems.append("tool entries must not carry uppercase role chips")
     if "| 项目 | 当前事实 |" not in readme:
         problems.append("product facts must use the approved two-column mobile-readable table")
     # GitHub only keeps <picture> sources inside an HTML block. "<a ...><picture>" on one
@@ -309,7 +321,7 @@ def main() -> int:
     if not re.search(
         r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:  <source [^\n]+>\n){5}'
         r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=[0-9a-f]{8}\"[^>]*>\n</picture>\n</a>\n\n"
-        r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
+        r"<sub>结构示意，非产品截图。</sub>\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
         readme,
     ):
         problems.append("Yi盘 card must link to yipan-showcase and keep the approved note and one-sentence definition")

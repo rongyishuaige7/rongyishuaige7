@@ -1212,6 +1212,60 @@ ${style}
 """)
 
 
+# Link badges share one anatomy: an uppercase label, a rule, then the action. Primary badges
+# are solid Yi盘 orange in both themes; secondary badges are outlined and follow the page
+# theme through their own color-scheme query, so they are not dark blocks on a light page.
+BADGE_FONT = 'Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif'
+BADGES = {
+    "badge-studio": ("STUDIO", "访问主页", "访问主页", "前往 Rongyi Studio 个人主页。", True),
+    "badge-build-log": ("BUILD", "开发记录", "查看开发记录", "前往 Rongyi 的公开开发记录。", False),
+    "badge-product-facts": ("FACTS", "产品事实与限制", "Yi盘产品事实与限制", "查看 Yi盘已确认的产品事实、限制和验证范围。", False),
+    "badge-feedback": ("FEEDBACK", "提交反馈", "提交 Yi盘反馈", "前往 Yi盘公开反馈页面。", True),
+}
+# Arial Bold advance widths (units per 1000) of the label letters; labels are 10px with 1px tracking.
+LABEL_ADVANCE = {"A": 722, "B": 722, "C": 722, "D": 722, "E": 667, "F": 611, "I": 278, "K": 722, "L": 611, "O": 778, "S": 667, "T": 611, "U": 722}
+
+
+def badge(label: str, action: str, title: str, desc: str, primary: bool) -> str:
+    label_end = 14 + sum(LABEL_ADVANCE[letter] for letter in label) / 100 + len(label)
+    rule = round(label_end + 12)
+    action_x = rule + 14
+    width = action_x + 14 * len(action) + 16
+    head = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="36" viewBox="0 0 {width} 36" role="img" aria-labelledby="title desc">\n'
+        f'  <title id="title">{title}</title>\n'
+        f'  <desc id="desc">{desc}</desc>\n'
+        f'  <style>\n'
+        f'    text {{ font-family: {BADGE_FONT}; font-weight: 700; }}\n'
+    )
+    if primary:
+        return head + (
+            f'  </style>\n'
+            f'  <rect x="0.75" y="0.75" width="{width - 1.5:g}" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>\n'
+            f'  <rect x="2" y="2" width="{width - 4}" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>\n'
+            f'  <text class="label" x="14" y="22" fill="#ffffff" font-size="10" letter-spacing="1">{label}</text>\n'
+            f'  <path d="M{rule} 8V28" stroke="#ffffff" stroke-opacity="0.42"/>\n'
+            f'  <text class="action" x="{action_x}" y="23" fill="#ffffff" font-size="14">{action}</text>\n'
+            f'</svg>\n'
+        )
+    return head + (
+        f'    .surface {{ fill: #ffffff; }}\n'
+        f'    .label {{ fill: #c8452a; }}\n'
+        f'    .action {{ fill: #18202a; }}\n'
+        f'    @media (prefers-color-scheme: dark) {{\n'
+        f'      .surface {{ fill: #202631; }}\n'
+        f'      .label {{ fill: #ff8a70; }}\n'
+        f'      .action {{ fill: #f4f6f8; }}\n'
+        f'    }}\n'
+        f'  </style>\n'
+        f'  <rect class="surface" x="0.5" y="0.5" width="{width - 1}" height="35" rx="8" fill="#ffffff" stroke="#e45738"/>\n'
+        f'  <text class="label" x="14" y="22" fill="#c8452a" font-size="10" letter-spacing="1">{label}</text>\n'
+        f'  <path d="M{rule} 8V28" stroke="#e45738" stroke-opacity="0.55"/>\n'
+        f'  <text class="action" x="{action_x}" y="23" fill="#18202a" font-size="14">{action}</text>\n'
+        f'</svg>\n'
+    )
+
+
 def media_uri(name: str) -> str:
     data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
     return f"data:image/webp;base64,{data}"
@@ -1343,6 +1397,8 @@ def main() -> int:
     for name, motion in (("dsh-card-mobile.svg", True), ("dsh-card-mobile-still.svg", False)):
         rendered[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=motion)
         hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)
+    for stem, spec in BADGES.items():
+        rendered[ASSETS / f"{stem}.svg"] = badge(*spec)
     readme = Path('README.md')
     stamped = stamp_versions(readme.read_text(encoding='utf-8'), {**rendered, **hash_sources})
     rendered[readme] = replace_snapshot(stamped, json.loads(NPM_STATS.read_text()))

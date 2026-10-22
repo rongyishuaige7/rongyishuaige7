@@ -1,9 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="172" height="36" viewBox="0 0 172 36" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="156" height="36" viewBox="0 0 156 36" role="img" aria-labelledby="title desc">
   <title id="title">访问主页</title>
   <desc id="desc">前往 Rongyi Studio 个人主页。</desc>
-  <rect x="0.75" y="0.75" width="170.5" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>
-  <rect x="2" y="2" width="168" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
-  <text x="14" y="22" fill="#ffffff" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">STUDIO</text>
-  <path d="M68 8V28" stroke="#ffffff" stroke-opacity="0.42"/>
-  <text x="82" y="23" fill="#ffffff" font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, sans-serif" font-size="14" font-weight="700">访问主页</text>
+  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-weight: 700; }
+  </style>
+  <rect x="0.75" y="0.75" width="154.5" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>
+  <rect x="2" y="2" width="152" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
+  <text class="label" x="14" y="22" fill="#ffffff" font-size="10" letter-spacing="1">STUDIO</text>
+  <path d="M70 8V28" stroke="#ffffff" stroke-opacity="0.42"/>
+  <text class="action" x="84" y="23" fill="#ffffff" font-size="14">访问主页</text>
 </svg>

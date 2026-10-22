@@ -1,8 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="176" height="36" viewBox="0 0 176 36" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="148" height="36" viewBox="0 0 148 36" role="img" aria-labelledby="title desc">
   <title id="title">查看开发记录</title>
   <desc id="desc">前往 Rongyi 的公开开发记录。</desc>
-  <rect x="0.5" y="0.5" width="175" height="35" rx="8" fill="#202631" stroke="#e45738"/>
-  <text x="14" y="22" fill="#ff8a70" font-family="Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="1">BUILD</text>
-  <path d="M60 8V28" stroke="#e45738" stroke-opacity="0.55"/>
-  <text x="74" y="23" fill="#f4f6f8" font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, sans-serif" font-size="14" font-weight="700">开发记录</text>
+  <style>
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-weight: 700; }
+    .surface { fill: #ffffff; }
+    .label { fill: #c8452a; }
+    .action { fill: #18202a; }
+    @media (prefers-color-scheme: dark) {
+      .surface { fill: #202631; }
+      .label { fill: #ff8a70; }
+      .action { fill: #f4f6f8; }
+    }
+  </style>
+  <rect class="surface" x="0.5" y="0.5" width="147" height="35" rx="8" fill="#ffffff" stroke="#e45738"/>
+  <text class="label" x="14" y="22" fill="#c8452a" font-size="10" letter-spacing="1">BUILD</text>
+  <path d="M62 8V28" stroke="#e45738" stroke-opacity="0.55"/>
+  <text class="action" x="76" y="23" fill="#18202a" font-size="14">开发记录</text>
 </svg>
