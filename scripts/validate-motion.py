@@ -9,6 +9,8 @@ import xml.etree.ElementTree as ET
 
 FLOW = Path("assets/yipan-flow-light.svg")
 HERO = Path("assets/hero-light.svg")
+# Narrow screens get a stacked hero that plays the same one-shot story.
+HERO_MOBILE = Path("assets/hero-mobile.svg")
 STRIP = Path("assets/hardware-strip-light.svg")
 DSH = Path("assets/dsh-card-light.svg")
 PAIR = {
@@ -237,6 +239,11 @@ def main() -> int:
 
     mobile = Path("assets/dsh-card-mobile.svg")
     problems.extend(check_dsh(mobile, mobile.read_text(encoding="utf-8"), mobile=True))
+    hero_mobile = HERO_MOBILE.read_text(encoding="utf-8")
+    hero_mobile_css = re.search(r"<style>(.*?)</style>", hero_mobile, re.DOTALL)
+    if hero_mobile_css and FORBIDDEN_ANIMATED_PROPERTIES.search(hero_mobile_css.group(1)):
+        problems.append(f"{HERO_MOBILE.name} animates a property other than transform or opacity")
+    problems.extend(check_hero(HERO_MOBILE, hero_mobile))
     for card, ambient in CARD_AMBIENT.items():
         card_text = card.read_text(encoding="utf-8")
         if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
@@ -244,12 +251,13 @@ def main() -> int:
         story_classes = {name for stage in STORIES[card][1] for name in stage}
         for class_name in sorted(set(dict(ANIMATION.findall(card_text))) - story_classes - ambient):
             problems.append(f"{card.name}: {class_name} is animated outside its story")
-    hero = HERO.read_text(encoding="utf-8")
-    if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
-        problems.append("hero still duplicates the cloud-agent workflow semantics")
-    for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<"):
-        if text not in hero:
-            problems.append(f"hero is missing a project entry card: {text.strip('<>')}")
+    for path in (HERO, HERO_MOBILE):
+        hero = path.read_text(encoding="utf-8")
+        if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
+            problems.append(f"{path.name} still duplicates the cloud-agent workflow semantics")
+        for text in (">Yi盘<", ">DSH Usage<", ">Hardware Lab<"):
+            if text not in hero:
+                problems.append(f"{path.name} is missing a project entry card: {text.strip('<>')}")
 
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)

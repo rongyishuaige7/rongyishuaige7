@@ -31,6 +31,7 @@ EXPECTED_ASSETS = {
     "yipan-flow-light.svg",
     "hero-still.svg", "yipan-flow-still.svg", "hardware-strip-still.svg",
     "dsh-card-still.svg", "dsh-card-mobile.svg", "dsh-card-mobile-still.svg",
+    "hero-mobile.svg", "hero-mobile-still.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
@@ -99,6 +100,11 @@ EMBEDDED_WEBP = re.compile(r"data:image/webp;base64,([A-Za-z0-9+/]+={0,2})")
 FORBIDDEN_WEBP_CHUNKS = {b"EXIF", b"XMP "}
 MAX_HERO_BYTES = 160 * 1024
 HERO_ENTRY_RIGHT_EDGE = 1160
+# Adaptive heroes carry both themed DSH captures; themed heroes carry their own one.
+ADAPTIVE_HEROES = {"hero-still.svg", "hero-mobile.svg", "hero-mobile-still.svg"}
+# Every hero label stays readable when GitHub scales the image down: at least 17
+# viewBox units, the same floor as the mobile DSH card.
+MIN_HERO_FONT = 17
 
 
 def local_name(name: str) -> str:
@@ -285,7 +291,7 @@ def validate(path: Path) -> list[str]:
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hero must keep an outer shell, inset panel, and inner edge")
-        expected_images = 5 if path.name == "hero-still.svg" else 4
+        expected_images = 5 if path.name in ADAPTIVE_HEROES else 4
         if embedded_images != expected_images:
             problems.append(f"hero must embed its themed DSH capture(s) and three hardware photos, found {embedded_images}")
         entry_touch = next((element for element in root.iter() if element.get("id") == "entry-touch"), None)
@@ -299,6 +305,9 @@ def validate(path: Path) -> list[str]:
                 problems.append(f"hero entry card is missing its caption: {caption}")
         if path.stat().st_size > MAX_HERO_BYTES:
             problems.append(f"hero SVG is {path.stat().st_size} bytes, over {MAX_HERO_BYTES}")
+        for element in root.iter(f"{SVG_NAMESPACE}text"):
+            if float(element.get("font-size", "0")) < MIN_HERO_FONT:
+                problems.append(f"hero text must be at least {MIN_HERO_FONT} viewBox units: {''.join(element.itertext())}")
 
     if path.name.startswith("hardware-strip-"):
         for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):
@@ -402,7 +411,7 @@ def validate(path: Path) -> list[str]:
                 if value not in description_text:
                     problems.append(f"DSH Usage description must repeat the npm figure {value}")
 
-    if path.stem.endswith("-still") or path.name == "dsh-card-mobile.svg":
+    if path.stem.endswith("-still") or path.name in {"dsh-card-mobile.svg", "hero-mobile.svg"}:
         if path.stem.endswith("-still") and ("animation:" in style_text or "@keyframes" in style_text):
             problems.append("static SVG must not contain motion")
         if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:

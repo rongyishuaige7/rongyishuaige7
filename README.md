@@ -1,9 +1,13 @@
+<a href="https://rongyishuaige7.github.io/">
 <picture>
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=e8653150">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=0d77e02f">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=4987d436">
-  <img src="./assets/hero-light.svg?v=4987d436" width="100%" alt="Rongyi，独立开发者，Yi盘创始人。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=abf827c6">
+  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=c5345920">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=2ce4d3eb">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=40b56b98">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=81ff0917">
+  <img src="./assets/hero-light.svg?v=81ff0917" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，资料与产出留在盘内、云端模型按需调用，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
 </picture>
+</a>
 
 <div align="center">
   <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=29894910" height="36" alt="访问 Rongyi Studio 主页"></a>

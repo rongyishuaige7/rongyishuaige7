@@ -13,7 +13,10 @@ from npm_snapshot import split_snapshot, format_snapshot
 
 README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
-HERO_ASSETS = (Path("assets/hero-dark.svg"), Path("assets/hero-light.svg"))
+HERO_ASSETS = tuple(Path(f"assets/hero-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
+# Below GitHub's two-column profile layout (1012px) the README column is too narrow
+# for the 1200-wide hero's labels, so it switches to the stacked 360-wide hero.
+HERO_NARROW_MEDIA = "(max-width: 1011px)"
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
 PHOTO_STRIP = Path("assets/hardware-featured.webp")
@@ -47,6 +50,8 @@ EXPECTED_ASSETS = {
     "./assets/badge-feedback.svg",
     "./assets/badge-hardware.svg",
     "./assets/hero-still.svg",
+    "./assets/hero-mobile.svg",
+    "./assets/hero-mobile-still.svg",
     "./assets/yipan-flow-still.svg",
     "./assets/hardware-strip-still.svg",
     "./assets/dsh-card-still.svg",
@@ -284,6 +289,13 @@ def main() -> int:
     # dark mode shows the light image and the image links to its own file.
     if re.search(r"<a\b[^>\n]*>[ \t]*<picture>|</picture>[ \t]*</a>", readme):
         problems.append("a linked <picture> must put <a>, <picture>, </picture> and </a> on their own lines")
+    # The hero opens the profile and links to the homepage instead of GitHub's raw image view.
+    if not re.match(
+        r'<a href="https://rongyishuaige7\.github\.io/">\n<picture>\n(?:  <source [^\n]+>\n){5}'
+        r'  <img src="\./assets/hero-light\.svg\?v=[0-9a-f]{8}"[^>]*>\n</picture>\n</a>\n',
+        readme,
+    ):
+        problems.append("README must open with the hero linked to the Rongyi Studio homepage")
     # The Yi盘 card links to the public repository and carries the summary itself,
     # so the paragraph under it keeps only the one-sentence definition.
     if not re.search(
@@ -318,6 +330,12 @@ def main() -> int:
                       if f'src="./assets/{stem}-light.svg' in b), "")
         sources = re.findall(r'<source media="([^"]+)" srcset="([^"?]+)(?:\?v=[^"]*)?">', block)
         expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg")]
+        if stem == "hero":
+            expected = [
+                (f"{HERO_NARROW_MEDIA} and (prefers-reduced-motion: reduce)", "./assets/hero-mobile-still.svg"),
+                (HERO_NARROW_MEDIA, "./assets/hero-mobile.svg"),
+                ("(prefers-reduced-motion: reduce)", "./assets/hero-still.svg"),
+            ]
         if stem == "dsh-card":
             expected = [
                 ("(max-width: 1200px) and (prefers-reduced-motion: reduce)", "./assets/dsh-card-mobile-still.svg"),

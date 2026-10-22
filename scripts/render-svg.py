@@ -167,6 +167,7 @@ PALETTES = {
 # The hero plays one entrance pass like the homepage entry cards, then holds the final frame:
 # cards rise in order, the drive face shines once, the DSH capture pans down and back, and the
 # photo deck fans out. Base styles are the final frame, so reduced motion shows it directly.
+# The narrow hero reuses this style: the same classes play the same one-shot story.
 HERO_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
@@ -191,16 +192,16 @@ HERO_STYLE = """  <style>
     }
     @keyframes shot-pan {
       0% { transform: translateY(0); }
-      40%, 62% { transform: translateY(-72.5px); }
+      40%, 62% { transform: translateY(-23px); }
       100% { transform: translateY(0); }
     }
     @keyframes deck-1 {
-      0% { transform: rotate(8deg) translate(48px, -6px); }
+      0% { transform: rotate(8deg) translate(52px, -6px); }
       80% { transform: rotate(-0.8deg) translate(-2px, 0.5px); }
       100% { transform: rotate(0deg) translate(0px, 0px); }
     }
     @keyframes deck-2 {
-      0% { transform: rotate(-7deg) translate(-48px, -4px); }
+      0% { transform: rotate(-7deg) translate(-52px, -4px); }
       80% { transform: rotate(0.8deg) translate(2px, 0.5px); }
       100% { transform: rotate(0deg) translate(0px, 0px); }
     }
@@ -211,14 +212,9 @@ HERO_STYLE = """  <style>
     }
   </style>"""
 
-# Each deck photo is drawn centred on its own origin. The outer group holds the final fanned pose;
-# the animated inner group starts with the inverse rotation and offset, so all three begin stacked
-# at the deck centre (996, 266) and settle into the pose.
-HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
-  <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
-  <desc id="desc">${theme_desc}品牌横幅，三张项目入口卡。Yi盘：U 盘里的 AI 工作台，受控内测，配 U 盘功能示意。DSH Usage：会话、Token 与模型费用，配用量趋势页的运行截图，夹具数据。Hardware Lab：${prototypes} 个硬件原型，配三张历史原型照片：天气时钟、车流自适应交通信号、多传感器手环。</desc>
-  <defs>
-    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
+# Pieces shared by the desktop and narrow heroes. Both captures need 23px of hidden
+# height below their clip for the pan; layouts place them with their own clip rects.
+HERO_GRADIENTS = """    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
       <stop offset="0.6" stop-color="${surface_b}"/>
       <stop offset="1" stop-color="${surface_c}"/>
@@ -262,42 +258,15 @@ HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="${grid_line}" stroke-width="0.6" opacity="${grid_opacity}"/>
     </pattern>
-    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="388">
-      <rect x="16" y="16" width="1168" height="388" fill="url(#gridFade)"/>
-    </mask>
-    <clipPath id="panelClip"><rect x="16" y="16" width="1168" height="388" rx="16"/></clipPath>
     <clipPath id="faceClip"><path d="M150 244H234A13 13 0 0 1 247 257V313A13 13 0 0 1 234 326H150Z"/></clipPath>
-    <clipPath id="shotClip"><rect x="414" y="196" width="396" height="144" rx="8"/></clipPath>
-    <clipPath id="photoClip"><rect x="-58" y="-43.5" width="116" height="87" rx="8"/></clipPath>
+    <clipPath id="photoClip"><rect x="-64" y="-48" width="128" height="96" rx="8"/></clipPath>
     <filter id="photoShadow" x="-40%" y="-40%" width="180%" height="200%">
       <feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#000000" flood-opacity="${shadow_opacity}"/>
     </filter>
-  </defs>
-${style}
+"""
 
-  <rect x="0.5" y="0.5" width="1199" height="419" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="16" y="16" width="1168" height="388" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
-  <g clip-path="url(#panelClip)">
-    <rect x="16" y="16" width="1168" height="388" fill="url(#grid)" mask="url(#gridMask)"/>
-  </g>
-  <rect x="16.5" y="16.5" width="1167" height="387" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
-
-  <g transform="translate(48 40)">
-    <rect width="46" height="46" rx="12" fill="${card}" stroke="${carry}" stroke-width="2"/>
-    <text x="23" y="31" fill="${carry_text}" font-size="24" font-weight="800" text-anchor="middle">R</text>
-    <text x="64" y="18" fill="${ink}" font-size="16" font-weight="700" letter-spacing="3">RONGYI</text>
-    <text x="64" y="40" fill="${muted}" font-size="13" letter-spacing="1.4">INDIE DEVELOPER · FOUNDER OF YI盘</text>
-  </g>
-
-  <g id="entry-carry" class="entry-carry">
-    <rect x="48" y="114" width="320" height="274" rx="14" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
-    <rect x="48" y="114" width="320" height="274" rx="14" fill="url(#tintCarry)"/>
-    <text x="72" y="162" fill="${carry_text}" font-size="28" font-weight="800" letter-spacing="-0.6">Yi盘</text>
-    <text x="72" y="188" fill="${soft}" font-size="14">U 盘里的 AI 工作台</text>
-    <text x="72" y="208" fill="${muted}" font-size="12">受控内测</text>
-    <g id="drive">
-      <ellipse cx="208" cy="342" rx="108" ry="10" fill="url(#driveShadow)"/>
-      <rect x="111" y="244" width="52" height="82" rx="11" fill="${drive_port}" stroke="${carry_2}" stroke-opacity="0.38"/>
+# The drive is drawn at its desktop size; the narrow hero scales the same group.
+DRIVE_BODY = """      <rect x="111" y="244" width="52" height="82" rx="11" fill="${drive_port}" stroke="${carry_2}" stroke-opacity="0.38"/>
       <rect x="150" y="244" width="13" height="82" fill="${drive_port}"/>
       <g fill="${drive_slot}" stroke="${drive_slot_stroke}">
         <rect x="126" y="262" width="6" height="46"/>
@@ -314,51 +283,181 @@ ${style}
       <g clip-path="url(#faceClip)">
         <path class="drive-shine" d="M110 244H150L120 326H80Z" fill="url(#shineBand)"/>
       </g>
+"""
+
+# Each deck photo is drawn centred on its own origin, and the deck around the origin of its
+# group. The outer group holds the final fanned pose; the animated inner group starts with the
+# inverse rotation and offset, so all three begin stacked at the deck centre and settle into
+# the pose. Left to right the photos follow the TOUCH featured builds: pot, traffic, voice.
+PHOTO_DECK = """        <g transform="translate(-52 6) rotate(-8)">
+          <g class="deck-1">
+            <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-64" y="-48" width="128" height="96" preserveAspectRatio="xMidYMid slice" href="${photo_pot}"/></g></g>
+            <rect x="-63.5" y="-47.5" width="127" height="95" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+          </g>
+        </g>
+        <g transform="translate(52 4) rotate(7)">
+          <g class="deck-2">
+            <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-64" y="-48" width="128" height="96" preserveAspectRatio="xMidYMid slice" href="${photo_voice}"/></g></g>
+            <rect x="-63.5" y="-47.5" width="127" height="95" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+          </g>
+        </g>
+        <g transform="translate(0 -5) rotate(-1)">
+          <g class="deck-3">
+            <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-64" y="-48" width="128" height="96" preserveAspectRatio="xMidYMid slice" href="${photo_traffic}"/></g></g>
+            <rect x="-63.5" y="-47.5" width="127" height="95" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
+          </g>
+        </g>
+"""
+
+HERO_DESC = (
+    "${theme_desc}品牌横幅，三张项目入口卡。Yi盘：U 盘里的 AI 工作台，受控内测，资料与产出留在盘内，云端模型按需调用，配 U 盘功能示意。"
+    "DSH Usage：会话、Token 与模型费用，配用量趋势页的运行截图，夹具数据。"
+    "Hardware Lab：${prototypes} 个硬件原型，配三张历史原型照片：多模态智能花盆、车流自适应交通信号、健康科普语音终端。"
+)
+
+# Desktop: Yi盘 leads with the widest card (400) and carries its status and two facts;
+# DSH Usage and Hardware Lab share 328 each. Every label is at least 17 units.
+HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
+  <desc id="desc">""" + HERO_DESC + """</desc>
+  <defs>
+""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="388">
+      <rect x="16" y="16" width="1168" height="388" fill="url(#gridFade)"/>
+    </mask>
+    <clipPath id="panelClip"><rect x="16" y="16" width="1168" height="388" rx="16"/></clipPath>
+    <clipPath id="shotClip"><rect x="494" y="210" width="284" height="132" rx="8"/></clipPath>
+  </defs>
+${style}
+
+  <rect x="0.5" y="0.5" width="1199" height="419" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="16" y="16" width="1168" height="388" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="16" y="16" width="1168" height="388" fill="url(#grid)" mask="url(#gridMask)"/>
+  </g>
+  <rect x="16.5" y="16.5" width="1167" height="387" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+
+  <g transform="translate(48 40)">
+    <rect width="46" height="46" rx="12" fill="${card}" stroke="${carry}" stroke-width="2"/>
+    <text x="23" y="31" fill="${carry_text}" font-size="24" font-weight="800" text-anchor="middle">R</text>
+    <text x="64" y="18" fill="${ink}" font-size="18" font-weight="700" letter-spacing="3">RONGYI</text>
+    <text x="64" y="42" fill="${muted}" font-size="17" letter-spacing="1.2">INDIE DEVELOPER · FOUNDER OF YI盘</text>
+  </g>
+
+  <g id="entry-carry" class="entry-carry">
+    <rect x="48" y="114" width="400" height="274" rx="14" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+    <rect x="48" y="114" width="400" height="274" rx="14" fill="url(#tintCarry)"/>
+    <text x="72" y="162" fill="${carry_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Yi盘</text>
+    <text x="72" y="192" fill="${soft}" font-size="18">U 盘里的 AI 工作台</text>
+    <g id="carry-status">
+      <rect x="316.5" y="136.5" width="107" height="31" rx="15.5" fill="${tag_fill}" stroke="${carry}" stroke-opacity="0.45"/>
+      <circle cx="334" cy="152" r="4" fill="${carry}"/>
+      <text x="346" y="158" fill="${carry_text}" font-size="17">受控内测</text>
     </g>
-    <text x="72" y="370" fill="${muted}" font-size="13">功能示意</text>
+    <g id="drive" transform="translate(-39 0)">
+      <ellipse cx="208" cy="342" rx="108" ry="10" fill="url(#driveShadow)"/>
+""" + DRIVE_BODY + """    </g>
+    <g id="carry-facts">
+      <circle cx="236" cy="266" r="4" fill="${carry}"/>
+      <text x="250" y="272" fill="${soft}" font-size="17">资料与产出留在盘内</text>
+      <circle cx="236" cy="304" r="3.5" fill="none" stroke="${muted}" stroke-width="1.5"/>
+      <text x="250" y="310" fill="${muted}" font-size="17">云端模型按需调用</text>
+    </g>
+    <text x="72" y="370" fill="${muted}" font-size="17">功能示意</text>
   </g>
 
   <g id="entry-see" class="entry-see">
-    <rect x="392" y="114" width="440" height="274" rx="14" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
-    <rect x="392" y="114" width="440" height="274" rx="14" fill="url(#tintSee)"/>
-    <text x="416" y="162" fill="${see_text}" font-size="28" font-weight="800" letter-spacing="-0.6">DSH Usage</text>
-    <text x="416" y="188" fill="${soft}" font-size="14">会话、Token 与模型费用</text>
+    <rect x="472" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
+    <rect x="472" y="114" width="328" height="274" rx="14" fill="url(#tintSee)"/>
+    <text x="496" y="162" fill="${see_text}" font-size="30" font-weight="800" letter-spacing="-0.6">DSH Usage</text>
+    <text x="496" y="192" fill="${soft}" font-size="18">会话、Token 与模型费用</text>
     <g id="dsh-shot">
-      <rect x="414" y="196" width="396" height="144" rx="8" fill="${shot_bg}"/>
+      <rect x="494" y="210" width="284" height="132" rx="8" fill="${shot_bg}"/>
       <g clip-path="url(#shotClip)">
-        <image class="shot-pan" x="414" y="196" width="396" height="216.5" preserveAspectRatio="xMidYMin slice" href="${dsh_trends}"/>
+        <image class="shot-pan dsh-capture" x="494" y="210" width="284" height="155.3" preserveAspectRatio="xMidYMin slice" href="${dsh_trends}"/>
       </g>
-      <rect x="414.5" y="196.5" width="395" height="143" rx="7.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
+      <rect x="494.5" y="210.5" width="283" height="131" rx="7.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
     </g>
-    <text x="416" y="370" fill="${muted}" font-size="13">运行截图 · 夹具数据</text>
+    <text x="496" y="370" fill="${muted}" font-size="17">运行截图 · 夹具数据</text>
   </g>
 
   <g id="entry-touch" class="entry-touch">
-    <rect x="856" y="114" width="280" height="274" rx="14" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
-    <rect x="856" y="114" width="280" height="274" rx="14" fill="url(#tintTouch)"/>
-    <text x="880" y="162" fill="${touch_text}" font-size="28" font-weight="800" letter-spacing="-0.6">Hardware Lab</text>
-    <text x="880" y="188" fill="${soft}" font-size="14">${prototypes} 个硬件原型</text>
-    <g id="photo-deck">
-      <g transform="translate(948 272) rotate(-8)">
-        <g class="deck-1">
-          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_weather}"/></g></g>
-          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
-        </g>
-      </g>
-      <g transform="translate(1044 270) rotate(7)">
-        <g class="deck-2">
-          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_traffic}"/></g></g>
-          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
-        </g>
-      </g>
-      <g transform="translate(996 261) rotate(-1)">
-        <g class="deck-3">
-          <g filter="url(#photoShadow)"><g clip-path="url(#photoClip)"><image x="-58" y="-43.5" width="116" height="87" preserveAspectRatio="xMidYMid slice" href="${photo_band}"/></g></g>
-          <rect x="-57.5" y="-43" width="115" height="86" rx="7.5" fill="none" stroke="${touch}" stroke-opacity="0.38"/>
-        </g>
-      </g>
+    <rect x="824" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
+    <rect x="824" y="114" width="328" height="274" rx="14" fill="url(#tintTouch)"/>
+    <text x="848" y="162" fill="${touch_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Hardware Lab</text>
+    <text x="848" y="192" fill="${soft}" font-size="18">${prototypes} 个硬件原型</text>
+    <g id="photo-deck" transform="translate(988 268)">
+""" + PHOTO_DECK + """    </g>
+    <text x="848" y="370" fill="${muted}" font-size="17">历史原型照片</text>
+  </g>
+</svg>
+""")
+
+# Narrow screens get the same three entries as stacked rows at 360 units wide, so text
+# keeps its 17-unit floor at phone width instead of shrinking with the 1200-wide banner.
+HERO_NARROW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="500" viewBox="0 0 360 500" role="img" aria-labelledby="title desc">
+  <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
+  <desc id="desc">""" + HERO_DESC + """</desc>
+  <defs>
+""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="10" y="10" width="340" height="480">
+      <rect x="10" y="10" width="340" height="480" fill="url(#gridFade)"/>
+    </mask>
+    <clipPath id="panelClip"><rect x="10" y="10" width="340" height="480" rx="14"/></clipPath>
+    <clipPath id="shotClip"><rect x="248" y="266" width="74" height="57" rx="6"/></clipPath>
+  </defs>
+${style}
+
+  <rect x="0.5" y="0.5" width="359" height="499" rx="18" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="10" y="10" width="340" height="480" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <g clip-path="url(#panelClip)">
+    <rect x="10" y="10" width="340" height="480" fill="url(#grid)" mask="url(#gridMask)"/>
+  </g>
+  <rect x="10.5" y="10.5" width="339" height="479" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+
+  <g transform="translate(24 26)">
+    <rect width="44" height="44" rx="11" fill="${card}" stroke="${carry}" stroke-width="2"/>
+    <text x="22" y="30" fill="${carry_text}" font-size="23" font-weight="800" text-anchor="middle">R</text>
+    <text x="58" y="18" fill="${ink}" font-size="18" font-weight="700" letter-spacing="2.4">RONGYI</text>
+    <text x="58" y="40" fill="${muted}" font-size="17" letter-spacing="1">INDIE DEVELOPER</text>
+    <text x="58" y="62" fill="${muted}" font-size="17" letter-spacing="1">FOUNDER OF YI盘</text>
+  </g>
+
+  <g id="entry-carry" class="entry-carry">
+    <rect x="24" y="112" width="312" height="112" rx="12" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
+    <rect x="24" y="112" width="312" height="112" rx="12" fill="url(#tintCarry)"/>
+    <text x="40" y="150" fill="${carry_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Yi盘</text>
+    <text x="40" y="176" fill="${soft}" font-size="17">U 盘里的 AI 工作台</text>
+    <g id="carry-status">
+      <circle cx="45" cy="198" r="4" fill="${carry}"/>
+      <text x="56" y="204" fill="${carry_text}" font-size="17">受控内测</text>
     </g>
-    <text x="880" y="370" fill="${muted}" font-size="13">历史原型照片</text>
+    <g id="drive" transform="translate(167.4 -16.1) scale(0.618)">
+""" + DRIVE_BODY + """    </g>
+    <text x="278" y="210" fill="${muted}" font-size="17" text-anchor="middle">功能示意</text>
+  </g>
+
+  <g id="entry-see" class="entry-see">
+    <rect x="24" y="238" width="312" height="112" rx="12" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
+    <rect x="24" y="238" width="312" height="112" rx="12" fill="url(#tintSee)"/>
+    <text x="40" y="276" fill="${see_text}" font-size="26" font-weight="800" letter-spacing="-0.4">DSH Usage</text>
+    <text x="40" y="302" fill="${soft}" font-size="17">会话、Token 与模型费用</text>
+    <text x="40" y="330" fill="${muted}" font-size="17">运行截图 · 夹具数据</text>
+    <g id="dsh-shot">
+      <rect x="248" y="266" width="74" height="57" rx="6" fill="${shot_bg}"/>
+      <g clip-path="url(#shotClip)">
+        <image class="shot-pan dsh-capture" x="248" y="266" width="147" height="80.4" preserveAspectRatio="xMinYMin slice" href="${dsh_trends}"/>
+      </g>
+      <rect x="248.5" y="266.5" width="73" height="56" rx="5.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
+    </g>
+  </g>
+
+  <g id="entry-touch" class="entry-touch">
+    <rect x="24" y="364" width="312" height="112" rx="12" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
+    <rect x="24" y="364" width="312" height="112" rx="12" fill="url(#tintTouch)"/>
+    <text x="40" y="402" fill="${touch_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Hardware Lab</text>
+    <text x="40" y="428" fill="${soft}" font-size="17">${prototypes} 个硬件原型</text>
+    <text x="40" y="456" fill="${muted}" font-size="17">历史原型照片</text>
+    <g id="photo-deck" transform="translate(278 420) scale(0.42)">
+""" + PHOTO_DECK + """    </g>
   </g>
 </svg>
 """)
@@ -1157,9 +1256,9 @@ def npm_figures(theme: str) -> dict[str, str]:
 def hero_media(theme: str) -> dict[str, str]:
     return {
         "dsh_trends": media_uri(f"dsh-trends-{theme}.webp"),
-        "photo_weather": media_uri("esp32-weather-clock.webp"),
+        "photo_pot": media_uri("esp32-s3-multimodal-smart-pot.webp"),
         "photo_traffic": media_uri("adaptive-traffic-signal-system.webp"),
-        "photo_band": media_uri("esp32-c3-smart-band.webp"),
+        "photo_voice": media_uri("esp32-s3-health-voice-terminal.webp"),
     }
 
 
@@ -1207,9 +1306,9 @@ def render_adaptive(template: Template, style: str, extra: dict[str, str], *, mo
 
 def both_captures(svg: str) -> str:
     """Adaptive heroes carry both real DSH captures; CSS shows the one matching the theme."""
-    image = re.search(r'<image class="shot-pan"[^>]+/>', svg).group(0)
-    light_image = image.replace('class="shot-pan"', 'class="shot-pan theme-light"')
-    dark_image = image.replace('class="shot-pan"', 'class="shot-pan theme-dark"').replace(
+    image = re.search(r'<image class="shot-pan dsh-capture"[^>]+/>', svg).group(0)
+    light_image = image.replace('dsh-capture"', 'dsh-capture theme-light"')
+    dark_image = image.replace('dsh-capture"', 'dsh-capture theme-dark"').replace(
         media_uri('dsh-trends-light.webp'), media_uri('dsh-trends-dark.webp'))
     return svg.replace(image, light_image + "\n        " + dark_image)
 
@@ -1257,6 +1356,8 @@ def main() -> int:
             hash_sources[path] = render_adaptive(template, style, NPM_PLACEHOLDER)
     hero_path = ASSETS / "hero-still.svg"
     rendered[hero_path] = both_captures(rendered[hero_path])
+    for name, motion in (("hero-mobile.svg", True), ("hero-mobile-still.svg", False)):
+        rendered[ASSETS / name] = both_captures(render_adaptive(HERO_NARROW, HERO_STYLE, hero_media('light'), motion=motion))
     for name, motion in (("dsh-card-mobile.svg", True), ("dsh-card-mobile-still.svg", False)):
         rendered[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=motion)
         hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)
