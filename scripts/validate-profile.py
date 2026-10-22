@@ -12,16 +12,21 @@ from npm_snapshot import split_snapshot, format_snapshot
 
 
 README_PATH = Path("README.md")
-STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
+HARDWARE_CARDS = tuple(Path(f"assets/hardware-card-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
 HERO_ASSETS = tuple(Path(f"assets/hero-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
 # Below GitHub's two-column profile layout (1012px) the README column (398-685px) is too
 # narrow for 17-unit labels on 1200-wide cards, so these cards switch to 360-wide variants.
 NARROW_MEDIA = "(max-width: 1011px)"
-NARROW_CARDS = ("hero", "yipan-flow", "dsh-card")
+NARROW_CARDS = ("hero", "yipan-flow", "dsh-card", "hardware-card")
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
-PHOTO_STRIP = Path("assets/hardware-featured.webp")
-MAX_PHOTO_BYTES = 160 * 1024
+# Each featured prototype photo links to its own repository, in the order of the project sections below.
+PHOTOS = {
+    Path("assets/photo-smart-pot.webp"): "esp32-s3-multimodal-smart-pot",
+    Path("assets/photo-traffic-signal.webp"): "adaptive-traffic-signal-system",
+    Path("assets/photo-voice-terminal.webp"): "esp32-s3-health-voice-terminal",
+}
+MAX_PHOTO_BYTES = 80 * 1024
 # The scheduled refresh rewrites this daily; npm's download window lags a few days, so
 # only a window ending more than NPM_STALE_DAYS ago means the refresh has stopped.
 NPM_STATS = Path("data/npm-stats.json")
@@ -42,20 +47,21 @@ EXPECTED_ASSETS = {
     "./assets/yipan-flow-light.svg",
     "./assets/dsh-card-dark.svg",
     "./assets/dsh-card-light.svg",
-    "./assets/hardware-strip-dark.svg",
-    "./assets/hardware-strip-light.svg",
+    "./assets/hardware-card-dark.svg",
+    "./assets/hardware-card-light.svg",
     "./assets/badge-studio.svg",
     "./assets/badge-build-log.svg",
     "./assets/badge-product-facts.svg",
     "./assets/badge-feedback.svg",
-    "./assets/badge-hardware.svg",
     "./assets/hero-still.svg",
     "./assets/hero-mobile.svg",
     "./assets/hero-mobile-still.svg",
     "./assets/yipan-flow-mobile.svg",
     "./assets/yipan-flow-mobile-still.svg",
     "./assets/yipan-flow-still.svg",
-    "./assets/hardware-strip-still.svg",
+    "./assets/hardware-card-still.svg",
+    "./assets/hardware-card-mobile.svg",
+    "./assets/hardware-card-mobile-still.svg",
     "./assets/dsh-card-still.svg",
     "./assets/dsh-card-mobile.svg",
     "./assets/dsh-card-mobile-still.svg",
@@ -64,14 +70,15 @@ EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg",
     "./assets/yipan-flow-light.svg",
     "./assets/dsh-card-light.svg",
-    "./assets/hardware-strip-light.svg",
+    "./assets/hardware-card-light.svg",
     "./assets/dsh-timeline-light.png",
-    "./assets/hardware-featured.webp",
+    "./assets/photo-smart-pot.webp",
+    "./assets/photo-traffic-signal.webp",
+    "./assets/photo-voice-terminal.webp",
     "./assets/badge-studio.svg",
     "./assets/badge-build-log.svg",
     "./assets/badge-product-facts.svg",
     "./assets/badge-feedback.svg",
-    "./assets/badge-hardware.svg",
 }
 # The three homepage lanes, in order, then the folded English overview.
 LANE_MARKERS = ("// 01 CARRY", "// 02 SEE", "// 03 TOUCH", "// ENGLISH OVERVIEW")
@@ -205,10 +212,10 @@ def validate_screenshot(path: Path) -> list[str]:
     return problems
 
 
-def validate_photo_strip(path: Path) -> list[str]:
-    """Keep the featured hardware photo strip small, WebP, and free of EXIF or XMP."""
+def validate_photo(path: Path) -> list[str]:
+    """Keep each featured hardware photo small, WebP, and free of EXIF or XMP."""
     if not path.exists():
-        return [f"missing photo strip: {path}"]
+        return [f"missing hardware photo: {path}"]
     data = path.read_bytes()
     problems: list[str] = []
     if len(data) > MAX_PHOTO_BYTES:
@@ -315,6 +322,14 @@ def main() -> int:
         readme,
     ):
         problems.append("DSH Usage card must link to dsh-stats and sit between its heading and the screenshot")
+    # The Hardware Lab card opens the TOUCH lane and links to the full project index.
+    if not re.search(
+        r"## `// 03 TOUCH` Hardware Lab\n\n"
+        r'<a href="https://github\.com/rongyishuaige7/YI-Hardware-Lab">\n<picture>\n(?:  <source [^\n]+>\n){5}'
+        r'  <img src="\./assets/hardware-card-light\.svg\?v=[0-9a-f]{8}"[^>]*>\n</picture>\n</a>\n',
+        readme,
+    ):
+        problems.append("Hardware Lab card must open the TOUCH lane and link to YI-Hardware-Lab")
     for repeated in ("`USAGE` DeepSeek Harness 插件", "以 `@rongyi7/dsh-stats` 发布在 npm"):
         if repeated in readme:
             problems.append(f"DSH Usage card text is repeated in the README body: {repeated}")
@@ -326,7 +341,7 @@ def main() -> int:
             problems.append("native npm paragraph must match data/npm-stats.json")
     except (ValueError, OSError, KeyError, TypeError) as error:
         problems.append(f"cannot validate native npm paragraph: {error}")
-    for stem in ("hero", "yipan-flow", "dsh-card", "hardware-strip"):
+    for stem in ("hero", "yipan-flow", "dsh-card", "hardware-card"):
         block = next((b for b in re.findall(r"<picture>\n(.*?)</picture>", readme, re.DOTALL)
                       if f'src="./assets/{stem}-light.svg' in b), "")
         sources = re.findall(r'<source media="([^"]+)" srcset="([^"?]+)(?:\?v=[^"]*)?">', block)
@@ -350,8 +365,8 @@ def main() -> int:
         elif npm_age > NPM_STALE_DAYS:
             problems.append(f"npm figures are stale: the download window ended {npm_age} days ago ({npm_end})")
     problems.extend(validate_workflows())
-    if readme.count('src="./assets/badge-') != 5:
-        problems.append("profile must contain exactly five local brand badges")
+    if readme.count('src="./assets/badge-') != 4:
+        problems.append("profile must contain exactly four local brand badges")
 
     positions = [readme.find(marker) for marker in LANE_MARKERS]
     if -1 not in positions:
@@ -380,16 +395,32 @@ def main() -> int:
         expected = count.group(1)
         if english is None or english.group(1) != expected:
             problems.append("English overview must state the same hardware project count")
-        for strip in STRIP_ASSETS:
-            if not strip.exists() or f">{expected} PROTOTYPES<" not in strip.read_text(encoding="utf-8"):
-                problems.append(f"{strip.name} must label the same {expected} hardware prototypes")
+        platforms = re.search(r"\*\*\d+ 个公开硬件项目\*\*[^\n]*?：((?:[\w\u4e00-\u9fff]+ \d+ 个、?)+)", readme)
+        readme_platforms = re.findall(r"([\w\u4e00-\u9fff]+) (\d+) 个", platforms.group(1)) if platforms else []
+        for card in HARDWARE_CARDS:
+            card_text = card.read_text(encoding="utf-8") if card.exists() else ""
+            if f">{expected} 个公开硬件项目<" not in card_text:
+                problems.append(f"{card.name} must state the same {expected} public hardware projects")
+            card_platforms = re.findall(
+                r'<g id="platform-\d+">\s*<text[^>]*>([^<]+)</text>\s*<path[^>]*/>\s*<text class="value"[^>]*>(\d+)</text>',
+                card_text,
+            )
+            if not readme_platforms or card_platforms != readme_platforms:
+                problems.append(f"{card.name} platform bars must match the README platform counts")
         for hero in HERO_ASSETS:
             if not hero.exists() or f">{expected} 个硬件原型" not in hero.read_text(encoding="utf-8"):
                 problems.append(f"{hero.name} must list the same {expected} hardware prototypes")
 
     for screenshot in SCREENSHOTS:
         problems.extend(validate_screenshot(screenshot))
-    problems.extend(validate_photo_strip(PHOTO_STRIP))
+    for photo, repository in PHOTOS.items():
+        problems.extend(validate_photo(photo))
+    photo_links = re.findall(
+        r'<a href="https://github\.com/rongyishuaige7/([\w-]+)"><img src="(\./assets/photo-[\w-]+\.webp)\?v=[0-9a-f]{8}" width="32%"',
+        readme,
+    )
+    if photo_links != [(repository, f"./{photo}") for photo, repository in PHOTOS.items()]:
+        problems.append("each featured hardware photo must link to its own repository, in project order")
     for theme in ("dark", "light"):
         if not re.search(rf'media="\(prefers-color-scheme: {theme}\)" srcset="\./assets/dsh-timeline-{theme}\.png\?v=[0-9a-f]{{8}}"', readme):
             problems.append(f"DSH screenshot must offer the {theme} capture for the {theme} color scheme")

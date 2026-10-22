@@ -25,6 +25,9 @@ MEDIA = Path("media/hero")
 NPM_STATS = Path("data/npm-stats.json")
 # Must match the "**N 个公开硬件项目**" fact in README.md (validate-profile.py checks it).
 HARDWARE_PROTOTYPES = 22
+# Public projects per controller platform, most first; README.md lists the same counts.
+HARDWARE_PLATFORMS = (("ESP32", 15), ("STM32", 3), ("树莓派", 3), ("Arduino", 1))
+assert sum(count for _, count in HARDWARE_PLATFORMS) == HARDWARE_PROTOTYPES
 
 # Lane colors follow the homepage: carry #ff6b4a/#ff9a3d, see #6ea8ff/#63ccf8,
 # touch #46d89c/#b6ec6a. Each lane's second color is lighter and leans toward
@@ -42,11 +45,9 @@ PALETTES = {
         "grid_line": "#526171",
         "grid_opacity": "0.5",
         "card": "#101722",
-        "zone_fill": "#0c121b",
         "ink": "#f3f6fa",
         "muted": "#9da6b4",
         "faint": "#737e8e",
-        "packet_fill": "#fff7f2",
         "carry": "#ff6b4a",
         "carry_2": "#ff9a3d",
         "carry_text": "#ff6b4a",
@@ -56,10 +57,6 @@ PALETTES = {
         "touch": "#46d89c",
         "touch_2": "#b6ec6a",
         "touch_text": "#46d89c",
-        "board": "#0a1714",
-        "led_off": "#183a2e",
-        "led_on": "#b6ec6a",
-        "pulse": "#b6ec6a",
         "soft": "#c3cad4",
         "tint": "0.12",
         "drive_port": "#161a21",
@@ -106,11 +103,9 @@ PALETTES = {
         "grid_line": "#8795a3",
         "grid_opacity": "0.42",
         "card": "#ffffff",
-        "zone_fill": "#f8fafc",
         "ink": "#18202a",
         "muted": "#5f6876",
         "faint": "#646d7b",
-        "packet_fill": "#ffffff",
         "carry": "#e45738",
         "carry_2": "#f08a2c",
         "carry_text": "#c8452a",
@@ -120,10 +115,6 @@ PALETTES = {
         "touch": "#1aa572",
         "touch_2": "#7cc23a",
         "touch_text": "#0b7d50",
-        "board": "#f1faf5",
-        "led_off": "#cfe9dc",
-        "led_on": "#1aa572",
-        "pulse": "#1aa572",
         "soft": "#3a4350",
         "tint": "0.08",
         "drive_port": "#eef1f5",
@@ -462,200 +453,107 @@ ${style}
 </svg>
 """)
 
-STRIP_STYLE = """  <style>
+# The Hardware Lab card follows the DSH card's anatomy: name, descriptor, headline, tags and
+# the index button on the left; the platform breakdown on the right. It is one series, so
+# plain horizontal bars sorted by count, values at the tips in text colors and no legend;
+# README.md states the same numbers as text. The bars grow once in order and the values
+# fade in after them, all within two seconds; base styles are the final frame, so reduced
+# motion shows the finished chart.
+HARDWARE_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal, .chip-on, .led-on { opacity: 0; }
+    .bar { transform-box: fill-box; transform-origin: 0 50%; }
     @media (prefers-reduced-motion: no-preference) {
-      .sig-in-a { animation: sig-in-a 6s linear infinite; }
-      .sig-in-b { animation: sig-in-b 6s linear infinite; }
-      .sig-in-c { animation: sig-in-c 6s linear infinite; }
-      .chip-on { animation: chip-on 6s ease-in-out infinite; }
-      .sig-out-a { animation: sig-out-a 6s linear infinite; }
-      .sig-out-b { animation: sig-out-b 6s linear infinite; }
-      .sig-out-c { animation: sig-out-c 6s linear infinite; }
-      .led-a { animation: led-a 6s ease-in-out infinite; }
-      .led-b { animation: led-b 6s ease-in-out infinite; }
-      .led-c { animation: led-c 6s ease-in-out infinite; }
+      .bar-1 { animation: bar-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+      .bar-2 { animation: bar-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both; }
+      .bar-3 { animation: bar-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both; }
+      .bar-4 { animation: bar-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.56s both; }
+      .value { animation: value-in 0.4s ease-out 1.2s both; }
     }
-    @keyframes sig-in-a {
-      0%, 1% { transform: translate(0, 0); opacity: 0; }
-      2% { transform: translate(0, 0); opacity: 1; }
-      14% { transform: translate(210px, 0); }
-      15% { transform: translate(220px, 0); }
-      16.5% { transform: translate(238px, 18px); }
-      17.5% { transform: translate(248px, 18px); }
-      30% { transform: translate(460px, 18px); opacity: 1; }
-      31%, 100% { transform: translate(460px, 18px); opacity: 0; }
+    @keyframes bar-grow {
+      from { transform: scaleX(0); }
+      to { transform: none; }
     }
-    @keyframes sig-in-b {
-      0%, 3% { transform: translateX(0); opacity: 0; }
-      4% { transform: translateX(0); opacity: 1; }
-      10% { transform: translateX(70px); }
-      18% { transform: translateX(230px); }
-      26% { transform: translateX(390px); }
-      32% { transform: translateX(460px); opacity: 1; }
-      33%, 100% { transform: translateX(460px); opacity: 0; }
-    }
-    @keyframes sig-in-c {
-      0%, 5% { transform: translate(0, 0); opacity: 0; }
-      6% { transform: translate(0, 0); opacity: 1; }
-      18% { transform: translate(210px, 0); }
-      19% { transform: translate(220px, 0); }
-      20.5% { transform: translate(238px, -18px); }
-      21.5% { transform: translate(248px, -18px); }
-      34% { transform: translate(460px, -18px); opacity: 1; }
-      35%, 100% { transform: translate(460px, -18px); opacity: 0; }
-    }
-    @keyframes chip-on {
-      0%, 34% { opacity: 0; }
-      36% { opacity: 1; }
-      37.5% { opacity: 0.72; }
-      39%, 46% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-    @keyframes sig-out-a {
-      0%, 45% { transform: translate(0, 0); opacity: 0; }
-      46% { transform: translate(0, 0); opacity: 1; }
-      57.5% { transform: translate(212px, 0); }
-      58.5% { transform: translate(222px, 0); }
-      60% { transform: translate(240px, -18px); }
-      61% { transform: translate(250px, -18px); }
-      72% { transform: translate(450px, -18px); opacity: 1; }
-      73%, 100% { transform: translate(450px, -18px); opacity: 0; }
-    }
-    @keyframes sig-out-b {
-      0%, 47% { transform: translateX(0); opacity: 0; }
-      48% { transform: translateX(0); opacity: 1; }
-      54% { transform: translateX(65px); }
-      62% { transform: translateX(225px); }
-      70% { transform: translateX(385px); }
-      74% { transform: translateX(450px); opacity: 1; }
-      75%, 100% { transform: translateX(450px); opacity: 0; }
-    }
-    @keyframes sig-out-c {
-      0%, 49% { transform: translate(0, 0); opacity: 0; }
-      50% { transform: translate(0, 0); opacity: 1; }
-      61.5% { transform: translate(212px, 0); }
-      62.5% { transform: translate(222px, 0); }
-      64% { transform: translate(240px, 18px); }
-      65% { transform: translate(250px, 18px); }
-      76% { transform: translate(450px, 18px); opacity: 1; }
-      77%, 100% { transform: translate(450px, 18px); opacity: 0; }
-    }
-    @keyframes led-a {
-      0%, 72% { opacity: 0; }
-      74%, 80% { opacity: 1; }
-      83% { opacity: 0.72; }
-      86% { opacity: 0.38; }
-      89% { opacity: 0.12; }
-      92%, 100% { opacity: 0; }
-    }
-    @keyframes led-b {
-      0%, 74% { opacity: 0; }
-      76%, 82% { opacity: 1; }
-      85% { opacity: 0.72; }
-      88% { opacity: 0.38; }
-      91% { opacity: 0.12; }
-      94%, 100% { opacity: 0; }
-    }
-    @keyframes led-c {
-      0%, 76% { opacity: 0; }
-      78%, 84% { opacity: 1; }
-      87% { opacity: 0.72; }
-      90% { opacity: 0.38; }
-      93% { opacity: 0.12; }
-      96%, 100% { opacity: 0; }
+    @keyframes value-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>"""
 
-STRIP = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="170" viewBox="0 0 1200 170" role="img" aria-labelledby="title desc">
-  <title id="title">Hardware Lab 电路走线示意</title>
-  <desc id="desc">${theme_desc}电路板横条。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 ${prototypes} PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
+
+def platform_bars(x0: int, tops: tuple[int, ...], thickness: int, unit: int, label_x: int, font_size: int) -> str:
+    """One row per platform: label, bar with a 4px rounded data end, value at the tip.
+
+    Bars use the deeper lane green so they keep 3:1 against the light card wash."""
+    rows = []
+    for index, ((name, count), top) in enumerate(zip(HARDWARE_PLATFORMS, tops), start=1):
+        end = x0 + count * unit
+        baseline = round(top + thickness / 2 + font_size * 0.35)
+        bottom = top + thickness
+        rows.append(
+            f'    <g id="platform-{index}">\n'
+            f'      <text x="{label_x}" y="{baseline}" fill="${{soft}}" font-size="{font_size}" text-anchor="end">{name}</text>\n'
+            f'      <path class="bar bar-{index}" d="M{x0} {top}H{end - 4}A4 4 0 0 1 {end} {top + 4}V{bottom - 4}A4 4 0 0 1 {end - 4} {bottom}H{x0}Z" fill="${{touch_text}}"/>\n'
+            f'      <text class="value" x="{end + 10}" y="{baseline}" fill="${{ink}}" font-size="{font_size}" font-weight="700">{count}</text>\n'
+            f'    </g>'
+        )
+    return "\n".join(rows)
+
+
+HARDWARE_DESC = (
+    "公开硬件项目统一收录在 Hardware Lab 索引，每个附项目介绍、构建证据与使用限制。"
+    "条形图按主控平台统计公开项目数："
+    + "、".join(f"{name} {count} 个" for name, count in HARDWARE_PLATFORMS)
+    + "。"
+)
+
+HARDWARE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Lab：${prototypes} 个公开硬件项目</title>
+  <desc id="desc">${theme_desc}Hardware Lab 项目卡。${prototypes} 个""" + HARDWARE_DESC + """</desc>
   <defs>
-    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="${surface_a}"/>
-      <stop offset="1" stop-color="${surface_b}"/>
-    </linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
-      <stop stop-color="${touch}" stop-opacity="0.6"/>
-      <stop offset="0.35" stop-color="${touch}" stop-opacity="0"/>
-      <stop offset="0.7" stop-color="${touch_2}" stop-opacity="0"/>
-      <stop offset="1" stop-color="${touch_2}" stop-opacity="0.45"/>
-    </linearGradient>
-    <radialGradient id="ledGlow">
-      <stop stop-color="${led_on}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${led_on}" stop-opacity="0"/>
-    </radialGradient>
-    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
-      <circle cx="10" cy="10" r="0.9" fill="${touch}" opacity="0.18"/>
-    </pattern>
-    <clipPath id="panelClip">
-      <rect x="16" y="16" width="1168" height="138" rx="14"/>
-    </clipPath>
+    <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${touch}" stop-opacity="0.12"/><stop offset="1" stop-color="${touch}" stop-opacity="0.02"/></linearGradient>
   </defs>
 ${style}
+  <rect x="0.5" y="0.5" width="1199" height="299" rx="18" fill="${page_bg}"/>
+  <rect x="0.5" y="0.5" width="1199" height="299" rx="18" fill="url(#cardWash)" stroke="${touch}" stroke-opacity="0.26"/>
+  <g id="card-copy">
+    <text x="48" y="72" fill="${ink}" font-size="37" font-weight="700">Hardware Lab</text>
+    <text x="48" y="107" fill="${touch_text}" font-size="18">硬件原型索引</text>
+    <text id="hardware-count" x="48" y="157" fill="${ink}" font-size="23">${prototypes} 个公开硬件项目</text>
+  </g>
+  <g id="card-tags"><text x="48" y="191" fill="${soft}" font-size="18">项目介绍 · 构建证据 · 使用限制</text></g>
+  <path d="M397 48V252" fill="none" stroke="${fig_stroke}"/>
+  <g id="card-cta">
+    <text x="48" y="257" fill="${touch_text}" font-size="19" font-weight="600">查看项目索引</text>
+    <path d="M175 257L188 244M178 244H188V254" fill="none" stroke="${touch_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="platform-chart">
+    <text x="443" y="75" fill="${ink}" font-size="24" font-weight="600">按主控平台</text>
+    <text x="1148" y="75" fill="${muted}" font-size="17" text-anchor="end">公开项目数</text>
+    <path d="M560.5 100V258" fill="none" stroke="${fig_stroke}"/>
+""" + platform_bars(560, (108, 148, 188, 228), 22, 34, 544, 18) + """
+  </g>
+</svg>
+""")
 
-  <rect x="0.5" y="0.5" width="1199" height="169" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="16" y="16" width="1168" height="138" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
-  <g clip-path="url(#panelClip)">
-    <rect x="16" y="16" width="1168" height="138" fill="url(#dots)"/>
+HARDWARE_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="362" viewBox="0 0 360 362" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Lab：${prototypes} 个公开硬件项目</title>
+  <desc id="desc">${prototypes} 个""" + HARDWARE_DESC + """</desc>
+${style}
+  <rect x="0.5" y="0.5" width="359" height="361" rx="18" fill="${page_bg}" stroke="${touch}" stroke-opacity="0.35"/>
+  <g id="card-copy">
+    <text x="24" y="45" fill="${ink}" font-size="27" font-weight="700">Hardware Lab</text>
+    <text id="hardware-count" x="24" y="77" fill="${soft}" font-size="18">${prototypes} 个公开硬件项目</text>
   </g>
-  <rect x="16.5" y="16.5" width="1167" height="137" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
-
-  <text x="40" y="46" class="mono" fill="${touch_text}" font-size="14" letter-spacing="1.6">HARDWARE LAB / SENSOR TO OUTPUT</text>
-  <text x="1160" y="46" class="mono" fill="${faint}" font-size="13" letter-spacing="1" text-anchor="end">ESP32 · STM32 · RPi · ARDUINO</text>
-
-  <g id="traces-in" fill="none" stroke="${touch}" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
-    <path d="M60 82H280L298 100H520"/>
-    <path d="M60 108H520"/>
-    <path d="M60 134H280L298 116H520"/>
+  <g id="card-tags"><text x="24" y="108" fill="${muted}" font-size="17">项目介绍 · 构建证据 · 使用限制</text></g>
+  <g id="platform-chart">
+    <text x="24" y="146" fill="${muted}" font-size="17">按主控平台 · 公开项目数</text>
+    <path d="M104.5 156V290" fill="none" stroke="${fig_stroke}"/>
+""" + platform_bars(104, (162, 196, 230, 264), 20, 12, 92, 17) + """
   </g>
-  <g id="traces-out" fill="none" stroke="${touch}" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
-    <path d="M680 100H902L920 82H1130"/>
-    <path d="M680 108H1130"/>
-    <path d="M680 116H902L920 134H1130"/>
-  </g>
-  <g fill="${zone_fill}" stroke="${touch}" stroke-width="2">
-    <circle cx="54" cy="82" r="6"/>
-    <circle cx="54" cy="108" r="6"/>
-    <circle cx="54" cy="134" r="6"/>
-  </g>
-  <g fill="${touch}">
-    <circle cx="280" cy="82" r="3.5"/>
-    <circle cx="280" cy="134" r="3.5"/>
-    <circle cx="920" cy="82" r="3.5"/>
-    <circle cx="920" cy="134" r="3.5"/>
-  </g>
-  <g fill="${board}" stroke="${touch}" stroke-opacity="0.6">
-    <rect x="170" y="100" width="40" height="16" rx="2"/>
-    <rect x="990" y="100" width="40" height="16" rx="2"/>
-  </g>
-
-  <g id="strip-chip">
-    <path d="M540 72V64M560 72V64M580 72V64M600 72V64M620 72V64M640 72V64M660 72V64M540 144V152M560 144V152M580 144V152M600 144V152M620 144V152M640 144V152M660 144V152" stroke="${touch}" stroke-opacity="0.6" stroke-width="2"/>
-    <rect x="520" y="72" width="160" height="72" rx="6" fill="${board}" stroke="${touch}" stroke-width="1.5"/>
-    <rect class="chip-on" x="513" y="65" width="174" height="86" rx="11" fill="none" stroke="${touch}" stroke-width="2"/>
-    <text x="600" y="104" fill="${ink}" font-size="16" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
-    <text class="mono" x="600" y="126" fill="${touch_text}" font-size="12" letter-spacing="1" text-anchor="middle">${prototypes} PROTOTYPES</text>
-  </g>
-
-  <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">
-    <circle cx="1138" cy="82" r="6"/>
-    <circle cx="1138" cy="108" r="6"/>
-    <circle cx="1138" cy="134" r="6"/>
-  </g>
-  <g class="led-on led-a"><circle cx="1138" cy="82" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="82" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-b"><circle cx="1138" cy="108" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="108" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-c"><circle cx="1138" cy="134" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="134" r="6" fill="${led_on}"/></g>
-
-  <g fill="${packet_fill}" stroke="${pulse}" stroke-width="2">
-    <circle class="signal sig-in-a" cx="60" cy="82" r="3.5"/>
-    <circle class="signal sig-in-b" cx="60" cy="108" r="3.5"/>
-    <circle class="signal sig-in-c" cx="60" cy="134" r="3.5"/>
-    <circle class="signal sig-out-a" cx="680" cy="100" r="3.5"/>
-    <circle class="signal sig-out-b" cx="680" cy="108" r="3.5"/>
-    <circle class="signal sig-out-c" cx="680" cy="116" r="3.5"/>
+  <path d="M24 306.5H336" stroke="${fig_stroke}"/>
+  <g id="card-cta">
+    <text x="24" y="339" fill="${touch_text}" font-size="18" font-weight="600">查看项目索引</text>
+    <path d="M144 339L156 327M147 327H156V336" fill="none" stroke="${touch_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
 """)
@@ -1416,7 +1314,7 @@ def main() -> int:
         "hero": (HERO, HERO_STYLE, hero_media),
         "yipan-flow": (FLOW, FLOW_STYLE, lambda theme: {}),
         "dsh-card": (DSH, DSH_STYLE, npm_figures),
-        "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
+        "hardware-card": (HARDWARE, HARDWARE_STYLE, lambda theme: {}),
     }
     rendered: dict[Path, str] = {}
     hash_sources: dict[Path, str] = {}
@@ -1437,6 +1335,7 @@ def main() -> int:
     narrow = {
         "hero": (HERO_NARROW, HERO_STYLE, hero_media('light'), both_captures),
         "yipan-flow": (FLOW_MOBILE, FLOW_STYLE, {}, lambda svg: svg),
+        "hardware-card": (HARDWARE_MOBILE, HARDWARE_STYLE, {}, lambda svg: svg),
     }
     for stem, (template, style, extra, finish) in narrow.items():
         for suffix, motion in (("mobile", True), ("mobile-still", False)):

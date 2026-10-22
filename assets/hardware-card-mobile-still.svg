@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="362" viewBox="0 0 360 362" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Lab：22 个公开硬件项目</title>
+  <desc id="desc">22 个公开硬件项目统一收录在 Hardware Lab 索引，每个附项目介绍、构建证据与使用限制。条形图按主控平台统计公开项目数：ESP32 15 个、STM32 3 个、树莓派 3 个、Arduino 1 个。</desc>
+  <style>
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    .theme-dark { display: none; }
+    @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
+
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .bar { transform-box: fill-box; transform-origin: 0 50%; }
+
+
+
+  </style>
+  <rect x="0.5" y="0.5" width="359" height="361" rx="18" fill="var(--page_bg)" stroke="var(--touch)" stroke-opacity="0.35"/>
+  <g id="card-copy">
+    <text x="24" y="45" fill="var(--ink)" font-size="27" font-weight="700">Hardware Lab</text>
+    <text id="hardware-count" x="24" y="77" fill="var(--soft)" font-size="18">22 个公开硬件项目</text>
+  </g>
+  <g id="card-tags"><text x="24" y="108" fill="var(--muted)" font-size="17">项目介绍 · 构建证据 · 使用限制</text></g>
+  <g id="platform-chart">
+    <text x="24" y="146" fill="var(--muted)" font-size="17">按主控平台 · 公开项目数</text>
+    <path d="M104.5 156V290" fill="none" stroke="var(--fig_stroke)"/>
+    <g id="platform-1">
+      <text x="92" y="178" fill="var(--soft)" font-size="17" text-anchor="end">ESP32</text>
+      <path class="bar bar-1" d="M104 162H280A4 4 0 0 1 284 166V178A4 4 0 0 1 280 182H104Z" fill="var(--touch_text)"/>
+      <text class="value" x="294" y="178" fill="var(--ink)" font-size="17" font-weight="700">15</text>
+    </g>
+    <g id="platform-2">
+      <text x="92" y="212" fill="var(--soft)" font-size="17" text-anchor="end">STM32</text>
+      <path class="bar bar-2" d="M104 196H136A4 4 0 0 1 140 200V212A4 4 0 0 1 136 216H104Z" fill="var(--touch_text)"/>
+      <text class="value" x="150" y="212" fill="var(--ink)" font-size="17" font-weight="700">3</text>
+    </g>
+    <g id="platform-3">
+      <text x="92" y="246" fill="var(--soft)" font-size="17" text-anchor="end">树莓派</text>
+      <path class="bar bar-3" d="M104 230H136A4 4 0 0 1 140 234V246A4 4 0 0 1 136 250H104Z" fill="var(--touch_text)"/>
+      <text class="value" x="150" y="246" fill="var(--ink)" font-size="17" font-weight="700">3</text>
+    </g>
+    <g id="platform-4">
+      <text x="92" y="280" fill="var(--soft)" font-size="17" text-anchor="end">Arduino</text>
+      <path class="bar bar-4" d="M104 264H112A4 4 0 0 1 116 268V280A4 4 0 0 1 112 284H104Z" fill="var(--touch_text)"/>
+      <text class="value" x="126" y="280" fill="var(--ink)" font-size="17" font-weight="700">1</text>
+    </g>
+  </g>
+  <path d="M24 306.5H336" stroke="var(--fig_stroke)"/>
+  <g id="card-cta">
+    <text x="24" y="339" fill="var(--touch_text)" font-size="18" font-weight="600">查看项目索引</text>
+    <path d="M144 339L156 327M147 327H156V336" fill="none" stroke="var(--touch_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

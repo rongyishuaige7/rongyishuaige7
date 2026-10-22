@@ -17,30 +17,30 @@ FORBIDDEN_STYLE = re.compile(r"(?:@import|javascript:|data:|https?://)", re.IGNO
 EXPECTED_ASSETS = {
     "badge-build-log.svg",
     "badge-feedback.svg",
-    "badge-hardware.svg",
     "badge-product-facts.svg",
     "badge-studio.svg",
-    "hardware-strip-dark.svg",
-    "hardware-strip-light.svg",
+    "hardware-card-dark.svg",
+    "hardware-card-light.svg",
     "dsh-card-dark.svg",
     "dsh-card-light.svg",
     "hero-dark.svg",
     "hero-light.svg",
     "yipan-flow-dark.svg",
     "yipan-flow-light.svg",
-    "hero-still.svg", "yipan-flow-still.svg", "hardware-strip-still.svg",
+    "hero-still.svg", "yipan-flow-still.svg", "hardware-card-still.svg",
     "dsh-card-still.svg", "dsh-card-mobile.svg", "dsh-card-mobile-still.svg",
     "hero-mobile.svg", "hero-mobile-still.svg",
     "yipan-flow-mobile.svg", "yipan-flow-mobile-still.svg",
+    "hardware-card-mobile.svg", "hardware-card-mobile-still.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
     ("dsh-card-dark.svg", "dsh-card-light.svg"),
-    ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
+    ("hardware-card-dark.svg", "hardware-card-light.svg"),
 )
 # Pairs rendered by scripts/render-svg.py must match element for element.
-GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "dsh-card-dark.svg", "hardware-strip-dark.svg"}
+GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "dsh-card-dark.svg", "hardware-card-dark.svg"}
 GEOMETRY_ATTRIBUTES = (
     "id",
     "class",
@@ -105,7 +105,16 @@ ADAPTIVE_HEROES = {"hero-still.svg", "hero-mobile.svg", "hero-mobile-still.svg"}
 # Every label on these cards stays readable when GitHub scales the image down:
 # at least 17 viewBox units.
 MIN_FONT = 17
-MIN_FONT_CARDS = ("hero-", "yipan-flow-", "dsh-card-")
+MIN_FONT_CARDS = ("hero-", "yipan-flow-", "dsh-card-", "hardware-card-")
+# The Hardware Lab card: one platform series as bars sorted by count, each row a label,
+# a bar whose length is proportional to its value, and the value at its tip.
+HARDWARE_CARD_TEXT = {
+    "card-copy": ("Hardware Lab", "个公开硬件项目"),
+    "card-tags": ("项目介绍", "构建证据", "使用限制"),
+    "card-cta": ("查看项目索引",),
+}
+HARDWARE_PLATFORM_NAMES = ("ESP32", "STM32", "树莓派", "Arduino")
+HARDWARE_BAR = re.compile(r"M(?P<x0>[\d.]+) [\d.]+H[\d.]+A4 4 0 0 1 (?P<end>[\d.]+) ")
 # The narrow Yi盘 card keeps the summary, the three local nodes and the cloud.
 FLOW_MOBILE_TEXT = ("Yi盘", "U 盘里的 AI 工作台", "U 盘内", *FLOW_TITLES, "云端", "模型", "受控内测", "查看公开仓库")
 
@@ -176,6 +185,37 @@ def check_card(
             problems.append(f"{label} card panel {panel_id} must hold " + ", ".join(sorted(panel_parts)))
         if panel_ids & set(copy):
             problems.append(f"{label} card copy must stay outside the panel {panel_id}")
+    return problems
+
+
+def check_hardware(root: ET.Element) -> list[str]:
+    by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+    problems = check_card(root, "Hardware Lab", HARDWARE_CARD_TEXT, "platform-chart", {
+        f"platform-{index}": (name,) for index, name in enumerate(HARDWARE_PLATFORM_NAMES, start=1)
+    })
+    counts: list[int] = []
+    units: set[float] = set()
+    for index in range(1, len(HARDWARE_PLATFORM_NAMES) + 1):
+        row = by_id.get(f"platform-{index}")
+        if row is None:
+            continue
+        bar = next((element for element in row if f"bar-{index}" in element.get("class", "").split()), None)
+        value = next((element for element in row if "value" in element.get("class", "").split()), None)
+        shape = HARDWARE_BAR.match(bar.get("d", "")) if bar is not None else None
+        text = "".join(value.itertext()).strip() if value is not None else ""
+        if shape is None or not text.isdigit():
+            problems.append(f"Hardware Lab platform-{index} needs a rounded bar and a numeric value")
+            continue
+        counts.append(int(text))
+        units.add(round((float(shape.group("end")) - float(shape.group("x0"))) / int(text), 3))
+    if counts != sorted(counts, reverse=True):
+        problems.append("Hardware Lab bars must be sorted by count, most first")
+    if len(units) > 1:
+        problems.append("Hardware Lab bar lengths must be proportional to their values")
+    headline = by_id.get("hardware-count")
+    total = re.match(r"(\d+) 个公开硬件项目", "".join(headline.itertext())) if headline is not None else None
+    if total is None or int(total.group(1)) != sum(counts):
+        problems.append("Hardware Lab platform counts must add up to the headline project count")
     return problems
 
 
@@ -309,13 +349,8 @@ def validate(path: Path) -> list[str]:
         if path.stat().st_size > MAX_HERO_BYTES:
             problems.append(f"hero SVG is {path.stat().st_size} bytes, over {MAX_HERO_BYTES}")
 
-    if path.name.startswith("hardware-strip-"):
-        for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):
-            if design_id not in element_ids:
-                problems.append(f"hardware strip is missing required element: {design_id}")
-        top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
-        if len(top_level_rects) < 3:
-            problems.append("hardware strip must keep an outer shell, inset panel, and inner edge")
+    if path.name.startswith("hardware-card-"):
+        problems.extend(check_hardware(root))
 
     if path.name.startswith(MIN_FONT_CARDS):
         for element in root.iter(f"{SVG_NAMESPACE}text"):

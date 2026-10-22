@@ -21,16 +21,19 @@ FLOW_MOBILE_STAGES = (
     ("lit-output",),
     ("lit-rail",),
 )
-STRIP = Path("assets/hardware-strip-light.svg")
+# The Hardware Lab bars grow once in order, then the values fade in; the chart holds.
+HARDWARE = Path("assets/hardware-card-light.svg")
+HARDWARE_MOBILE = Path("assets/hardware-card-mobile.svg")
+HARDWARE_ORDER = ("bar-1", "bar-2", "bar-3", "bar-4", "value")
 DSH = Path("assets/dsh-card-light.svg")
 PAIR = {
     FLOW: Path("assets/yipan-flow-dark.svg"),
     DSH: Path("assets/dsh-card-dark.svg"),
     HERO: Path("assets/hero-dark.svg"),
-    STRIP: Path("assets/hardware-strip-dark.svg"),
+    HARDWARE: Path("assets/hardware-card-dark.svg"),
 }
 # Each story is a list of stages that share one cycle. Classes inside a stage
-# run together (three traces, three LEDs); a stage may not start before the
+# run together (the rail light and its packet); a stage may not start before the
 # previous stage has nearly finished, so the cause always precedes the effect.
 STORIES = {
     FLOW: ("8s", (
@@ -45,12 +48,6 @@ STORIES = {
         ("lit-output",),
         ("lit-rail", "packet-rail"),
     )),
-    STRIP: ("6s", (
-        ("sig-in-a", "sig-in-b", "sig-in-c"),
-        ("chip-on",),
-        ("sig-out-a", "sig-out-b", "sig-out-c"),
-        ("led-a", "led-b", "led-c"),
-    )),
 }
 # Looping cards play a fixed number of passes, then every animation stops on the base
 # frame (the complete static card) instead of moving beside the README text forever.
@@ -61,11 +58,11 @@ LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3", DSH: "3", DSH_MOBILE: "3"}
 CARD_AMBIENT = {
     FLOW: {"status-pulse", "cta-shine"},
 }
-# The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
-# on its own must end within 5 seconds). Classes start in this order: the three
-# entry cards, then the drive shine, the DSH capture pan, and the photo deck.
+# The hero and the Hardware Lab card play once and hold their final frame (WCAG 2.2.2:
+# motion that starts on its own must end within 5 seconds). Hero classes start in this
+# order: the three entry cards, then the drive shine, the DSH capture pan, and the photo deck.
 HERO_ORDER = ("entry-carry", "entry-see", "entry-touch", "drive-shine", "shot-pan", "deck-1", "deck-2", "deck-3")
-HERO_BUDGET_SECONDS = 5.0
+ONE_SHOT_BUDGET_SECONDS = 5.0
 # Functional DSH stages may overlap at their edges, but their first starts must
 # follow this causal order. npm figures and persistent feature captions never move.
 DSH_PHASES = (
@@ -82,7 +79,7 @@ DSH_MOBILE_CLASSES = {"packet-a", "lane-a", "lane-b", "lane-c"}
 # Base styles are the final frame, so reduced motion shows what the animation
 # ends on. The drive shine is the exception: it starts and ends outside the
 # clipped drive face, so its final frame is invisible either way.
-HERO_OFFSTAGE_END = {"drive-shine"}
+HERO_OFFSTAGE_END = frozenset({"drive-shine"})
 HERO_ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<value>[^;]+);")
 FINAL_KEYFRAME = re.compile(r"(?:^|[\s}])(?:to|100%)\s*\{(?P<body>[^}]*)\}")
 FORBIDDEN_ANIMATED_PROPERTIES = re.compile(
@@ -156,16 +153,17 @@ def seconds(token: str) -> float:
     return float(token[:-2]) / 1000 if token.endswith("ms") else float(token[:-1])
 
 
-def check_hero(path: Path, text: str) -> list[str]:
+def check_once(path: Path, text: str, order: tuple[str, ...], offstage_end: frozenset[str] = frozenset()) -> list[str]:
+    """One-shot motion: each class plays once in order, ends within the budget and holds its final frame."""
     problems: list[str] = []
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
     declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
-    if set(declarations) != set(HERO_ORDER):
+    if set(declarations) != set(order):
         problems.append(
-            f"{path.name}: animated classes must be exactly {', '.join(HERO_ORDER)}; found {', '.join(sorted(declarations))}"
+            f"{path.name}: animated classes must be exactly {', '.join(order)}; found {', '.join(sorted(declarations))}"
         )
     previous_delay = -1.0
-    for class_name in HERO_ORDER:
+    for class_name in order:
         value = declarations.get(class_name)
         if value is None:
             continue
@@ -183,12 +181,12 @@ def check_hero(path: Path, text: str) -> list[str]:
             problems.append(f"{path.name}: {class_name} must play exactly once")
         if not {"both", "forwards"} & set(tokens):
             problems.append(f"{path.name}: {class_name} must hold its final frame (fill both or forwards)")
-        if delay + duration > HERO_BUDGET_SECONDS:
-            problems.append(f"{path.name}: {class_name} ends at {delay + duration:g}s, after {HERO_BUDGET_SECONDS:g}s")
+        if delay + duration > ONE_SHOT_BUDGET_SECONDS:
+            problems.append(f"{path.name}: {class_name} ends at {delay + duration:g}s, after {ONE_SHOT_BUDGET_SECONDS:g}s")
         if delay < previous_delay:
-            problems.append(f"{path.name}: {class_name} starts before the previous hero stage")
+            problems.append(f"{path.name}: {class_name} starts before the previous stage")
         previous_delay = delay
-        if class_name in HERO_OFFSTAGE_END:
+        if class_name in offstage_end:
             continue
         final = FINAL_KEYFRAME.search(keyframes[keyframe])
         body = final.group("body") if final else ""
@@ -265,7 +263,10 @@ def main() -> int:
         if light_css and FORBIDDEN_ANIMATED_PROPERTIES.search(light_css.group(1)):
             problems.append(f"{light.name} animates a property other than transform or opacity")
         if light == HERO:
-            problems.extend(check_hero(light, light_text))
+            problems.extend(check_once(light, light_text, HERO_ORDER, HERO_OFFSTAGE_END))
+            continue
+        if light == HARDWARE:
+            problems.extend(check_once(light, light_text, HARDWARE_ORDER))
             continue
         if light == DSH:
             problems.extend(check_dsh(light, light_text))
@@ -278,11 +279,15 @@ def main() -> int:
     problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
     for card, passes in LOOP_PASSES.items():
         problems.extend(check_passes(card, card.read_text(encoding="utf-8"), passes))
-    hero_mobile = HERO_MOBILE.read_text(encoding="utf-8")
-    hero_mobile_css = re.search(r"<style>(.*?)</style>", hero_mobile, re.DOTALL)
-    if hero_mobile_css and FORBIDDEN_ANIMATED_PROPERTIES.search(hero_mobile_css.group(1)):
-        problems.append(f"{HERO_MOBILE.name} animates a property other than transform or opacity")
-    problems.extend(check_hero(HERO_MOBILE, hero_mobile))
+    for narrow, order, offstage_end in (
+        (HERO_MOBILE, HERO_ORDER, HERO_OFFSTAGE_END),
+        (HARDWARE_MOBILE, HARDWARE_ORDER, frozenset()),
+    ):
+        narrow_text = narrow.read_text(encoding="utf-8")
+        narrow_css = re.search(r"<style>(.*?)</style>", narrow_text, re.DOTALL)
+        if narrow_css and FORBIDDEN_ANIMATED_PROPERTIES.search(narrow_css.group(1)):
+            problems.append(f"{narrow.name} animates a property other than transform or opacity")
+        problems.extend(check_once(narrow, narrow_text, order, offstage_end))
     for card, ambient in CARD_AMBIENT.items():
         card_text = card.read_text(encoding="utf-8")
         if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
@@ -301,7 +306,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story. Static image sources provide reduced-motion fallbacks.")
+    print("Hero and Hardware Lab motion ends within 5s; Yi盘 and DSH play three causal passes. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 
