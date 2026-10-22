@@ -20,7 +20,6 @@ EXPECTED_ASSETS = {
     "badge-hardware.svg",
     "badge-product-facts.svg",
     "badge-studio.svg",
-    "badge-yipan.svg",
     "hardware-strip-dark.svg",
     "hardware-strip-light.svg",
     "dsh-card-dark.svg",
@@ -32,6 +31,7 @@ EXPECTED_ASSETS = {
     "hero-still.svg", "yipan-flow-still.svg", "hardware-strip-still.svg",
     "dsh-card-still.svg", "dsh-card-mobile.svg", "dsh-card-mobile-still.svg",
     "hero-mobile.svg", "hero-mobile-still.svg",
+    "yipan-flow-mobile.svg", "yipan-flow-mobile-still.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
@@ -61,7 +61,7 @@ GEOMETRY_ATTRIBUTES = (
 # sit inside the dashed U 盘 boundary and the cloud model outside it, linked to the
 # workspace in both directions.
 FLOW_CARD_TEXT = {
-    "card-copy": ("资料、任务记录和产出保存在盘内，", "智能处理主要调用云端模型。"),
+    "card-copy": ("Yi盘", "U 盘里的 AI 工作台", "资料、任务记录和产出保存在盘内，", "智能处理主要调用云端模型。"),
     "card-tags": ("U 盘存储", "云端模型"),
     "card-cta": ("查看公开仓库",),
     "card-status": ("受控内测",),
@@ -92,7 +92,7 @@ NPM_STATS_KEYS = {"package", "downloads_last_month", "downloads_start", "downloa
 NPM_PACKAGE = "@rongyi7/dsh-stats"
 ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 SEMVER = re.compile(r"\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?")
-PRIMARY_BADGES = {"badge-yipan.svg", "badge-feedback.svg", "badge-studio.svg"}
+PRIMARY_BADGES = {"badge-feedback.svg", "badge-studio.svg"}
 MAX_BADGE_BYTES = 20 * 1024
 # The hero may embed raster media only as base64 WebP (GitHub's SVG CSP blocks
 # external images). Each file stays small and carries no EXIF or XMP chunk.
@@ -102,9 +102,12 @@ MAX_HERO_BYTES = 160 * 1024
 HERO_ENTRY_RIGHT_EDGE = 1160
 # Adaptive heroes carry both themed DSH captures; themed heroes carry their own one.
 ADAPTIVE_HEROES = {"hero-still.svg", "hero-mobile.svg", "hero-mobile-still.svg"}
-# Every hero label stays readable when GitHub scales the image down: at least 17
-# viewBox units, the same floor as the mobile DSH card.
-MIN_HERO_FONT = 17
+# Every label on these cards stays readable when GitHub scales the image down:
+# at least 17 viewBox units.
+MIN_FONT = 17
+MIN_FONT_CARDS = ("hero-", "yipan-flow-", "dsh-card-mobile")
+# The narrow Yi盘 card keeps the summary, the three local nodes and the cloud.
+FLOW_MOBILE_TEXT = ("Yi盘", "U 盘里的 AI 工作台", "U 盘内", *FLOW_TITLES, "云端", "模型", "受控内测", "查看公开仓库")
 
 
 def local_name(name: str) -> str:
@@ -305,9 +308,6 @@ def validate(path: Path) -> list[str]:
                 problems.append(f"hero entry card is missing its caption: {caption}")
         if path.stat().st_size > MAX_HERO_BYTES:
             problems.append(f"hero SVG is {path.stat().st_size} bytes, over {MAX_HERO_BYTES}")
-        for element in root.iter(f"{SVG_NAMESPACE}text"):
-            if float(element.get("font-size", "0")) < MIN_HERO_FONT:
-                problems.append(f"hero text must be at least {MIN_HERO_FONT} viewBox units: {''.join(element.itertext())}")
 
     if path.name.startswith("hardware-strip-"):
         for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):
@@ -317,7 +317,27 @@ def validate(path: Path) -> list[str]:
         if len(top_level_rects) < 3:
             problems.append("hardware strip must keep an outer shell, inset panel, and inner edge")
 
-    if path.name.startswith("yipan-flow-"):
+    if path.name.startswith(MIN_FONT_CARDS):
+        for element in root.iter(f"{SVG_NAMESPACE}text"):
+            if float(element.get("font-size", "0")) < MIN_FONT:
+                problems.append(f"card text must be at least {MIN_FONT} viewBox units: {''.join(element.itertext())}")
+
+    if path.name.startswith("yipan-flow-mobile"):
+        visible_text = drawn_text(root)
+        for required_text in FLOW_MOBILE_TEXT:
+            if required_text not in visible_text:
+                problems.append(f"narrow Yi盘 card is missing required text: {required_text}")
+        by_id = {element.get("id"): element for element in root.iter() if element.get("id")}
+        drive, boundary, cloud = by_id.get("drive"), by_id.get("drive-boundary"), by_id.get("flow-cloud")
+        drive_ids = {element.get("id") for element in drive.iter()} if drive is not None else set()
+        if not {"flow-context", "flow-workspace", "flow-output"} <= drive_ids or "flow-cloud" in drive_ids:
+            problems.append("narrow Yi盘 nodes must sit inside the drive boundary group, the cloud outside it")
+        cloud_rect = cloud.find(f"{SVG_NAMESPACE}rect") if cloud is not None else None
+        if boundary is None or cloud_rect is None or (
+            float(cloud_rect.get("x", "0")) <= float(boundary.get("x", "0")) + float(boundary.get("width", "0"))
+        ):
+            problems.append("narrow Yi盘 cloud model must be drawn outside the drive boundary")
+    elif path.name.startswith("yipan-flow-"):
         visible_text = drawn_text(root)
         required_flow_text = (
             "U 盘内",
@@ -383,9 +403,6 @@ def validate(path: Path) -> list[str]:
             if re.search(r"\.view-[1-4][^{}]*\{[^}]*opacity:\s*0", style_text):
                 problems.append("DSH Usage feature text must remain visible")
         else:
-            for element in root.iter(f"{SVG_NAMESPACE}text"):
-                if float(element.get("font-size", "0")) < 17:
-                    problems.append("mobile DSH card text must be at least 17 viewBox units")
             for fact in ("DSH Usage", "按项目统计会话用量", "预估费用", "项目时间线", "近 30 天下载", "最新版本"):
                 if fact not in drawn_text(root):
                     problems.append(f"mobile DSH card is missing {fact}")
@@ -411,7 +428,7 @@ def validate(path: Path) -> list[str]:
                 if value not in description_text:
                     problems.append(f"DSH Usage description must repeat the npm figure {value}")
 
-    if path.stem.endswith("-still") or path.name in {"dsh-card-mobile.svg", "hero-mobile.svg"}:
+    if path.stem.endswith(("-still", "-mobile")):
         if path.stem.endswith("-still") and ("animation:" in style_text or "@keyframes" in style_text):
             problems.append("static SVG must not contain motion")
         if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:

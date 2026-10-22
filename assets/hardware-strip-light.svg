@@ -138,7 +138,7 @@
   <rect x="16.5" y="16.5" width="1167" height="137" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
 
   <text x="40" y="46" class="mono" fill="#0b7d50" font-size="14" letter-spacing="1.6">HARDWARE LAB / SENSOR TO OUTPUT</text>
-  <text x="1160" y="46" class="mono" fill="#6c7583" font-size="13" letter-spacing="1" text-anchor="end">ESP32 · STM32 · RPi · ARDUINO</text>
+  <text x="1160" y="46" class="mono" fill="#646d7b" font-size="13" letter-spacing="1" text-anchor="end">ESP32 · STM32 · RPi · ARDUINO</text>
 
   <g id="traces-in" fill="none" stroke="#1aa572" stroke-opacity="0.5" stroke-width="2" stroke-linejoin="round">
     <path d="M60 82H280L298 100H520"/>

@@ -11,6 +11,16 @@ FLOW = Path("assets/yipan-flow-light.svg")
 HERO = Path("assets/hero-light.svg")
 # Narrow screens get a stacked hero that plays the same one-shot story.
 HERO_MOBILE = Path("assets/hero-mobile.svg")
+# The narrow Yi盘 card lights the same nodes in the same order, without packets.
+FLOW_MOBILE = Path("assets/yipan-flow-mobile.svg")
+FLOW_MOBILE_STAGES = (
+    ("lit-context",),
+    ("lit-workspace-in",),
+    ("lit-cloud",),
+    ("lit-workspace-back",),
+    ("lit-output",),
+    ("lit-rail",),
+)
 STRIP = Path("assets/hardware-strip-light.svg")
 DSH = Path("assets/dsh-card-light.svg")
 PAIR = {
@@ -42,6 +52,9 @@ STORIES = {
         ("led-a", "led-b", "led-c"),
     )),
 }
+# Looping cards play a fixed number of passes, then every animation stops on the base
+# frame (the complete static card) instead of moving beside the README text forever.
+LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3"}
 # The cards' status dots and button shines run on the same 8s cycle but sit outside
 # their stories; any other animated class must belong to a stage.
 CARD_AMBIENT = {
@@ -186,6 +199,15 @@ def check_hero(path: Path, text: str) -> list[str]:
     return problems
 
 
+def check_passes(path: Path, text: str, passes: str) -> list[str]:
+    problems: list[str] = []
+    for match in HERO_ANIMATION.finditer(text):
+        tokens = re.sub(r"cubic-bezier\([^)]*\)", "", match.group("value")).split()
+        if "infinite" in tokens or passes not in tokens:
+            problems.append(f"{path.name}: {match.group('class')} must play {passes} passes, then stop")
+    return problems
+
+
 def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
     problems: list[str] = []
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
@@ -239,6 +261,10 @@ def main() -> int:
 
     mobile = Path("assets/dsh-card-mobile.svg")
     problems.extend(check_dsh(mobile, mobile.read_text(encoding="utf-8"), mobile=True))
+    flow_mobile = FLOW_MOBILE.read_text(encoding="utf-8")
+    problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
+    for card, passes in LOOP_PASSES.items():
+        problems.extend(check_passes(card, card.read_text(encoding="utf-8"), passes))
     hero_mobile = HERO_MOBILE.read_text(encoding="utf-8")
     hero_mobile_css = re.search(r"<style>(.*?)</style>", hero_mobile, re.DOTALL)
     if hero_mobile_css and FORBIDDEN_ANIMATED_PROPERTIES.search(hero_mobile_css.group(1)):
@@ -262,7 +288,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘, DSH, and hardware keep causal loop stories. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 plays three causal passes; DSH and hardware keep causal loop stories. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

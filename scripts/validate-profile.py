@@ -14,9 +14,10 @@ from npm_snapshot import split_snapshot, format_snapshot
 README_PATH = Path("README.md")
 STRIP_ASSETS = (Path("assets/hardware-strip-dark.svg"), Path("assets/hardware-strip-light.svg"))
 HERO_ASSETS = tuple(Path(f"assets/hero-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
-# Below GitHub's two-column profile layout (1012px) the README column is too narrow
-# for the 1200-wide hero's labels, so it switches to the stacked 360-wide hero.
-HERO_NARROW_MEDIA = "(max-width: 1011px)"
+# Below GitHub's two-column profile layout (1012px) the README column (398-685px) is too
+# narrow for 17-unit labels on 1200-wide cards, so these cards switch to 360-wide variants.
+NARROW_MEDIA = "(max-width: 1011px)"
+NARROW_CARDS = ("hero", "yipan-flow")
 SCREENSHOTS = (Path("assets/dsh-timeline-dark.png"), Path("assets/dsh-timeline-light.png"))
 MAX_SCREENSHOT_BYTES = 150 * 1024
 PHOTO_STRIP = Path("assets/hardware-featured.webp")
@@ -45,13 +46,14 @@ EXPECTED_ASSETS = {
     "./assets/hardware-strip-light.svg",
     "./assets/badge-studio.svg",
     "./assets/badge-build-log.svg",
-    "./assets/badge-yipan.svg",
     "./assets/badge-product-facts.svg",
     "./assets/badge-feedback.svg",
     "./assets/badge-hardware.svg",
     "./assets/hero-still.svg",
     "./assets/hero-mobile.svg",
     "./assets/hero-mobile-still.svg",
+    "./assets/yipan-flow-mobile.svg",
+    "./assets/yipan-flow-mobile-still.svg",
     "./assets/yipan-flow-still.svg",
     "./assets/hardware-strip-still.svg",
     "./assets/dsh-card-still.svg",
@@ -67,7 +69,6 @@ EXPECTED_IMG_ASSETS = {
     "./assets/hardware-featured.webp",
     "./assets/badge-studio.svg",
     "./assets/badge-build-log.svg",
-    "./assets/badge-yipan.svg",
     "./assets/badge-product-facts.svg",
     "./assets/badge-feedback.svg",
     "./assets/badge-hardware.svg",
@@ -299,7 +300,7 @@ def main() -> int:
     # The Yi盘 card links to the public repository and carries the summary itself,
     # so the paragraph under it keeps only the one-sentence definition.
     if not re.search(
-        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:.*\n){3}'
+        r'<a href="https://github\.com/rongyishuaige7/yipan-showcase">\n<picture>\n(?:  <source [^\n]+>\n){5}'
         r"  <img src=\"\./assets/yipan-flow-light\.svg\?v=[0-9a-f]{8}\"[^>]*>\n</picture>\n</a>\n\n"
         r"> 结构示意，非产品截图。\n\n\*\*Yi盘是一套装在 U 盘里的随身 AI 工作台。\*\*\n\n\| 项目 \| 当前事实 \|",
         readme,
@@ -330,11 +331,11 @@ def main() -> int:
                       if f'src="./assets/{stem}-light.svg' in b), "")
         sources = re.findall(r'<source media="([^"]+)" srcset="([^"?]+)(?:\?v=[^"]*)?">', block)
         expected = [("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg")]
-        if stem == "hero":
+        if stem in NARROW_CARDS:
             expected = [
-                (f"{HERO_NARROW_MEDIA} and (prefers-reduced-motion: reduce)", "./assets/hero-mobile-still.svg"),
-                (HERO_NARROW_MEDIA, "./assets/hero-mobile.svg"),
-                ("(prefers-reduced-motion: reduce)", "./assets/hero-still.svg"),
+                (f"{NARROW_MEDIA} and (prefers-reduced-motion: reduce)", f"./assets/{stem}-mobile-still.svg"),
+                (NARROW_MEDIA, f"./assets/{stem}-mobile.svg"),
+                ("(prefers-reduced-motion: reduce)", f"./assets/{stem}-still.svg"),
             ]
         if stem == "dsh-card":
             expected = [
@@ -355,8 +356,8 @@ def main() -> int:
         elif npm_age > NPM_STALE_DAYS:
             problems.append(f"npm figures are stale: the download window ended {npm_age} days ago ({npm_end})")
     problems.extend(validate_workflows())
-    if readme.count('src="./assets/badge-') != 6:
-        problems.append("profile must contain exactly six local brand badges")
+    if readme.count('src="./assets/badge-') != 5:
+        problems.append("profile must contain exactly five local brand badges")
 
     positions = [readme.find(marker) for marker in LANE_MARKERS]
     if -1 not in positions:

@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="460" viewBox="0 0 360 460" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘：U 盘里的 AI 工作台</title>
+  <desc id="desc">Yi盘：U 盘里的 AI 工作台。资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；状态受控内测。结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
+  <style>
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    .theme-dark { display: none; }
+    @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_on: #b6ec6a; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
+
+    text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .lit, .packet, .pulse-ring { opacity: 0; }
+    .pulse-ring { transform-box: fill-box; transform-origin: center; }
+    @media (prefers-reduced-motion: no-preference) {
+      .lit-context { animation: lit-context 8s ease-in-out 3; }
+      .packet-retrieve { animation: packet-retrieve 8s linear 3; }
+      .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out 3; }
+      .packet-request { animation: packet-request 8s linear 3; }
+      .lit-cloud { animation: lit-cloud 8s ease-in-out 3; }
+      .packet-result { animation: packet-result 8s linear 3; }
+      .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out 3; }
+      .packet-generate { animation: packet-generate 8s linear 3; }
+      .lit-output { animation: lit-output 8s ease-in-out 3; }
+      .lit-rail { animation: lit-rail 8s ease-in-out 3; }
+      .packet-rail { animation: packet-rail 8s linear 3; }
+      .status-pulse { animation: status-pulse 8s ease-out 3; }
+      .cta-shine { animation: cta-shine 8s ease-in-out 3; }
+    }
+    @keyframes lit-context {
+      0% { opacity: 0; }
+      2%, 7% { opacity: 1; }
+      9%, 100% { opacity: 0; }
+    }
+    @keyframes packet-retrieve {
+      0%, 8% { opacity: 0; transform: translateY(0); }
+      9% { opacity: 1; transform: translateY(0); }
+      11% { transform: translateY(3px); }
+      13% { transform: translateY(12px); }
+      15% { transform: translateY(24px); }
+      17% { opacity: 1; transform: translateY(32px); }
+      18%, 100% { opacity: 0; transform: translateY(32px); }
+    }
+    @keyframes lit-workspace-in {
+      0%, 16% { opacity: 0; }
+      18% { opacity: 1; }
+      20.5% { opacity: 0.78; }
+      23% { opacity: 1; }
+      25%, 100% { opacity: 0; }
+    }
+    @keyframes packet-request {
+      0%, 24% { opacity: 0; transform: translateX(0); }
+      25% { opacity: 1; transform: translateX(0); }
+      27% { transform: translateX(8px); }
+      29% { transform: translateX(32px); }
+      31% { transform: translateX(62px); }
+      33% { opacity: 1; transform: translateX(76px); }
+      34%, 100% { opacity: 0; transform: translateX(76px); }
+    }
+    @keyframes lit-cloud {
+      0%, 32% { opacity: 0; }
+      34% { opacity: 1; }
+      36% { opacity: 0.72; }
+      37.5% { opacity: 1; }
+      39% { opacity: 0.88; }
+      41%, 100% { opacity: 0; }
+    }
+    @keyframes packet-result {
+      0%, 40% { opacity: 0; transform: translateX(0); }
+      41% { opacity: 1; transform: translateX(0); }
+      43% { transform: translateX(-8px); }
+      45% { transform: translateX(-32px); }
+      47% { transform: translateX(-62px); }
+      49% { opacity: 1; transform: translateX(-76px); }
+      50%, 100% { opacity: 0; transform: translateX(-76px); }
+    }
+    @keyframes lit-workspace-back {
+      0%, 48% { opacity: 0; }
+      50% { opacity: 1; }
+      52.5% { opacity: 0.78; }
+      55% { opacity: 1; }
+      57%, 100% { opacity: 0; }
+    }
+    @keyframes packet-generate {
+      0%, 56% { opacity: 0; transform: translateY(0); }
+      57% { opacity: 1; transform: translateY(0); }
+      59% { transform: translateY(3px); }
+      61% { transform: translateY(12px); }
+      63% { transform: translateY(24px); }
+      65% { opacity: 1; transform: translateY(32px); }
+      66%, 100% { opacity: 0; transform: translateY(32px); }
+    }
+    @keyframes lit-output {
+      0%, 64% { opacity: 0; }
+      66% { opacity: 1; }
+      68.5% { opacity: 0.82; }
+      71% { opacity: 1; }
+      73%, 100% { opacity: 0; }
+    }
+    @keyframes lit-rail {
+      0%, 72% { opacity: 0; }
+      74% { opacity: 0.65; }
+      76%, 81% { opacity: 1; }
+      83% { opacity: 0.75; }
+      85%, 100% { opacity: 0; }
+    }
+    @keyframes packet-rail {
+      0%, 74% { opacity: 0; transform: translateY(0); }
+      75% { opacity: 1; transform: translateY(0); }
+      77% { transform: translateY(-17px); }
+      79% { transform: translateY(-78px); }
+      81% { transform: translateY(-156px); }
+      83% { opacity: 1; transform: translateY(-196px); }
+      84%, 100% { opacity: 0; transform: translateY(-196px); }
+    }
+    @keyframes status-pulse {
+      0%, 22%, 25%, 47%, 50%, 72%, 75%, 97%, 100% { opacity: 0; transform: scale(1); }
+      1%, 26%, 51%, 76% { opacity: 0.55; transform: scale(1); }
+      21%, 46%, 71%, 96% { opacity: 0; transform: scale(3); }
+    }
+    @keyframes cta-shine {
+      0%, 86% { transform: translateX(0); }
+      96%, 100% { transform: translateX(300px); }
+    }
+  </style>
+  <rect x="0.5" y="0.5" width="359" height="459" rx="18" fill="var(--page_bg)" stroke="var(--carry)" stroke-opacity="0.35"/>
+  <g id="card-copy">
+    <text x="24" y="45" fill="var(--ink)" font-size="27" font-weight="700">Yi盘</text>
+    <text x="24" y="77" fill="var(--carry_text)" font-size="18">U 盘里的 AI 工作台</text>
+    <text x="24" y="110" fill="var(--soft)" font-size="17">资料、任务记录和产出保存在盘内，</text>
+    <text x="24" y="134" fill="var(--soft)" font-size="17">智能处理主要调用云端模型。</text>
+  </g>
+
+  <g id="flow-figure">
+    <g id="cloud-branch">
+      <path d="M229 283.5H255M236 295.5H262" stroke="var(--link_line)"/>
+      <path d="M255 279.5V287.5L262 283.5ZM236 291.5V299.5L229 295.5Z" fill="var(--link_head)"/>
+      <g id="flow-cloud">
+        <rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="var(--card)" stroke="var(--cloud_stroke)" stroke-dasharray="6 5"/>
+        <g class="lit lit-cloud"><rect x="259" y="251" width="80" height="77" rx="13.5" fill="none" stroke="var(--cloud_lit)" stroke-opacity="0.18" stroke-width="4"/><rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="var(--cloud_lit)" fill-opacity="0.07" stroke="var(--cloud_lit)" stroke-width="1.5" stroke-dasharray="6 5"/></g>
+        <text x="299" y="285" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">云端</text>
+        <text x="299" y="307" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">模型</text>
+      </g>
+    </g>
+    <g id="drive">
+      <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <text x="236" y="174" fill="var(--flow_tag)" font-size="17" text-anchor="end">U 盘内</text>
+      <g id="continuity-rail">
+        <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="var(--carry)" stroke-opacity="0.4"/>
+        <path d="M46 217.5V225.5L52 221.5Z" fill="var(--carry)" fill-opacity="0.65"/>
+        <g class="lit lit-rail">
+          <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="var(--carry_2)" stroke-width="1.5"/>
+          <path d="M46 217.5V225.5L52 221.5Z" fill="var(--carry_2)"/>
+        </g>
+      </g>
+      <path d="M140 248V258M140 316V326" stroke="var(--carry)" stroke-opacity="0.45"/>
+      <path d="M135 258H145L140 265ZM135 326H145L140 333Z" fill="var(--carry)" fill-opacity="0.7"/>
+      <g id="flow-context">
+        <rect x="52.5" y="198.5" width="176" height="46" rx="9" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-context"><rect x="49" y="195" width="183" height="53" rx="12.5" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="52.5" y="198.5" width="176" height="46" rx="9" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="66" y="228" fill="var(--ink)" font-size="18" font-weight="700">盘内资料与任务</text>
+      </g>
+      <g id="flow-workspace">
+        <rect x="52.5" y="266.5" width="176" height="46" rx="9" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-workspace-in"><rect x="49" y="263" width="183" height="53" rx="12.5" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="52.5" y="266.5" width="176" height="46" rx="9" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <g class="lit lit-workspace-back"><rect x="49" y="263" width="183" height="53" rx="12.5" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="52.5" y="266.5" width="176" height="46" rx="9" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="66" y="296" fill="var(--ink)" font-size="18" font-weight="700">Yi盘工作台</text>
+      </g>
+      <g id="flow-output">
+        <rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-output"><rect x="49" y="331" width="183" height="53" rx="12.5" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="66" y="364" fill="var(--ink)" font-size="18" font-weight="700">产出与任务记录</text>
+      </g>
+    </g>
+  </g>
+
+  <path d="M24 406.5H336" stroke="var(--fig_stroke)"/>
+  <g id="card-status">
+    <circle class="pulse-ring status-pulse" cx="30" cy="431" r="4" fill="var(--carry)"/>
+    <circle cx="30" cy="431" r="4" fill="var(--carry)"/>
+    <text x="42" y="437" fill="var(--muted)" font-size="17">受控内测</text>
+  </g>
+  <g id="card-cta">
+    <text x="312" y="437" fill="var(--carry_text)" font-size="18" font-weight="700" text-anchor="end">查看公开仓库</text>
+    <path d="M318 438L330 426M321 426H330V435" fill="none" stroke="var(--carry_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

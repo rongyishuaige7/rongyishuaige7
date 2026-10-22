@@ -109,7 +109,7 @@ PALETTES = {
         "zone_fill": "#f8fafc",
         "ink": "#18202a",
         "muted": "#5f6876",
-        "faint": "#6c7583",
+        "faint": "#646d7b",
         "packet_fill": "#ffffff",
         "carry": "#e45738",
         "carry_2": "#f08a2c",
@@ -152,7 +152,7 @@ PALETTES = {
         "tab_bg": "#f4f6f9",
         "pill_fill": "#e8f0fd",
         "drive_fill": "0.03",
-        "flow_tag": "#c25a12",
+        "flow_tag": "#b4520e",
         "link_line": "#b9c1cc",
         "link_head": "#7d8794",
         "link_dot": "#4c5562",
@@ -661,31 +661,33 @@ ${style}
 """)
 
 
-# The Yi盘 card follows the homepage featured card: summary, tags, the repo button and
-# status on the left, the structure diagram inset on the right. In the diagram the three
-# nodes sit inside a dashed "U 盘内" boundary and the cloud model stays outside it. One 8s
-# loop lights each step in causal order: context, retrieve, workspace, request, cloud,
-# result, workspace, generate, output, then a packet runs the record rail back to the
-# context. The status dot breathes and the button shines once per loop. Reduced motion
-# shows the still card.
+# The Yi盘 card follows the homepage featured card and the DSH card's anatomy: title,
+# descriptor, summary, tags, the repo button and status on the left, the structure diagram
+# inset on the right. In the diagram the three nodes sit inside a dashed "U 盘内" boundary
+# and the cloud model stays outside it. Each 8s pass lights the steps in causal order:
+# context, retrieve, workspace, request, cloud, result, workspace, generate, output, then a
+# packet runs the record rail back to the context. The status dot breathes and the button
+# shines once per pass. After three passes every animation stops on the base frame, the
+# complete diagram, so the card does not keep moving beside the text; reduced motion shows
+# that frame from the start.
 FLOW_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .lit, .packet, .pulse-ring { opacity: 0; }
     .pulse-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
-      .lit-context { animation: lit-context 8s ease-in-out infinite; }
-      .packet-retrieve { animation: packet-retrieve 8s linear infinite; }
-      .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out infinite; }
-      .packet-request { animation: packet-request 8s linear infinite; }
-      .lit-cloud { animation: lit-cloud 8s ease-in-out infinite; }
-      .packet-result { animation: packet-result 8s linear infinite; }
-      .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out infinite; }
-      .packet-generate { animation: packet-generate 8s linear infinite; }
-      .lit-output { animation: lit-output 8s ease-in-out infinite; }
-      .lit-rail { animation: lit-rail 8s ease-in-out infinite; }
-      .packet-rail { animation: packet-rail 8s linear infinite; }
-      .status-pulse { animation: status-pulse 8s ease-out infinite; }
-      .cta-shine { animation: cta-shine 8s ease-in-out infinite; }
+      .lit-context { animation: lit-context 8s ease-in-out 3; }
+      .packet-retrieve { animation: packet-retrieve 8s linear 3; }
+      .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out 3; }
+      .packet-request { animation: packet-request 8s linear 3; }
+      .lit-cloud { animation: lit-cloud 8s ease-in-out 3; }
+      .packet-result { animation: packet-result 8s linear 3; }
+      .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out 3; }
+      .packet-generate { animation: packet-generate 8s linear 3; }
+      .lit-output { animation: lit-output 8s ease-in-out 3; }
+      .lit-rail { animation: lit-rail 8s ease-in-out 3; }
+      .packet-rail { animation: packet-rail 8s linear 3; }
+      .status-pulse { animation: status-pulse 8s ease-out 3; }
+      .cta-shine { animation: cta-shine 8s ease-in-out 3; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -767,11 +769,11 @@ FLOW_STYLE = """  <style>
     @keyframes packet-rail {
       0%, 74% { opacity: 0; transform: translateY(0); }
       75% { opacity: 1; transform: translateY(0); }
-      77% { transform: translateY(-16px); }
-      79% { transform: translateY(-74px); }
-      81% { transform: translateY(-148px); }
-      83% { opacity: 1; transform: translateY(-186px); }
-      84%, 100% { opacity: 0; transform: translateY(-186px); }
+      77% { transform: translateY(-17px); }
+      79% { transform: translateY(-78px); }
+      81% { transform: translateY(-156px); }
+      83% { opacity: 1; transform: translateY(-196px); }
+      84%, 100% { opacity: 0; transform: translateY(-196px); }
     }
     @keyframes status-pulse {
       0%, 22%, 25%, 47%, 50%, 72%, 75%, 97%, 100% { opacity: 0; transform: scale(1); }
@@ -784,9 +786,26 @@ FLOW_STYLE = """  <style>
     }
   </style>"""
 
-FLOW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="476" viewBox="0 0 1200 476" role="img" aria-labelledby="title desc">
+# A node's highlight: a soft outer ring and a tinted fill over the node's own box.
+def flow_lit(cls: str, x: float, y: float, width: float, height: float, radius: float, color: str, **extra: str) -> str:
+    attrs = "".join(f' {key.replace("_", "-")}="{value}"' for key, value in extra.items())
+    return (
+        f'<g class="lit {cls}">'
+        f'<rect x="{x - 3.5:g}" y="{y - 3.5:g}" width="{width + 7:g}" height="{height + 7:g}" rx="{radius + 3.5:g}" fill="none" stroke="{color}" stroke-opacity="0.18" stroke-width="4"/>'
+        f'<rect x="{x:g}" y="{y:g}" width="{width:g}" height="{height:g}" rx="{radius:g}" fill="{color}" fill-opacity="0.07" stroke="{color}" stroke-width="1.5"{attrs}/>'
+        "</g>"
+    )
+
+
+FLOW_DESC = (
+    "Yi盘：U 盘里的 AI 工作台。资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；状态受控内测。"
+    "结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；"
+    "生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。"
+)
+
+FLOW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="488" viewBox="0 0 1200 488" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘：U 盘里的 AI 工作台</title>
-  <desc id="desc">${theme_desc}Yi盘项目卡。左栏：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；标签 U 盘存储、云端模型；"查看公开仓库"按钮；状态受控内测。右栏是结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
+  <desc id="desc">${theme_desc}Yi盘项目卡，标签 U 盘存储、云端模型，"查看公开仓库"按钮。""" + FLOW_DESC + """</desc>
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="0.6">
       <stop stop-color="${carry}" stop-opacity="${wash}"/>
@@ -825,156 +844,212 @@ FLOW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="
     <pattern id="figGrid" width="22" height="22" patternUnits="userSpaceOnUse">
       <path d="M22 0H0V22" fill="none" stroke="${fig_grid}"/>
     </pattern>
-    <clipPath id="figClip"><rect x="489" y="49" width="662" height="378" rx="13.5"/></clipPath>
+    <clipPath id="figClip"><rect x="449" y="49" width="702" height="391" rx="13.5"/></clipPath>
     <filter id="ctaGlow" x="-30%" y="-40%" width="160%" height="230%">
       <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="${carry}" flood-opacity="0.18"/>
     </filter>
-    <clipPath id="ctaClip"><rect x="72" y="299" width="200" height="60" rx="14"/></clipPath>
+    <clipPath id="ctaClip"><rect x="48" y="290" width="200" height="58" rx="14"/></clipPath>
   </defs>
 ${style}
 
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="${page_bg}"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardWash)"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardGlow)"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="none" stroke="${carry}" stroke-opacity="0.26"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="${page_bg}"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="url(#cardWash)"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="url(#cardGlow)"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="none" stroke="${carry}" stroke-opacity="0.26"/>
 
-  <g transform="translate(0 -22)">
   <g id="card-copy">
-    <text x="72" y="179" fill="${soft}" font-size="23">资料、任务记录和产出保存在盘内，</text>
-    <text x="72" y="219" fill="${soft}" font-size="23">智能处理主要调用云端模型。</text>
+    <text x="48" y="72" fill="${ink}" font-size="37" font-weight="700">Yi盘</text>
+    <text x="48" y="107" fill="${carry_text}" font-size="18">U 盘里的 AI 工作台</text>
+    <text x="48" y="160" fill="${soft}" font-size="23">资料、任务记录和产出保存在盘内，</text>
+    <text x="48" y="195" fill="${soft}" font-size="23">智能处理主要调用云端模型。</text>
   </g>
-  <g id="card-tags" font-size="15" text-anchor="middle">
-    <rect x="72.5" y="241.5" width="91" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
-    <text x="118" y="263" fill="${muted}">U 盘存储</text>
-    <rect x="173.5" y="241.5" width="87" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
-    <text x="217" y="263" fill="${muted}">云端模型</text>
+  <g id="card-tags" text-anchor="middle">
+    <rect x="48.5" y="222.5" width="99" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
+    <text x="98" y="245" fill="${muted}" font-size="17">U 盘存储</text>
+    <rect x="157.5" y="222.5" width="99" height="33" rx="8.5" fill="${tag_fill}" stroke="${tag_stroke}"/>
+    <text x="207" y="245" fill="${muted}" font-size="17">云端模型</text>
   </g>
   <g id="card-cta">
-    <rect x="72" y="299" width="200" height="60" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
+    <rect x="48" y="290" width="200" height="58" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
     <g clip-path="url(#ctaClip)">
-      <path class="cta-shine" d="M24 299H64L44 359H4Z" fill="url(#ctaShine)"/>
+      <path class="cta-shine" d="M0 290H40L20 348H-20Z" fill="url(#ctaShine)"/>
     </g>
-    <text x="96" y="336" fill="${cta_ink}" font-size="19" font-weight="700">查看公开仓库</text>
-    <path d="M231 337L244 324M234 324H244V334" fill="none" stroke="${cta_ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="72" y="325" fill="${cta_ink}" font-size="19" font-weight="700">查看公开仓库</text>
+    <path d="M207 326L220 313M210 313H220V323" fill="none" stroke="${cta_ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status">
-    <circle cx="298" cy="329" r="8" fill="${carry}" opacity="0.18"/>
-    <circle class="pulse-ring status-pulse" cx="298" cy="329" r="4" fill="${carry}"/>
-    <circle cx="298" cy="329" r="4" fill="${carry}"/>
-    <text x="313" y="334" fill="${muted}" font-size="15">受控内测</text>
-  </g>
+    <circle cx="274" cy="319" r="8" fill="${carry}" opacity="0.18"/>
+    <circle class="pulse-ring status-pulse" cx="274" cy="319" r="4" fill="${carry}"/>
+    <circle cx="274" cy="319" r="4" fill="${carry}"/>
+    <text x="289" y="325" fill="${muted}" font-size="17">受控内测</text>
   </g>
 
   <g id="flow-figure">
-    <rect x="488.5" y="48.5" width="663" height="379" rx="14" fill="${fig_bg}" stroke="${fig_stroke}"/>
+    <rect x="448.5" y="48.5" width="703" height="392" rx="14" fill="${fig_bg}" stroke="${fig_stroke}"/>
     <g clip-path="url(#figClip)">
-      <rect x="489" y="49" width="662" height="378" fill="url(#figGrid)"/>
+      <rect x="449" y="49" width="702" height="391" fill="url(#figGrid)"/>
     </g>
 
     <g id="cloud-branch">
       <g id="link-request">
-        <path d="M916 240H999" stroke="${link_line}"/>
-        <path d="M998 235.5V244.5L1005 240Z" fill="${link_head}"/>
-        <text x="971" y="228" fill="${faint}" font-size="13" text-anchor="middle">按需请求</text>
+        <path d="M895 247.5H997" stroke="${link_line}"/>
+        <path d="M996 243V252L1003 247.5Z" fill="${link_head}"/>
+        <text x="959" y="236" fill="${faint}" font-size="17" text-anchor="middle">按需请求</text>
         <g class="packet packet-request">
-          <rect x="906" y="238.5" width="16" height="3" rx="1.5" fill="url(#trailRight)"/>
-          <circle cx="922" cy="240" r="7" fill="${link_dot}" opacity="0.2"/>
-          <circle cx="922" cy="240" r="3.5" fill="${link_dot}"/>
+          <rect x="898" y="246" width="16" height="3" rx="1.5" fill="url(#trailRight)"/>
+          <circle cx="914" cy="247.5" r="7" fill="${link_dot}" opacity="0.2"/>
+          <circle cx="914" cy="247.5" r="3.5" fill="${link_dot}"/>
         </g>
       </g>
       <g id="link-result">
-        <path d="M923 264H1007" stroke="${link_line}"/>
-        <path d="M923 259.5V268.5L916 264Z" fill="${link_head}"/>
-        <text x="971" y="285" fill="${faint}" font-size="13" text-anchor="middle">返回结果</text>
+        <path d="M902 271.5H1004" stroke="${link_line}"/>
+        <path d="M902 267V276L895 271.5Z" fill="${link_head}"/>
+        <text x="959" y="295" fill="${faint}" font-size="17" text-anchor="middle">返回结果</text>
         <g class="packet packet-result">
-          <rect x="1001" y="262.5" width="16" height="3" rx="1.5" fill="url(#trailLeft)"/>
-          <circle cx="1001" cy="264" r="7" fill="${link_dot}" opacity="0.2"/>
-          <circle cx="1001" cy="264" r="3.5" fill="${link_dot}"/>
+          <rect x="986" y="270" width="16" height="3" rx="1.5" fill="url(#trailLeft)"/>
+          <circle cx="986" cy="271.5" r="7" fill="${link_dot}" opacity="0.2"/>
+          <circle cx="986" cy="271.5" r="3.5" fill="${link_dot}"/>
         </g>
       </g>
       <g id="flow-cloud">
-        <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
-        <g class="lit lit-cloud">
-          <rect x="1004" y="202" width="130" height="100" rx="16" fill="none" stroke="${cloud_lit}" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="${cloud_lit}" fill-opacity="0.06" stroke="${cloud_lit}" stroke-width="1.5" stroke-dasharray="6 5"/>
-        </g>
-        <text x="1069" y="247" fill="${ink}" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
-        <text x="1069" y="273" fill="${muted}" font-size="14" text-anchor="middle">按需推理</text>
+        <rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
+        """ + flow_lit("lit-cloud", 1004.5, 212.5, 128, 94, 12.5, "${cloud_lit}", stroke_dasharray="6 5") + """
+        <text x="1068.5" y="255" fill="${ink}" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
+        <text x="1068.5" y="283" fill="${muted}" font-size="17" text-anchor="middle">按需推理</text>
       </g>
     </g>
 
     <g id="drive">
-      <rect id="drive-boundary" x="508.5" y="94.5" width="427" height="315" rx="14" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
-      <text x="932" y="84" fill="${flow_tag}" font-size="14" text-anchor="end">U 盘内</text>
+      <rect id="drive-boundary" x="468.5" y="98.5" width="446" height="322" rx="14" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <text x="910" y="86" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
 
       <g id="continuity-rail">
-        <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
-        <path d="M549 137.5V146.5L556 142Z" fill="${carry}" fill-opacity="0.65"/>
-        <text fill="${faint}" font-size="13" text-anchor="middle"><tspan x="542" y="221">记</tspan><tspan x="542" y="239">录</tspan><tspan x="542" y="257">·</tspan><tspan x="542" y="275">沉</tspan><tspan x="542" y="293">淀</tspan></text>
+        <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
+        <path d="M517 145V154L524 149.5Z" fill="${carry}" fill-opacity="0.65"/>
+        <text fill="${faint}" font-size="17" text-anchor="middle"><tspan x="505" y="225.5">记</tspan><tspan x="505" y="245.5">录</tspan><tspan x="505" y="265.5">·</tspan><tspan x="505" y="285.5">沉</tspan><tspan x="505" y="305.5">淀</tspan></text>
         <g class="lit lit-rail">
-          <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="${carry_2}" stroke-width="1.5"/>
-          <path d="M549 137.5V146.5L556 142Z" fill="${carry_2}"/>
+          <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="${carry_2}" stroke-width="1.5"/>
+          <path d="M517 145V154L524 149.5Z" fill="${carry_2}"/>
         </g>
         <g class="packet packet-rail">
-          <rect x="526.5" y="338" width="3" height="16" rx="1.5" fill="url(#trailUp)"/>
-          <circle cx="528" cy="338" r="7" fill="${carry_2}" opacity="0.22"/>
-          <circle cx="528" cy="338" r="3.5" fill="${carry_2}"/>
+          <rect x="486.5" y="354" width="3" height="16" rx="1.5" fill="url(#trailUp)"/>
+          <circle cx="488" cy="354" r="7" fill="${carry_2}" opacity="0.22"/>
+          <circle cx="488" cy="354" r="3.5" fill="${carry_2}"/>
         </g>
       </g>
 
       <g id="step-retrieve">
-        <path d="M596 178V212" stroke="${carry}" stroke-opacity="0.45"/>
-        <path d="M591 211H601L596 218Z" fill="${carry}" fill-opacity="0.7"/>
-        <text x="614" y="202" fill="${faint}" font-size="13">检索 / 继续</text>
+        <path d="M564 188V217" stroke="${carry}" stroke-opacity="0.45"/>
+        <path d="M559 216H569L564 223Z" fill="${carry}" fill-opacity="0.7"/>
+        <text x="582" y="210" fill="${faint}" font-size="17">检索 / 继续</text>
         <g class="packet packet-retrieve">
-          <rect x="594.5" y="164" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
-          <circle cx="596" cy="180" r="7" fill="${carry_2}" opacity="0.22"/>
-          <circle cx="596" cy="180" r="3.5" fill="${carry_2}"/>
+          <rect x="562.5" y="172" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="564" cy="188" r="7" fill="${carry_2}" opacity="0.22"/>
+          <circle cx="564" cy="188" r="3.5" fill="${carry_2}"/>
         </g>
       </g>
       <g id="step-generate">
-        <path d="M596 288V322" stroke="${carry}" stroke-opacity="0.45"/>
-        <path d="M591 321H601L596 328Z" fill="${carry}" fill-opacity="0.7"/>
-        <text x="614" y="312" fill="${faint}" font-size="13">生成 / 记录</text>
+        <path d="M564 298V327" stroke="${carry}" stroke-opacity="0.45"/>
+        <path d="M559 326H569L564 333Z" fill="${carry}" fill-opacity="0.7"/>
+        <text x="582" y="320" fill="${faint}" font-size="17">生成 / 记录</text>
         <g class="packet packet-generate">
-          <rect x="594.5" y="274" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
-          <circle cx="596" cy="290" r="7" fill="${carry_2}" opacity="0.22"/>
-          <circle cx="596" cy="290" r="3.5" fill="${carry_2}"/>
+          <rect x="562.5" y="282" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="564" cy="298" r="7" fill="${carry_2}" opacity="0.22"/>
+          <circle cx="564" cy="298" r="3.5" fill="${carry_2}"/>
         </g>
       </g>
 
       <g id="flow-context">
-        <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
-        <g class="lit lit-context">
-          <rect x="553" y="106" width="366" height="72" rx="14" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="${carry}" fill-opacity="0.08" stroke="${carry}" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="137" fill="${ink}" font-size="20" font-weight="700">盘内资料与任务</text>
-        <text x="576" y="161" fill="${muted}" font-size="14">Inbox 确认后写入长期知识</text>
+        <rect x="524.5" y="114.5" width="370" height="70" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-context", 524.5, 114.5, 370, 70, 10.5, "${carry}") + """
+        <text x="544" y="143" fill="${ink}" font-size="22" font-weight="700">盘内资料与任务</text>
+        <text x="544" y="170" fill="${muted}" font-size="17">Inbox 确认后写入长期知识</text>
       </g>
       <g id="flow-workspace">
-        <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
-        <g class="lit lit-workspace-in">
-          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="${carry}" fill-opacity="0.08" stroke="${carry}" stroke-width="1.5"/>
-        </g>
-        <g class="lit lit-workspace-back">
-          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="${carry}" fill-opacity="0.08" stroke="${carry}" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="247" fill="${ink}" font-size="20" font-weight="700">Yi盘工作台</text>
-        <text x="576" y="271" fill="${muted}" font-size="14">受管 Agent 处理当前任务</text>
+        <rect x="524.5" y="224.5" width="370" height="70" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-workspace-in", 524.5, 224.5, 370, 70, 10.5, "${carry}") + """
+        """ + flow_lit("lit-workspace-back", 524.5, 224.5, 370, 70, 10.5, "${carry}") + """
+        <text x="544" y="253" fill="${ink}" font-size="22" font-weight="700">Yi盘工作台</text>
+        <text x="544" y="280" fill="${muted}" font-size="17">受管 Agent 处理当前任务</text>
       </g>
       <g id="flow-output">
-        <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
-        <g class="lit lit-output">
-          <rect x="553" y="326" width="366" height="72" rx="14" fill="none" stroke="${carry}" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="${carry}" fill-opacity="0.08" stroke="${carry}" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="357" fill="${ink}" font-size="20" font-weight="700">产出与任务记录</text>
-        <text x="576" y="381" fill="${muted}" font-size="14">留在盘内，随盘带走</text>
+        <rect x="524.5" y="334.5" width="370" height="70" rx="10.5" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-output", 524.5, 334.5, 370, 70, 10.5, "${carry}") + """
+        <text x="544" y="363" fill="${ink}" font-size="22" font-weight="700">产出与任务记录</text>
+        <text x="544" y="390" fill="${muted}" font-size="17">留在盘内，随盘带走</text>
       </g>
     </g>
+  </g>
+</svg>
+""")
+
+# Narrow screens get the same card stacked at 360 units: the summary, then the diagram with
+# node titles only (the README table and alt text carry the details), then status and link.
+# It lights the nodes in the same order on the same 8s pass, without packets.
+FLOW_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="460" viewBox="0 0 360 460" role="img" aria-labelledby="title desc">
+  <title id="title">Yi盘：U 盘里的 AI 工作台</title>
+  <desc id="desc">""" + FLOW_DESC + """</desc>
+${style}
+  <rect x="0.5" y="0.5" width="359" height="459" rx="18" fill="${page_bg}" stroke="${carry}" stroke-opacity="0.35"/>
+  <g id="card-copy">
+    <text x="24" y="45" fill="${ink}" font-size="27" font-weight="700">Yi盘</text>
+    <text x="24" y="77" fill="${carry_text}" font-size="18">U 盘里的 AI 工作台</text>
+    <text x="24" y="110" fill="${soft}" font-size="17">资料、任务记录和产出保存在盘内，</text>
+    <text x="24" y="134" fill="${soft}" font-size="17">智能处理主要调用云端模型。</text>
+  </g>
+
+  <g id="flow-figure">
+    <g id="cloud-branch">
+      <path d="M229 283.5H255M236 295.5H262" stroke="${link_line}"/>
+      <path d="M255 279.5V287.5L262 283.5ZM236 291.5V299.5L229 295.5Z" fill="${link_head}"/>
+      <g id="flow-cloud">
+        <rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
+        """ + flow_lit("lit-cloud", 262.5, 254.5, 73, 70, 10, "${cloud_lit}", stroke_dasharray="6 5") + """
+        <text x="299" y="285" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">云端</text>
+        <text x="299" y="307" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">模型</text>
+      </g>
+    </g>
+    <g id="drive">
+      <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <text x="236" y="174" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
+      <g id="continuity-rail">
+        <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
+        <path d="M46 217.5V225.5L52 221.5Z" fill="${carry}" fill-opacity="0.65"/>
+        <g class="lit lit-rail">
+          <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="${carry_2}" stroke-width="1.5"/>
+          <path d="M46 217.5V225.5L52 221.5Z" fill="${carry_2}"/>
+        </g>
+      </g>
+      <path d="M140 248V258M140 316V326" stroke="${carry}" stroke-opacity="0.45"/>
+      <path d="M135 258H145L140 265ZM135 326H145L140 333Z" fill="${carry}" fill-opacity="0.7"/>
+      <g id="flow-context">
+        <rect x="52.5" y="198.5" width="176" height="46" rx="9" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-context", 52.5, 198.5, 176, 46, 9, "${carry}") + """
+        <text x="66" y="228" fill="${ink}" font-size="18" font-weight="700">盘内资料与任务</text>
+      </g>
+      <g id="flow-workspace">
+        <rect x="52.5" y="266.5" width="176" height="46" rx="9" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-workspace-in", 52.5, 266.5, 176, 46, 9, "${carry}") + """
+        """ + flow_lit("lit-workspace-back", 52.5, 266.5, 176, 46, 9, "${carry}") + """
+        <text x="66" y="296" fill="${ink}" font-size="18" font-weight="700">Yi盘工作台</text>
+      </g>
+      <g id="flow-output">
+        <rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
+        """ + flow_lit("lit-output", 52.5, 334.5, 176, 46, 9, "${carry}") + """
+        <text x="66" y="364" fill="${ink}" font-size="18" font-weight="700">产出与任务记录</text>
+      </g>
+    </g>
+  </g>
+
+  <path d="M24 406.5H336" stroke="${fig_stroke}"/>
+  <g id="card-status">
+    <circle class="pulse-ring status-pulse" cx="30" cy="431" r="4" fill="${carry}"/>
+    <circle cx="30" cy="431" r="4" fill="${carry}"/>
+    <text x="42" y="437" fill="${muted}" font-size="17">受控内测</text>
+  </g>
+  <g id="card-cta">
+    <text x="312" y="437" fill="${carry_text}" font-size="18" font-weight="700" text-anchor="end">查看公开仓库</text>
+    <path d="M318 438L330 426M321 426H330V435" fill="none" stroke="${carry_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
 """)
@@ -1356,8 +1431,14 @@ def main() -> int:
             hash_sources[path] = render_adaptive(template, style, NPM_PLACEHOLDER)
     hero_path = ASSETS / "hero-still.svg"
     rendered[hero_path] = both_captures(rendered[hero_path])
-    for name, motion in (("hero-mobile.svg", True), ("hero-mobile-still.svg", False)):
-        rendered[ASSETS / name] = both_captures(render_adaptive(HERO_NARROW, HERO_STYLE, hero_media('light'), motion=motion))
+    # Narrow screens: one adaptive file with motion and one still file per card.
+    narrow = {
+        "hero": (HERO_NARROW, HERO_STYLE, hero_media('light'), both_captures),
+        "yipan-flow": (FLOW_MOBILE, FLOW_STYLE, {}, lambda svg: svg),
+    }
+    for stem, (template, style, extra, finish) in narrow.items():
+        for suffix, motion in (("mobile", True), ("mobile-still", False)):
+            rendered[ASSETS / f"{stem}-{suffix}.svg"] = finish(render_adaptive(template, style, extra, motion=motion))
     for name, motion in (("dsh-card-mobile.svg", True), ("dsh-card-mobile-still.svg", False)):
         rendered[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=motion)
         hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)

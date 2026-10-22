@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="476" viewBox="0 0 1200 476" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="488" viewBox="0 0 1200 488" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘：U 盘里的 AI 工作台</title>
-  <desc id="desc">深浅主题自适应Yi盘项目卡。左栏：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；标签 U 盘存储、云端模型；"查看公开仓库"按钮；状态受控内测。右栏是结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
+  <desc id="desc">深浅主题自适应Yi盘项目卡，标签 U 盘存储、云端模型，"查看公开仓库"按钮。Yi盘：U 盘里的 AI 工作台。资料、任务记录和产出保存在盘内，智能处理主要调用云端模型；状态受控内测。结构示意，非产品截图：虚线框表示 U 盘内，盘内资料与任务（Inbox 确认后写入长期知识）经检索供 Yi盘工作台使用，受管 Agent 处理当前任务；生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。框外是云端模型：工作台按需请求，模型按需推理后返回结果。</desc>
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="0.6">
       <stop stop-color="var(--carry)" stop-opacity="var(--wash)"/>
@@ -39,14 +39,14 @@
     <pattern id="figGrid" width="22" height="22" patternUnits="userSpaceOnUse">
       <path d="M22 0H0V22" fill="none" stroke="var(--fig_grid)"/>
     </pattern>
-    <clipPath id="figClip"><rect x="489" y="49" width="662" height="378" rx="13.5"/></clipPath>
+    <clipPath id="figClip"><rect x="449" y="49" width="702" height="391" rx="13.5"/></clipPath>
     <filter id="ctaGlow" x="-30%" y="-40%" width="160%" height="230%">
       <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="var(--carry)" flood-opacity="0.18"/>
     </filter>
-    <clipPath id="ctaClip"><rect x="72" y="299" width="200" height="60" rx="14"/></clipPath>
+    <clipPath id="ctaClip"><rect x="48" y="290" width="200" height="58" rx="14"/></clipPath>
   </defs>
   <style>
-    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #6c7583; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #c25a12; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
     .theme-dark { display: none; }
     @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_on: #b6ec6a; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
 
@@ -69,146 +69,131 @@
 
   </style>
 
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="var(--page_bg)"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardWash)"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="url(#cardGlow)"/>
-  <rect x="0.5" y="0.5" width="1199" height="475" rx="18" fill="none" stroke="var(--carry)" stroke-opacity="0.26"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="var(--page_bg)"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="url(#cardWash)"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="url(#cardGlow)"/>
+  <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="none" stroke="var(--carry)" stroke-opacity="0.26"/>
 
-  <g transform="translate(0 -22)">
   <g id="card-copy">
-    <text x="72" y="179" fill="var(--soft)" font-size="23">资料、任务记录和产出保存在盘内，</text>
-    <text x="72" y="219" fill="var(--soft)" font-size="23">智能处理主要调用云端模型。</text>
+    <text x="48" y="72" fill="var(--ink)" font-size="37" font-weight="700">Yi盘</text>
+    <text x="48" y="107" fill="var(--carry_text)" font-size="18">U 盘里的 AI 工作台</text>
+    <text x="48" y="160" fill="var(--soft)" font-size="23">资料、任务记录和产出保存在盘内，</text>
+    <text x="48" y="195" fill="var(--soft)" font-size="23">智能处理主要调用云端模型。</text>
   </g>
-  <g id="card-tags" font-size="15" text-anchor="middle">
-    <rect x="72.5" y="241.5" width="91" height="33" rx="8.5" fill="var(--tag_fill)" stroke="var(--tag_stroke)"/>
-    <text x="118" y="263" fill="var(--muted)">U 盘存储</text>
-    <rect x="173.5" y="241.5" width="87" height="33" rx="8.5" fill="var(--tag_fill)" stroke="var(--tag_stroke)"/>
-    <text x="217" y="263" fill="var(--muted)">云端模型</text>
+  <g id="card-tags" text-anchor="middle">
+    <rect x="48.5" y="222.5" width="99" height="33" rx="8.5" fill="var(--tag_fill)" stroke="var(--tag_stroke)"/>
+    <text x="98" y="245" fill="var(--muted)" font-size="17">U 盘存储</text>
+    <rect x="157.5" y="222.5" width="99" height="33" rx="8.5" fill="var(--tag_fill)" stroke="var(--tag_stroke)"/>
+    <text x="207" y="245" fill="var(--muted)" font-size="17">云端模型</text>
   </g>
   <g id="card-cta">
-    <rect x="72" y="299" width="200" height="60" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
+    <rect x="48" y="290" width="200" height="58" rx="14" fill="url(#ctaFill)" filter="url(#ctaGlow)"/>
     <g clip-path="url(#ctaClip)">
-      <path class="cta-shine" d="M24 299H64L44 359H4Z" fill="url(#ctaShine)"/>
+      <path class="cta-shine" d="M0 290H40L20 348H-20Z" fill="url(#ctaShine)"/>
     </g>
-    <text x="96" y="336" fill="var(--cta_ink)" font-size="19" font-weight="700">查看公开仓库</text>
-    <path d="M231 337L244 324M234 324H244V334" fill="none" stroke="var(--cta_ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="72" y="325" fill="var(--cta_ink)" font-size="19" font-weight="700">查看公开仓库</text>
+    <path d="M207 326L220 313M210 313H220V323" fill="none" stroke="var(--cta_ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status">
-    <circle cx="298" cy="329" r="8" fill="var(--carry)" opacity="0.18"/>
-    <circle class="pulse-ring status-pulse" cx="298" cy="329" r="4" fill="var(--carry)"/>
-    <circle cx="298" cy="329" r="4" fill="var(--carry)"/>
-    <text x="313" y="334" fill="var(--muted)" font-size="15">受控内测</text>
-  </g>
+    <circle cx="274" cy="319" r="8" fill="var(--carry)" opacity="0.18"/>
+    <circle class="pulse-ring status-pulse" cx="274" cy="319" r="4" fill="var(--carry)"/>
+    <circle cx="274" cy="319" r="4" fill="var(--carry)"/>
+    <text x="289" y="325" fill="var(--muted)" font-size="17">受控内测</text>
   </g>
 
   <g id="flow-figure">
-    <rect x="488.5" y="48.5" width="663" height="379" rx="14" fill="var(--fig_bg)" stroke="var(--fig_stroke)"/>
+    <rect x="448.5" y="48.5" width="703" height="392" rx="14" fill="var(--fig_bg)" stroke="var(--fig_stroke)"/>
     <g clip-path="url(#figClip)">
-      <rect x="489" y="49" width="662" height="378" fill="url(#figGrid)"/>
+      <rect x="449" y="49" width="702" height="391" fill="url(#figGrid)"/>
     </g>
 
     <g id="cloud-branch">
       <g id="link-request">
-        <path d="M916 240H999" stroke="var(--link_line)"/>
-        <path d="M998 235.5V244.5L1005 240Z" fill="var(--link_head)"/>
-        <text x="971" y="228" fill="var(--faint)" font-size="13" text-anchor="middle">按需请求</text>
+        <path d="M895 247.5H997" stroke="var(--link_line)"/>
+        <path d="M996 243V252L1003 247.5Z" fill="var(--link_head)"/>
+        <text x="959" y="236" fill="var(--faint)" font-size="17" text-anchor="middle">按需请求</text>
         <g class="packet packet-request">
-          <rect x="906" y="238.5" width="16" height="3" rx="1.5" fill="url(#trailRight)"/>
-          <circle cx="922" cy="240" r="7" fill="var(--link_dot)" opacity="0.2"/>
-          <circle cx="922" cy="240" r="3.5" fill="var(--link_dot)"/>
+          <rect x="898" y="246" width="16" height="3" rx="1.5" fill="url(#trailRight)"/>
+          <circle cx="914" cy="247.5" r="7" fill="var(--link_dot)" opacity="0.2"/>
+          <circle cx="914" cy="247.5" r="3.5" fill="var(--link_dot)"/>
         </g>
       </g>
       <g id="link-result">
-        <path d="M923 264H1007" stroke="var(--link_line)"/>
-        <path d="M923 259.5V268.5L916 264Z" fill="var(--link_head)"/>
-        <text x="971" y="285" fill="var(--faint)" font-size="13" text-anchor="middle">返回结果</text>
+        <path d="M902 271.5H1004" stroke="var(--link_line)"/>
+        <path d="M902 267V276L895 271.5Z" fill="var(--link_head)"/>
+        <text x="959" y="295" fill="var(--faint)" font-size="17" text-anchor="middle">返回结果</text>
         <g class="packet packet-result">
-          <rect x="1001" y="262.5" width="16" height="3" rx="1.5" fill="url(#trailLeft)"/>
-          <circle cx="1001" cy="264" r="7" fill="var(--link_dot)" opacity="0.2"/>
-          <circle cx="1001" cy="264" r="3.5" fill="var(--link_dot)"/>
+          <rect x="986" y="270" width="16" height="3" rx="1.5" fill="url(#trailLeft)"/>
+          <circle cx="986" cy="271.5" r="7" fill="var(--link_dot)" opacity="0.2"/>
+          <circle cx="986" cy="271.5" r="3.5" fill="var(--link_dot)"/>
         </g>
       </g>
       <g id="flow-cloud">
-        <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="var(--card)" stroke="var(--cloud_stroke)" stroke-dasharray="6 5"/>
-        <g class="lit lit-cloud">
-          <rect x="1004" y="202" width="130" height="100" rx="16" fill="none" stroke="var(--cloud_lit)" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="1007.5" y="205.5" width="123" height="93" rx="12.5" fill="var(--cloud_lit)" fill-opacity="0.06" stroke="var(--cloud_lit)" stroke-width="1.5" stroke-dasharray="6 5"/>
-        </g>
-        <text x="1069" y="247" fill="var(--ink)" font-size="20" font-weight="700" text-anchor="middle">云端模型</text>
-        <text x="1069" y="273" fill="var(--muted)" font-size="14" text-anchor="middle">按需推理</text>
+        <rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="var(--card)" stroke="var(--cloud_stroke)" stroke-dasharray="6 5"/>
+        <g class="lit lit-cloud"><rect x="1001" y="209" width="135" height="101" rx="16" fill="none" stroke="var(--cloud_lit)" stroke-opacity="0.18" stroke-width="4"/><rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="var(--cloud_lit)" fill-opacity="0.07" stroke="var(--cloud_lit)" stroke-width="1.5" stroke-dasharray="6 5"/></g>
+        <text x="1068.5" y="255" fill="var(--ink)" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
+        <text x="1068.5" y="283" fill="var(--muted)" font-size="17" text-anchor="middle">按需推理</text>
       </g>
     </g>
 
     <g id="drive">
-      <rect id="drive-boundary" x="508.5" y="94.5" width="427" height="315" rx="14" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
-      <text x="932" y="84" fill="var(--flow_tag)" font-size="14" text-anchor="end">U 盘内</text>
+      <rect id="drive-boundary" x="468.5" y="98.5" width="446" height="322" rx="14" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <text x="910" y="86" fill="var(--flow_tag)" font-size="17" text-anchor="end">U 盘内</text>
 
       <g id="continuity-rail">
-        <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="var(--carry)" stroke-opacity="0.4"/>
-        <path d="M549 137.5V146.5L556 142Z" fill="var(--carry)" fill-opacity="0.65"/>
-        <text fill="var(--faint)" font-size="13" text-anchor="middle"><tspan x="542" y="221">记</tspan><tspan x="542" y="239">录</tspan><tspan x="542" y="257">·</tspan><tspan x="542" y="275">沉</tspan><tspan x="542" y="293">淀</tspan></text>
+        <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="var(--carry)" stroke-opacity="0.4"/>
+        <path d="M517 145V154L524 149.5Z" fill="var(--carry)" fill-opacity="0.65"/>
+        <text fill="var(--faint)" font-size="17" text-anchor="middle"><tspan x="505" y="225.5">记</tspan><tspan x="505" y="245.5">录</tspan><tspan x="505" y="265.5">·</tspan><tspan x="505" y="285.5">沉</tspan><tspan x="505" y="305.5">淀</tspan></text>
         <g class="lit lit-rail">
-          <path d="M556 362H536A8 8 0 0 1 528 354V150A8 8 0 0 1 536 142H549" fill="none" stroke="var(--carry_2)" stroke-width="1.5"/>
-          <path d="M549 137.5V146.5L556 142Z" fill="var(--carry_2)"/>
+          <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="var(--carry_2)" stroke-width="1.5"/>
+          <path d="M517 145V154L524 149.5Z" fill="var(--carry_2)"/>
         </g>
         <g class="packet packet-rail">
-          <rect x="526.5" y="338" width="3" height="16" rx="1.5" fill="url(#trailUp)"/>
-          <circle cx="528" cy="338" r="7" fill="var(--carry_2)" opacity="0.22"/>
-          <circle cx="528" cy="338" r="3.5" fill="var(--carry_2)"/>
+          <rect x="486.5" y="354" width="3" height="16" rx="1.5" fill="url(#trailUp)"/>
+          <circle cx="488" cy="354" r="7" fill="var(--carry_2)" opacity="0.22"/>
+          <circle cx="488" cy="354" r="3.5" fill="var(--carry_2)"/>
         </g>
       </g>
 
       <g id="step-retrieve">
-        <path d="M596 178V212" stroke="var(--carry)" stroke-opacity="0.45"/>
-        <path d="M591 211H601L596 218Z" fill="var(--carry)" fill-opacity="0.7"/>
-        <text x="614" y="202" fill="var(--faint)" font-size="13">检索 / 继续</text>
+        <path d="M564 188V217" stroke="var(--carry)" stroke-opacity="0.45"/>
+        <path d="M559 216H569L564 223Z" fill="var(--carry)" fill-opacity="0.7"/>
+        <text x="582" y="210" fill="var(--faint)" font-size="17">检索 / 继续</text>
         <g class="packet packet-retrieve">
-          <rect x="594.5" y="164" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
-          <circle cx="596" cy="180" r="7" fill="var(--carry_2)" opacity="0.22"/>
-          <circle cx="596" cy="180" r="3.5" fill="var(--carry_2)"/>
+          <rect x="562.5" y="172" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="564" cy="188" r="7" fill="var(--carry_2)" opacity="0.22"/>
+          <circle cx="564" cy="188" r="3.5" fill="var(--carry_2)"/>
         </g>
       </g>
       <g id="step-generate">
-        <path d="M596 288V322" stroke="var(--carry)" stroke-opacity="0.45"/>
-        <path d="M591 321H601L596 328Z" fill="var(--carry)" fill-opacity="0.7"/>
-        <text x="614" y="312" fill="var(--faint)" font-size="13">生成 / 记录</text>
+        <path d="M564 298V327" stroke="var(--carry)" stroke-opacity="0.45"/>
+        <path d="M559 326H569L564 333Z" fill="var(--carry)" fill-opacity="0.7"/>
+        <text x="582" y="320" fill="var(--faint)" font-size="17">生成 / 记录</text>
         <g class="packet packet-generate">
-          <rect x="594.5" y="274" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
-          <circle cx="596" cy="290" r="7" fill="var(--carry_2)" opacity="0.22"/>
-          <circle cx="596" cy="290" r="3.5" fill="var(--carry_2)"/>
+          <rect x="562.5" y="282" width="3" height="16" rx="1.5" fill="url(#trailDown)"/>
+          <circle cx="564" cy="298" r="7" fill="var(--carry_2)" opacity="0.22"/>
+          <circle cx="564" cy="298" r="3.5" fill="var(--carry_2)"/>
         </g>
       </g>
 
       <g id="flow-context">
-        <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
-        <g class="lit lit-context">
-          <rect x="553" y="106" width="366" height="72" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="109.5" width="359" height="65" rx="10.5" fill="var(--carry)" fill-opacity="0.08" stroke="var(--carry)" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="137" fill="var(--ink)" font-size="20" font-weight="700">盘内资料与任务</text>
-        <text x="576" y="161" fill="var(--muted)" font-size="14">Inbox 确认后写入长期知识</text>
+        <rect x="524.5" y="114.5" width="370" height="70" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-context"><rect x="521" y="111" width="377" height="77" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="524.5" y="114.5" width="370" height="70" rx="10.5" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="544" y="143" fill="var(--ink)" font-size="22" font-weight="700">盘内资料与任务</text>
+        <text x="544" y="170" fill="var(--muted)" font-size="17">Inbox 确认后写入长期知识</text>
       </g>
       <g id="flow-workspace">
-        <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
-        <g class="lit lit-workspace-in">
-          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="var(--carry)" fill-opacity="0.08" stroke="var(--carry)" stroke-width="1.5"/>
-        </g>
-        <g class="lit lit-workspace-back">
-          <rect x="553" y="216" width="366" height="72" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="219.5" width="359" height="65" rx="10.5" fill="var(--carry)" fill-opacity="0.08" stroke="var(--carry)" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="247" fill="var(--ink)" font-size="20" font-weight="700">Yi盘工作台</text>
-        <text x="576" y="271" fill="var(--muted)" font-size="14">受管 Agent 处理当前任务</text>
+        <rect x="524.5" y="224.5" width="370" height="70" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-workspace-in"><rect x="521" y="221" width="377" height="77" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="524.5" y="224.5" width="370" height="70" rx="10.5" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <g class="lit lit-workspace-back"><rect x="521" y="221" width="377" height="77" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="524.5" y="224.5" width="370" height="70" rx="10.5" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="544" y="253" fill="var(--ink)" font-size="22" font-weight="700">Yi盘工作台</text>
+        <text x="544" y="280" fill="var(--muted)" font-size="17">受管 Agent 处理当前任务</text>
       </g>
       <g id="flow-output">
-        <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
-        <g class="lit lit-output">
-          <rect x="553" y="326" width="366" height="72" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/>
-          <rect x="556.5" y="329.5" width="359" height="65" rx="10.5" fill="var(--carry)" fill-opacity="0.08" stroke="var(--carry)" stroke-width="1.5"/>
-        </g>
-        <text x="576" y="357" fill="var(--ink)" font-size="20" font-weight="700">产出与任务记录</text>
-        <text x="576" y="381" fill="var(--muted)" font-size="14">留在盘内，随盘带走</text>
+        <rect x="524.5" y="334.5" width="370" height="70" rx="10.5" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
+        <g class="lit lit-output"><rect x="521" y="331" width="377" height="77" rx="14" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="524.5" y="334.5" width="370" height="70" rx="10.5" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
+        <text x="544" y="363" fill="var(--ink)" font-size="22" font-weight="700">产出与任务记录</text>
+        <text x="544" y="390" fill="var(--muted)" font-size="17">留在盘内，随盘带走</text>
       </g>
     </g>
   </g>
