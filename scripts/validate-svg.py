@@ -308,6 +308,7 @@ def validate(path: Path) -> list[str]:
         hero_ids = (
             "edge", "grid", "gridFade", "gridMask", "panelClip",
             "entry-carry", "entry-see", "entry-touch", "drive", "dsh-shot", "photo-deck",
+            "lane-dot-carry", "lane-dot-see", "lane-dot-touch",
         )
         for design_id in hero_ids:
             if design_id not in element_ids:

@@ -97,11 +97,27 @@ BADGE_MOTION = {
 DIVIDERS = tuple(Path(f"assets/divider-{lane}{size}.svg") for lane in ("carry", "see", "touch") for size in ("", "-mobile"))
 DIVIDER_STAGES = (("head", "trail"), ("node",))
 DIVIDER_REST_FROM = 50.0
-# The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
-# on its own must end within 5 seconds). Classes start in this order: the three
-# entry cards, then the drive shine, the DSH capture pan, and the photo deck.
+# The hero entrance plays once and holds its final frame within 5 seconds. After it,
+# the three entry cards' lane dots pulse in turn for three 6s rounds and then rest;
+# that finite tail is the user's accepted exception to WCAG 2.2.2. Entrance classes
+# start in this order: the three entry cards, then the drive shine, the DSH capture
+# pan, and the photo deck.
 HERO_ORDER = ("entry-carry", "entry-see", "entry-touch", "drive-shine", "shot-pan", "deck-1", "deck-2", "deck-3")
 ONE_SHOT_BUDGET_SECONDS = 5.0
+# After the entrance the three entry cards' lane dots pulse in turn, three times,
+# then the hero rests. They are ambient, not part of the one-shot entrance.
+HERO_AMBIENT = {
+    "lane-dot-carry", "lane-ring-carry",
+    "lane-dot-see", "lane-ring-see",
+    "lane-dot-touch", "lane-ring-touch",
+}
+HERO_AMBIENT_DELAYS = {
+    "lane-dot-carry": 4.2, "lane-ring-carry": 4.2,
+    "lane-dot-see": 6.2, "lane-ring-see": 6.2,
+    "lane-dot-touch": 8.2, "lane-ring-touch": 8.2,
+}
+HERO_AMBIENT_CYCLE = 6.0
+HERO_AMBIENT_PASSES = "3"
 # Functional DSH stages may overlap at their edges, but their first starts must
 # follow this causal order. npm figures and persistent feature captions never move.
 DSH_PHASES = (
@@ -246,13 +262,18 @@ def seconds(token: str) -> float:
 
 
 def check_once(path: Path, text: str, order: tuple[str, ...], offstage_end: frozenset[str] = frozenset()) -> list[str]:
-    """One-shot motion: each class plays once in order, ends within the budget and holds its final frame."""
+    """Entrance motion: each class plays once in order, ends within the budget and holds its final frame.
+
+    The lane dots are ambient and checked by check_hero_ambient instead.
+    """
     problems: list[str] = []
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
     declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
-    if set(declarations) != set(order):
+    expected = set(order) | HERO_AMBIENT
+    if set(declarations) != expected:
         problems.append(
-            f"{path.name}: animated classes must be exactly {', '.join(order)}; found {', '.join(sorted(declarations))}"
+            f"{path.name}: animated classes must be the entrance plus the three lane dots; "
+            f"found {', '.join(sorted(declarations))}"
         )
     previous_delay = -1.0
     for class_name in order:
@@ -287,6 +308,32 @@ def check_once(path: Path, text: str, order: tuple[str, ...], offstage_end: froz
         moved = transform is not None and any(float(number) != 0 for number in re.findall(r"-?\d+(?:\.\d+)?", transform.group(1)))
         if final is None or moved or (opacity is not None and float(opacity.group(1)) != 1):
             problems.append(f"{path.name}: {keyframe} must end on the untransformed, fully opaque base frame")
+    return problems
+
+
+def check_hero_ambient(path: Path, text: str) -> list[str]:
+    """The three lane dots pulse in turn after the entrance, three times, then rest."""
+    problems: list[str] = []
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    for class_name, delay in HERO_AMBIENT_DELAYS.items():
+        value = declarations.get(class_name)
+        if value is None:
+            problems.append(f"{path.name}: missing lane-dot animation for {class_name}")
+            continue
+        tokens = value.split()
+        times = [seconds(token) for token in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", token)]
+        if len(times) < 2 or times[0] != HERO_AMBIENT_CYCLE or abs(times[1] - delay) > 0.01:
+            problems.append(f"{path.name}: {class_name} must start at {delay:g}s on a {HERO_AMBIENT_CYCLE:g}s cycle")
+        if HERO_AMBIENT_PASSES not in tokens or "infinite" in tokens:
+            problems.append(f"{path.name}: {class_name} must play {HERO_AMBIENT_PASSES} rounds, then stop")
+        body = keyframes.get(tokens[0], "")
+        if "100%" not in body:
+            problems.append(f"{path.name}: {class_name} needs a 100% keyframe")
+        elif class_name.startswith("lane-dot") and "opacity: 0.32" not in body:
+            problems.append(f"{path.name}: {class_name} must rest dim after its rounds")
+        elif class_name.startswith("lane-ring") and "opacity: 0;" not in body:
+            problems.append(f"{path.name}: {class_name} must end invisible")
     return problems
 
 
@@ -512,6 +559,7 @@ def main() -> int:
         problems.extend(check_properties(light, light_text))
         if light == HERO:
             problems.extend(check_once(light, light_text, HERO_ORDER, HERO_OFFSTAGE_END))
+            problems.extend(check_hero_ambient(light, light_text))
             continue
         if light == DSH:
             problems.extend(check_dsh(light, light_text))
@@ -536,7 +584,9 @@ def main() -> int:
         problems.extend(check_passes(card, card.read_text(encoding="utf-8"), passes))
     for narrow in (HERO_MOBILE, FLOW_MOBILE, DSH_MOBILE, STRIP_MOBILE):
         problems.extend(check_properties(narrow, narrow.read_text(encoding="utf-8")))
-    problems.extend(check_once(HERO_MOBILE, HERO_MOBILE.read_text(encoding="utf-8"), HERO_ORDER, HERO_OFFSTAGE_END))
+    hero_mobile_text = HERO_MOBILE.read_text(encoding="utf-8")
+    problems.extend(check_once(HERO_MOBILE, hero_mobile_text, HERO_ORDER, HERO_OFFSTAGE_END))
+    problems.extend(check_hero_ambient(HERO_MOBILE, hero_mobile_text))
     strip_mobile = STRIP_MOBILE.read_text(encoding="utf-8")
     problems.extend(check_story(STRIP_MOBILE, strip_mobile, *STORIES[STRIP]))
     for strip in (STRIP, STRIP_MOBILE):
@@ -569,7 +619,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only; badges rest between passes or blink as status lights; lane dividers run briefly and rest. Static image sources provide reduced-motion fallbacks.")
+    print("Hero entrance ends within 5s, then its three lane dots pulse three times and rest; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only; badges rest between passes or blink as status lights; lane dividers run briefly and rest; the footer terminal types on a 12s loop. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

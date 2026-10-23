@@ -182,6 +182,8 @@ PALETTES = {
 HERO_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
+    .lane-dot-carry, .lane-dot-see, .lane-dot-touch { opacity: 0.32; }
+    .lane-ring-carry, .lane-ring-see, .lane-ring-touch { opacity: 0; transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .entry-carry { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
       .entry-see { animation: entry-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
@@ -191,6 +193,12 @@ HERO_STYLE = """  <style>
       .deck-1 { animation: deck-1 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.6s both; }
       .deck-2 { animation: deck-2 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.75s both; }
       .deck-3 { animation: deck-3 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both; }
+      .lane-dot-carry { animation: lane-dot 6s ease-in-out 4.2s 3; }
+      .lane-ring-carry { animation: lane-ring 6s ease-out 4.2s 3; }
+      .lane-dot-see { animation: lane-dot 6s ease-in-out 6.2s 3; }
+      .lane-ring-see { animation: lane-ring 6s ease-out 6.2s 3; }
+      .lane-dot-touch { animation: lane-dot 6s ease-in-out 8.2s 3; }
+      .lane-ring-touch { animation: lane-ring 6s ease-out 8.2s 3; }
     }
     @keyframes entry-in {
       0% { transform: translateY(14px); opacity: 0; }
@@ -220,6 +228,16 @@ HERO_STYLE = """  <style>
       0% { transform: rotate(1deg) translate(0px, 5px); }
       80% { transform: rotate(-0.3deg) translate(0px, -1px); }
       100% { transform: rotate(0deg) translate(0px, 0px); }
+    }
+    @keyframes lane-dot {
+      0%, 18% { opacity: 0.32; }
+      22%, 30% { opacity: 1; }
+      38%, 100% { opacity: 0.32; }
+    }
+    @keyframes lane-ring {
+      0%, 18% { opacity: 0; transform: none; }
+      22% { opacity: 0.55; transform: none; }
+      34%, 100% { opacity: 0; transform: scale(2); }
     }
   </style>"""
 
@@ -357,6 +375,8 @@ ${style}
   <g id="entry-carry" class="entry-carry">
     <rect x="48" y="114" width="400" height="274" rx="14" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
     <rect x="48" y="114" width="400" height="274" rx="14" fill="url(#tintCarry)"/>
+    <circle id="lane-dot-carry" class="lane-dot-carry" cx="58" cy="152" r="4.5" fill="${carry}"/>
+    <circle class="lane-ring-carry" cx="58" cy="152" r="4.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
     <text x="72" y="162" fill="${carry_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Yi盘</text>
     <text x="72" y="192" fill="${soft}" font-size="18">U 盘里的 AI 工作台</text>
     <g id="carry-status">
@@ -379,6 +399,8 @@ ${style}
   <g id="entry-see" class="entry-see">
     <rect x="472" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
     <rect x="472" y="114" width="328" height="274" rx="14" fill="url(#tintSee)"/>
+    <circle id="lane-dot-see" class="lane-dot-see" cx="482" cy="152" r="4.5" fill="${see}"/>
+    <circle class="lane-ring-see" cx="482" cy="152" r="4.5" fill="none" stroke="${see}" stroke-width="1.5"/>
     <text x="496" y="162" fill="${see_text}" font-size="30" font-weight="800" letter-spacing="-0.6">DSH Usage</text>
     <text x="496" y="192" fill="${soft}" font-size="18">会话、Token 与模型费用</text>
     <g id="dsh-shot">
@@ -394,6 +416,8 @@ ${style}
   <g id="entry-touch" class="entry-touch">
     <rect x="824" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
     <rect x="824" y="114" width="328" height="274" rx="14" fill="url(#tintTouch)"/>
+    <circle id="lane-dot-touch" class="lane-dot-touch" cx="834" cy="152" r="4.5" fill="${touch}"/>
+    <circle class="lane-ring-touch" cx="834" cy="152" r="4.5" fill="none" stroke="${touch}" stroke-width="1.5"/>
     <text x="848" y="162" fill="${touch_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Hardware Lab</text>
     <text x="848" y="192" fill="${soft}" font-size="18">${prototypes} 个硬件原型</text>
     <g id="photo-deck" transform="translate(988 268)">
@@ -435,6 +459,8 @@ ${style}
   <g id="entry-carry" class="entry-carry">
     <rect x="24" y="112" width="312" height="112" rx="12" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
     <rect x="24" y="112" width="312" height="112" rx="12" fill="url(#tintCarry)"/>
+    <circle id="lane-dot-carry" class="lane-dot-carry" cx="30" cy="140" r="3.5" fill="${carry}"/>
+    <circle class="lane-ring-carry" cx="30" cy="140" r="3.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
     <text x="40" y="150" fill="${carry_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Yi盘</text>
     <text x="40" y="176" fill="${soft}" font-size="17">U 盘里的 AI 工作台</text>
     <g id="carry-status">
@@ -449,6 +475,8 @@ ${style}
   <g id="entry-see" class="entry-see">
     <rect x="24" y="238" width="312" height="112" rx="12" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
     <rect x="24" y="238" width="312" height="112" rx="12" fill="url(#tintSee)"/>
+    <circle id="lane-dot-see" class="lane-dot-see" cx="30" cy="266" r="3.5" fill="${see}"/>
+    <circle class="lane-ring-see" cx="30" cy="266" r="3.5" fill="none" stroke="${see}" stroke-width="1.5"/>
     <text x="40" y="276" fill="${see_text}" font-size="26" font-weight="800" letter-spacing="-0.4">DSH Usage</text>
     <text x="40" y="302" fill="${soft}" font-size="17">会话、Token 与模型费用</text>
     <text x="40" y="330" fill="${muted}" font-size="17">运行截图 · 夹具数据</text>
@@ -464,6 +492,8 @@ ${style}
   <g id="entry-touch" class="entry-touch">
     <rect x="24" y="364" width="312" height="112" rx="12" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
     <rect x="24" y="364" width="312" height="112" rx="12" fill="url(#tintTouch)"/>
+    <circle id="lane-dot-touch" class="lane-dot-touch" cx="30" cy="392" r="3.5" fill="${touch}"/>
+    <circle class="lane-ring-touch" cx="30" cy="392" r="3.5" fill="none" stroke="${touch}" stroke-width="1.5"/>
     <text x="40" y="402" fill="${touch_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Hardware Lab</text>
     <text x="40" y="428" fill="${soft}" font-size="17">${prototypes} 个硬件原型</text>
     <text x="40" y="456" fill="${muted}" font-size="17">历史原型照片</text>

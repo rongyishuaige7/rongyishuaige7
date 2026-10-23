@@ -64,6 +64,10 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
+    .lane-dot-carry, .lane-dot-see, .lane-dot-touch { opacity: 0.32; }
+    .lane-ring-carry, .lane-ring-see, .lane-ring-touch { opacity: 0; transform-box: fill-box; transform-origin: center; }
+
+
 
 
 
@@ -91,6 +95,8 @@
   <g id="entry-carry" class="entry-carry">
     <rect x="24" y="112" width="312" height="112" rx="12" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.32"/>
     <rect x="24" y="112" width="312" height="112" rx="12" fill="url(#tintCarry)"/>
+    <circle id="lane-dot-carry" class="lane-dot-carry" cx="30" cy="140" r="3.5" fill="var(--carry)"/>
+    <circle class="lane-ring-carry" cx="30" cy="140" r="3.5" fill="none" stroke="var(--carry)" stroke-width="1.5"/>
     <text x="40" y="150" fill="var(--carry_text)" font-size="26" font-weight="800" letter-spacing="-0.4">Yi盘</text>
     <text x="40" y="176" fill="var(--soft)" font-size="17">U 盘里的 AI 工作台</text>
     <g id="carry-status">
@@ -122,6 +128,8 @@
   <g id="entry-see" class="entry-see">
     <rect x="24" y="238" width="312" height="112" rx="12" fill="var(--card)" stroke="var(--see)" stroke-opacity="0.32"/>
     <rect x="24" y="238" width="312" height="112" rx="12" fill="url(#tintSee)"/>
+    <circle id="lane-dot-see" class="lane-dot-see" cx="30" cy="266" r="3.5" fill="var(--see)"/>
+    <circle class="lane-ring-see" cx="30" cy="266" r="3.5" fill="none" stroke="var(--see)" stroke-width="1.5"/>
     <text x="40" y="276" fill="var(--see_text)" font-size="26" font-weight="800" letter-spacing="-0.4">DSH Usage</text>
     <text x="40" y="302" fill="var(--soft)" font-size="17">会话、Token 与模型费用</text>
     <text x="40" y="330" fill="var(--muted)" font-size="17">运行截图 · 夹具数据</text>
@@ -138,6 +146,8 @@
   <g id="entry-touch" class="entry-touch">
     <rect x="24" y="364" width="312" height="112" rx="12" fill="var(--card)" stroke="var(--touch)" stroke-opacity="0.32"/>
     <rect x="24" y="364" width="312" height="112" rx="12" fill="url(#tintTouch)"/>
+    <circle id="lane-dot-touch" class="lane-dot-touch" cx="30" cy="392" r="3.5" fill="var(--touch)"/>
+    <circle class="lane-ring-touch" cx="30" cy="392" r="3.5" fill="none" stroke="var(--touch)" stroke-width="1.5"/>
     <text x="40" y="402" fill="var(--touch_text)" font-size="26" font-weight="800" letter-spacing="-0.4">Hardware Lab</text>
     <text x="40" y="428" fill="var(--soft)" font-size="17">22 个硬件原型</text>
     <text x="40" y="456" fill="var(--muted)" font-size="17">历史原型照片</text>
