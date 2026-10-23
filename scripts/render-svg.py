@@ -1891,6 +1891,133 @@ ${style}
 """)
 
 
+# The terminal signature sits above the footer. It types ./ship --carry --see --touch,
+# prints the three lane states, then holds a blinking prompt before the next pass.
+# Desktop keeps the command on one line; the narrow version wraps it onto two lines and
+# stacks the three states so 17-unit text stays readable at 360 wide.
+TERMINAL_STYLE = """  <style>
+    text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 20px; }
+    .panel { fill: ${tab_bg}; stroke: ${tag_stroke}; }
+    .ink { fill: ${ink}; } .muted { fill: ${muted}; }
+    .carry { fill: ${carry_text}; } .see { fill: ${see_text}; } .touch { fill: ${touch_text}; }
+    .cover { fill: ${tab_bg}; transform-box: fill-box; transform-origin: right center; transform: scaleX(0); }
+    @media (prefers-reduced-motion: no-preference) {
+      .cover { animation: cover 12s linear infinite; }
+      .out { animation: out 12s linear infinite; }
+      .cur-line { animation: cur-line 12s linear infinite; }
+      .cur-type { animation: cur-type 12s linear infinite; }
+      .blink { animation: blink 1.1s steps(1, end) infinite; }
+    }
+    @keyframes cover {
+      0%, 5% { transform: none; animation-timing-function: steps(28, end); }
+      30% { transform: scaleX(0); }
+      90% { transform: scaleX(0); animation-timing-function: steps(28, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes out {
+      0%, 32% { opacity: 0; }
+      33%, 89% { opacity: 1; }
+      90%, 100% { opacity: 0; }
+    }
+    @keyframes cur-line {
+      0% { transform: translateY(-72px); animation-timing-function: steps(1, end); }
+      35% { transform: none; animation-timing-function: steps(1, end); }
+      90%, 100% { transform: translateY(-72px); }
+    }
+    @keyframes cur-type {
+      0%, 5% { transform: none; animation-timing-function: steps(28, end); }
+      30% { transform: translateX(336px); animation-timing-function: steps(1, end); }
+      35% { transform: none; animation-timing-function: steps(1, end); }
+      90% { transform: translateX(336px); animation-timing-function: steps(28, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>"""
+
+TERMINAL = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="168" viewBox="0 0 1200 168" role="img" aria-labelledby="title desc">
+  <title id="title">rongyi@studio 终端签名</title>
+  <desc id="desc">终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab ${prototypes} 个原型，随后重新输入。</desc>
+${style}
+  <rect class="panel" x="0.5" y="0.5" width="1199" height="167" rx="16"/>
+  <text x="40" y="54"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  <text class="ink" x="256" y="54">./ship --carry --see --touch</text>
+  <rect class="cover" x="254" y="32" width="344" height="30"/>
+  <g class="out">
+    <text x="40" y="90"><tspan class="carry">● carry</tspan><tspan class="muted">  受控内测   </tspan><tspan class="see">● see</tspan><tspan class="muted">  npm 插件   </tspan><tspan class="touch">● touch</tspan><tspan class="muted">  ${prototypes} 个原型</tspan></text>
+    <text x="40" y="126"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  </g>
+  <g class="cur-line"><g class="cur-type"><rect class="ink blink" x="256" y="108" width="11" height="23" opacity="0.85"/></g></g>
+</svg>
+""")
+
+TERMINAL_MOBILE_STYLE = """  <style>
+    text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 17px; }
+    .panel { fill: ${tab_bg}; stroke: ${tag_stroke}; }
+    .ink { fill: ${ink}; } .muted { fill: ${muted}; }
+    .carry { fill: ${carry_text}; } .see { fill: ${see_text}; } .touch { fill: ${touch_text}; }
+    .cover-1, .cover-2 { fill: ${tab_bg}; transform-box: fill-box; transform-origin: right center; transform: scaleX(0); }
+    .out, .cursor { opacity: 1; }
+    @media (prefers-reduced-motion: no-preference) {
+      .cover-1 { animation: cover-1 12s linear infinite; }
+      .cover-2 { animation: cover-2 12s linear infinite; }
+      .out { animation: out 12s linear infinite; }
+      .cursor { animation: cursor 12s linear infinite; }
+      .blink { animation: blink 1.1s steps(1, end) infinite; }
+    }
+    @keyframes cover-1 {
+      0%, 5% { transform: none; animation-timing-function: steps(14, end); }
+      18% { transform: scaleX(0); }
+      90% { transform: scaleX(0); animation-timing-function: steps(14, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes cover-2 {
+      0%, 18% { transform: none; animation-timing-function: steps(15, end); }
+      30% { transform: scaleX(0); }
+      90% { transform: scaleX(0); animation-timing-function: steps(15, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes out {
+      0%, 32% { opacity: 0; }
+      33%, 89% { opacity: 1; }
+      90%, 100% { opacity: 0; }
+    }
+    @keyframes cursor {
+      0%, 34% { opacity: 0; }
+      35%, 89% { opacity: 1; }
+      90%, 100% { opacity: 0; }
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>"""
+
+TERMINAL_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="218" viewBox="0 0 360 218" role="img" aria-labelledby="title desc">
+  <title id="title">rongyi@studio 终端签名</title>
+  <desc id="desc">终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab ${prototypes} 个原型，随后重新输入。</desc>
+${style}
+  <rect class="panel" x="0.5" y="0.5" width="359" height="217" rx="16"/>
+  <text x="18" y="38"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  <text class="ink" x="18" y="64">./ship --carry</text>
+  <text class="ink" x="36" y="90">--see --touch</text>
+  <rect class="cover-1" x="16" y="44" width="153" height="26"/>
+  <rect class="cover-2" x="34" y="70" width="143" height="26"/>
+  <g class="out">
+    <text x="18" y="122"><tspan class="carry">● carry</tspan><tspan class="muted">  受控内测</tspan></text>
+    <text x="18" y="148"><tspan class="see">● see</tspan><tspan class="muted">  npm 插件</tspan></text>
+    <text x="18" y="174"><tspan class="touch">● touch</tspan><tspan class="muted">  ${prototypes} 个原型</tspan></text>
+    <text x="18" y="204"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  </g>
+  <g class="cursor"><rect class="ink blink" x="202" y="186" width="9" height="20" opacity="0.85"/></g>
+</svg>
+""")
+
+
 # Link badges share one anatomy: an uppercase label, a rule, then the action. Primary badges
 # are solid Yi盘 orange in both themes; secondary badges are outlined in their lane color and
 # follow the page theme through their own color-scheme query, so they are not dark blocks on
@@ -2149,8 +2276,11 @@ def hero_media(theme: str) -> dict[str, str]:
 
 def render(template: Template, style: str, palette: dict[str, str], extra: dict[str, str] | None = None) -> str:
     tokens = dict(palette)
-    tokens.update(style=style, prototypes=str(HARDWARE_PROTOTYPES))
+    tokens.update(prototypes=str(HARDWARE_PROTOTYPES))
     tokens.update(extra or {})
+    # Styles may carry palette tokens themselves (the terminal does); resolve them before
+    # the outer template substitutes the whole style block.
+    tokens["style"] = Template(style).substitute(tokens)
     return template.substitute(tokens)
 
 
@@ -2225,6 +2355,7 @@ def main() -> int:
         "yipan-flow": (FLOW, FLOW_STYLE, lambda theme: {}),
         "dsh-card": (DSH, DSH_STYLE, npm_figures),
         "hardware-strip": (STRIP, STRIP_STYLE, lambda theme: {}),
+        "terminal": (TERMINAL, TERMINAL_STYLE, lambda theme: {}),
     }
     rendered: dict[Path, str] = {}
     hash_sources: dict[Path, str] = {}
@@ -2246,6 +2377,7 @@ def main() -> int:
         "hero": (HERO_NARROW, HERO_STYLE, hero_media('light'), both_captures),
         "yipan-flow": (FLOW_MOBILE, FLOW_STYLE, {}, lambda svg: svg),
         "hardware-strip": (STRIP_MOBILE, narrow_strip_style(), {}, lambda svg: svg),
+        "terminal": (TERMINAL_MOBILE, TERMINAL_MOBILE_STYLE, {}, lambda svg: svg),
     }
     for stem, (template, style, extra, finish) in narrow.items():
         for suffix, motion in (("mobile", True), ("mobile-still", False)):

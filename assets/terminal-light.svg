@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="168" viewBox="0 0 1200 168" role="img" aria-labelledby="title desc">
+  <title id="title">rongyi@studio 终端签名</title>
+  <desc id="desc">终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab 22 个原型，随后重新输入。</desc>
+  <style>
+    text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 20px; }
+    .panel { fill: #f4f6f9; stroke: #d5dbe4; }
+    .ink { fill: #18202a; } .muted { fill: #5f6876; }
+    .carry { fill: #c8452a; } .see { fill: #2559c4; } .touch { fill: #0b7d50; }
+    .cover { fill: #f4f6f9; transform-box: fill-box; transform-origin: right center; transform: scaleX(0); }
+    @media (prefers-reduced-motion: no-preference) {
+      .cover { animation: cover 12s linear infinite; }
+      .out { animation: out 12s linear infinite; }
+      .cur-line { animation: cur-line 12s linear infinite; }
+      .cur-type { animation: cur-type 12s linear infinite; }
+      .blink { animation: blink 1.1s steps(1, end) infinite; }
+    }
+    @keyframes cover {
+      0%, 5% { transform: none; animation-timing-function: steps(28, end); }
+      30% { transform: scaleX(0); }
+      90% { transform: scaleX(0); animation-timing-function: steps(28, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes out {
+      0%, 32% { opacity: 0; }
+      33%, 89% { opacity: 1; }
+      90%, 100% { opacity: 0; }
+    }
+    @keyframes cur-line {
+      0% { transform: translateY(-72px); animation-timing-function: steps(1, end); }
+      35% { transform: none; animation-timing-function: steps(1, end); }
+      90%, 100% { transform: translateY(-72px); }
+    }
+    @keyframes cur-type {
+      0%, 5% { transform: none; animation-timing-function: steps(28, end); }
+      30% { transform: translateX(336px); animation-timing-function: steps(1, end); }
+      35% { transform: none; animation-timing-function: steps(1, end); }
+      90% { transform: translateX(336px); animation-timing-function: steps(28, end); }
+      95%, 100% { transform: none; }
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+  <rect class="panel" x="0.5" y="0.5" width="1199" height="167" rx="16"/>
+  <text x="40" y="54"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  <text class="ink" x="256" y="54">./ship --carry --see --touch</text>
+  <rect class="cover" x="254" y="32" width="344" height="30"/>
+  <g class="out">
+    <text x="40" y="90"><tspan class="carry">● carry</tspan><tspan class="muted">  受控内测   </tspan><tspan class="see">● see</tspan><tspan class="muted">  npm 插件   </tspan><tspan class="touch">● touch</tspan><tspan class="muted">  22 个原型</tspan></text>
+    <text x="40" y="126"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  </g>
+  <g class="cur-line"><g class="cur-type"><rect class="ink blink" x="256" y="108" width="11" height="23" opacity="0.85"/></g></g>
+</svg>

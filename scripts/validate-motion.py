@@ -28,6 +28,10 @@ FLOW_MOBILE_STAGES = (
 STRIP = Path("assets/hardware-strip-light.svg")
 STRIP_MOBILE = Path("assets/hardware-strip-mobile.svg")
 DSH = Path("assets/dsh-card-light.svg")
+# The footer signature types a command, prints three lane states, then holds a prompt.
+TERMINAL = Path("assets/terminal-light.svg")
+TERMINAL_DARK = Path("assets/terminal-dark.svg")
+TERMINAL_MOBILE = Path("assets/terminal-mobile.svg")
 PAIR = {
     FLOW: Path("assets/yipan-flow-dark.svg"),
     DSH: Path("assets/dsh-card-dark.svg"),
@@ -114,6 +118,11 @@ DSH_MOBILE_CLASSES = {"packet-a", "lane-a", "lane-b", "lane-c"}
 # The scan lights every bar and lane it crosses (transient marks, one class each). The
 # downloads odometer has one class per digit place; the figure uses the low places only.
 DSH_SCAN_MARK = re.compile(r"mark-(?P<kind>bar|lane)-\d+")
+# The terminal's story classes share the 12s loop; the cursor blinks on its own 1.1s cycle.
+TERMINAL_CLASSES = {"cover", "out", "cur-line", "cur-type", "blink"}
+TERMINAL_MOBILE_CLASSES = {"cover-1", "cover-2", "out", "cursor", "blink"}
+TERMINAL_LOOP = "12s"
+TERMINAL_BLINK = "1.1s"
 DSH_ODOMETER = re.compile(r"odo-(?P<place>\d+)")
 # Base styles are the final frame, so reduced motion shows what the animation
 # ends on. The drive shine is the exception: it starts and ends outside the
@@ -468,6 +477,28 @@ def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
     return problems
 
 
+def check_terminal(path: Path, text: str, *, mobile: bool = False) -> list[str]:
+    """The footer signature types on a 12s loop and keeps a blinking prompt."""
+    problems = check_properties(path, text)
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    expected = TERMINAL_MOBILE_CLASSES if mobile else TERMINAL_CLASSES
+    if set(declarations) != expected:
+        problems.append(f"{path.name}: animated classes must be exactly {', '.join(sorted(expected))}")
+    for class_name, value in declarations.items():
+        tokens = re.sub(r"(?:cubic-bezier|steps)\([^)]*\)", "", value).split()
+        keyframe = tokens[0] if tokens else ""
+        if keyframe not in keyframes:
+            problems.append(f"{path.name}: {class_name} uses undefined keyframes {keyframe}")
+            continue
+        if class_name == "blink":
+            if TERMINAL_BLINK not in tokens or "infinite" not in tokens:
+                problems.append(f"{path.name}: blink must use the {TERMINAL_BLINK} cursor cycle")
+        elif TERMINAL_LOOP not in tokens or "infinite" not in tokens:
+            problems.append(f"{path.name}: {class_name} must loop on the {TERMINAL_LOOP} cycle")
+    return problems
+
+
 def main() -> int:
     problems: list[str] = []
 
@@ -489,6 +520,16 @@ def main() -> int:
         problems.extend(check_story(light, light_text, cycle, stages))
 
     problems.extend(check_dsh(DSH_MOBILE, DSH_MOBILE.read_text(encoding="utf-8"), mobile=True))
+    for terminal, mobile in ((TERMINAL, False), (TERMINAL_MOBILE, True)):
+        problems.extend(check_terminal(terminal, terminal.read_text(encoding="utf-8"), mobile=mobile))
+    dark_terminal = TERMINAL_DARK.read_text(encoding="utf-8")
+    light_terminal = TERMINAL.read_text(encoding="utf-8")
+    if dict(ANIMATION.findall(dark_terminal)) != dict(ANIMATION.findall(light_terminal)):
+        problems.append("terminal dark/light animation classes differ")
+    dark_keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(dark_terminal)}
+    light_keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(light_terminal)}
+    if dark_keyframes != light_keyframes:
+        problems.append("terminal dark/light keyframes differ")
     flow_mobile = FLOW_MOBILE.read_text(encoding="utf-8")
     problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
     for card, passes in LOOP_PASSES.items():

@@ -174,6 +174,15 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 ---
 
+<picture>
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/terminal-mobile-still.svg?v=f801ad5b">
+  <source media="(max-width: 1011px)" srcset="./assets/terminal-mobile.svg?v=12effff4">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/terminal-still.svg?v=8b79f1c3">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/terminal-dark.svg?v=1718875b">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/terminal-light.svg?v=74ad1f6a">
+  <img src="./assets/terminal-light.svg?v=74ad1f6a" width="100%" alt="终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab 22 个原型，随后重新输入。">
+</picture>
+
 <div align="center">
   <strong>Rongyi Studio</strong>
   <br><br>

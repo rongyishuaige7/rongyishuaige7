@@ -14,6 +14,7 @@ from npm_snapshot import split_snapshot, format_snapshot
 README_PATH = Path("README.md")
 STRIP_ASSETS = tuple(Path(f"assets/hardware-strip-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
 HERO_ASSETS = tuple(Path(f"assets/hero-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
+TERMINAL_ASSETS = tuple(Path(f"assets/terminal-{variant}.svg") for variant in ("dark", "light", "still", "mobile", "mobile-still"))
 # Below GitHub's two-column profile layout (1012px) the README column (398-685px) is too
 # narrow for 17-unit labels on 1200-wide cards, so these cards switch to 360-wide variants.
 NARROW_MEDIA = "(max-width: 1011px)"
@@ -72,6 +73,11 @@ EXPECTED_ASSETS = {
     "./assets/divider-see-mobile.svg",
     "./assets/divider-touch.svg",
     "./assets/divider-touch-mobile.svg",
+    "./assets/terminal-dark.svg",
+    "./assets/terminal-light.svg",
+    "./assets/terminal-still.svg",
+    "./assets/terminal-mobile.svg",
+    "./assets/terminal-mobile-still.svg",
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg",
@@ -90,6 +96,7 @@ EXPECTED_IMG_ASSETS = {
     "./assets/divider-carry.svg",
     "./assets/divider-see.svg",
     "./assets/divider-touch.svg",
+    "./assets/terminal-light.svg",
 }
 # Each lane opens with its signal divider instead of a Markdown rule. Dividers are
 # decorative, so their img carries an empty alt and screen readers skip them.
@@ -428,6 +435,9 @@ def main() -> int:
         for hero in HERO_ASSETS:
             if not hero.exists() or f">{expected} 个硬件原型" not in hero.read_text(encoding="utf-8"):
                 problems.append(f"{hero.name} must list the same {expected} hardware prototypes")
+        for terminal in TERMINAL_ASSETS:
+            if not terminal.exists() or f"{expected} 个原型" not in terminal.read_text(encoding="utf-8"):
+                problems.append(f"{terminal.name} must list the same {expected} hardware prototypes")
 
     for screenshot in SCREENSHOTS:
         problems.extend(validate_screenshot(screenshot))
@@ -463,6 +473,24 @@ def main() -> int:
             readme,
         ):
             problems.append(f"{heading[3:]} must open with its {lane} signal divider")
+
+    terminal_block = next(
+        (block for block in re.findall(r"<picture>\n(.*?)</picture>", readme, re.DOTALL)
+         if 'terminal-light.svg' in block),
+        "",
+    )
+    terminal_sources = re.findall(r'<source media="([^"]+)" srcset="([^"?]+)(?:\?v=[^"]*)?">', terminal_block)
+    terminal_expected = [
+        (f"{NARROW_MEDIA} and (prefers-reduced-motion: reduce)", "./assets/terminal-mobile-still.svg"),
+        (NARROW_MEDIA, "./assets/terminal-mobile.svg"),
+        ("(prefers-reduced-motion: reduce)", "./assets/terminal-still.svg"),
+        ("(prefers-color-scheme: dark)", "./assets/terminal-dark.svg"),
+        ("(prefers-color-scheme: light)", "./assets/terminal-light.svg"),
+    ]
+    if terminal_sources != terminal_expected:
+        problems.append("terminal signature must select narrow, motion and theme sources in order")
+    if not re.search(r'</picture>\n\n<div align="center">\n  <strong>Rongyi Studio</strong>', readme):
+        problems.append("terminal signature must sit directly above the Rongyi Studio footer")
 
     image_tags = re.findall(r"<img\b[^>]*>", readme, re.IGNORECASE)
     image_sources: set[str] = set()

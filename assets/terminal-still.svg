@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="168" viewBox="0 0 1200 168" role="img" aria-labelledby="title desc">
+  <title id="title">rongyi@studio 终端签名</title>
+  <desc id="desc">终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab 22 个原型，随后重新输入。</desc>
+  <style>
+    :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_red: #e5484d; --led_amber: #f0a020; --led_green: #1aa572; --led_red_off: #f9dede; --led_amber_off: #fcefd0; --led_green_off: #cfe9dc; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
+    .theme-dark { display: none; }
+    @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_red: #ff6369; --led_amber: #ffc53d; --led_green: #46d89c; --led_red_off: #3a1a1d; --led_amber_off: #3a2f14; --led_green_off: #183a2e; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
+
+    text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 20px; }
+    .panel { fill: var(--tab_bg); stroke: var(--tag_stroke); }
+    .ink { fill: var(--ink); } .muted { fill: var(--muted); }
+    .carry { fill: var(--carry_text); } .see { fill: var(--see_text); } .touch { fill: var(--touch_text); }
+    .cover { fill: var(--tab_bg); transform-box: fill-box; transform-origin: right center; transform: scaleX(0); }
+
+
+
+
+
+
+  </style>
+  <rect class="panel" x="0.5" y="0.5" width="1199" height="167" rx="16"/>
+  <text x="40" y="54"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  <text class="ink" x="256" y="54">./ship --carry --see --touch</text>
+  <rect class="cover" x="254" y="32" width="344" height="30"/>
+  <g class="out">
+    <text x="40" y="90"><tspan class="carry">● carry</tspan><tspan class="muted">  受控内测   </tspan><tspan class="see">● see</tspan><tspan class="muted">  npm 插件   </tspan><tspan class="touch">● touch</tspan><tspan class="muted">  22 个原型</tspan></text>
+    <text x="40" y="126"><tspan class="carry">rongyi</tspan><tspan class="muted">@</tspan><tspan class="see">studio</tspan><tspan class="muted"> ~ %</tspan></text>
+  </g>
+  <g class="cur-line"><g class="cur-type"><rect class="ink blink" x="256" y="108" width="11" height="23" opacity="0.85"/></g></g>
+</svg>

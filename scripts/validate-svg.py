@@ -36,15 +36,18 @@ EXPECTED_ASSETS = {
     "divider-carry.svg", "divider-carry-mobile.svg",
     "divider-see.svg", "divider-see-mobile.svg",
     "divider-touch.svg", "divider-touch-mobile.svg",
+    "terminal-dark.svg", "terminal-light.svg", "terminal-still.svg",
+    "terminal-mobile.svg", "terminal-mobile-still.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
     ("yipan-flow-dark.svg", "yipan-flow-light.svg"),
     ("dsh-card-dark.svg", "dsh-card-light.svg"),
     ("hardware-strip-dark.svg", "hardware-strip-light.svg"),
+    ("terminal-dark.svg", "terminal-light.svg"),
 )
 # Pairs rendered by scripts/render-svg.py must match element for element.
-GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "dsh-card-dark.svg", "hardware-strip-dark.svg"}
+GENERATED_PAIRS = {"hero-dark.svg", "yipan-flow-dark.svg", "dsh-card-dark.svg", "hardware-strip-dark.svg", "terminal-dark.svg"}
 GEOMETRY_ATTRIBUTES = (
     "id",
     "class",
@@ -334,6 +337,22 @@ def validate(path: Path) -> list[str]:
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]
         if len(top_level_rects) < 3:
             problems.append("hardware strip must keep an outer shell, inset panel, and inner edge")
+
+    if path.name.startswith("terminal-"):
+        visible_text = drawn_text(root)
+        for required_text in ("./ship --carry", "--see --touch", "受控内测", "npm 插件", "个原型"):
+            if required_text not in visible_text:
+                problems.append(f"terminal is missing required text: {required_text}")
+        size = "17px" if path.name.startswith("terminal-mobile") else "20px"
+        if f"font-size: {size}" not in style_text:
+            problems.append(f"terminal must use {size} text")
+        if "monospace" not in style_text:
+            problems.append("terminal must use a monospace font stack")
+        if path.name.startswith("terminal-mobile"):
+            if root.get("width") != "360" or root.get("height") != "218":
+                problems.append("narrow terminal must be 360x218")
+        elif root.get("width") != "1200" or root.get("height") != "168":
+            problems.append("terminal must be 1200x168")
 
     if path.name.startswith(MIN_FONT_CARDS):
         for element in root.iter(f"{SVG_NAMESPACE}text"):
