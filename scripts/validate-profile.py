@@ -458,7 +458,7 @@ def main() -> int:
 
     for lane, heading in LANE_DIVIDERS.items():
         if not re.search(
-            r'<picture>\n  <source media="\(max-width: 600px\)" srcset="\./assets/divider-' + lane + r'-mobile\.svg\?v=[0-9a-f]{8}">\n'
+            r'<picture>\n  <source media="\(max-width: 1011px\)" srcset="\./assets/divider-' + lane + r'-mobile\.svg\?v=[0-9a-f]{8}">\n'
             r'  <img src="\./assets/divider-' + lane + r'\.svg\?v=[0-9a-f]{8}" width="100%" alt="">\n</picture>\n\n' + re.escape(heading),
             readme,
         ):

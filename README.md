@@ -16,7 +16,7 @@
 </div>
 
 <picture>
-  <source media="(max-width: 600px)" srcset="./assets/divider-carry-mobile.svg?v=55401d4b">
+  <source media="(max-width: 1011px)" srcset="./assets/divider-carry-mobile.svg?v=55401d4b">
   <img src="./assets/divider-carry.svg?v=a2f1512d" width="100%" alt="">
 </picture>
 
@@ -50,7 +50,7 @@
 </div>
 
 <picture>
-  <source media="(max-width: 600px)" srcset="./assets/divider-see-mobile.svg?v=21a3c2cb">
+  <source media="(max-width: 1011px)" srcset="./assets/divider-see-mobile.svg?v=21a3c2cb">
   <img src="./assets/divider-see.svg?v=4868d8ed" width="100%" alt="">
 </picture>
 
@@ -98,7 +98,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
 <picture>
-  <source media="(max-width: 600px)" srcset="./assets/divider-touch-mobile.svg?v=be3aca54">
+  <source media="(max-width: 1011px)" srcset="./assets/divider-touch-mobile.svg?v=be3aca54">
   <img src="./assets/divider-touch.svg?v=6f983093" width="100%" alt="">
 </picture>
 
