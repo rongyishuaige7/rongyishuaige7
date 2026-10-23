@@ -93,7 +93,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 - **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
 - **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
-- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39917162018) | MIT
+- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39919092745) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
