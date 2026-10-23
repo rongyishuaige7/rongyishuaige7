@@ -70,7 +70,7 @@ LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3", DSH: "3", DSH_MOBILE: "3"}
 # The cards' status dots and buttons (shine, ring, arrow nudge) run on the same 8s cycle
 # but sit outside their stories; any other animated class must belong to a stage.
 CARD_AMBIENT = {
-    FLOW: {"status-pulse", "cta-shine", "cta-ring", "cta-arrow"},
+    FLOW: {"status-pulse", "cta-shine", "cta-ring", "cta-arrow", "march"},
 }
 # Accumulating classes play one pass that spans all three card passes: class n lands
 # during pass n, while the named stage is lit, and stays (the record stack grows to three).
@@ -129,6 +129,7 @@ KEYFRAME_EASING = "animation-timing-function"
 DASH_KEYFRAMES = {
     "hardware-strip-": re.compile(r"comet-(?:in|out)-[abc]"),
     "divider-": re.compile(r"trail"),
+    "yipan-flow-": re.compile(r"march"),
 }
 ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<keyframe>[\w-]+)")
 KEYFRAME = re.compile(r"@keyframes\s+(?P<name>[\w-]+)\s*\{(?P<body>.*?)\n\s*\}", re.DOTALL)
@@ -286,8 +287,10 @@ def check_passes(path: Path, text: str, passes: str) -> list[str]:
     for match in HERO_ANIMATION.finditer(text):
         tokens = re.sub(r"cubic-bezier\([^)]*\)", "", match.group("value")).split()
         durations = [seconds(token) for token in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", token)]
+        repeats = next((int(token) for token in tokens if re.fullmatch(r"\d+", token)), 1)
         spans_all = "1" in tokens and durations[:1] == [int(passes) * CARD_CYCLE_SECONDS]
-        if "infinite" in tokens or not (passes in tokens or spans_all):
+        short_cycle = bool(durations) and abs(durations[0] * repeats - int(passes) * CARD_CYCLE_SECONDS) < 0.01
+        if "infinite" in tokens or not (passes in tokens or spans_all or short_cycle):
             problems.append(f"{path.name}: {match.group('class')} must play {passes} passes, then stop")
     return problems
 
@@ -507,7 +510,7 @@ def main() -> int:
         stage, accumulate = CARD_ACCUMULATE[rules]
         problems.extend(check_accumulate(card, card_text, stage, accumulate, int(LOOP_PASSES[card])))
         loops = dict(re.findall(r"\.([\w-]+)\s*\{\s*animation:\s*[\w-]+\s+([\d.]+m?s)", card_text))
-        if {duration for class_name, duration in loops.items() if class_name not in accumulate} != {"8s"}:
+        if {duration for class_name, duration in loops.items() if class_name not in accumulate and class_name != "march"} != {"8s"}:
             problems.append(f"{card.name} does not use one 8s loop like the homepage")
         problems.extend(check_ambient(card, card_text, STORIES[rules][1], CARD_AMBIENT[rules] | set(accumulate)))
     for divider in DIVIDERS:

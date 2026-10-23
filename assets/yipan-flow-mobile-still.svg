@@ -35,6 +35,7 @@
 
 
 
+
   </style>
   <rect x="0.5" y="0.5" width="359" height="459" rx="18" fill="var(--page_bg)" stroke="var(--carry)" stroke-opacity="0.35"/>
   <g id="card-copy">
@@ -57,7 +58,7 @@
       </g>
     </g>
     <g id="drive">
-      <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <rect id="drive-boundary" class="march" x="24.5" y="186.5" width="216" height="206" rx="12" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="236" y="174" fill="var(--flow_tag)" font-size="17" text-anchor="end">U 盘内</text>
       <g id="drive-io"><circle cx="172" cy="168" r="4" fill="var(--tag_stroke)"/><g class="io-on io-read"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g><g class="io-on io-write"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g><g class="io-on io-sync"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g></g>
       <g id="continuity-rail">

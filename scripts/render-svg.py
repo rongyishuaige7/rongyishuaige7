@@ -1025,6 +1025,7 @@ FLOW_STYLE_BASE = """  <style>
       .cta-shine { animation: cta-shine 8s ease-in-out 3; }
       .cta-ring { animation: cta-ring 8s ease-out 3; }
       .cta-arrow { animation: cta-arrow 8s ease-out 3; }
+      .march { animation: march 1.6s linear 15; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -1175,6 +1176,10 @@ FLOW_STYLE_BASE = """  <style>
       0%, 95.5% { transform: none; }
       97.5% { transform: translate(3px, -3px); }
       99.2%, 100% { transform: none; }
+    }
+    @keyframes march {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -11px; }
     }
   </style>"""
 
@@ -1360,7 +1365,7 @@ ${style}
     </g>
 
     <g id="drive">
-      <rect id="drive-boundary" x="468.5" y="98.5" width="446" height="322" rx="14" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <rect id="drive-boundary" class="march" x="468.5" y="98.5" width="446" height="322" rx="14" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="910" y="86" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
       """ + io_led(845, 80, 4.5, 10) + """
 
@@ -1455,7 +1460,7 @@ ${style}
       </g>
     </g>
     <g id="drive">
-      <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
+      <rect id="drive-boundary" class="march" x="24.5" y="186.5" width="216" height="206" rx="12" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="236" y="174" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
       """ + io_led(172, 168, 4, 9) + """
       <g id="continuity-rail">

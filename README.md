@@ -24,12 +24,12 @@
 
 <a href="https://github.com/rongyishuaige7/yipan-showcase">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=54c5ba3c">
-  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=6cb95ae2">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=8ed2ffd5">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=3a0f24ef">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=4fd42619">
-  <img src="./assets/yipan-flow-light.svg?v=4fd42619" width="100%" alt="Yi盘卡片，U 盘里的 AI 工作台：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=7df9927d">
+  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=98539b81">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=70f8067e">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=7c00fea1">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=ddcc901a">
+  <img src="./assets/yipan-flow-light.svg?v=ddcc901a" width="100%" alt="Yi盘卡片，U 盘里的 AI 工作台：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
 </picture>
 </a>
 
