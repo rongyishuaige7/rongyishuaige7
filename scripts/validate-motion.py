@@ -92,10 +92,14 @@ DSH_PHASES = (
     ("usage-a", "usage-b", "usage-c"),
     ("lane-a", "lane-b", "lane-c"),
     ("timeline-scan",),
-    ("cta-arrow",),
+    ("cta-arrow", "cta-underline"),
 )
 DSH_TRANSIENT = {"packet-a", "packet-b", "packet-c", "timeline-scan"}
 DSH_MOBILE_CLASSES = {"packet-a", "lane-a", "lane-b", "lane-c"}
+# The scan lights every bar and lane it crosses (transient marks, one class each). The
+# downloads odometer has one class per digit place; the figure uses the low places only.
+DSH_SCAN_MARK = re.compile(r"mark-(?P<kind>bar|lane)-\d+")
+DSH_ODOMETER = re.compile(r"odo-(?P<place>\d+)")
 # Base styles are the final frame, so reduced motion shows what the animation
 # ends on. The drive shine is the exception: it starts and ends outside the
 # clipped drive face, so its final frame is invisible either way.
@@ -105,6 +109,8 @@ FINAL_KEYFRAME = re.compile(r"(?:^|[\s}])(?:to|100%)\s*\{(?P<body>[^}]*)\}")
 # Keyframes may only move compositor-friendly properties. The one exception is a dash
 # offset on a pre-dashed stroke, which draws the strip's signal tails along their traces.
 ANIMATED_PROPERTIES = {"transform", "opacity"}
+# A keyframe may set the easing of its own segment; that is not an animated property.
+KEYFRAME_EASING = "animation-timing-function"
 DASH_KEYFRAMES = {
     "hardware-strip-": re.compile(r"comet-(?:in|out)-[abc]"),
 }
@@ -178,7 +184,7 @@ def check_properties(path: Path, text: str) -> list[str]:
     dashed_keyframes: set[str] = set()
     for match in KEYFRAME.finditer(text):
         name, body = match.group("name"), match.group("body")
-        allowed = set(ANIMATED_PROPERTIES)
+        allowed = ANIMATED_PROPERTIES | {KEYFRAME_EASING}
         if dash and dash.fullmatch(name):
             allowed.add("stroke-dashoffset")
             dashed_keyframes.add(name)
@@ -304,13 +310,58 @@ def check_accumulate(path: Path, text: str, stage: str, classes: tuple[str, ...]
     return problems
 
 
+def keyframe_for(declarations: dict[str, str], class_name: str) -> str:
+    return re.sub(r"cubic-bezier\([^)]*\)", "", declarations[class_name]).split()[0]
+
+
+def check_scan_marks(path: Path, root: ET.Element, keyframes: dict[str, str], declarations: dict[str, str], marks: set[str]) -> list[str]:
+    """Each mark lights while the scan is visible, and bars and lanes light left to right."""
+    problems: list[str] = []
+    scan = visible_intervals(keyframes.get(keyframe_for(declarations, "timeline-scan"), "")) if "timeline-scan" in declarations else []
+    if not scan:
+        return [f"{path.name}: scan marks need a visible timeline scan"]
+    lit: dict[str, list[tuple[float, float, str]]] = {"bar": [], "lane": []}
+    for element in root.iter():
+        for class_name in set(element.get("class", "").split()) & marks:
+            intervals = visible_intervals(keyframes.get(keyframe_for(declarations, class_name), ""))
+            if not intervals or not scan[0][0] <= intervals[0][0] <= scan[-1][1]:
+                problems.append(f"{path.name}: {class_name} must light while the scan crosses the timeline")
+                continue
+            lit[DSH_SCAN_MARK.fullmatch(class_name).group("kind")].append((float(element.get("x", "0")), intervals[0][0], class_name))
+    for kind, entries in lit.items():
+        starts = [start for _, start, _ in sorted(entries)]
+        if starts != sorted(starts):
+            problems.append(f"{path.name}: scan {kind} marks must light left to right")
+    return problems
+
+
+def check_odometer(path: Path, root: ET.Element, keyframes: dict[str, str], declarations: dict[str, str], odometer: set[str]) -> list[str]:
+    """Odometer columns sit in the downloads figure and land on the digit they start on."""
+    problems: list[str] = []
+    downloads = next((element for element in root.iter() if element.get("id") == "npm-downloads"), None)
+    inside = set(downloads.iter()) if downloads is not None else set()
+    for element in root.iter():
+        for class_name in set(element.get("class", "").split()) & odometer:
+            if element not in inside:
+                problems.append(f"{path.name}: {class_name} may only roll the downloads figure")
+                continue
+            rows = [(float(row.get("y", "0")), (row.text or "").strip()) for row in element]
+            shifts = [abs(float(value)) for value in re.findall(r"translateY\((-?[\d.]+)px\)", keyframes.get(keyframe_for(declarations, class_name), ""))]
+            landing = rows[0][0] + max(shifts, default=0) if rows else None
+            if not shifts or (landing, rows[0][1]) not in rows:
+                problems.append(f"{path.name}: {class_name} must land on the digit it shows at rest")
+    return problems
+
+
 def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
     problems: list[str] = []
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
     declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
     expected = {name for phase in DSH_PHASES for name in phase}
-    if set(declarations) != expected:
-        problems.append(f"{path.name}: DSH motion must cover its functional story and CTA only")
+    marks = {name for name in declarations if DSH_SCAN_MARK.fullmatch(name)}
+    odometer = {name for name in declarations if DSH_ODOMETER.fullmatch(name)}
+    if set(declarations) - marks - odometer != expected or not marks or not odometer:
+        problems.append(f"{path.name}: DSH motion must cover its functional story, scan marks, odometer and CTA only")
     for class_name, value in declarations.items():
         tokens = re.sub(r"cubic-bezier\([^)]*\)", "", value).split()
         name = tokens[0]
@@ -326,7 +377,7 @@ def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
         final_body = final.group("body") if final else ""
         opacity = re.search(r"opacity:\s*([0-9.]+)", final_body)
         transform = re.search(r"transform:\s*([^;]+)", final_body)
-        if class_name in DSH_TRANSIENT:
+        if class_name in DSH_TRANSIENT | marks:
             if final is None or opacity is None or float(opacity.group(1)) != 0:
                 problems.append(f"{path.name}: {name} must end hidden")
         elif final is None or (opacity is not None and float(opacity.group(1)) != 1) or (
@@ -334,15 +385,20 @@ def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
         ):
             problems.append(f"{path.name}: {name} must end on the complete base frame")
         properties = set(re.findall(r"([\w-]+)\s*:", body))
-        if properties - {"transform", "opacity"}:
+        if properties - ANIMATED_PROPERTIES - {KEYFRAME_EASING}:
             problems.append(f"{path.name}: {name} must animate transform/opacity only")
     root = ET.fromstring(text)
     used = {name for element in root.iter() for name in element.get("class", "").split()} & set(declarations)
-    if used != (DSH_MOBILE_CLASSES if mobile else expected):
+    places = sorted(int(DSH_ODOMETER.fullmatch(name).group("place")) for name in used & odometer)
+    if used - odometer != (DSH_MOBILE_CLASSES if mobile else expected | marks) or places != list(range(len(places))) or not places:
         problems.append(f"{path.name}: DSH illustration is missing an animated stage")
+    problems.extend(check_odometer(path, root, keyframes, declarations, odometer))
+    if not mobile:
+        problems.extend(check_scan_marks(path, root, keyframes, declarations, marks))
     for element in root.iter():
         if element.get("id") in {"card-copy", "card-tags", "card-metrics", "npm-as-of", "flow-caption", "view-1", "view-2", "view-3", "view-4"}:
-            if any(set(child.get("class", "").split()) & set(declarations) for child in element.iter()):
+            # Only the downloads odometer may move among the metrics.
+            if any(set(child.get("class", "").split()) & (set(declarations) - odometer) for child in element.iter()):
                 problems.append(f"{path.name}: {element.get('id')} must remain still and visible")
     return problems
 
@@ -403,7 +459,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

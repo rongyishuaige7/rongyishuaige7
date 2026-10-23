@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="360" height="374" viewBox="0 0 360 374" role="img" aria-labelledby="title desc">
   <title id="title">DSH Usage：按项目统计会话用量</title>
   <desc id="desc">DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。会话到项目时间线为功能示意，非产品截图，不代表真实用量。npm 近 30 天下载 1,031 次，最新版本 0.5.0，已发布 95 个版本；下载统计截至 2026-10-18。</desc>
+  <defs><clipPath id="odoClip"><rect x="20" y="294" width="178" height="36"/></clipPath></defs>
   <style>
     :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
     .theme-dark { display: none; }
@@ -8,10 +9,10 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow, .cta-underline { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
-    .time-lane { transform-origin: left center; }
-    .packet, .timeline-scan { opacity: 0; }
+    .time-lane, .cta-underline { transform-origin: left center; }
+    .packet, .timeline-scan, .scan-mark { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
       .record-a { animation: record-a 8s ease-in-out -0.4s 3; }
       .record-b { animation: record-b 8s ease-in-out -0.4s 3; }
@@ -30,6 +31,32 @@
       .lane-c { animation: lane-c 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
       .timeline-scan { animation: timeline-scan 8s ease-in-out -0.4s 3; }
       .cta-arrow { animation: cta-nudge 8s ease-out -0.4s 3; }
+      .mark-bar-0 { animation: mark-bar-0 8s ease-out -0.4s 3; }
+      .mark-bar-1 { animation: mark-bar-1 8s ease-out -0.4s 3; }
+      .mark-bar-2 { animation: mark-bar-2 8s ease-out -0.4s 3; }
+      .mark-bar-3 { animation: mark-bar-3 8s ease-out -0.4s 3; }
+      .mark-bar-4 { animation: mark-bar-4 8s ease-out -0.4s 3; }
+      .mark-bar-5 { animation: mark-bar-5 8s ease-out -0.4s 3; }
+      .mark-bar-6 { animation: mark-bar-6 8s ease-out -0.4s 3; }
+      .mark-bar-7 { animation: mark-bar-7 8s ease-out -0.4s 3; }
+      .mark-bar-8 { animation: mark-bar-8 8s ease-out -0.4s 3; }
+      .mark-bar-9 { animation: mark-bar-9 8s ease-out -0.4s 3; }
+      .mark-bar-10 { animation: mark-bar-10 8s ease-out -0.4s 3; }
+      .mark-bar-11 { animation: mark-bar-11 8s ease-out -0.4s 3; }
+      .mark-lane-0 { animation: mark-lane-0 8s ease-out -0.4s 3; }
+      .mark-lane-1 { animation: mark-lane-1 8s ease-out -0.4s 3; }
+      .mark-lane-2 { animation: mark-lane-2 8s ease-out -0.4s 3; }
+      .mark-lane-3 { animation: mark-lane-3 8s ease-out -0.4s 3; }
+      .mark-lane-4 { animation: mark-lane-4 8s ease-out -0.4s 3; }
+      .mark-lane-5 { animation: mark-lane-5 8s ease-out -0.4s 3; }
+      .mark-lane-6 { animation: mark-lane-6 8s ease-out -0.4s 3; }
+      .odo-0 { animation: odo-0 8s linear -0.4s 3; }
+      .odo-1 { animation: odo-1 8s linear -0.4s 3; }
+      .odo-2 { animation: odo-2 8s linear -0.4s 3; }
+      .odo-3 { animation: odo-3 8s linear -0.4s 3; }
+      .odo-4 { animation: odo-4 8s linear -0.4s 3; }
+      .odo-5 { animation: odo-5 8s linear -0.4s 3; }
+      .cta-underline { animation: cta-underline 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
     }
     @keyframes record-a {
       0% { opacity: 1; transform: translateY(0); }
@@ -145,6 +172,143 @@
       98% { transform: translateX(1px); }
       100% { transform: translateX(0); }
     }
+    @keyframes cta-underline {
+      0% { transform: none; }
+      4%, 90.5% { transform: scaleX(0); }
+      96%, 100% { transform: none; }
+    }
+    @keyframes mark-bar-0 {
+      0%, 75.49% { opacity: 0; }
+      76.19% { opacity: 1; }
+      79.89%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-1 {
+      0%, 77.3% { opacity: 0; }
+      78% { opacity: 1; }
+      81.7%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-2 {
+      0%, 78.47% { opacity: 0; }
+      79.17% { opacity: 1; }
+      82.87%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-3 {
+      0%, 79.42% { opacity: 0; }
+      80.12% { opacity: 1; }
+      83.82%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-4 {
+      0%, 80.26% { opacity: 0; }
+      80.96% { opacity: 1; }
+      84.66%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-5 {
+      0%, 81.05% { opacity: 0; }
+      81.75% { opacity: 1; }
+      85.45%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-6 {
+      0%, 81.82% { opacity: 0; }
+      82.52% { opacity: 1; }
+      86.22%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-7 {
+      0%, 82.6% { opacity: 0; }
+      83.3% { opacity: 1; }
+      87%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-8 {
+      0%, 83.42% { opacity: 0; }
+      84.12% { opacity: 1; }
+      87.82%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-9 {
+      0%, 84.31% { opacity: 0; }
+      85.01% { opacity: 1; }
+      88.71%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-10 {
+      0%, 85.37% { opacity: 0; }
+      86.07% { opacity: 1; }
+      89.77%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-11 {
+      0%, 86.8% { opacity: 0; }
+      87.5% { opacity: 1; }
+      91.2%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-0 {
+      0%, 74.65% { opacity: 0; }
+      75.25% { opacity: 0.9; }
+      80.11% { opacity: 0.9; }
+      83.61%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-1 {
+      0%, 81.06% { opacity: 0; }
+      81.66% { opacity: 0.9; }
+      86.13% { opacity: 0.9; }
+      89.63%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-2 {
+      0%, 77.57% { opacity: 0; }
+      78.17% { opacity: 0.9; }
+      83% { opacity: 0.9; }
+      86.5%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-3 {
+      0%, 83.34% { opacity: 0; }
+      83.94% { opacity: 0.9; }
+      86.35% { opacity: 0.9; }
+      89.85%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-4 {
+      0%, 74.65% { opacity: 0; }
+      75.25% { opacity: 0.9; }
+      78.91% { opacity: 0.9; }
+      82.41%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-5 {
+      0%, 80.19% { opacity: 0; }
+      80.79% { opacity: 0.9; }
+      84.14% { opacity: 0.9; }
+      87.64%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-6 {
+      0%, 84.87% { opacity: 0; }
+      85.47% { opacity: 0.9; }
+      88.83% { opacity: 0.9; }
+      92.33%, 100% { opacity: 0; }
+    }
+    @keyframes odo-0 {
+      0%, 93.2% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      99.2% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      99.3%, 100% { transform: none; }
+    }
+    @keyframes odo-1 {
+      0%, 92.6% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      98.6% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      98.7%, 100% { transform: none; }
+    }
+    @keyframes odo-2 {
+      0%, 92% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      98% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      98.1%, 100% { transform: none; }
+    }
+    @keyframes odo-3 {
+      0%, 91.4% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      97.4% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      97.5%, 100% { transform: none; }
+    }
+    @keyframes odo-4 {
+      0%, 90.8% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      96.8% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      96.9%, 100% { transform: none; }
+    }
+    @keyframes odo-5 {
+      0%, 90.2% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      96.2% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      96.3%, 100% { transform: none; }
+    }
   </style>
   <rect x="0.5" y="0.5" width="359" height="373" rx="18" fill="var(--page_bg)" stroke="var(--see)" stroke-opacity="0.35"/>
   <text x="24" y="45" fill="var(--ink)" font-size="27" font-weight="700">DSH Usage</text>
@@ -169,7 +333,7 @@
   <g id="card-metrics">
     <text x="24" y="286" fill="var(--muted)" font-size="17">近 30 天下载</text>
     <text x="202" y="286" fill="var(--muted)" font-size="17">最新版本</text>
-    <text id="npm-downloads" x="24" y="322" fill="var(--ink)" font-size="30" font-weight="600" class="mono">1,031</text>
+    <g id="npm-downloads" clip-path="url(#odoClip)" fill="var(--ink)"><text class="mono odo odo-3" font-size="30" font-weight="600"><tspan x="24" y="322">1</tspan><tspan x="24" y="362">2</tspan><tspan x="24" y="402">3</tspan><tspan x="24" y="442">4</tspan><tspan x="24" y="482">5</tspan><tspan x="24" y="522">6</tspan><tspan x="24" y="562">7</tspan><tspan x="24" y="602">8</tspan><tspan x="24" y="642">9</tspan><tspan x="24" y="682">0</tspan><tspan x="24" y="722">1</tspan></text><text class="mono" x="42" y="322" font-size="30" font-weight="600">,</text><text class="mono odo odo-2" font-size="30" font-weight="600"><tspan x="60" y="322">0</tspan><tspan x="60" y="362">1</tspan><tspan x="60" y="402">2</tspan><tspan x="60" y="442">3</tspan><tspan x="60" y="482">4</tspan><tspan x="60" y="522">5</tspan><tspan x="60" y="562">6</tspan><tspan x="60" y="602">7</tspan><tspan x="60" y="642">8</tspan><tspan x="60" y="682">9</tspan><tspan x="60" y="722">0</tspan></text><text class="mono odo odo-1" font-size="30" font-weight="600"><tspan x="78" y="322">3</tspan><tspan x="78" y="362">4</tspan><tspan x="78" y="402">5</tspan><tspan x="78" y="442">6</tspan><tspan x="78" y="482">7</tspan><tspan x="78" y="522">8</tspan><tspan x="78" y="562">9</tspan><tspan x="78" y="602">0</tspan><tspan x="78" y="642">1</tspan><tspan x="78" y="682">2</tspan><tspan x="78" y="722">3</tspan></text><text class="mono odo odo-0" font-size="30" font-weight="600"><tspan x="96" y="322">1</tspan><tspan x="96" y="362">2</tspan><tspan x="96" y="402">3</tspan><tspan x="96" y="442">4</tspan><tspan x="96" y="482">5</tspan><tspan x="96" y="522">6</tspan><tspan x="96" y="562">7</tspan><tspan x="96" y="602">8</tspan><tspan x="96" y="642">9</tspan><tspan x="96" y="682">0</tspan><tspan x="96" y="722">1</tspan></text></g>
     <text id="npm-latest" x="202" y="322" fill="var(--ink)" font-size="30" font-weight="600" class="mono">0.5.0</text>
   </g>
   <text id="npm-as-of" x="24" y="355" fill="var(--muted)" font-size="17">统计截至 2026-10-18</text>

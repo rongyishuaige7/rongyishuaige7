@@ -1459,15 +1459,18 @@ ${style}
 # bars, timeline lanes, scan) in three 8s passes. Each pass opens by dimming the complete
 # illustration, builds it back stage by stage and ends complete, so passes join seamlessly
 # and the card stops on the complete illustration (its base frame). The -0.4s delay starts
-# the first pass already dimmed. npm metrics and product facts stay visible throughout;
-# transient packets and the scanner are hidden in the base frame and both static variants.
-DSH_STYLE = """  <style>
+# the first pass already dimmed. As the scan crosses the timeline it lights each usage bar
+# and lane it passes; then the 30-day downloads figure rolls one full turn per digit and
+# lands on the real value, and the link draws its underline and nudges its arrow. Product
+# facts stay visible throughout; transient packets, highlights and the scanner are hidden
+# in the base frame and both static variants.
+DSH_STYLE_BASE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow, .cta-underline { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
-    .time-lane { transform-origin: left center; }
-    .packet, .timeline-scan { opacity: 0; }
+    .time-lane, .cta-underline { transform-origin: left center; }
+    .packet, .timeline-scan, .scan-mark { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
       .record-a { animation: record-a 8s ease-in-out -0.4s 3; }
       .record-b { animation: record-b 8s ease-in-out -0.4s 3; }
@@ -1486,6 +1489,7 @@ DSH_STYLE = """  <style>
       .lane-c { animation: lane-c 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
       .timeline-scan { animation: timeline-scan 8s ease-in-out -0.4s 3; }
       .cta-arrow { animation: cta-nudge 8s ease-out -0.4s 3; }
+      .cta-underline { animation: cta-underline 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
     }
     @keyframes record-a {
       0% { opacity: 1; transform: translateY(0); }
@@ -1601,7 +1605,132 @@ DSH_STYLE = """  <style>
       98% { transform: translateX(1px); }
       100% { transform: translateX(0); }
     }
+    @keyframes cta-underline {
+      0% { transform: none; }
+      4%, 90.5% { transform: scaleX(0); }
+      96%, 100% { transform: none; }
+    }
   </style>"""
+
+# Timeline geometry. Usage bars are (x, top, height), 12 wide on the 224 baseline; lanes
+# are (x, y, width), 8 tall. The scan line starts at x 835 and travels 290 units from 74%
+# to 90% of the pass with ease-in-out, as in timeline-scan above.
+DSH_BARS = {
+    "a": ((837, 208, 16), (861, 194, 30), (885, 202, 22), (909, 184, 40)),
+    "b": ((933, 196, 28), (957, 177, 47), (981, 191, 33), (1005, 171, 53)),
+    "c": ((1029, 182, 42), (1053, 201, 23), (1077, 188, 36), (1101, 207, 17)),
+}
+DSH_LANES = {
+    "a": ((837, 247, 86), (960, 247, 130)),
+    "b": ((870, 272, 141), (1030, 272, 64)),
+    "c": ((837, 297, 55), (934, 297, 110), (1070, 297, 52)),
+}
+SCAN_X, SCAN_TRAVEL, SCAN_START, SCAN_END = 835, 290, 74, 90
+
+
+def scan_reaches(x: float) -> float:
+    """Percent of the pass at which the ease-in-out scan line crosses x."""
+    progress = min(max((x - SCAN_X) / SCAN_TRAVEL, 0), 1)
+
+    def bezier(t: float, first: float, second: float) -> float:
+        return 3 * (1 - t) ** 2 * t * first + 3 * (1 - t) * t ** 2 * second + t ** 3
+
+    low, high = 0.0, 1.0
+    for _ in range(50):
+        middle = (low + high) / 2
+        low, high = (middle, high) if bezier(middle, 0, 1) < progress else (low, middle)
+    return SCAN_START + (SCAN_END - SCAN_START) * bezier(low, 0.42, 0.58)
+
+
+def dsh_bars() -> str:
+    return "".join(
+        f'<g class="usage-bars usage-{group}">'
+        + "".join(f'<rect x="{x}" y="{y}" width="12" height="{height}" rx="3"/>' for x, y, height in bars)
+        + "</g>"
+        for group, bars in DSH_BARS.items()
+    )
+
+
+def dsh_lanes() -> str:
+    return "".join(
+        f'<g class="time-lane lane-{group}">'
+        + "".join(f'<rect x="{x}" y="{y}" width="{width}" height="8" rx="4"/>' for x, y, width in lanes)
+        + "</g>"
+        for group, lanes in DSH_LANES.items()
+    )
+
+
+def scan_marks() -> tuple[str, str, str]:
+    """Highlights the scan lights as it crosses each bar's center and each lane's span."""
+    rules, frames, marks = [], [], []
+    bars = [bar for group in DSH_BARS.values() for bar in group]
+    lanes = [lane for group in DSH_LANES.values() for lane in group]
+    for index, (x, y, height) in enumerate(bars):
+        name, at = f"mark-bar-{index}", scan_reaches(x + 6)
+        rules.append(f"      .{name} {{ animation: {name} 8s ease-out -0.4s 3; }}")
+        frames.append(
+            f"    @keyframes {name} {{\n      0%, {number(at - 0.4)}% {{ opacity: 0; }}\n"
+            f"      {number(at + 0.3)}% {{ opacity: 1; }}\n      {number(at + 4)}%, 100% {{ opacity: 0; }}\n    }}\n"
+        )
+        marks.append(f'<rect class="scan-mark {name}" x="{x - 1}" y="{y - 1}" width="14" height="{height + 2}" rx="3.5"/>')
+    for index, (x, y, width) in enumerate(lanes):
+        name, start = f"mark-lane-{index}", scan_reaches(x)
+        end = max(scan_reaches(x + width), start + 0.6)
+        rules.append(f"      .{name} {{ animation: {name} 8s ease-out -0.4s 3; }}")
+        frames.append(
+            f"    @keyframes {name} {{\n      0%, {number(start - 0.3)}% {{ opacity: 0; }}\n"
+            f"      {number(start + 0.3)}% {{ opacity: 0.9; }}\n      {number(end)}% {{ opacity: 0.9; }}\n"
+            f"      {number(end + 3.5)}%, 100% {{ opacity: 0; }}\n    }}\n"
+        )
+        marks.append(f'<rect class="scan-mark {name}" x="{x}" y="{y - 1}" width="{width}" height="10" rx="5"/>')
+    return "\n".join(rules), "".join(frames), "".join(marks)
+
+
+# The downloads odometer: one column per digit, numbered from the ones place so the CSS
+# does not depend on the figure. Each column stacks its digit and the next ten (one full
+# turn that ends on the same digit), rolls up one turn after the scan, then snaps back to
+# the identical first row. The ones digit lands last.
+ODOMETER_COLUMNS = 6
+ODOMETER_ROW = 40
+
+
+def odometer_style() -> tuple[str, str]:
+    rules, frames = [], []
+    for place in range(ODOMETER_COLUMNS):
+        start = 90.2 + (ODOMETER_COLUMNS - 1 - place) * 0.6
+        rules.append(f"      .odo-{place} {{ animation: odo-{place} 8s linear -0.4s 3; }}")
+        frames.append(
+            f"    @keyframes odo-{place} {{\n"
+            f"      0%, {number(start)}% {{ transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }}\n"
+            f"      {number(start + 6)}% {{ transform: translateY({-10 * ODOMETER_ROW}px); animation-timing-function: steps(1, end); }}\n"
+            f"      {number(start + 6.1)}%, 100% {{ transform: none; }}\n    }}\n"
+        )
+    return "\n".join(rules), "".join(frames)
+
+
+def odometer(value: str, x: float, y: float, size: int) -> str:
+    """Monospace columns for a figure such as 1,031; separators stay still."""
+    digits = sum(char.isdigit() for char in value)
+    if digits > ODOMETER_COLUMNS:
+        raise SystemExit(f"downloads figure {value} needs more than {ODOMETER_COLUMNS} odometer columns")
+    font = f'font-size="{size}" font-weight="600"'
+    columns, place = [], digits
+    for index, char in enumerate(value):
+        left = number(x + index * size * 0.6)
+        if not char.isdigit():
+            columns.append(f'<text class="mono" x="{left}" y="{y:g}" {font}>{escape(char)}</text>')
+            continue
+        place -= 1
+        rows = "".join(f'<tspan x="{left}" y="{y + row * ODOMETER_ROW:g}">{(int(char) + row) % 10}</tspan>' for row in range(11))
+        columns.append(f'<text class="mono odo odo-{place}" {font}>{rows}</text>')
+    return "".join(columns)
+
+
+SCAN_RULES, SCAN_FRAMES, SCAN_MARKS = scan_marks()
+ODOMETER_RULES, ODOMETER_FRAMES = odometer_style()
+DSH_STYLE = DSH_STYLE_BASE.replace(
+    "      .cta-underline {", SCAN_RULES + "\n" + ODOMETER_RULES + "\n      .cta-underline {", 1
+).replace("  </style>", SCAN_FRAMES + ODOMETER_FRAMES + "  </style>", 1)
 
 DSH = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
   <title id="title">DSH Usage：按项目统计会话用量</title>
@@ -1609,6 +1738,7 @@ DSH = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="4
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${see}" stop-opacity="0.12"/><stop offset="1" stop-color="${see}" stop-opacity="0.02"/></linearGradient>
     <linearGradient id="laneFill"><stop stop-color="${see}"/><stop offset="1" stop-color="${see_2}"/></linearGradient>
+    <clipPath id="odoClip"><rect x="44" y="264" width="170" height="38"/></clipPath>
   </defs>
 ${style}
   <rect x="0.5" y="0.5" width="1199" height="419" rx="18" fill="${page_bg}"/>
@@ -1623,12 +1753,13 @@ ${style}
   <g id="card-metrics">
     <text x="48" y="253" fill="${muted}" font-size="17">近 30 天下载</text>
     <text x="218" y="253" fill="${muted}" font-size="17">npm 最新版本</text>
-    <text id="npm-downloads" x="48" y="293" fill="${ink}" font-size="32" font-weight="600" class="mono">${npm_downloads}</text>
+    <g id="npm-downloads" clip-path="url(#odoClip)" fill="${ink}">${npm_odometer}</g>
     <text id="npm-latest" x="218" y="293" fill="${ink}" font-size="32" font-weight="600" class="mono">${npm_latest}</text>
   </g>
   <text id="npm-as-of" x="48" y="324" fill="${muted}" font-size="17">统计截至 ${npm_as_of}</text>
   <g id="card-cta">
     <text x="48" y="377" fill="${see_text}" font-size="19" font-weight="600">查看仓库</text>
+    <rect class="cta-underline" x="48" y="384" width="76" height="2" rx="1" fill="${see_text}"/>
     <path class="cta-arrow" d="M137 377L150 364M140 364H150V374" fill="none" stroke="${see_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status"><text x="350" y="377" fill="${muted}" font-size="17" text-anchor="end">npm · MIT</text></g>
@@ -1659,16 +1790,9 @@ ${style}
       <g id="timeline-illustration">
         <rect x="815" y="151" width="333" height="173" rx="11" fill="${fig_bg}" stroke="${fig_stroke}"/>
         <path d="M854 166V308M906 166V308M958 166V308M1010 166V308M1062 166V308M1114 166V308M834 231H1129" fill="none" stroke="${fig_grid}"/>
-        <g fill="${see}">
-          <g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g>
-          <g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g>
-          <g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g>
-        </g>
-        <g fill="url(#laneFill)">
-          <g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g>
-          <g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g>
-          <g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g>
-        </g>
+        <g fill="${see}">""" + dsh_bars() + """</g>
+        <g fill="url(#laneFill)">""" + dsh_lanes() + """</g>
+        <g id="scan-marks" fill="${see_2}">""" + SCAN_MARKS + """</g>
         <g class="timeline-scan"><path d="M835 163V312" stroke="${see_2}" stroke-width="2"/><rect x="835" y="163" width="12" height="149" fill="${see_2}" opacity="0.08"/></g>
       </g>
       <g id="view-1"><text x="443" y="375" fill="${muted}" font-size="17">项目总览 · CSV/JSON 导出</text></g>
@@ -1682,6 +1806,7 @@ ${style}
 DSH_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="374" viewBox="0 0 360 374" role="img" aria-labelledby="title desc">
   <title id="title">DSH Usage：按项目统计会话用量</title>
   <desc id="desc">DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。会话到项目时间线为功能示意，非产品截图，不代表真实用量。npm 近 30 天下载 ${npm_downloads} 次，最新版本 ${npm_latest}，已发布 ${npm_versions} 个版本；下载统计截至 ${npm_as_of}。</desc>
+  <defs><clipPath id="odoClip"><rect x="20" y="294" width="178" height="36"/></clipPath></defs>
 ${style}
   <rect x="0.5" y="0.5" width="359" height="373" rx="18" fill="${page_bg}" stroke="${see}" stroke-opacity="0.35"/>
   <text x="24" y="45" fill="${ink}" font-size="27" font-weight="700">DSH Usage</text>
@@ -1706,7 +1831,7 @@ ${style}
   <g id="card-metrics">
     <text x="24" y="286" fill="${muted}" font-size="17">近 30 天下载</text>
     <text x="202" y="286" fill="${muted}" font-size="17">最新版本</text>
-    <text id="npm-downloads" x="24" y="322" fill="${ink}" font-size="30" font-weight="600" class="mono">${npm_downloads}</text>
+    <g id="npm-downloads" clip-path="url(#odoClip)" fill="${ink}">${npm_odometer_narrow}</g>
     <text id="npm-latest" x="202" y="322" fill="${ink}" font-size="30" font-weight="600" class="mono">${npm_latest}</text>
   </g>
   <text id="npm-as-of" x="24" y="355" fill="${muted}" font-size="17">统计截至 ${npm_as_of}</text>
@@ -1784,15 +1909,26 @@ def media_uri(name: str) -> str:
     return f"data:image/webp;base64,{data}"
 
 
+def npm_tokens(downloads: str, latest: str, versions: str, as_of: str) -> dict[str, str]:
+    return {
+        "npm_downloads": downloads,
+        "npm_latest": latest,
+        "npm_versions": versions,
+        "npm_as_of": as_of,
+        "npm_odometer": odometer(downloads, 48, 293, 32),
+        "npm_odometer_narrow": odometer(downloads, 24, 322, 30),
+    }
+
+
 def npm_figures(theme: str) -> dict[str, str]:
     """The DSH card's npm metrics, formatted like the homepage (validate-svg.py re-checks them)."""
     stats = json.loads(NPM_STATS.read_text(encoding="utf-8"))
-    return {
-        "npm_downloads": f"{int(stats['downloads_last_month']):,}",
-        "npm_latest": escape(str(stats["latest"])),
-        "npm_versions": f"{int(stats['version_count']):,}",
-        "npm_as_of": escape(str(stats["downloads_end"])),
-    }
+    return npm_tokens(
+        f"{int(stats['downloads_last_month']):,}",
+        escape(str(stats["latest"])),
+        f"{int(stats['version_count']):,}",
+        escape(str(stats["downloads_end"])),
+    )
 
 
 def hero_media(theme: str) -> dict[str, str]:
@@ -1857,7 +1993,7 @@ def both_captures(svg: str) -> str:
 
 # Placeholder npm figures for version hashes: the daily refresh changes the numbers
 # inside the DSH SVGs, but not their ?v= in README, so the bot stays inside its markers.
-NPM_PLACEHOLDER = {"npm_downloads": "0", "npm_latest": "0.0.0", "npm_versions": "0", "npm_as_of": "0000-00-00"}
+NPM_PLACEHOLDER = npm_tokens("0", "0.0.0", "0", "0000-00-00")
 VERSIONED_ASSET = re.compile(r"(\./assets/([\w.-]+))\?v=[0-9A-Za-z]+")
 
 

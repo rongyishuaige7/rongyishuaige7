@@ -153,6 +153,17 @@ def load_npm_stats() -> tuple[dict, list[str]]:
     return stats, problems
 
 
+def shown_figure(element: ET.Element) -> str:
+    """A plain figure reads its text; an odometer shows each column's first row and its separators."""
+    if local_name(element.tag) == "text":
+        return "".join(element.itertext()).strip()
+    return "".join(
+        (column[0].text if len(column) else column.text) or ""
+        for column in element
+        if local_name(column.tag) == "text"
+    ).strip()
+
+
 def check_card(
     root: ET.Element,
     label: str,
@@ -422,7 +433,7 @@ def validate(path: Path) -> list[str]:
             metric_ids = {element.get("id") for element in metrics.iter()} if metrics is not None else set()
             for metric_id, value in expected.items():
                 metric = by_id.get(metric_id)
-                if metric is None or metric_id not in metric_ids or "".join(metric.itertext()).strip() != value:
+                if metric is None or metric_id not in metric_ids or shown_figure(metric) != value:
                     problems.append(f"DSH Usage {metric_id} must read {value} from {NPM_STATS}")
             as_of = by_id.get("npm-as-of")
             if as_of is None or "".join(as_of.itertext()).strip() != f"统计截至 {stats['downloads_end']}":

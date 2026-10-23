@@ -4,6 +4,7 @@
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="var(--see)" stop-opacity="0.12"/><stop offset="1" stop-color="var(--see)" stop-opacity="0.02"/></linearGradient>
     <linearGradient id="laneFill"><stop stop-color="var(--see)"/><stop offset="1" stop-color="var(--see_2)"/></linearGradient>
+    <clipPath id="odoClip"><rect x="44" y="264" width="170" height="38"/></clipPath>
   </defs>
   <style>
     :root { --shell: #edf0f4; --shell_stroke: #cbd2dc; --panel_stroke: #cbd2dc; --surface_a: #ffffff; --surface_b: #f7f8fa; --surface_c: #f6f7fb; --grid_line: #8795a3; --grid_opacity: 0.42; --card: #ffffff; --zone_fill: #f8fafc; --ink: #18202a; --muted: #5f6876; --faint: #646d7b; --packet_fill: #ffffff; --carry: #e45738; --carry_2: #f08a2c; --carry_text: #c8452a; --see: #3d7be0; --see_2: #1e93cc; --see_text: #2559c4; --touch: #1aa572; --touch_2: #7cc23a; --touch_text: #0b7d50; --board: #f1faf5; --led_off: #cfe9dc; --led_on: #1aa572; --pulse: #1aa572; --soft: #3a4350; --tint: 0.08; --drive_port: #eef1f5; --drive_face_a: #ffffff; --drive_face_b: #eef1f6; --drive_slot: #dde3ea; --drive_slot_stroke: #b9c2cd; --drive_ink: #18202a; --shine: #f08a2c; --shine_opacity: 0.2; --shadow_opacity: 0.16; --shot_bg: #f3f5f8; --page_bg: #ffffff; --wash: 0.06; --glow: 0.07; --fig_bg: #fbfcfd; --fig_stroke: #dfe3e8; --fig_grid: #eef1f5; --cta_ink: #17100d; --tag_fill: #f7f8fa; --tag_stroke: #d5dbe4; --see_wash: 0.06; --see_glow: 0.07; --see_ink: #0b1020; --metric_bg: #ffffff; --tab_bg: #f4f6f9; --pill_fill: #e8f0fd; --drive_fill: 0.03; --flow_tag: #b4520e; --link_line: #b9c1cc; --link_head: #7d8794; --link_dot: #4c5562; --cloud_stroke: #9aa3ae; --cloud_lit: #4c5562; }
@@ -12,10 +13,36 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow, .cta-underline { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
-    .time-lane { transform-origin: left center; }
-    .packet, .timeline-scan { opacity: 0; }
+    .time-lane, .cta-underline { transform-origin: left center; }
+    .packet, .timeline-scan, .scan-mark { opacity: 0; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -47,12 +74,13 @@
   <g id="card-metrics">
     <text x="48" y="253" fill="var(--muted)" font-size="17">近 30 天下载</text>
     <text x="218" y="253" fill="var(--muted)" font-size="17">npm 最新版本</text>
-    <text id="npm-downloads" x="48" y="293" fill="var(--ink)" font-size="32" font-weight="600" class="mono">1,031</text>
+    <g id="npm-downloads" clip-path="url(#odoClip)" fill="var(--ink)"><text class="mono odo odo-3" font-size="32" font-weight="600"><tspan x="48" y="293">1</tspan><tspan x="48" y="333">2</tspan><tspan x="48" y="373">3</tspan><tspan x="48" y="413">4</tspan><tspan x="48" y="453">5</tspan><tspan x="48" y="493">6</tspan><tspan x="48" y="533">7</tspan><tspan x="48" y="573">8</tspan><tspan x="48" y="613">9</tspan><tspan x="48" y="653">0</tspan><tspan x="48" y="693">1</tspan></text><text class="mono" x="67.2" y="293" font-size="32" font-weight="600">,</text><text class="mono odo odo-2" font-size="32" font-weight="600"><tspan x="86.4" y="293">0</tspan><tspan x="86.4" y="333">1</tspan><tspan x="86.4" y="373">2</tspan><tspan x="86.4" y="413">3</tspan><tspan x="86.4" y="453">4</tspan><tspan x="86.4" y="493">5</tspan><tspan x="86.4" y="533">6</tspan><tspan x="86.4" y="573">7</tspan><tspan x="86.4" y="613">8</tspan><tspan x="86.4" y="653">9</tspan><tspan x="86.4" y="693">0</tspan></text><text class="mono odo odo-1" font-size="32" font-weight="600"><tspan x="105.6" y="293">3</tspan><tspan x="105.6" y="333">4</tspan><tspan x="105.6" y="373">5</tspan><tspan x="105.6" y="413">6</tspan><tspan x="105.6" y="453">7</tspan><tspan x="105.6" y="493">8</tspan><tspan x="105.6" y="533">9</tspan><tspan x="105.6" y="573">0</tspan><tspan x="105.6" y="613">1</tspan><tspan x="105.6" y="653">2</tspan><tspan x="105.6" y="693">3</tspan></text><text class="mono odo odo-0" font-size="32" font-weight="600"><tspan x="124.8" y="293">1</tspan><tspan x="124.8" y="333">2</tspan><tspan x="124.8" y="373">3</tspan><tspan x="124.8" y="413">4</tspan><tspan x="124.8" y="453">5</tspan><tspan x="124.8" y="493">6</tspan><tspan x="124.8" y="533">7</tspan><tspan x="124.8" y="573">8</tspan><tspan x="124.8" y="613">9</tspan><tspan x="124.8" y="653">0</tspan><tspan x="124.8" y="693">1</tspan></text></g>
     <text id="npm-latest" x="218" y="293" fill="var(--ink)" font-size="32" font-weight="600" class="mono">0.5.0</text>
   </g>
   <text id="npm-as-of" x="48" y="324" fill="var(--muted)" font-size="17">统计截至 2026-10-18</text>
   <g id="card-cta">
     <text x="48" y="377" fill="var(--see_text)" font-size="19" font-weight="600">查看仓库</text>
+    <rect class="cta-underline" x="48" y="384" width="76" height="2" rx="1" fill="var(--see_text)"/>
     <path class="cta-arrow" d="M137 377L150 364M140 364H150V374" fill="none" stroke="var(--see_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status"><text x="350" y="377" fill="var(--muted)" font-size="17" text-anchor="end">npm · MIT</text></g>
@@ -83,16 +111,9 @@
       <g id="timeline-illustration">
         <rect x="815" y="151" width="333" height="173" rx="11" fill="var(--fig_bg)" stroke="var(--fig_stroke)"/>
         <path d="M854 166V308M906 166V308M958 166V308M1010 166V308M1062 166V308M1114 166V308M834 231H1129" fill="none" stroke="var(--fig_grid)"/>
-        <g fill="var(--see)">
-          <g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g>
-          <g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g>
-          <g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g>
-        </g>
-        <g fill="url(#laneFill)">
-          <g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g>
-          <g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g>
-          <g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g>
-        </g>
+        <g fill="var(--see)"><g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g><g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g><g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g></g>
+        <g fill="url(#laneFill)"><g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g><g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g><g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g></g>
+        <g id="scan-marks" fill="var(--see_2)"><rect class="scan-mark mark-bar-0" x="836" y="207" width="14" height="18" rx="3.5"/><rect class="scan-mark mark-bar-1" x="860" y="193" width="14" height="32" rx="3.5"/><rect class="scan-mark mark-bar-2" x="884" y="201" width="14" height="24" rx="3.5"/><rect class="scan-mark mark-bar-3" x="908" y="183" width="14" height="42" rx="3.5"/><rect class="scan-mark mark-bar-4" x="932" y="195" width="14" height="30" rx="3.5"/><rect class="scan-mark mark-bar-5" x="956" y="176" width="14" height="49" rx="3.5"/><rect class="scan-mark mark-bar-6" x="980" y="190" width="14" height="35" rx="3.5"/><rect class="scan-mark mark-bar-7" x="1004" y="170" width="14" height="55" rx="3.5"/><rect class="scan-mark mark-bar-8" x="1028" y="181" width="14" height="44" rx="3.5"/><rect class="scan-mark mark-bar-9" x="1052" y="200" width="14" height="25" rx="3.5"/><rect class="scan-mark mark-bar-10" x="1076" y="187" width="14" height="38" rx="3.5"/><rect class="scan-mark mark-bar-11" x="1100" y="206" width="14" height="19" rx="3.5"/><rect class="scan-mark mark-lane-0" x="837" y="246" width="86" height="10" rx="5"/><rect class="scan-mark mark-lane-1" x="960" y="246" width="130" height="10" rx="5"/><rect class="scan-mark mark-lane-2" x="870" y="271" width="141" height="10" rx="5"/><rect class="scan-mark mark-lane-3" x="1030" y="271" width="64" height="10" rx="5"/><rect class="scan-mark mark-lane-4" x="837" y="296" width="55" height="10" rx="5"/><rect class="scan-mark mark-lane-5" x="934" y="296" width="110" height="10" rx="5"/><rect class="scan-mark mark-lane-6" x="1070" y="296" width="52" height="10" rx="5"/></g>
         <g class="timeline-scan"><path d="M835 163V312" stroke="var(--see_2)" stroke-width="2"/><rect x="835" y="163" width="12" height="149" fill="var(--see_2)" opacity="0.08"/></g>
       </g>
       <g id="view-1"><text x="443" y="375" fill="var(--muted)" font-size="17">项目总览 · CSV/JSON 导出</text></g>

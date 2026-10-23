@@ -4,14 +4,15 @@
   <defs>
     <linearGradient id="cardWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6ea8ff" stop-opacity="0.12"/><stop offset="1" stop-color="#6ea8ff" stop-opacity="0.02"/></linearGradient>
     <linearGradient id="laneFill"><stop stop-color="#6ea8ff"/><stop offset="1" stop-color="#63ccf8"/></linearGradient>
+    <clipPath id="odoClip"><rect x="44" y="264" width="170" height="38"/></clipPath>
   </defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .record, .usage-bars, .time-lane, .cta-arrow { transform-box: fill-box; }
+    .record, .usage-bars, .time-lane, .cta-arrow, .cta-underline { transform-box: fill-box; }
     .usage-bars { transform-origin: center bottom; }
-    .time-lane { transform-origin: left center; }
-    .packet, .timeline-scan { opacity: 0; }
+    .time-lane, .cta-underline { transform-origin: left center; }
+    .packet, .timeline-scan, .scan-mark { opacity: 0; }
     @media (prefers-reduced-motion: no-preference) {
       .record-a { animation: record-a 8s ease-in-out -0.4s 3; }
       .record-b { animation: record-b 8s ease-in-out -0.4s 3; }
@@ -30,6 +31,32 @@
       .lane-c { animation: lane-c 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
       .timeline-scan { animation: timeline-scan 8s ease-in-out -0.4s 3; }
       .cta-arrow { animation: cta-nudge 8s ease-out -0.4s 3; }
+      .mark-bar-0 { animation: mark-bar-0 8s ease-out -0.4s 3; }
+      .mark-bar-1 { animation: mark-bar-1 8s ease-out -0.4s 3; }
+      .mark-bar-2 { animation: mark-bar-2 8s ease-out -0.4s 3; }
+      .mark-bar-3 { animation: mark-bar-3 8s ease-out -0.4s 3; }
+      .mark-bar-4 { animation: mark-bar-4 8s ease-out -0.4s 3; }
+      .mark-bar-5 { animation: mark-bar-5 8s ease-out -0.4s 3; }
+      .mark-bar-6 { animation: mark-bar-6 8s ease-out -0.4s 3; }
+      .mark-bar-7 { animation: mark-bar-7 8s ease-out -0.4s 3; }
+      .mark-bar-8 { animation: mark-bar-8 8s ease-out -0.4s 3; }
+      .mark-bar-9 { animation: mark-bar-9 8s ease-out -0.4s 3; }
+      .mark-bar-10 { animation: mark-bar-10 8s ease-out -0.4s 3; }
+      .mark-bar-11 { animation: mark-bar-11 8s ease-out -0.4s 3; }
+      .mark-lane-0 { animation: mark-lane-0 8s ease-out -0.4s 3; }
+      .mark-lane-1 { animation: mark-lane-1 8s ease-out -0.4s 3; }
+      .mark-lane-2 { animation: mark-lane-2 8s ease-out -0.4s 3; }
+      .mark-lane-3 { animation: mark-lane-3 8s ease-out -0.4s 3; }
+      .mark-lane-4 { animation: mark-lane-4 8s ease-out -0.4s 3; }
+      .mark-lane-5 { animation: mark-lane-5 8s ease-out -0.4s 3; }
+      .mark-lane-6 { animation: mark-lane-6 8s ease-out -0.4s 3; }
+      .odo-0 { animation: odo-0 8s linear -0.4s 3; }
+      .odo-1 { animation: odo-1 8s linear -0.4s 3; }
+      .odo-2 { animation: odo-2 8s linear -0.4s 3; }
+      .odo-3 { animation: odo-3 8s linear -0.4s 3; }
+      .odo-4 { animation: odo-4 8s linear -0.4s 3; }
+      .odo-5 { animation: odo-5 8s linear -0.4s 3; }
+      .cta-underline { animation: cta-underline 8s cubic-bezier(0.2, 0.7, 0.2, 1) -0.4s 3; }
     }
     @keyframes record-a {
       0% { opacity: 1; transform: translateY(0); }
@@ -145,6 +172,143 @@
       98% { transform: translateX(1px); }
       100% { transform: translateX(0); }
     }
+    @keyframes cta-underline {
+      0% { transform: none; }
+      4%, 90.5% { transform: scaleX(0); }
+      96%, 100% { transform: none; }
+    }
+    @keyframes mark-bar-0 {
+      0%, 75.49% { opacity: 0; }
+      76.19% { opacity: 1; }
+      79.89%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-1 {
+      0%, 77.3% { opacity: 0; }
+      78% { opacity: 1; }
+      81.7%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-2 {
+      0%, 78.47% { opacity: 0; }
+      79.17% { opacity: 1; }
+      82.87%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-3 {
+      0%, 79.42% { opacity: 0; }
+      80.12% { opacity: 1; }
+      83.82%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-4 {
+      0%, 80.26% { opacity: 0; }
+      80.96% { opacity: 1; }
+      84.66%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-5 {
+      0%, 81.05% { opacity: 0; }
+      81.75% { opacity: 1; }
+      85.45%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-6 {
+      0%, 81.82% { opacity: 0; }
+      82.52% { opacity: 1; }
+      86.22%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-7 {
+      0%, 82.6% { opacity: 0; }
+      83.3% { opacity: 1; }
+      87%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-8 {
+      0%, 83.42% { opacity: 0; }
+      84.12% { opacity: 1; }
+      87.82%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-9 {
+      0%, 84.31% { opacity: 0; }
+      85.01% { opacity: 1; }
+      88.71%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-10 {
+      0%, 85.37% { opacity: 0; }
+      86.07% { opacity: 1; }
+      89.77%, 100% { opacity: 0; }
+    }
+    @keyframes mark-bar-11 {
+      0%, 86.8% { opacity: 0; }
+      87.5% { opacity: 1; }
+      91.2%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-0 {
+      0%, 74.65% { opacity: 0; }
+      75.25% { opacity: 0.9; }
+      80.11% { opacity: 0.9; }
+      83.61%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-1 {
+      0%, 81.06% { opacity: 0; }
+      81.66% { opacity: 0.9; }
+      86.13% { opacity: 0.9; }
+      89.63%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-2 {
+      0%, 77.57% { opacity: 0; }
+      78.17% { opacity: 0.9; }
+      83% { opacity: 0.9; }
+      86.5%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-3 {
+      0%, 83.34% { opacity: 0; }
+      83.94% { opacity: 0.9; }
+      86.35% { opacity: 0.9; }
+      89.85%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-4 {
+      0%, 74.65% { opacity: 0; }
+      75.25% { opacity: 0.9; }
+      78.91% { opacity: 0.9; }
+      82.41%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-5 {
+      0%, 80.19% { opacity: 0; }
+      80.79% { opacity: 0.9; }
+      84.14% { opacity: 0.9; }
+      87.64%, 100% { opacity: 0; }
+    }
+    @keyframes mark-lane-6 {
+      0%, 84.87% { opacity: 0; }
+      85.47% { opacity: 0.9; }
+      88.83% { opacity: 0.9; }
+      92.33%, 100% { opacity: 0; }
+    }
+    @keyframes odo-0 {
+      0%, 93.2% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      99.2% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      99.3%, 100% { transform: none; }
+    }
+    @keyframes odo-1 {
+      0%, 92.6% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      98.6% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      98.7%, 100% { transform: none; }
+    }
+    @keyframes odo-2 {
+      0%, 92% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      98% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      98.1%, 100% { transform: none; }
+    }
+    @keyframes odo-3 {
+      0%, 91.4% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      97.4% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      97.5%, 100% { transform: none; }
+    }
+    @keyframes odo-4 {
+      0%, 90.8% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      96.8% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      96.9%, 100% { transform: none; }
+    }
+    @keyframes odo-5 {
+      0%, 90.2% { transform: none; animation-timing-function: cubic-bezier(0.35, 0, 0.15, 1); }
+      96.2% { transform: translateY(-400px); animation-timing-function: steps(1, end); }
+      96.3%, 100% { transform: none; }
+    }
   </style>
   <rect x="0.5" y="0.5" width="1199" height="419" rx="18" fill="#0d1117"/>
   <rect x="0.5" y="0.5" width="1199" height="419" rx="18" fill="url(#cardWash)" stroke="#6ea8ff" stroke-opacity="0.26"/>
@@ -158,12 +322,13 @@
   <g id="card-metrics">
     <text x="48" y="253" fill="#9da6b4" font-size="17">近 30 天下载</text>
     <text x="218" y="253" fill="#9da6b4" font-size="17">npm 最新版本</text>
-    <text id="npm-downloads" x="48" y="293" fill="#f3f6fa" font-size="32" font-weight="600" class="mono">1,031</text>
+    <g id="npm-downloads" clip-path="url(#odoClip)" fill="#f3f6fa"><text class="mono odo odo-3" font-size="32" font-weight="600"><tspan x="48" y="293">1</tspan><tspan x="48" y="333">2</tspan><tspan x="48" y="373">3</tspan><tspan x="48" y="413">4</tspan><tspan x="48" y="453">5</tspan><tspan x="48" y="493">6</tspan><tspan x="48" y="533">7</tspan><tspan x="48" y="573">8</tspan><tspan x="48" y="613">9</tspan><tspan x="48" y="653">0</tspan><tspan x="48" y="693">1</tspan></text><text class="mono" x="67.2" y="293" font-size="32" font-weight="600">,</text><text class="mono odo odo-2" font-size="32" font-weight="600"><tspan x="86.4" y="293">0</tspan><tspan x="86.4" y="333">1</tspan><tspan x="86.4" y="373">2</tspan><tspan x="86.4" y="413">3</tspan><tspan x="86.4" y="453">4</tspan><tspan x="86.4" y="493">5</tspan><tspan x="86.4" y="533">6</tspan><tspan x="86.4" y="573">7</tspan><tspan x="86.4" y="613">8</tspan><tspan x="86.4" y="653">9</tspan><tspan x="86.4" y="693">0</tspan></text><text class="mono odo odo-1" font-size="32" font-weight="600"><tspan x="105.6" y="293">3</tspan><tspan x="105.6" y="333">4</tspan><tspan x="105.6" y="373">5</tspan><tspan x="105.6" y="413">6</tspan><tspan x="105.6" y="453">7</tspan><tspan x="105.6" y="493">8</tspan><tspan x="105.6" y="533">9</tspan><tspan x="105.6" y="573">0</tspan><tspan x="105.6" y="613">1</tspan><tspan x="105.6" y="653">2</tspan><tspan x="105.6" y="693">3</tspan></text><text class="mono odo odo-0" font-size="32" font-weight="600"><tspan x="124.8" y="293">1</tspan><tspan x="124.8" y="333">2</tspan><tspan x="124.8" y="373">3</tspan><tspan x="124.8" y="413">4</tspan><tspan x="124.8" y="453">5</tspan><tspan x="124.8" y="493">6</tspan><tspan x="124.8" y="533">7</tspan><tspan x="124.8" y="573">8</tspan><tspan x="124.8" y="613">9</tspan><tspan x="124.8" y="653">0</tspan><tspan x="124.8" y="693">1</tspan></text></g>
     <text id="npm-latest" x="218" y="293" fill="#f3f6fa" font-size="32" font-weight="600" class="mono">0.5.0</text>
   </g>
   <text id="npm-as-of" x="48" y="324" fill="#9da6b4" font-size="17">统计截至 2026-10-18</text>
   <g id="card-cta">
     <text x="48" y="377" fill="#6ea8ff" font-size="19" font-weight="600">查看仓库</text>
+    <rect class="cta-underline" x="48" y="384" width="76" height="2" rx="1" fill="#6ea8ff"/>
     <path class="cta-arrow" d="M137 377L150 364M140 364H150V374" fill="none" stroke="#6ea8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status"><text x="350" y="377" fill="#9da6b4" font-size="17" text-anchor="end">npm · MIT</text></g>
@@ -194,16 +359,9 @@
       <g id="timeline-illustration">
         <rect x="815" y="151" width="333" height="173" rx="11" fill="#080b10" stroke="#262c35"/>
         <path d="M854 166V308M906 166V308M958 166V308M1010 166V308M1062 166V308M1114 166V308M834 231H1129" fill="none" stroke="#141920"/>
-        <g fill="#6ea8ff">
-          <g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g>
-          <g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g>
-          <g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g>
-        </g>
-        <g fill="url(#laneFill)">
-          <g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g>
-          <g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g>
-          <g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g>
-        </g>
+        <g fill="#6ea8ff"><g class="usage-bars usage-a"><rect x="837" y="208" width="12" height="16" rx="3"/><rect x="861" y="194" width="12" height="30" rx="3"/><rect x="885" y="202" width="12" height="22" rx="3"/><rect x="909" y="184" width="12" height="40" rx="3"/></g><g class="usage-bars usage-b"><rect x="933" y="196" width="12" height="28" rx="3"/><rect x="957" y="177" width="12" height="47" rx="3"/><rect x="981" y="191" width="12" height="33" rx="3"/><rect x="1005" y="171" width="12" height="53" rx="3"/></g><g class="usage-bars usage-c"><rect x="1029" y="182" width="12" height="42" rx="3"/><rect x="1053" y="201" width="12" height="23" rx="3"/><rect x="1077" y="188" width="12" height="36" rx="3"/><rect x="1101" y="207" width="12" height="17" rx="3"/></g></g>
+        <g fill="url(#laneFill)"><g class="time-lane lane-a"><rect x="837" y="247" width="86" height="8" rx="4"/><rect x="960" y="247" width="130" height="8" rx="4"/></g><g class="time-lane lane-b"><rect x="870" y="272" width="141" height="8" rx="4"/><rect x="1030" y="272" width="64" height="8" rx="4"/></g><g class="time-lane lane-c"><rect x="837" y="297" width="55" height="8" rx="4"/><rect x="934" y="297" width="110" height="8" rx="4"/><rect x="1070" y="297" width="52" height="8" rx="4"/></g></g>
+        <g id="scan-marks" fill="#63ccf8"><rect class="scan-mark mark-bar-0" x="836" y="207" width="14" height="18" rx="3.5"/><rect class="scan-mark mark-bar-1" x="860" y="193" width="14" height="32" rx="3.5"/><rect class="scan-mark mark-bar-2" x="884" y="201" width="14" height="24" rx="3.5"/><rect class="scan-mark mark-bar-3" x="908" y="183" width="14" height="42" rx="3.5"/><rect class="scan-mark mark-bar-4" x="932" y="195" width="14" height="30" rx="3.5"/><rect class="scan-mark mark-bar-5" x="956" y="176" width="14" height="49" rx="3.5"/><rect class="scan-mark mark-bar-6" x="980" y="190" width="14" height="35" rx="3.5"/><rect class="scan-mark mark-bar-7" x="1004" y="170" width="14" height="55" rx="3.5"/><rect class="scan-mark mark-bar-8" x="1028" y="181" width="14" height="44" rx="3.5"/><rect class="scan-mark mark-bar-9" x="1052" y="200" width="14" height="25" rx="3.5"/><rect class="scan-mark mark-bar-10" x="1076" y="187" width="14" height="38" rx="3.5"/><rect class="scan-mark mark-bar-11" x="1100" y="206" width="14" height="19" rx="3.5"/><rect class="scan-mark mark-lane-0" x="837" y="246" width="86" height="10" rx="5"/><rect class="scan-mark mark-lane-1" x="960" y="246" width="130" height="10" rx="5"/><rect class="scan-mark mark-lane-2" x="870" y="271" width="141" height="10" rx="5"/><rect class="scan-mark mark-lane-3" x="1030" y="271" width="64" height="10" rx="5"/><rect class="scan-mark mark-lane-4" x="837" y="296" width="55" height="10" rx="5"/><rect class="scan-mark mark-lane-5" x="934" y="296" width="110" height="10" rx="5"/><rect class="scan-mark mark-lane-6" x="1070" y="296" width="52" height="10" rx="5"/></g>
         <g class="timeline-scan"><path d="M835 163V312" stroke="#63ccf8" stroke-width="2"/><rect x="835" y="163" width="12" height="149" fill="#63ccf8" opacity="0.08"/></g>
       </g>
       <g id="view-1"><text x="443" y="375" fill="#9da6b4" font-size="17">项目总览 · CSV/JSON 导出</text></g>

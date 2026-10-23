@@ -54,12 +54,12 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=d835885d">
-  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=ae2d62c6">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=86e4eff3">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=0d5ddb9e">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=7bf06145">
-  <img src="./assets/dsh-card-light.svg?v=7bf06145" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=ad50582e">
+  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=a0e3cf88">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=22f10bd3">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=f3ac57f0">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=577ee0ef">
+  <img src="./assets/dsh-card-light.svg?v=577ee0ef" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
 </picture>
 </a>
 
