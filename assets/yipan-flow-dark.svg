@@ -47,22 +47,34 @@
   </defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .lit, .packet, .pulse-ring { opacity: 0; }
-    .pulse-ring { transform-box: fill-box; transform-origin: center; }
+    .lit, .packet, .pulse-ring, .io-on, .think, .plus-one, .cta-ring { opacity: 0; }
+    .pulse-ring, .think, .cta-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .lit-context { animation: lit-context 8s ease-in-out 3; }
       .packet-retrieve { animation: packet-retrieve 8s linear 3; }
+      .io-read { animation: io-read 8s linear 3; }
       .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out 3; }
       .packet-request { animation: packet-request 8s linear 3; }
       .lit-cloud { animation: lit-cloud 8s ease-in-out 3; }
+      .think-a { animation: think-a 8s ease-in-out 3; }
+      .think-b { animation: think-b 8s ease-in-out 3; }
+      .think-c { animation: think-c 8s ease-in-out 3; }
       .packet-result { animation: packet-result 8s linear 3; }
       .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out 3; }
       .packet-generate { animation: packet-generate 8s linear 3; }
+      .io-write { animation: io-write 8s linear 3; }
       .lit-output { animation: lit-output 8s ease-in-out 3; }
+      .plus-one { animation: plus-one 8s ease-out 3; }
+      .sheet-1 { animation: sheet-1 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-2 { animation: sheet-2 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-3 { animation: sheet-3 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
       .lit-rail { animation: lit-rail 8s ease-in-out 3; }
       .packet-rail { animation: packet-rail 8s linear 3; }
+      .io-sync { animation: io-sync 8s linear 3; }
       .status-pulse { animation: status-pulse 8s ease-out 3; }
       .cta-shine { animation: cta-shine 8s ease-in-out 3; }
+      .cta-ring { animation: cta-ring 8s ease-out 3; }
+      .cta-arrow { animation: cta-arrow 8s ease-out 3; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -159,6 +171,100 @@
       0%, 86% { transform: translateX(0); }
       96%, 100% { transform: translateX(300px); }
     }
+    @keyframes think-a {
+      0%, 33% { opacity: 0; transform: none; }
+      34% { opacity: 1; transform: translateY(-3px); }
+      35.6% { opacity: 0.35; transform: none; }
+      37.2% { opacity: 1; transform: translateY(-3px); }
+      38.8% { opacity: 0.35; transform: none; }
+      40.6%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-b {
+      0%, 33.7% { opacity: 0; transform: none; }
+      34.7% { opacity: 1; transform: translateY(-3px); }
+      36.3% { opacity: 0.35; transform: none; }
+      37.9% { opacity: 1; transform: translateY(-3px); }
+      39.5% { opacity: 0.35; transform: none; }
+      41.3%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-c {
+      0%, 34.4% { opacity: 0; transform: none; }
+      35.4% { opacity: 1; transform: translateY(-3px); }
+      37% { opacity: 0.35; transform: none; }
+      38.6% { opacity: 1; transform: translateY(-3px); }
+      40.2% { opacity: 0.35; transform: none; }
+      42%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes plus-one {
+      0%, 65.5% { opacity: 0; transform: translateY(6px); }
+      67% { opacity: 1; transform: none; }
+      71% { opacity: 1; transform: translateY(-5px); }
+      74%, 100% { opacity: 0; transform: translateY(-10px); }
+    }
+    @keyframes sheet-1 {
+      0%, 21.4% { opacity: 0; transform: translateY(-16px); }
+      22.9% { opacity: 1; transform: translateY(1.5px); }
+      23.8%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-2 {
+      0%, 54.73% { opacity: 0; transform: translateY(-16px); }
+      56.23% { opacity: 1; transform: translateY(1.5px); }
+      57.13%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-3 {
+      0%, 88.07% { opacity: 0; transform: translateY(-16px); }
+      89.57% { opacity: 1; transform: translateY(1.5px); }
+      90.47%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes cta-ring {
+      0%, 87% { opacity: 0; transform: none; }
+      88% { opacity: 0.6; transform: none; }
+      96%, 100% { opacity: 0; transform: scale(1.06, 1.22); }
+    }
+    @keyframes cta-arrow {
+      0%, 95.5% { transform: none; }
+      97.5% { transform: translate(3px, -3px); }
+      99.2%, 100% { transform: none; }
+    }
+    @keyframes io-read {
+      0%, 8.4% { opacity: 0; }
+      9% { opacity: 1; }
+      10.1% { opacity: 0.22; }
+      11% { opacity: 1; }
+      12.1% { opacity: 0.22; }
+      13% { opacity: 1; }
+      14.1% { opacity: 0.22; }
+      15% { opacity: 1; }
+      16.1% { opacity: 0.22; }
+      17% { opacity: 1; }
+      18%, 100% { opacity: 0; }
+    }
+    @keyframes io-write {
+      0%, 56.4% { opacity: 0; }
+      57% { opacity: 1; }
+      58.1% { opacity: 0.22; }
+      59% { opacity: 1; }
+      60.1% { opacity: 0.22; }
+      61% { opacity: 1; }
+      62.1% { opacity: 0.22; }
+      63% { opacity: 1; }
+      64.1% { opacity: 0.22; }
+      65% { opacity: 1; }
+      66%, 100% { opacity: 0; }
+    }
+    @keyframes io-sync {
+      0%, 74.4% { opacity: 0; }
+      75% { opacity: 1; }
+      76.1% { opacity: 0.22; }
+      77% { opacity: 1; }
+      78.1% { opacity: 0.22; }
+      79% { opacity: 1; }
+      80.1% { opacity: 0.22; }
+      81% { opacity: 1; }
+      82.1% { opacity: 0.22; }
+      83% { opacity: 1; }
+      84%, 100% { opacity: 0; }
+    }
   </style>
 
   <rect x="0.5" y="0.5" width="1199" height="487" rx="18" fill="#0d1117"/>
@@ -183,8 +289,9 @@
     <g clip-path="url(#ctaClip)">
       <path class="cta-shine" d="M0 290H40L20 348H-20Z" fill="url(#ctaShine)"/>
     </g>
+    <rect class="cta-ring" x="48" y="290" width="200" height="58" rx="14" fill="none" stroke="#ff6b4a" stroke-width="2"/>
     <text x="72" y="325" fill="#17100d" font-size="19" font-weight="700">查看公开仓库</text>
-    <path d="M207 326L220 313M210 313H220V323" fill="none" stroke="#17100d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="cta-arrow" d="M207 326L220 313M210 313H220V323" fill="none" stroke="#17100d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status">
     <circle cx="274" cy="319" r="8" fill="#ff6b4a" opacity="0.18"/>
@@ -223,6 +330,7 @@
       <g id="flow-cloud">
         <rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="#101722" stroke="#5a5f66" stroke-dasharray="6 5"/>
         <g class="lit lit-cloud"><rect x="1001" y="209" width="135" height="101" rx="16" fill="none" stroke="#c7ced8" stroke-opacity="0.18" stroke-width="4"/><rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="#c7ced8" fill-opacity="0.07" stroke="#c7ced8" stroke-width="1.5" stroke-dasharray="6 5"/></g>
+        <g fill="#c7ced8"><circle class="think think-a" cx="1055.5" cy="229" r="3.5"/><circle class="think think-b" cx="1068.5" cy="229" r="3.5"/><circle class="think think-c" cx="1081.5" cy="229" r="3.5"/></g>
         <text x="1068.5" y="255" fill="#f3f6fa" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
         <text x="1068.5" y="283" fill="#9da6b4" font-size="17" text-anchor="middle">按需推理</text>
       </g>
@@ -231,6 +339,7 @@
     <g id="drive">
       <rect id="drive-boundary" x="468.5" y="98.5" width="446" height="322" rx="14" fill="#ff6b4a" fill-opacity="0.03" stroke="#ff6b4a" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="910" y="86" fill="#ff9a3d" font-size="17" text-anchor="end">U 盘内</text>
+      <g id="drive-io"><circle cx="845" cy="80" r="4.5" fill="#2b3038"/><g class="io-on io-read"><circle cx="845" cy="80" r="10" fill="#ff9a3d" opacity="0.25"/><circle cx="845" cy="80" r="4.5" fill="#ff9a3d"/></g><g class="io-on io-write"><circle cx="845" cy="80" r="10" fill="#ff9a3d" opacity="0.25"/><circle cx="845" cy="80" r="4.5" fill="#ff9a3d"/></g><g class="io-on io-sync"><circle cx="845" cy="80" r="10" fill="#ff9a3d" opacity="0.25"/><circle cx="845" cy="80" r="4.5" fill="#ff9a3d"/></g></g>
 
       <g id="continuity-rail">
         <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="#ff6b4a" stroke-opacity="0.4"/>
@@ -286,6 +395,8 @@
         <g class="lit lit-output"><rect x="521" y="331" width="377" height="77" rx="14" fill="none" stroke="#ff6b4a" stroke-opacity="0.18" stroke-width="4"/><rect x="524.5" y="334.5" width="370" height="70" rx="10.5" fill="#ff6b4a" fill-opacity="0.07" stroke="#ff6b4a" stroke-width="1.5"/></g>
         <text x="544" y="363" fill="#f3f6fa" font-size="22" font-weight="700">产出与任务记录</text>
         <text x="544" y="390" fill="#9da6b4" font-size="17">留在盘内，随盘带走</text>
+        <g id="record-stack"><rect class="sheet sheet-1" x="830" y="384" width="46" height="10" rx="2.5" fill="#ff6b4a" fill-opacity="0.16" stroke="#ff6b4a" stroke-opacity="0.65"/><rect class="sheet sheet-2" x="830" y="372" width="46" height="10" rx="2.5" fill="#ff6b4a" fill-opacity="0.16" stroke="#ff6b4a" stroke-opacity="0.65"/><rect class="sheet sheet-3" x="830" y="360" width="46" height="10" rx="2.5" fill="#ff6b4a" fill-opacity="0.16" stroke="#ff6b4a" stroke-opacity="0.65"/></g>
+        <text class="plus-one" x="818" y="377" fill="#ff6b4a" font-size="17" font-weight="700" text-anchor="end">+1</text>
       </g>
     </g>
   </g>

@@ -7,22 +7,34 @@
     @media (prefers-color-scheme: dark) { :root { --shell: #080c13; --shell_stroke: #303846; --panel_stroke: #414b5b; --surface_a: #111722; --surface_b: #0b1018; --surface_c: #121117; --grid_line: #526171; --grid_opacity: 0.5; --card: #101722; --zone_fill: #0c121b; --ink: #f3f6fa; --muted: #9da6b4; --faint: #737e8e; --packet_fill: #fff7f2; --carry: #ff6b4a; --carry_2: #ff9a3d; --carry_text: #ff6b4a; --see: #6ea8ff; --see_2: #63ccf8; --see_text: #6ea8ff; --touch: #46d89c; --touch_2: #b6ec6a; --touch_text: #46d89c; --board: #0a1714; --led_off: #183a2e; --led_on: #b6ec6a; --pulse: #b6ec6a; --soft: #c3cad4; --tint: 0.12; --drive_port: #161a21; --drive_face_a: #20252d; --drive_face_b: #0d1117; --drive_slot: #232934; --drive_slot_stroke: #4e5663; --drive_ink: #f3f6fa; --shine: #ffffff; --shine_opacity: 0.16; --shadow_opacity: 0.45; --shot_bg: #161a21; --page_bg: #0d1117; --wash: 0.085; --glow: 0.1; --fig_bg: #080b10; --fig_stroke: #262c35; --fig_grid: #141920; --cta_ink: #17100d; --tag_fill: #12161d; --tag_stroke: #2b3038; --see_wash: 0.085; --see_glow: 0.1; --see_ink: #0b1020; --metric_bg: #0a0e15; --tab_bg: #0b0f16; --pill_fill: #142033; --drive_fill: 0.03; --flow_tag: #ff9a3d; --link_line: #45494f; --link_head: #85878b; --link_dot: #e8edf3; --cloud_stroke: #5a5f66; --cloud_lit: #c7ced8; } .theme-light { display: none; } .theme-dark { display: inline; } }
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .lit, .packet, .pulse-ring { opacity: 0; }
-    .pulse-ring { transform-box: fill-box; transform-origin: center; }
+    .lit, .packet, .pulse-ring, .io-on, .think, .plus-one, .cta-ring { opacity: 0; }
+    .pulse-ring, .think, .cta-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .lit-context { animation: lit-context 8s ease-in-out 3; }
       .packet-retrieve { animation: packet-retrieve 8s linear 3; }
+      .io-read { animation: io-read 8s linear 3; }
       .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out 3; }
       .packet-request { animation: packet-request 8s linear 3; }
       .lit-cloud { animation: lit-cloud 8s ease-in-out 3; }
+      .think-a { animation: think-a 8s ease-in-out 3; }
+      .think-b { animation: think-b 8s ease-in-out 3; }
+      .think-c { animation: think-c 8s ease-in-out 3; }
       .packet-result { animation: packet-result 8s linear 3; }
       .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out 3; }
       .packet-generate { animation: packet-generate 8s linear 3; }
+      .io-write { animation: io-write 8s linear 3; }
       .lit-output { animation: lit-output 8s ease-in-out 3; }
+      .plus-one { animation: plus-one 8s ease-out 3; }
+      .sheet-1 { animation: sheet-1 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-2 { animation: sheet-2 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-3 { animation: sheet-3 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
       .lit-rail { animation: lit-rail 8s ease-in-out 3; }
       .packet-rail { animation: packet-rail 8s linear 3; }
+      .io-sync { animation: io-sync 8s linear 3; }
       .status-pulse { animation: status-pulse 8s ease-out 3; }
       .cta-shine { animation: cta-shine 8s ease-in-out 3; }
+      .cta-ring { animation: cta-ring 8s ease-out 3; }
+      .cta-arrow { animation: cta-arrow 8s ease-out 3; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -119,6 +131,100 @@
       0%, 86% { transform: translateX(0); }
       96%, 100% { transform: translateX(300px); }
     }
+    @keyframes think-a {
+      0%, 33% { opacity: 0; transform: none; }
+      34% { opacity: 1; transform: translateY(-3px); }
+      35.6% { opacity: 0.35; transform: none; }
+      37.2% { opacity: 1; transform: translateY(-3px); }
+      38.8% { opacity: 0.35; transform: none; }
+      40.6%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-b {
+      0%, 33.7% { opacity: 0; transform: none; }
+      34.7% { opacity: 1; transform: translateY(-3px); }
+      36.3% { opacity: 0.35; transform: none; }
+      37.9% { opacity: 1; transform: translateY(-3px); }
+      39.5% { opacity: 0.35; transform: none; }
+      41.3%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-c {
+      0%, 34.4% { opacity: 0; transform: none; }
+      35.4% { opacity: 1; transform: translateY(-3px); }
+      37% { opacity: 0.35; transform: none; }
+      38.6% { opacity: 1; transform: translateY(-3px); }
+      40.2% { opacity: 0.35; transform: none; }
+      42%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes plus-one {
+      0%, 65.5% { opacity: 0; transform: translateY(6px); }
+      67% { opacity: 1; transform: none; }
+      71% { opacity: 1; transform: translateY(-5px); }
+      74%, 100% { opacity: 0; transform: translateY(-10px); }
+    }
+    @keyframes sheet-1 {
+      0%, 21.4% { opacity: 0; transform: translateY(-16px); }
+      22.9% { opacity: 1; transform: translateY(1.5px); }
+      23.8%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-2 {
+      0%, 54.73% { opacity: 0; transform: translateY(-16px); }
+      56.23% { opacity: 1; transform: translateY(1.5px); }
+      57.13%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-3 {
+      0%, 88.07% { opacity: 0; transform: translateY(-16px); }
+      89.57% { opacity: 1; transform: translateY(1.5px); }
+      90.47%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes cta-ring {
+      0%, 87% { opacity: 0; transform: none; }
+      88% { opacity: 0.6; transform: none; }
+      96%, 100% { opacity: 0; transform: scale(1.06, 1.22); }
+    }
+    @keyframes cta-arrow {
+      0%, 95.5% { transform: none; }
+      97.5% { transform: translate(3px, -3px); }
+      99.2%, 100% { transform: none; }
+    }
+    @keyframes io-read {
+      0%, 8.4% { opacity: 0; }
+      9% { opacity: 1; }
+      10.1% { opacity: 0.22; }
+      11% { opacity: 1; }
+      12.1% { opacity: 0.22; }
+      13% { opacity: 1; }
+      14.1% { opacity: 0.22; }
+      15% { opacity: 1; }
+      16.1% { opacity: 0.22; }
+      17% { opacity: 1; }
+      18%, 100% { opacity: 0; }
+    }
+    @keyframes io-write {
+      0%, 56.4% { opacity: 0; }
+      57% { opacity: 1; }
+      58.1% { opacity: 0.22; }
+      59% { opacity: 1; }
+      60.1% { opacity: 0.22; }
+      61% { opacity: 1; }
+      62.1% { opacity: 0.22; }
+      63% { opacity: 1; }
+      64.1% { opacity: 0.22; }
+      65% { opacity: 1; }
+      66%, 100% { opacity: 0; }
+    }
+    @keyframes io-sync {
+      0%, 74.4% { opacity: 0; }
+      75% { opacity: 1; }
+      76.1% { opacity: 0.22; }
+      77% { opacity: 1; }
+      78.1% { opacity: 0.22; }
+      79% { opacity: 1; }
+      80.1% { opacity: 0.22; }
+      81% { opacity: 1; }
+      82.1% { opacity: 0.22; }
+      83% { opacity: 1; }
+      84%, 100% { opacity: 0; }
+    }
   </style>
   <rect x="0.5" y="0.5" width="359" height="459" rx="18" fill="var(--page_bg)" stroke="var(--carry)" stroke-opacity="0.35"/>
   <g id="card-copy">
@@ -135,13 +241,15 @@
       <g id="flow-cloud">
         <rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="var(--card)" stroke="var(--cloud_stroke)" stroke-dasharray="6 5"/>
         <g class="lit lit-cloud"><rect x="259" y="251" width="80" height="77" rx="13.5" fill="none" stroke="var(--cloud_lit)" stroke-opacity="0.18" stroke-width="4"/><rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="var(--cloud_lit)" fill-opacity="0.07" stroke="var(--cloud_lit)" stroke-width="1.5" stroke-dasharray="6 5"/></g>
-        <text x="299" y="285" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">云端</text>
-        <text x="299" y="307" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">模型</text>
+        <g fill="var(--cloud_lit)"><circle class="think think-a" cx="290" cy="265" r="2.5"/><circle class="think think-b" cx="299" cy="265" r="2.5"/><circle class="think think-c" cx="308" cy="265" r="2.5"/></g>
+        <text x="299" y="288" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">云端</text>
+        <text x="299" y="310" fill="var(--ink)" font-size="18" font-weight="700" text-anchor="middle">模型</text>
       </g>
     </g>
     <g id="drive">
       <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="var(--carry)" fill-opacity="var(--drive_fill)" stroke="var(--carry)" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="236" y="174" fill="var(--flow_tag)" font-size="17" text-anchor="end">U 盘内</text>
+      <g id="drive-io"><circle cx="172" cy="168" r="4" fill="var(--tag_stroke)"/><g class="io-on io-read"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g><g class="io-on io-write"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g><g class="io-on io-sync"><circle cx="172" cy="168" r="9" fill="var(--carry_2)" opacity="0.25"/><circle cx="172" cy="168" r="4" fill="var(--carry_2)"/></g></g>
       <g id="continuity-rail">
         <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="var(--carry)" stroke-opacity="0.4"/>
         <path d="M46 217.5V225.5L52 221.5Z" fill="var(--carry)" fill-opacity="0.65"/>
@@ -167,6 +275,7 @@
         <rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="var(--card)" stroke="var(--carry)" stroke-opacity="0.3"/>
         <g class="lit lit-output"><rect x="49" y="331" width="183" height="53" rx="12.5" fill="none" stroke="var(--carry)" stroke-opacity="0.18" stroke-width="4"/><rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="var(--carry)" fill-opacity="0.07" stroke="var(--carry)" stroke-width="1.5"/></g>
         <text x="66" y="364" fill="var(--ink)" font-size="18" font-weight="700">产出与任务记录</text>
+        <g id="record-stack"><rect class="sheet sheet-1" x="201" y="364" width="20" height="6" rx="1.5" fill="var(--carry)" fill-opacity="0.16" stroke="var(--carry)" stroke-opacity="0.65"/><rect class="sheet sheet-2" x="201" y="356" width="20" height="6" rx="1.5" fill="var(--carry)" fill-opacity="0.16" stroke="var(--carry)" stroke-opacity="0.65"/><rect class="sheet sheet-3" x="201" y="348" width="20" height="6" rx="1.5" fill="var(--carry)" fill-opacity="0.16" stroke="var(--carry)" stroke-opacity="0.65"/></g>
       </g>
     </g>
   </g>
@@ -179,6 +288,6 @@
   </g>
   <g id="card-cta">
     <text x="312" y="437" fill="var(--carry_text)" font-size="18" font-weight="700" text-anchor="end">查看公开仓库</text>
-    <path d="M318 438L330 426M321 426H330V435" fill="none" stroke="var(--carry_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="cta-arrow" d="M318 438L330 426M321 426H330V435" fill="none" stroke="var(--carry_text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>

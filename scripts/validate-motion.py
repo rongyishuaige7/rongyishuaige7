@@ -11,15 +11,18 @@ FLOW = Path("assets/yipan-flow-light.svg")
 HERO = Path("assets/hero-light.svg")
 # Narrow screens get a stacked hero that plays the same one-shot story.
 HERO_MOBILE = Path("assets/hero-mobile.svg")
-# The narrow Yi盘 card lights the same nodes in the same order, without packets.
+# The narrow Yi盘 card lights the same nodes in the same order, without packets; the
+# activity LED still flickers between the nodes it connects.
 FLOW_MOBILE = Path("assets/yipan-flow-mobile.svg")
 FLOW_MOBILE_STAGES = (
     ("lit-context",),
+    ("io-read",),
     ("lit-workspace-in",),
-    ("lit-cloud",),
+    ("lit-cloud", "think-a", "think-b", "think-c"),
     ("lit-workspace-back",),
+    ("io-write",),
     ("lit-output",),
-    ("lit-rail",),
+    ("lit-rail", "io-sync"),
 )
 # The Hardware Lab strip loops its circuit story; the narrow strip tells the same story.
 STRIP = Path("assets/hardware-strip-light.svg")
@@ -35,17 +38,19 @@ PAIR = {
 # run together (three traces, three LEDs); a stage may not start before the
 # previous stage has nearly finished, so the cause always precedes the effect.
 STORIES = {
+    # The drive's activity LED flickers with each packet that moves on the drive; the
+    # cloud thinks while lit; "+1" rises while the output is lit.
     FLOW: ("8s", (
         ("lit-context",),
-        ("packet-retrieve",),
+        ("packet-retrieve", "io-read"),
         ("lit-workspace-in",),
         ("packet-request",),
-        ("lit-cloud",),
+        ("lit-cloud", "think-a", "think-b", "think-c"),
         ("packet-result",),
         ("lit-workspace-back",),
-        ("packet-generate",),
-        ("lit-output",),
-        ("lit-rail", "packet-rail"),
+        ("packet-generate", "io-write"),
+        ("lit-output", "plus-one"),
+        ("lit-rail", "packet-rail", "io-sync"),
     )),
     # Sensor pads ripple as their signals leave; the glowing tails ride with the signals;
     # the pin wave runs while the chip is lit.
@@ -62,11 +67,17 @@ STRIP_AMBIENT = {"heartbeat"}
 # frame (the complete static card) instead of moving beside the README text forever.
 DSH_MOBILE = Path("assets/dsh-card-mobile.svg")
 LOOP_PASSES = {FLOW: "3", FLOW_MOBILE: "3", DSH: "3", DSH_MOBILE: "3"}
-# The cards' status dots and button shines run on the same 8s cycle but sit outside
-# their stories; any other animated class must belong to a stage.
+# The cards' status dots and buttons (shine, ring, arrow nudge) run on the same 8s cycle
+# but sit outside their stories; any other animated class must belong to a stage.
 CARD_AMBIENT = {
-    FLOW: {"status-pulse", "cta-shine"},
+    FLOW: {"status-pulse", "cta-shine", "cta-ring", "cta-arrow"},
 }
+# Accumulating classes play one pass that spans all three card passes: class n lands
+# during pass n, while the named stage is lit, and stays (the record stack grows to three).
+CARD_ACCUMULATE = {
+    FLOW: ("lit-output", ("sheet-1", "sheet-2", "sheet-3")),
+}
+CARD_CYCLE_SECONDS = 8.0
 # The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
 # on its own must end within 5 seconds). Classes start in this order: the three
 # entry cards, then the drive shine, the DSH capture pan, and the photo deck.
@@ -248,11 +259,48 @@ def check_once(path: Path, text: str, order: tuple[str, ...], offstage_end: froz
 
 
 def check_passes(path: Path, text: str, passes: str) -> list[str]:
+    """Every animation plays `passes` cycles, or once across all of them, then stops."""
     problems: list[str] = []
     for match in HERO_ANIMATION.finditer(text):
         tokens = re.sub(r"cubic-bezier\([^)]*\)", "", match.group("value")).split()
-        if "infinite" in tokens or passes not in tokens:
+        durations = [seconds(token) for token in tokens if re.fullmatch(r"\d+(?:\.\d+)?m?s", token)]
+        spans_all = "1" in tokens and durations[:1] == [int(passes) * CARD_CYCLE_SECONDS]
+        if "infinite" in tokens or not (passes in tokens or spans_all):
             problems.append(f"{path.name}: {match.group('class')} must play {passes} passes, then stop")
+    return problems
+
+
+def check_accumulate(path: Path, text: str, stage: str, classes: tuple[str, ...], passes: int) -> list[str]:
+    problems: list[str] = []
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    lit = visible_intervals(keyframes.get(dict(ANIMATION.findall(text)).get(stage, ""), ""))
+    if not lit:
+        return [f"{path.name}: {stage} must light before anything accumulates on it"]
+    for number, class_name in enumerate(classes):
+        value = declarations.get(class_name)
+        if value is None:
+            problems.append(f"{path.name}: missing animation for {class_name}")
+            continue
+        tokens = re.sub(r"cubic-bezier\([^)]*\)", "", value).split()
+        if f"{passes * CARD_CYCLE_SECONDS:g}s" not in tokens or "1" not in tokens:
+            problems.append(f"{path.name}: {class_name} must play once across all {passes} passes")
+        body = keyframes.get(tokens[0], "")
+        final = FINAL_KEYFRAME.search(body)
+        final_body = final.group("body") if final else ""
+        opacity = re.search(r"opacity:\s*([0-9.]+)", final_body)
+        transform = re.search(r"transform:\s*([^;]+)", final_body)
+        if final is None or opacity is None or float(opacity.group(1)) != 1 or (
+            transform is not None and any(float(n) != 0 for n in re.findall(r"-?\d+(?:\.\d+)?", transform.group(1)))
+        ):
+            problems.append(f"{path.name}: {class_name} must stay in place once it lands")
+        intervals = visible_intervals(body)
+        if not intervals:
+            problems.append(f"{path.name}: {class_name} never becomes visible")
+            continue
+        landing = intervals[0][0] * passes
+        if int(landing // 100) != number or not lit[0][0] <= landing % 100 <= lit[-1][1]:
+            problems.append(f"{path.name}: {class_name} must land in pass {number + 1} while {stage} is lit")
     return problems
 
 
@@ -335,11 +383,15 @@ def main() -> int:
     for timing in re.findall(r"\.[\w-]+\s*\{\s*animation:[^;]+;", strip_css.group(1) if strip_css else ""):
         if timing not in strip_mobile:
             problems.append(f"{STRIP_MOBILE.name} must keep the desktop strip timing: {timing}")
-    for card, ambient in CARD_AMBIENT.items():
+    # The narrow Yi盘 card shares the desktop CSS, so the desktop loop, ambient and accumulating rules apply.
+    for card, rules in ((FLOW, FLOW), (FLOW_MOBILE, FLOW)):
         card_text = card.read_text(encoding="utf-8")
-        if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
+        stage, accumulate = CARD_ACCUMULATE[rules]
+        problems.extend(check_accumulate(card, card_text, stage, accumulate, int(LOOP_PASSES[card])))
+        loops = dict(re.findall(r"\.([\w-]+)\s*\{\s*animation:\s*[\w-]+\s+([\d.]+m?s)", card_text))
+        if {duration for class_name, duration in loops.items() if class_name not in accumulate} != {"8s"}:
             problems.append(f"{card.name} does not use one 8s loop like the homepage")
-        problems.extend(check_ambient(card, card_text, STORIES[card][1], ambient))
+        problems.extend(check_ambient(card, card_text, STORIES[rules][1], CARD_AMBIENT[rules] | set(accumulate)))
     for path in (HERO, HERO_MOBILE):
         hero = path.read_text(encoding="utf-8")
         if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
@@ -351,7 +403,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

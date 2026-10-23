@@ -941,28 +941,43 @@ ${style}
 # inset on the right. In the diagram the three nodes sit inside a dashed "U 盘内" boundary
 # and the cloud model stays outside it. Each 8s pass lights the steps in causal order:
 # context, retrieve, workspace, request, cloud, result, workspace, generate, output, then a
-# packet runs the record rail back to the context. The status dot breathes and the button
-# shines once per pass. After three passes every animation stops on the base frame, the
-# complete diagram, so the card does not keep moving beside the text; reduced motion shows
-# that frame from the start.
-FLOW_STYLE = """  <style>
+# packet runs the record rail back to the context. The drive's activity LED flickers while
+# data moves on the drive (retrieve, generate, rail), three dots think inside the lit cloud,
+# and each pass lands one sheet on the output's record stack with a "+1", so the stack grows
+# to three over the card's three passes. The status dot breathes; the button shines, a ring
+# leaves it and its arrow nudges once per pass. After three passes every animation stops on
+# the base frame, the complete diagram with all three sheets, so the card does not keep
+# moving beside the text; reduced motion shows that frame from the start.
+FLOW_STYLE_BASE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-    .lit, .packet, .pulse-ring { opacity: 0; }
-    .pulse-ring { transform-box: fill-box; transform-origin: center; }
+    .lit, .packet, .pulse-ring, .io-on, .think, .plus-one, .cta-ring { opacity: 0; }
+    .pulse-ring, .think, .cta-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .lit-context { animation: lit-context 8s ease-in-out 3; }
       .packet-retrieve { animation: packet-retrieve 8s linear 3; }
+      .io-read { animation: io-read 8s linear 3; }
       .lit-workspace-in { animation: lit-workspace-in 8s ease-in-out 3; }
       .packet-request { animation: packet-request 8s linear 3; }
       .lit-cloud { animation: lit-cloud 8s ease-in-out 3; }
+      .think-a { animation: think-a 8s ease-in-out 3; }
+      .think-b { animation: think-b 8s ease-in-out 3; }
+      .think-c { animation: think-c 8s ease-in-out 3; }
       .packet-result { animation: packet-result 8s linear 3; }
       .lit-workspace-back { animation: lit-workspace-back 8s ease-in-out 3; }
       .packet-generate { animation: packet-generate 8s linear 3; }
+      .io-write { animation: io-write 8s linear 3; }
       .lit-output { animation: lit-output 8s ease-in-out 3; }
+      .plus-one { animation: plus-one 8s ease-out 3; }
+      .sheet-1 { animation: sheet-1 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-2 { animation: sheet-2 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
+      .sheet-3 { animation: sheet-3 24s cubic-bezier(0.2, 0.7, 0.2, 1) 1; }
       .lit-rail { animation: lit-rail 8s ease-in-out 3; }
       .packet-rail { animation: packet-rail 8s linear 3; }
+      .io-sync { animation: io-sync 8s linear 3; }
       .status-pulse { animation: status-pulse 8s ease-out 3; }
       .cta-shine { animation: cta-shine 8s ease-in-out 3; }
+      .cta-ring { animation: cta-ring 8s ease-out 3; }
+      .cta-arrow { animation: cta-arrow 8s ease-out 3; }
     }
     @keyframes lit-context {
       0% { opacity: 0; }
@@ -1059,7 +1074,108 @@ FLOW_STYLE = """  <style>
       0%, 86% { transform: translateX(0); }
       96%, 100% { transform: translateX(300px); }
     }
+    @keyframes think-a {
+      0%, 33% { opacity: 0; transform: none; }
+      34% { opacity: 1; transform: translateY(-3px); }
+      35.6% { opacity: 0.35; transform: none; }
+      37.2% { opacity: 1; transform: translateY(-3px); }
+      38.8% { opacity: 0.35; transform: none; }
+      40.6%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-b {
+      0%, 33.7% { opacity: 0; transform: none; }
+      34.7% { opacity: 1; transform: translateY(-3px); }
+      36.3% { opacity: 0.35; transform: none; }
+      37.9% { opacity: 1; transform: translateY(-3px); }
+      39.5% { opacity: 0.35; transform: none; }
+      41.3%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes think-c {
+      0%, 34.4% { opacity: 0; transform: none; }
+      35.4% { opacity: 1; transform: translateY(-3px); }
+      37% { opacity: 0.35; transform: none; }
+      38.6% { opacity: 1; transform: translateY(-3px); }
+      40.2% { opacity: 0.35; transform: none; }
+      42%, 100% { opacity: 0; transform: none; }
+    }
+    @keyframes plus-one {
+      0%, 65.5% { opacity: 0; transform: translateY(6px); }
+      67% { opacity: 1; transform: none; }
+      71% { opacity: 1; transform: translateY(-5px); }
+      74%, 100% { opacity: 0; transform: translateY(-10px); }
+    }
+    @keyframes sheet-1 {
+      0%, 21.4% { opacity: 0; transform: translateY(-16px); }
+      22.9% { opacity: 1; transform: translateY(1.5px); }
+      23.8%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-2 {
+      0%, 54.73% { opacity: 0; transform: translateY(-16px); }
+      56.23% { opacity: 1; transform: translateY(1.5px); }
+      57.13%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes sheet-3 {
+      0%, 88.07% { opacity: 0; transform: translateY(-16px); }
+      89.57% { opacity: 1; transform: translateY(1.5px); }
+      90.47%, 100% { opacity: 1; transform: none; }
+    }
+    @keyframes cta-ring {
+      0%, 87% { opacity: 0; transform: none; }
+      88% { opacity: 0.6; transform: none; }
+      96%, 100% { opacity: 0; transform: scale(1.06, 1.22); }
+    }
+    @keyframes cta-arrow {
+      0%, 95.5% { transform: none; }
+      97.5% { transform: translate(3px, -3px); }
+      99.2%, 100% { transform: none; }
+    }
   </style>"""
+
+
+# The activity LED flickers through each disk access: bright and dim in 1.1/0.9% steps.
+def io_keyframes(access: str, start: int, end: int) -> str:
+    rows = [f"      0%, {number(start - 0.6)}% {{ opacity: 0; }}"]
+    tenth, lit = start * 10, True
+    while tenth <= end * 10:
+        rows.append(f"      {number(tenth / 10)}% {{ opacity: {1 if lit else 0.22}; }}")
+        tenth += 11 if lit else 9
+        lit = not lit
+    rows.append(f"      {number(end + 1)}%, 100% {{ opacity: 0; }}")
+    return f"    @keyframes io-{access} {{\n" + "\n".join(rows) + "\n    }\n"
+
+
+# Reads while the retrieve packet moves, writes while the output is generated, syncs with the rail.
+IO_ACCESSES = {"read": (9, 17), "write": (57, 65), "sync": (75, 83)}
+
+
+def io_led(cx: float, cy: float, radius: float, glow: float) -> str:
+    """The drive's activity LED: an unlit housing and one flicker layer per disk access."""
+    layers = "".join(
+        f'<g class="io-on io-{access}"><circle cx="{cx:g}" cy="{cy:g}" r="{glow:g}" fill="${{carry_2}}" opacity="0.25"/>'
+        f'<circle cx="{cx:g}" cy="{cy:g}" r="{radius:g}" fill="${{carry_2}}"/></g>'
+        for access in IO_ACCESSES
+    )
+    return f'<g id="drive-io"><circle cx="{cx:g}" cy="{cy:g}" r="{radius:g}" fill="${{tag_stroke}}"/>{layers}</g>'
+
+
+def record_stack(x: float, ys: tuple[float, ...], width: float, height: float, radius: float) -> str:
+    """Output records: sheet n lands during pass n, from the bottom of the stack up."""
+    return '<g id="record-stack">' + "".join(
+        f'<rect class="sheet sheet-{n}" x="{x:g}" y="{y:g}" width="{width:g}" height="{height:g}" rx="{radius:g}" '
+        'fill="${carry}" fill-opacity="0.16" stroke="${carry}" stroke-opacity="0.65"/>'
+        for n, y in enumerate(ys, start=1)
+    ) + "</g>"
+
+
+def think_dots(xs: tuple[float, ...], cy: float, radius: float) -> str:
+    return '<g fill="${cloud_lit}">' + "".join(
+        f'<circle class="think think-{letter}" cx="{x:g}" cy="{cy:g}" r="{radius:g}"/>' for letter, x in zip("abc", xs)
+    ) + "</g>"
+
+
+FLOW_STYLE = FLOW_STYLE_BASE.replace(
+    "  </style>", "".join(io_keyframes(access, *span) for access, span in IO_ACCESSES.items()) + "  </style>", 1
+)
 
 # A node's highlight: a soft outer ring and a tinted fill over the node's own box.
 def flow_lit(cls: str, x: float, y: float, width: float, height: float, radius: float, color: str, **extra: str) -> str:
@@ -1149,8 +1265,9 @@ ${style}
     <g clip-path="url(#ctaClip)">
       <path class="cta-shine" d="M0 290H40L20 348H-20Z" fill="url(#ctaShine)"/>
     </g>
+    <rect class="cta-ring" x="48" y="290" width="200" height="58" rx="14" fill="none" stroke="${carry}" stroke-width="2"/>
     <text x="72" y="325" fill="${cta_ink}" font-size="19" font-weight="700">查看公开仓库</text>
-    <path d="M207 326L220 313M210 313H220V323" fill="none" stroke="${cta_ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="cta-arrow" d="M207 326L220 313M210 313H220V323" fill="none" stroke="${cta_ink}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status">
     <circle cx="274" cy="319" r="8" fill="${carry}" opacity="0.18"/>
@@ -1189,6 +1306,7 @@ ${style}
       <g id="flow-cloud">
         <rect x="1004.5" y="212.5" width="128" height="94" rx="12.5" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
         """ + flow_lit("lit-cloud", 1004.5, 212.5, 128, 94, 12.5, "${cloud_lit}", stroke_dasharray="6 5") + """
+        """ + think_dots((1055.5, 1068.5, 1081.5), 229, 3.5) + """
         <text x="1068.5" y="255" fill="${ink}" font-size="22" font-weight="700" text-anchor="middle">云端模型</text>
         <text x="1068.5" y="283" fill="${muted}" font-size="17" text-anchor="middle">按需推理</text>
       </g>
@@ -1197,6 +1315,7 @@ ${style}
     <g id="drive">
       <rect id="drive-boundary" x="468.5" y="98.5" width="446" height="322" rx="14" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="910" y="86" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
+      """ + io_led(845, 80, 4.5, 10) + """
 
       <g id="continuity-rail">
         <path d="M524 369.5H496A8 8 0 0 1 488 361.5V157.5A8 8 0 0 1 496 149.5H517" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
@@ -1252,6 +1371,8 @@ ${style}
         """ + flow_lit("lit-output", 524.5, 334.5, 370, 70, 10.5, "${carry}") + """
         <text x="544" y="363" fill="${ink}" font-size="22" font-weight="700">产出与任务记录</text>
         <text x="544" y="390" fill="${muted}" font-size="17">留在盘内，随盘带走</text>
+        """ + record_stack(830, (384, 372, 360), 46, 10, 2.5) + """
+        <text class="plus-one" x="818" y="377" fill="${carry_text}" font-size="17" font-weight="700" text-anchor="end">+1</text>
       </g>
     </g>
   </g>
@@ -1260,7 +1381,8 @@ ${style}
 
 # Narrow screens get the same card stacked at 360 units: the summary, then the diagram with
 # node titles only (the README table and alt text carry the details), then status and link.
-# It lights the nodes in the same order on the same 8s pass, without packets.
+# It lights the nodes in the same order on the same 8s pass, without packets and the "+1";
+# the activity LED, thinking dots, record stack and link arrow keep the desktop timing.
 FLOW_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="460" viewBox="0 0 360 460" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘：U 盘里的 AI 工作台</title>
   <desc id="desc">""" + FLOW_DESC + """</desc>
@@ -1280,13 +1402,15 @@ ${style}
       <g id="flow-cloud">
         <rect x="262.5" y="254.5" width="73" height="70" rx="10" fill="${card}" stroke="${cloud_stroke}" stroke-dasharray="6 5"/>
         """ + flow_lit("lit-cloud", 262.5, 254.5, 73, 70, 10, "${cloud_lit}", stroke_dasharray="6 5") + """
-        <text x="299" y="285" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">云端</text>
-        <text x="299" y="307" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">模型</text>
+        """ + think_dots((290, 299, 308), 265, 2.5) + """
+        <text x="299" y="288" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">云端</text>
+        <text x="299" y="310" fill="${ink}" font-size="18" font-weight="700" text-anchor="middle">模型</text>
       </g>
     </g>
     <g id="drive">
       <rect id="drive-boundary" x="24.5" y="186.5" width="216" height="206" rx="12" fill="${carry}" fill-opacity="${drive_fill}" stroke="${carry}" stroke-opacity="0.45" stroke-dasharray="6 5"/>
       <text x="236" y="174" fill="${flow_tag}" font-size="17" text-anchor="end">U 盘内</text>
+      """ + io_led(172, 168, 4, 9) + """
       <g id="continuity-rail">
         <path d="M52 357.5H44A6 6 0 0 1 38 351.5V227.5A6 6 0 0 1 44 221.5H46" fill="none" stroke="${carry}" stroke-opacity="0.4"/>
         <path d="M46 217.5V225.5L52 221.5Z" fill="${carry}" fill-opacity="0.65"/>
@@ -1312,6 +1436,7 @@ ${style}
         <rect x="52.5" y="334.5" width="176" height="46" rx="9" fill="${card}" stroke="${carry}" stroke-opacity="0.3"/>
         """ + flow_lit("lit-output", 52.5, 334.5, 176, 46, 9, "${carry}") + """
         <text x="66" y="364" fill="${ink}" font-size="18" font-weight="700">产出与任务记录</text>
+        """ + record_stack(201, (364, 356, 348), 20, 6, 1.5) + """
       </g>
     </g>
   </g>
@@ -1324,7 +1449,7 @@ ${style}
   </g>
   <g id="card-cta">
     <text x="312" y="437" fill="${carry_text}" font-size="18" font-weight="700" text-anchor="end">查看公开仓库</text>
-    <path d="M318 438L330 426M321 426H330V435" fill="none" stroke="${carry_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="cta-arrow" d="M318 438L330 426M321 426H330V435" fill="none" stroke="${carry_text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
 """)
