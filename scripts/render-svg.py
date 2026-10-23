@@ -12,6 +12,7 @@ Run this script after editing templates or npm data; CI checks generated output.
 import base64
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 from string import Template
@@ -1988,6 +1989,77 @@ def badge(label: str, action: str, title: str, desc: str, style: str, kind: str,
     )
 
 
+# Lane dividers replace the Markdown rules before CARRY, SEE and TOUCH: a trace in the lane's
+# color that jogs down once (at 30/50/70% of the width, so the three read as one signal
+# stepping across the page). Every 6s a head with a dashed tail runs it in 1.3s and lights the
+# end node, then the line rests. They follow the page theme through their own color-scheme
+# query; reduced motion shows the resting trace.
+DIVIDER_JOGS = {"carry": 0.30, "see": 0.50, "touch": 0.70}
+DIVIDER_GEOMETRY = {
+    # width, height, start x, end x, upper y, lower y, half jog, ring r, head r, glow r, line, trail, tail
+    "wide": (1200, 36, 24, 1172, 12, 24, 8, 5, 3.5, 11, 2, 3, 90),
+    "narrow": (360, 28, 16, 338, 9, 19, 7, 3.5, 2.8, 8, 1.5, 2.5, 44),
+}
+DIVIDER_RUN = (8, 30)
+
+
+def divider(lane: str, size: str) -> str:
+    width, height, x0, x1, y1, y2, half, ring, head, glow, line, trail, tail = DIVIDER_GEOMETRY[size]
+    jog = round(width * DIVIDER_JOGS[lane])
+    first, diagonal, last = jog - half - x0, math.hypot(2 * half, y2 - y1), x1 - jog - half
+    length = first + diagonal + last
+    start, end = DIVIDER_RUN
+    corner_a = start + (end - start) * first / length
+    corner_b = start + (end - start) * (first + diagonal) / length
+    path = f"M{x0} {y1}H{jog - half}L{jog + half} {y2}H{x1}"
+    light, dark = PALETTES["light"][lane], PALETTES["dark"][lane]
+    name = {"carry": "CARRY", "see": "SEE", "touch": "TOUCH"}[lane]
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+  <title id="title">{name} 泳道分隔</title>
+  <desc id="desc">装饰分隔线：一条 {name} 泳道颜色的走线，信号每 6 秒沿它跑一遍。</desc>
+  <style>
+    :root {{ --lane: {light}; }}
+    @media (prefers-color-scheme: dark) {{ :root {{ --lane: {dark}; }} }}
+    .line {{ stroke: var(--lane); }}
+    .dot {{ fill: var(--lane); }}
+    .head, .trail, .node {{ opacity: 0; }}
+    {MOTION_GUARD} {{
+      .head {{ animation: head 6s linear infinite; }}
+      .trail {{ animation: trail 6s linear infinite; }}
+      .node {{ animation: node 6s ease-out infinite; }}
+    }}
+    @keyframes head {{
+      0%, {number(start - 0.5)}% {{ opacity: 0; transform: none; }}
+      {start}% {{ opacity: 1; transform: none; }}
+      {number(corner_a)}% {{ transform: translate({first}px, 0); }}
+      {number(corner_b)}% {{ transform: translate({first + 2 * half}px, {y2 - y1}px); }}
+      {end}% {{ opacity: 1; transform: translate({x1 - x0}px, {y2 - y1}px); }}
+      {number(end + 1.5)}%, 100% {{ opacity: 0; transform: translate({x1 - x0}px, {y2 - y1}px); }}
+    }}
+    @keyframes trail {{
+      0%, {number(start - 0.5)}% {{ opacity: 0; stroke-dashoffset: {tail}px; }}
+      {start}% {{ opacity: 1; stroke-dashoffset: {tail}px; }}
+      {end}% {{ opacity: 1; stroke-dashoffset: {number(tail - length)}px; }}
+      {end + 3}%, 100% {{ opacity: 0; stroke-dashoffset: {number(tail - length)}px; }}
+    }}
+    @keyframes node {{
+      0%, {number(end - 0.5)}% {{ opacity: 0; }}
+      {end + 1}% {{ opacity: 1; }}
+      {end + 14}%, 100% {{ opacity: 0; }}
+    }}
+  </style>
+  <path class="line" d="{path}" fill="none" stroke="{light}" stroke-opacity="0.32" stroke-width="{line}" stroke-linejoin="round"/>
+  <circle class="line" cx="{x0 - ring - 1}" cy="{y1}" r="{ring}" fill="none" stroke="{light}" stroke-width="{line}" stroke-opacity="0.55"/>
+  <circle class="dot" cx="{jog - half}" cy="{y1}" r="{ring / 2:g}" fill="{light}" opacity="0.6"/>
+  <circle class="dot" cx="{jog + half}" cy="{y2}" r="{ring / 2:g}" fill="{light}" opacity="0.6"/>
+  <circle class="dot" cx="{x1 + ring + 1}" cy="{y2}" r="{ring}" fill="{light}" opacity="0.4"/>
+  <g class="node"><circle class="dot" cx="{x1 + ring + 1}" cy="{y2}" r="{glow}" fill="{light}" opacity="0.18"/><circle class="dot" cx="{x1 + ring + 1}" cy="{y2}" r="{ring}" fill="{light}"/></g>
+  <path class="line trail" d="{path}" fill="none" stroke="{light}" stroke-width="{trail}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="{tail} 3000"/>
+  <circle class="dot head" cx="{x0}" cy="{y1}" r="{head}" fill="{light}"/>
+</svg>
+"""
+
+
 def media_uri(name: str) -> str:
     data = base64.b64encode((MEDIA / name).read_bytes()).decode("ascii")
     return f"data:image/webp;base64,{data}"
@@ -2132,6 +2204,9 @@ def main() -> int:
         hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)
     for stem, spec in BADGES.items():
         rendered[ASSETS / f"{stem}.svg"] = badge(*spec, *BADGE_MOTION[stem])
+    for lane in DIVIDER_JOGS:
+        rendered[ASSETS / f"divider-{lane}.svg"] = divider(lane, "wide")
+        rendered[ASSETS / f"divider-{lane}-mobile.svg"] = divider(lane, "narrow")
     readme = Path('README.md')
     stamped = stamp_versions(readme.read_text(encoding='utf-8'), {**rendered, **hash_sources})
     rendered[readme] = replace_snapshot(stamped, json.loads(NPM_STATS.read_text()))

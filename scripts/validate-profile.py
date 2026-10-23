@@ -66,6 +66,12 @@ EXPECTED_ASSETS = {
     "./assets/dsh-card-still.svg",
     "./assets/dsh-card-mobile.svg",
     "./assets/dsh-card-mobile-still.svg",
+    "./assets/divider-carry.svg",
+    "./assets/divider-carry-mobile.svg",
+    "./assets/divider-see.svg",
+    "./assets/divider-see-mobile.svg",
+    "./assets/divider-touch.svg",
+    "./assets/divider-touch-mobile.svg",
 }
 EXPECTED_IMG_ASSETS = {
     "./assets/hero-light.svg",
@@ -81,7 +87,14 @@ EXPECTED_IMG_ASSETS = {
     "./assets/badge-product-facts.svg",
     "./assets/badge-feedback.svg",
     "./assets/badge-hardware.svg",
+    "./assets/divider-carry.svg",
+    "./assets/divider-see.svg",
+    "./assets/divider-touch.svg",
 }
+# Each lane opens with its signal divider instead of a Markdown rule. Dividers are
+# decorative, so their img carries an empty alt and screen readers skip them.
+LANE_DIVIDERS = {"carry": "## `// 01 CARRY`", "see": "## `// 02 SEE`", "touch": "## `// 03 TOUCH`"}
+DIVIDER_IMG = re.compile(r'src="\./assets/divider-[a-z]+\.svg')
 # The three homepage lanes, in order, then the folded English overview.
 LANE_MARKERS = ("// 01 CARRY", "// 02 SEE", "// 03 TOUCH", "// ENGLISH OVERVIEW")
 REQUIRED_TEXT = (
@@ -443,13 +456,24 @@ def main() -> int:
         if unexpected:
             problems.append("README has unexpected SVG references: " + ", ".join(unexpected))
 
+    for lane, heading in LANE_DIVIDERS.items():
+        if not re.search(
+            r'<picture>\n  <source media="\(max-width: 600px\)" srcset="\./assets/divider-' + lane + r'-mobile\.svg\?v=[0-9a-f]{8}">\n'
+            r'  <img src="\./assets/divider-' + lane + r'\.svg\?v=[0-9a-f]{8}" width="100%" alt="">\n</picture>\n\n' + re.escape(heading),
+            readme,
+        ):
+            problems.append(f"{heading[3:]} must open with its {lane} signal divider")
+
     image_tags = re.findall(r"<img\b[^>]*>", readme, re.IGNORECASE)
     image_sources: set[str] = set()
     if len(image_tags) != len(EXPECTED_IMG_ASSETS):
         problems.append(f"expected {len(EXPECTED_IMG_ASSETS)} local img tags, found {len(image_tags)}")
     for tag in image_tags:
-        alt = re.search(r'alt="([^"]+)"', tag, re.IGNORECASE)
-        if alt is None or not alt.group(1).strip():
+        alt = re.search(r'alt="([^"]*)"', tag, re.IGNORECASE)
+        if DIVIDER_IMG.search(tag):
+            if alt is None or alt.group(1):
+                problems.append("lane divider img must carry an empty alt")
+        elif alt is None or not alt.group(1).strip():
             problems.append("fallback img is missing non-empty alt text")
         src = re.search(r'src="([^"]+)"', tag, re.IGNORECASE)
         if src is None or not src.group(1).startswith("./assets/"):

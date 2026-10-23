@@ -33,6 +33,9 @@ EXPECTED_ASSETS = {
     "hero-mobile.svg", "hero-mobile-still.svg",
     "yipan-flow-mobile.svg", "yipan-flow-mobile-still.svg",
     "hardware-strip-mobile.svg", "hardware-strip-mobile-still.svg",
+    "divider-carry.svg", "divider-carry-mobile.svg",
+    "divider-see.svg", "divider-see-mobile.svg",
+    "divider-touch.svg", "divider-touch-mobile.svg",
 }
 THEME_PAIRS = (
     ("hero-dark.svg", "hero-light.svg"),
@@ -446,8 +449,17 @@ def validate(path: Path) -> list[str]:
     if path.stem.endswith(("-still", "-mobile")):
         if path.stem.endswith("-still") and ("animation:" in style_text or "@keyframes" in style_text):
             problems.append("static SVG must not contain motion")
-        if "@media (prefers-color-scheme: dark)" not in style_text or "--ink:" not in style_text:
+        # Cards carry the whole palette; lane dividers carry their one lane color.
+        palette_token = "--lane:" if path.name.startswith("divider-") else "--ink:"
+        if "@media (prefers-color-scheme: dark)" not in style_text or palette_token not in style_text:
             problems.append("static/adaptive SVG must provide both inherited color schemes")
+
+    if path.name.startswith("divider-"):
+        # Wide and narrow dividers follow the page theme like the outlined badges.
+        if "@media (prefers-color-scheme: dark)" not in style_text or "--lane:" not in style_text:
+            problems.append("lane divider must follow the page color scheme")
+        if root.find(f"{SVG_NAMESPACE}text") is not None:
+            problems.append("lane divider is decorative and must not draw text")
 
     if path.name.startswith("badge-"):
         if '"PingFang SC"' not in style_text:

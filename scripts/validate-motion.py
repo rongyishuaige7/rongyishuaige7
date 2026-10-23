@@ -88,6 +88,11 @@ BADGE_MOTION = {
     Path("assets/badge-build-log.svg"): ({"cursor"}, "1.1s", "infinite"),
     Path("assets/badge-hardware.svg"): ({"led-lit"}, "6s", "infinite"),
 }
+# Lane dividers loop a short run and a long rest: the head and its tail run the trace,
+# then the end node lights; nothing moves in the second half of each 6s loop.
+DIVIDERS = tuple(Path(f"assets/divider-{lane}{size}.svg") for lane in ("carry", "see", "touch") for size in ("", "-mobile"))
+DIVIDER_STAGES = (("head", "trail"), ("node",))
+DIVIDER_REST_FROM = 50.0
 # The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
 # on its own must end within 5 seconds). Classes start in this order: the three
 # entry cards, then the drive shine, the DSH capture pan, and the photo deck.
@@ -123,6 +128,7 @@ ANIMATED_PROPERTIES = {"transform", "opacity"}
 KEYFRAME_EASING = "animation-timing-function"
 DASH_KEYFRAMES = {
     "hardware-strip-": re.compile(r"comet-(?:in|out)-[abc]"),
+    "divider-": re.compile(r"trail"),
 }
 ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<keyframe>[\w-]+)")
 KEYFRAME = re.compile(r"@keyframes\s+(?P<name>[\w-]+)\s*\{(?P<body>.*?)\n\s*\}", re.DOTALL)
@@ -363,6 +369,20 @@ def check_odometer(path: Path, root: ET.Element, keyframes: dict[str, str], decl
     return problems
 
 
+def check_divider(path: Path, text: str) -> list[str]:
+    problems = check_story(path, text, "6s", DIVIDER_STAGES) + check_properties(path, text)
+    problems.extend(check_ambient(path, text, DIVIDER_STAGES, set()))
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    for class_name, value in {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}.items():
+        tokens = value.split()
+        if "infinite" not in tokens:
+            problems.append(f"{path.name}: {class_name} must loop like the circuit strip")
+        intervals = visible_intervals(keyframes.get(tokens[0], ""))
+        if intervals and intervals[-1][1] > DIVIDER_REST_FROM:
+            problems.append(f"{path.name}: {class_name} must rest from {DIVIDER_REST_FROM:g}% of the loop")
+    return problems
+
+
 def check_badge(path: Path, text: str, classes: set[str], duration: str, count: str) -> list[str]:
     problems = check_properties(path, text)
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
@@ -490,6 +510,8 @@ def main() -> int:
         if {duration for class_name, duration in loops.items() if class_name not in accumulate} != {"8s"}:
             problems.append(f"{card.name} does not use one 8s loop like the homepage")
         problems.extend(check_ambient(card, card_text, STORIES[rules][1], CARD_AMBIENT[rules] | set(accumulate)))
+    for divider in DIVIDERS:
+        problems.extend(check_divider(divider, divider.read_text(encoding="utf-8")))
     for badge, (classes, duration, count) in BADGE_MOTION.items():
         problems.extend(check_badge(badge, badge.read_text(encoding="utf-8"), classes, duration, count))
     for path in (HERO, HERO_MOBILE):
@@ -503,7 +525,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only; badges rest between passes or blink as status lights. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only; badges rest between passes or blink as status lights; lane dividers run briefly and rest. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

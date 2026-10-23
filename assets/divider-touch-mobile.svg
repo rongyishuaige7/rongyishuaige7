@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="28" viewBox="0 0 360 28" role="img" aria-labelledby="title desc">
+  <title id="title">TOUCH 泳道分隔</title>
+  <desc id="desc">装饰分隔线：一条 TOUCH 泳道颜色的走线，信号每 6 秒沿它跑一遍。</desc>
+  <style>
+    :root { --lane: #1aa572; }
+    @media (prefers-color-scheme: dark) { :root { --lane: #46d89c; } }
+    .line { stroke: var(--lane); }
+    .dot { fill: var(--lane); }
+    .head, .trail, .node { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .head { animation: head 6s linear infinite; }
+      .trail { animation: trail 6s linear infinite; }
+      .node { animation: node 6s ease-out infinite; }
+    }
+    @keyframes head {
+      0%, 7.5% { opacity: 0; transform: none; }
+      8% { opacity: 1; transform: none; }
+      23.49% { transform: translate(229px, 0); }
+      24.66% { transform: translate(243px, 10px); }
+      30% { opacity: 1; transform: translate(322px, 10px); }
+      31.5%, 100% { opacity: 0; transform: translate(322px, 10px); }
+    }
+    @keyframes trail {
+      0%, 7.5% { opacity: 0; stroke-dashoffset: 44px; }
+      8% { opacity: 1; stroke-dashoffset: 44px; }
+      30% { opacity: 1; stroke-dashoffset: -281.2px; }
+      33%, 100% { opacity: 0; stroke-dashoffset: -281.2px; }
+    }
+    @keyframes node {
+      0%, 29.5% { opacity: 0; }
+      31% { opacity: 1; }
+      44%, 100% { opacity: 0; }
+    }
+  </style>
+  <path class="line" d="M16 9H245L259 19H338" fill="none" stroke="#1aa572" stroke-opacity="0.32" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle class="line" cx="11.5" cy="9" r="3.5" fill="none" stroke="#1aa572" stroke-width="1.5" stroke-opacity="0.55"/>
+  <circle class="dot" cx="245" cy="9" r="1.75" fill="#1aa572" opacity="0.6"/>
+  <circle class="dot" cx="259" cy="19" r="1.75" fill="#1aa572" opacity="0.6"/>
+  <circle class="dot" cx="342.5" cy="19" r="3.5" fill="#1aa572" opacity="0.4"/>
+  <g class="node"><circle class="dot" cx="342.5" cy="19" r="8" fill="#1aa572" opacity="0.18"/><circle class="dot" cx="342.5" cy="19" r="3.5" fill="#1aa572"/></g>
+  <path class="line trail" d="M16 9H245L259 19H338" fill="none" stroke="#1aa572" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="44 3000"/>
+  <circle class="dot head" cx="16" cy="9" r="2.8" fill="#1aa572"/>
+</svg>

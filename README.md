@@ -15,7 +15,10 @@
   <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=ae65ddf8" height="36" alt="查看开发记录"></a>
 </div>
 
----
+<picture>
+  <source media="(max-width: 600px)" srcset="./assets/divider-carry-mobile.svg?v=55401d4b">
+  <img src="./assets/divider-carry.svg?v=a2f1512d" width="100%" alt="">
+</picture>
 
 ## `// 01 CARRY` Yi盘
 
@@ -46,7 +49,10 @@
   <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=a4f4dbad" height="36" alt="提交 Yi盘反馈"></a>
 </div>
 
----
+<picture>
+  <source media="(max-width: 600px)" srcset="./assets/divider-see-mobile.svg?v=21a3c2cb">
+  <img src="./assets/divider-see.svg?v=4868d8ed" width="100%" alt="">
+</picture>
 
 ## `// 02 SEE` DSH Usage 与开发工具
 
@@ -91,7 +97,10 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
----
+<picture>
+  <source media="(max-width: 600px)" srcset="./assets/divider-touch-mobile.svg?v=be3aca54">
+  <img src="./assets/divider-touch.svg?v=6f983093" width="100%" alt="">
+</picture>
 
 ## `// 03 TOUCH` Hardware Lab
 

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="36" viewBox="0 0 1200 36" role="img" aria-labelledby="title desc">
+  <title id="title">SEE 泳道分隔</title>
+  <desc id="desc">装饰分隔线：一条 SEE 泳道颜色的走线，信号每 6 秒沿它跑一遍。</desc>
+  <style>
+    :root { --lane: #3d7be0; }
+    @media (prefers-color-scheme: dark) { :root { --lane: #6ea8ff; } }
+    .line { stroke: var(--lane); }
+    .dot { fill: var(--lane); }
+    .head, .trail, .node { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) {
+      .head { animation: head 6s linear infinite; }
+      .trail { animation: trail 6s linear infinite; }
+      .node { animation: node 6s ease-out infinite; }
+    }
+    @keyframes head {
+      0%, 7.5% { opacity: 0; transform: none; }
+      8% { opacity: 1; transform: none; }
+      18.85% { transform: translate(568px, 0); }
+      19.23% { transform: translate(584px, 12px); }
+      30% { opacity: 1; transform: translate(1148px, 12px); }
+      31.5%, 100% { opacity: 0; transform: translate(1148px, 12px); }
+    }
+    @keyframes trail {
+      0%, 7.5% { opacity: 0; stroke-dashoffset: 90px; }
+      8% { opacity: 1; stroke-dashoffset: 90px; }
+      30% { opacity: 1; stroke-dashoffset: -1062px; }
+      33%, 100% { opacity: 0; stroke-dashoffset: -1062px; }
+    }
+    @keyframes node {
+      0%, 29.5% { opacity: 0; }
+      31% { opacity: 1; }
+      44%, 100% { opacity: 0; }
+    }
+  </style>
+  <path class="line" d="M24 12H592L608 24H1172" fill="none" stroke="#3d7be0" stroke-opacity="0.32" stroke-width="2" stroke-linejoin="round"/>
+  <circle class="line" cx="18" cy="12" r="5" fill="none" stroke="#3d7be0" stroke-width="2" stroke-opacity="0.55"/>
+  <circle class="dot" cx="592" cy="12" r="2.5" fill="#3d7be0" opacity="0.6"/>
+  <circle class="dot" cx="608" cy="24" r="2.5" fill="#3d7be0" opacity="0.6"/>
+  <circle class="dot" cx="1178" cy="24" r="5" fill="#3d7be0" opacity="0.4"/>
+  <g class="node"><circle class="dot" cx="1178" cy="24" r="11" fill="#3d7be0" opacity="0.18"/><circle class="dot" cx="1178" cy="24" r="5" fill="#3d7be0"/></g>
+  <path class="line trail" d="M24 12H592L608 24H1172" fill="none" stroke="#3d7be0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="90 3000"/>
+  <circle class="dot head" cx="24" cy="12" r="3.5" fill="#3d7be0"/>
+</svg>
