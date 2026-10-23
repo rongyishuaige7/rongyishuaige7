@@ -1,8 +1,8 @@
 <a href="https://rongyishuaige7.github.io/">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=27beb07f">
-  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=e4cf2f2d">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=46d47635">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=fd5a7142">
+  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=82f3d2a1">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=830cdae8">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=40b56b98">
   <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=81ff0917">
   <img src="./assets/hero-light.svg?v=81ff0917" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，资料与产出留在盘内、云端模型按需调用，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
@@ -24,9 +24,9 @@
 
 <a href="https://github.com/rongyishuaige7/yipan-showcase">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=284907ba">
-  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=08910608">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=6953d30c">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=54c5ba3c">
+  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=6cb95ae2">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=8ed2ffd5">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=3a0f24ef">
   <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=4fd42619">
   <img src="./assets/yipan-flow-light.svg?v=4fd42619" width="100%" alt="Yi盘卡片，U 盘里的 AI 工作台：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
@@ -60,9 +60,9 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=ad50582e">
-  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=a0e3cf88">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=22f10bd3">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=b5cc6b9a">
+  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=65bf9c05">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=803bb167">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=f3ac57f0">
   <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=577ee0ef">
   <img src="./assets/dsh-card-light.svg?v=577ee0ef" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
@@ -106,12 +106,12 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=46a1e143">
-  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=5d4fe0fb">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=21e6baf7">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=6cbe5ddb">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=4336ecc9">
-  <img src="./assets/hardware-strip-light.svg?v=4336ecc9" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=05211801">
+  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=08c166ba">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=3fadb07b">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=cdd41c89">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=1b3c7aa0">
+  <img src="./assets/hardware-strip-light.svg?v=1b3c7aa0" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧红、黄、绿三颗 LED。">
 </picture>
 </a>
 

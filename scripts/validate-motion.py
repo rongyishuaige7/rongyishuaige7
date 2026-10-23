@@ -58,7 +58,7 @@ STORIES = {
         ("pad-a", "pad-b", "pad-c", "sig-in-a", "sig-in-b", "sig-in-c", "comet-in-a", "comet-in-b", "comet-in-c"),
         ("chip-on", "pin-hi"),
         ("sig-out-a", "sig-out-b", "sig-out-c", "comet-out-a", "comet-out-b", "comet-out-c"),
-        ("led-a", "led-b", "led-c"),
+        ("led-a", "led-b", "led-c", "bloom-a", "bloom-b", "bloom-c"),
     )),
 }
 # The chip's pin-1 dot ticks once a second on the same loop, outside the story.

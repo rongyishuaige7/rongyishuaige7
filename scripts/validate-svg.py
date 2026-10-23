@@ -328,7 +328,7 @@ def validate(path: Path) -> list[str]:
             problems.append(f"hero SVG is {path.stat().st_size} bytes, over {MAX_HERO_BYTES}")
 
     if path.name.startswith("hardware-strip-"):
-        for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip"):
+        for design_id in ("edge", "dots", "panelClip", "traces-in", "traces-out", "strip-chip", "ledGlow-a", "ledGlow-b", "ledGlow-c"):
             if design_id not in element_ids:
                 problems.append(f"hardware strip is missing required element: {design_id}")
         top_level_rects = [element for element in root if local_name(element.tag) == "rect"]

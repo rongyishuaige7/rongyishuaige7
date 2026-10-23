@@ -59,7 +59,12 @@ PALETTES = {
         "touch_text": "#46d89c",
         "board": "#0a1714",
         "led_off": "#183a2e",
-        "led_on": "#b6ec6a",
+        "led_red": "#ff6369",
+        "led_amber": "#ffc53d",
+        "led_green": "#46d89c",
+        "led_red_off": "#3a1a1d",
+        "led_amber_off": "#3a2f14",
+        "led_green_off": "#183a2e",
         "pulse": "#b6ec6a",
         "soft": "#c3cad4",
         "tint": "0.12",
@@ -123,7 +128,12 @@ PALETTES = {
         "touch_text": "#0b7d50",
         "board": "#f1faf5",
         "led_off": "#cfe9dc",
-        "led_on": "#1aa572",
+        "led_red": "#e5484d",
+        "led_amber": "#f0a020",
+        "led_green": "#1aa572",
+        "led_red_off": "#f9dede",
+        "led_amber_off": "#fcefd0",
+        "led_green_off": "#cfe9dc",
         "pulse": "#1aa572",
         "soft": "#3a4350",
         "tint": "0.08",
@@ -472,8 +482,8 @@ ${style}
 STRIP_STYLE_BASE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal, .chip-on, .led-on, .comet, .pin-hi, .pad-ring { opacity: 0; }
-    .pad-ring { transform-box: fill-box; transform-origin: center; }
+    .signal, .chip-on, .led-on, .comet, .pin-hi, .pad-ring, .bloom { opacity: 0; }
+    .pad-ring, .bloom { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
       .pad-a { animation: pad-a 6s ease-out infinite; }
       .pad-b { animation: pad-b 6s ease-out infinite; }
@@ -501,6 +511,9 @@ STRIP_STYLE_BASE = """  <style>
       .led-a { animation: led-a 6s ease-in-out infinite; }
       .led-b { animation: led-b 6s ease-in-out infinite; }
       .led-c { animation: led-c 6s ease-in-out infinite; }
+      .bloom-a { animation: bloom-a 6s ease-out infinite; }
+      .bloom-b { animation: bloom-b 6s ease-out infinite; }
+      .bloom-c { animation: bloom-c 6s ease-out infinite; }
       .heartbeat { animation: heartbeat 6s ease-out infinite; }
     }
     @keyframes pad-a {
@@ -616,11 +629,26 @@ STRIP_STYLE_BASE = """  <style>
       93% { opacity: 0.12; }
       96%, 100% { opacity: 0; }
     }
+    @keyframes bloom-a {
+      0%, 73.5% { opacity: 0; transform: none; }
+      74% { opacity: 0.8; transform: none; }
+      83%, 100% { opacity: 0; transform: scale(2.8); }
+    }
+    @keyframes bloom-b {
+      0%, 75.5% { opacity: 0; transform: none; }
+      76% { opacity: 0.8; transform: none; }
+      85%, 100% { opacity: 0; transform: scale(2.8); }
+    }
+    @keyframes bloom-c {
+      0%, 77.5% { opacity: 0; transform: none; }
+      78% { opacity: 0.8; transform: none; }
+      87%, 100% { opacity: 0; transform: scale(2.8); }
+    }
   </style>"""
 
 STRIP = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="170" viewBox="0 0 1200 170" role="img" aria-labelledby="title desc">
   <title id="title">Hardware Lab 电路走线示意</title>
-  <desc id="desc">${theme_desc}电路板横条。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 ${prototypes} PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
+  <desc id="desc">${theme_desc}电路板横条。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 ${prototypes} PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧红、黄、绿三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
@@ -632,9 +660,17 @@ STRIP = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height=
       <stop offset="0.7" stop-color="${touch_2}" stop-opacity="0"/>
       <stop offset="1" stop-color="${touch_2}" stop-opacity="0.45"/>
     </linearGradient>
-    <radialGradient id="ledGlow">
-      <stop stop-color="${led_on}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${led_on}" stop-opacity="0"/>
+    <radialGradient id="ledGlow-a">
+      <stop stop-color="${led_red}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_red}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ledGlow-b">
+      <stop stop-color="${led_amber}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_amber}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ledGlow-c">
+      <stop stop-color="${led_green}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_green}" stop-opacity="0"/>
     </radialGradient>
     <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
       <circle cx="10" cy="10" r="0.9" fill="${touch}" opacity="0.18"/>
@@ -712,14 +748,15 @@ ${style}
     <path class="pin-hi pin-6" d="M660 72V63M660 144V153"/>
   </g>
 
-  <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">
-    <circle cx="1138" cy="82" r="6"/>
-    <circle cx="1138" cy="108" r="6"/>
-    <circle cx="1138" cy="134" r="6"/>
-  </g>
-  <g class="led-on led-a"><circle cx="1138" cy="82" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="82" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-b"><circle cx="1138" cy="108" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="108" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-c"><circle cx="1138" cy="134" r="16" fill="url(#ledGlow)"/><circle cx="1138" cy="134" r="6" fill="${led_on}"/></g>
+  <circle cx="1138" cy="82" r="6" fill="${led_red_off}" stroke="${led_red}" stroke-opacity="0.55"/>
+  <g class="led-on led-a"><circle cx="1138" cy="82" r="17" fill="url(#ledGlow-a)"/><circle cx="1138" cy="82" r="6" fill="${led_red}"/></g>
+  <circle class="bloom bloom-a" cx="1138" cy="82" r="6" fill="none" stroke="${led_red}" stroke-width="1.5"/>
+  <circle cx="1138" cy="108" r="6" fill="${led_amber_off}" stroke="${led_amber}" stroke-opacity="0.55"/>
+  <g class="led-on led-b"><circle cx="1138" cy="108" r="17" fill="url(#ledGlow-b)"/><circle cx="1138" cy="108" r="6" fill="${led_amber}"/></g>
+  <circle class="bloom bloom-b" cx="1138" cy="108" r="6" fill="none" stroke="${led_amber}" stroke-width="1.5"/>
+  <circle cx="1138" cy="134" r="6" fill="${led_green_off}" stroke="${led_green}" stroke-opacity="0.55"/>
+  <g class="led-on led-c"><circle cx="1138" cy="134" r="17" fill="url(#ledGlow-c)"/><circle cx="1138" cy="134" r="6" fill="${led_green}"/></g>
+  <circle class="bloom bloom-c" cx="1138" cy="134" r="6" fill="none" stroke="${led_green}" stroke-width="1.5"/>
 
   <g fill="${packet_fill}" stroke="${pulse}" stroke-width="2">
     <circle class="signal sig-in-a" cx="60" cy="82" r="3.5"/>
@@ -828,7 +865,7 @@ def narrow_strip_style() -> str:
 
 STRIP_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="222" viewBox="0 0 360 222" role="img" aria-labelledby="title desc">
   <title id="title">Hardware Lab 电路走线示意</title>
-  <desc id="desc">电路板示意。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 ${prototypes} PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
+  <desc id="desc">电路板示意。左侧三路传感器信号沿走线汇入中间标注 HW LAB 与 ${prototypes} PROTOTYPES 的芯片，芯片亮起后信号继续流向右侧红、黄、绿三颗 LED，LED 依次点亮。结构示意，非实物照片。</desc>
   <defs>
     <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
@@ -840,9 +877,17 @@ STRIP_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" h
       <stop offset="0.7" stop-color="${touch_2}" stop-opacity="0"/>
       <stop offset="1" stop-color="${touch_2}" stop-opacity="0.45"/>
     </linearGradient>
-    <radialGradient id="ledGlow">
-      <stop stop-color="${led_on}" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="${led_on}" stop-opacity="0"/>
+    <radialGradient id="ledGlow-a">
+      <stop stop-color="${led_red}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_red}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ledGlow-b">
+      <stop stop-color="${led_amber}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_amber}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ledGlow-c">
+      <stop stop-color="${led_green}" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="${led_green}" stop-opacity="0"/>
     </radialGradient>
     <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
       <circle cx="10" cy="10" r="0.9" fill="${touch}" opacity="0.18"/>
@@ -916,14 +961,15 @@ ${style}
     <path class="pin-hi pin-6" d="M240 114V106M240 186V194"/>
   </g>
 
-  <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">
-    <circle cx="330" cy="124" r="6"/>
-    <circle cx="330" cy="150" r="6"/>
-    <circle cx="330" cy="176" r="6"/>
-  </g>
-  <g class="led-on led-a"><circle cx="330" cy="124" r="14" fill="url(#ledGlow)"/><circle cx="330" cy="124" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-b"><circle cx="330" cy="150" r="14" fill="url(#ledGlow)"/><circle cx="330" cy="150" r="6" fill="${led_on}"/></g>
-  <g class="led-on led-c"><circle cx="330" cy="176" r="14" fill="url(#ledGlow)"/><circle cx="330" cy="176" r="6" fill="${led_on}"/></g>
+  <circle cx="330" cy="124" r="6" fill="${led_red_off}" stroke="${led_red}" stroke-opacity="0.55"/>
+  <g class="led-on led-a"><circle cx="330" cy="124" r="14" fill="url(#ledGlow-a)"/><circle cx="330" cy="124" r="6" fill="${led_red}"/></g>
+  <circle class="bloom bloom-a" cx="330" cy="124" r="6" fill="none" stroke="${led_red}" stroke-width="1.5"/>
+  <circle cx="330" cy="150" r="6" fill="${led_amber_off}" stroke="${led_amber}" stroke-opacity="0.55"/>
+  <g class="led-on led-b"><circle cx="330" cy="150" r="14" fill="url(#ledGlow-b)"/><circle cx="330" cy="150" r="6" fill="${led_amber}"/></g>
+  <circle class="bloom bloom-b" cx="330" cy="150" r="6" fill="none" stroke="${led_amber}" stroke-width="1.5"/>
+  <circle cx="330" cy="176" r="6" fill="${led_green_off}" stroke="${led_green}" stroke-opacity="0.55"/>
+  <g class="led-on led-c"><circle cx="330" cy="176" r="14" fill="url(#ledGlow-c)"/><circle cx="330" cy="176" r="6" fill="${led_green}"/></g>
+  <circle class="bloom bloom-c" cx="330" cy="176" r="6" fill="none" stroke="${led_green}" stroke-width="1.5"/>
 
   <g fill="${packet_fill}" stroke="${pulse}" stroke-width="2">
     <circle class="signal sig-in-a" cx="36" cy="124" r="3.5"/>
