@@ -10,9 +10,9 @@
 </a>
 
 <div align="center">
-  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=33ccb169" height="36" alt="访问 Rongyi Studio 主页"></a>
+  <a href="https://rongyishuaige7.github.io/"><img src="./assets/badge-studio.svg?v=eca25f0a" height="36" alt="访问 Rongyi Studio 主页"></a>
   &nbsp;&nbsp;
-  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=9c6280f1" height="36" alt="查看开发记录"></a>
+  <a href="https://rongyishuaige7.github.io/#log"><img src="./assets/badge-build-log.svg?v=ae65ddf8" height="36" alt="查看开发记录"></a>
 </div>
 
 ---
@@ -41,9 +41,9 @@
 | 公开范围 | 产品事实、已知限制和开发复盘公开；核心实现、客户配置与制盘工具不公开 |
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=e325048b" height="36" alt="查看 Yi盘产品事实与限制"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/blob/main/docs/%E4%BA%A7%E5%93%81%E4%BA%8B%E5%AE%9E%E4%B8%8E%E9%99%90%E5%88%B6.md"><img src="./assets/badge-product-facts.svg?v=b0a0f9a2" height="36" alt="查看 Yi盘产品事实与限制"></a>
   &nbsp;&nbsp;
-  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=5c5fc6ca" height="36" alt="提交 Yi盘反馈"></a>
+  <a href="https://github.com/rongyishuaige7/yipan-showcase/issues"><img src="./assets/badge-feedback.svg?v=a4f4dbad" height="36" alt="提交 Yi盘反馈"></a>
 </div>
 
 ---
@@ -150,7 +150,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 > **构建说明：** 各项目的 GitHub Actions 负责固定配置下的构建与仓库检查；对应的精确构建链接、公开资料和使用限制以 [Hardware Lab](https://github.com/rongyishuaige7/YI-Hardware-Lab) 为准。部分项目上传的 Actions Artifact 按平台保留期自动过期。
 
 <div align="center">
-  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><img src="./assets/badge-hardware.svg?v=4d8f3589" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
+  <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab"><img src="./assets/badge-hardware.svg?v=f661cd7d" height="36" alt="查看 Hardware Lab 硬件项目索引"></a>
 </div>
 
 ---

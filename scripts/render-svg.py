@@ -1851,6 +1851,18 @@ BADGES = {
     "badge-feedback": ("FEEDBACK", "提交反馈", "提交 Yi盘反馈", "前往 Yi盘公开反馈页面。", "primary"),
     "badge-hardware": ("TOUCH", "Hardware Lab", "查看 Hardware Lab", "前往 Hardware Lab 公开硬件项目索引。", "touch"),
 }
+# Badge motion follows each badge's lane. Primary buttons shine and nudge an arrow like the
+# Yi盘 button (8s x 3, staggered by their delays); BUILD blinks a terminal cursor; FACTS sends
+# a Yi盘 packet along its bottom edge (8s x 3); TOUCH carries an LED that lights briefly every
+# 6s. Base styles are the resting frame: shine off-badge, arrow in place, packet hidden,
+# cursor shown, LED unlit; reduced motion keeps that frame.
+BADGE_MOTION = {
+    "badge-studio": ("shine", 1.2),
+    "badge-build-log": ("cursor", 0),
+    "badge-product-facts": ("packet", 0.8),
+    "badge-feedback": ("shine", 0.6),
+    "badge-hardware": ("led", 0),
+}
 # Outlined badge colors per lane: (border, light label, dark label).
 BADGE_ACCENTS = {"carry": ("#e45738", "#c8452a", "#ff8a70"), "touch": ("#2fa877", "#0b7d50", "#6fe0ae")}
 # Arial Bold advance widths (units per 1000) for the Latin letters in badges; CJK glyphs are one em.
@@ -1858,31 +1870,99 @@ ARIAL_BOLD = {
     "A": 722, "B": 722, "C": 722, "D": 722, "E": 667, "F": 611, "H": 722, "I": 278, "K": 722, "L": 611, "O": 778,
     "S": 667, "T": 611, "U": 722, "a": 556, "b": 611, "d": 611, "e": 556, "r": 389, "w": 778, " ": 278,
 }
+MOTION_GUARD = "@media (prefers-reduced-motion: no-preference)"
 
 
 def text_width(text: str, size: float, tracking: float = 0) -> float:
     return sum(ARIAL_BOLD[char] * size / 1000 if char in ARIAL_BOLD else size for char in text) + tracking * len(text)
 
 
-def badge(label: str, action: str, title: str, desc: str, style: str) -> str:
-    rule = round(14 + text_width(label, 10, 1) + 12)
+def badge_motion(kind: str, delay: float, width: int, rule: int, style: str) -> dict[str, str]:
+    """Defs, resting CSS, guarded animation rules, keyframes and markup for one badge's motion."""
+    if kind == "shine":
+        return {
+            "defs": (
+                f'<clipPath id="clip"><rect x="0.75" y="0.75" width="{width - 1.5:g}" height="34.5" rx="7.5"/></clipPath>'
+                '<linearGradient id="sheen" x1="0" x2="1"><stop stop-color="#ffffff" stop-opacity="0"/>'
+                '<stop offset="0.5" stop-color="#ffffff" stop-opacity="0.42"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>'
+            ),
+            "rest": "    .shine { transform: translateX(-60px); }\n",
+            "rules": f"      .shine {{ animation: shine 8s ease-in-out {delay:g}s 3; }}\n      .arrow {{ animation: arrow-nudge 8s ease-out {delay:g}s 3; }}\n",
+            "frames": (
+                f"    @keyframes shine {{\n      0% {{ transform: translateX(-60px); }}\n      11%, 100% {{ transform: translateX({width + 60}px); }}\n    }}\n"
+                "    @keyframes arrow-nudge {\n      0%, 10% { transform: none; }\n      13% { transform: translate(2px, -2px); }\n      16%, 100% { transform: none; }\n    }\n"
+            ),
+            "under": '  <g clip-path="url(#clip)"><path class="shine" d="M18 0H46L30 36H2Z" fill="url(#sheen)"/></g>\n',
+            "over": f'  <path class="arrow" d="M{width - 25} 23L{width - 17} 15M{width - 23} 15H{width - 17}V21" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>\n',
+        }
+    border, light_label, dark_label = BADGE_ACCENTS[style]
+    if kind == "cursor":
+        return {
+            "rules": "      .cursor { animation: cursor 1.1s steps(1, end) infinite; }\n",
+            "frames": "    @keyframes cursor {\n      0% { opacity: 1; }\n      50% { opacity: 0; }\n      100% { opacity: 1; }\n    }\n",
+            "over": f'  <rect class="label cursor" x="{rule - 10}" y="13" width="5" height="10" fill="{light_label}"/>\n',
+        }
+    if kind == "packet":
+        return {
+            "defs": f'<linearGradient id="trail" x1="0" x2="1"><stop stop-color="{border}" stop-opacity="0"/><stop offset="1" stop-color="{border}" stop-opacity="0.7"/></linearGradient>',
+            "rest": "    .packet { opacity: 0; }\n    .packet-dot { fill: " + border + "; }\n",
+            "dark": f"      .packet-dot {{ fill: {dark_label}; }}\n",
+            "rules": f"      .packet {{ animation: packet 8s cubic-bezier(0.45, 0, 0.25, 1) {delay:g}s 3; }}\n",
+            "frames": (
+                "    @keyframes packet {\n      0% { opacity: 0; transform: none; }\n      1.5% { opacity: 1; transform: none; }\n"
+                f"      13% {{ opacity: 1; transform: translateX({width - 30}px); }}\n"
+                f"      15%, 100% {{ opacity: 0; transform: translateX({width - 30}px); }}\n    }}\n"
+            ),
+            "over": (
+                '  <g class="packet"><rect x="3" y="33.2" width="14" height="1.6" rx="0.8" fill="url(#trail)"/>'
+                f'<circle class="packet-dot" cx="17" cy="34" r="1.8" fill="{border}"/></g>\n'
+            ),
+        }
+    light, dark = PALETTES["light"], PALETTES["dark"]
+    return {
+        "rest": (
+            f"    .led-ring {{ fill: {light['led_off']}; stroke: {border}; }}\n"
+            f"    .led-core {{ fill: {light['touch']}; }}\n    .led-lit {{ opacity: 0; }}\n"
+        ),
+        "dark": f"      .led-ring {{ fill: {dark['led_off']}; stroke: {dark_label}; }}\n      .led-core {{ fill: {dark['touch']}; }}\n",
+        "rules": "      .led-lit { animation: badge-led 6s ease-in-out infinite; }\n",
+        "frames": "    @keyframes badge-led {\n      0%, 72% { opacity: 0; }\n      74%, 82% { opacity: 1; }\n      88% { opacity: 0.4; }\n      94%, 100% { opacity: 0; }\n    }\n",
+        "under": (
+            f'  <circle class="led-ring" cx="14" cy="18" r="3.4" fill="{light["led_off"]}" stroke="{border}" stroke-opacity="0.6"/>\n'
+            f'  <g class="led-lit"><circle class="led-core" cx="14" cy="18" r="7" fill="{light["touch"]}" opacity="0.28"/>'
+            f'<circle class="led-core" cx="14" cy="18" r="3.4" fill="{light["touch"]}"/></g>\n'
+        ),
+    }
+
+
+def badge(label: str, action: str, title: str, desc: str, style: str, kind: str, delay: float) -> str:
+    label_x = 24 if kind == "led" else 14
+    rule = round(label_x + text_width(label, 10, 1) + 12)
     action_x = rule + 14
-    width = round(action_x + text_width(action, 14) + 16)
+    width = round(action_x + text_width(action, 14) + 16) + (14 if kind == "shine" else 0)
+    motion = badge_motion(kind, delay, width, rule, style)
+    defs = f'  <defs>{motion["defs"]}</defs>\n' if "defs" in motion else ""
+    guarded = f'    {MOTION_GUARD} {{\n{motion["rules"]}    }}\n{motion["frames"]}'
     head = (
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="36" viewBox="0 0 {width} 36" role="img" aria-labelledby="title desc">\n'
         f'  <title id="title">{title}</title>\n'
         f'  <desc id="desc">{desc}</desc>\n'
+        f'{defs}'
         f'  <style>\n'
         f'    text {{ font-family: {BADGE_FONT}; font-weight: 700; }}\n'
+        f'{motion.get("rest", "")}'
     )
     if style == "primary":
         return head + (
+            f'{guarded}'
             f'  </style>\n'
             f'  <rect x="0.75" y="0.75" width="{width - 1.5:g}" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>\n'
             f'  <rect x="2" y="2" width="{width - 4}" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>\n'
-            f'  <text class="label" x="14" y="22" fill="#ffffff" font-size="10" letter-spacing="1">{label}</text>\n'
+            f'{motion.get("under", "")}'
+            f'  <text class="label" x="{label_x}" y="22" fill="#ffffff" font-size="10" letter-spacing="1">{label}</text>\n'
             f'  <path d="M{rule} 8V28" stroke="#ffffff" stroke-opacity="0.42"/>\n'
             f'  <text class="action" x="{action_x}" y="23" fill="#ffffff" font-size="14">{action}</text>\n'
+            f'{motion.get("over", "")}'
             f'</svg>\n'
         )
     border, light_label, dark_label = BADGE_ACCENTS[style]
@@ -1894,12 +1974,16 @@ def badge(label: str, action: str, title: str, desc: str, style: str) -> str:
         f'      .surface {{ fill: #202631; }}\n'
         f'      .label {{ fill: {dark_label}; }}\n'
         f'      .action {{ fill: #f4f6f8; }}\n'
+        f'{motion.get("dark", "")}'
         f'    }}\n'
+        f'{guarded}'
         f'  </style>\n'
         f'  <rect class="surface" x="0.5" y="0.5" width="{width - 1}" height="35" rx="8" fill="#ffffff" stroke="{border}"/>\n'
-        f'  <text class="label" x="14" y="22" fill="{light_label}" font-size="10" letter-spacing="1">{label}</text>\n'
+        f'{motion.get("under", "")}'
+        f'  <text class="label" x="{label_x}" y="22" fill="{light_label}" font-size="10" letter-spacing="1">{label}</text>\n'
         f'  <path d="M{rule} 8V28" stroke="{border}" stroke-opacity="0.55"/>\n'
         f'  <text class="action" x="{action_x}" y="23" fill="#18202a" font-size="14">{action}</text>\n'
+        f'{motion.get("over", "")}'
         f'</svg>\n'
     )
 
@@ -2047,7 +2131,7 @@ def main() -> int:
         rendered[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, npm_figures('light'), motion=motion)
         hash_sources[ASSETS / name] = render_adaptive(DSH_MOBILE, DSH_STYLE, NPM_PLACEHOLDER, motion=motion)
     for stem, spec in BADGES.items():
-        rendered[ASSETS / f"{stem}.svg"] = badge(*spec)
+        rendered[ASSETS / f"{stem}.svg"] = badge(*spec, *BADGE_MOTION[stem])
     readme = Path('README.md')
     stamped = stamp_versions(readme.read_text(encoding='utf-8'), {**rendered, **hash_sources})
     rendered[readme] = replace_snapshot(stamped, json.loads(NPM_STATS.read_text()))

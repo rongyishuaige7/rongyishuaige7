@@ -78,6 +78,16 @@ CARD_ACCUMULATE = {
     FLOW: ("lit-output", ("sheet-1", "sheet-2", "sheet-3")),
 }
 CARD_CYCLE_SECONDS = 8.0
+# Badges: primary buttons and FACTS play three 8s passes and end on their resting frame
+# (hidden, in place, or swept off a clipped badge); BUILD's cursor and TOUCH's LED are
+# status lights that keep blinking.
+BADGE_MOTION = {
+    Path("assets/badge-studio.svg"): ({"shine", "arrow"}, "8s", "3"),
+    Path("assets/badge-feedback.svg"): ({"shine", "arrow"}, "8s", "3"),
+    Path("assets/badge-product-facts.svg"): ({"packet"}, "8s", "3"),
+    Path("assets/badge-build-log.svg"): ({"cursor"}, "1.1s", "infinite"),
+    Path("assets/badge-hardware.svg"): ({"led-lit"}, "6s", "infinite"),
+}
 # The hero plays once and holds its final frame (WCAG 2.2.2: motion that starts
 # on its own must end within 5 seconds). Classes start in this order: the three
 # entry cards, then the drive shine, the DSH capture pan, and the photo deck.
@@ -353,6 +363,38 @@ def check_odometer(path: Path, root: ET.Element, keyframes: dict[str, str], decl
     return problems
 
 
+def check_badge(path: Path, text: str, classes: set[str], duration: str, count: str) -> list[str]:
+    problems = check_properties(path, text)
+    keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
+    declarations = {match.group("class"): match.group("value") for match in HERO_ANIMATION.finditer(text)}
+    if set(declarations) != classes:
+        problems.append(f"{path.name}: animated classes must be exactly {', '.join(sorted(classes))}")
+    root = ET.fromstring(text)
+    parents = {child: parent for parent in root.iter() for child in parent}
+    for class_name, value in declarations.items():
+        tokens = re.sub(r"(?:cubic-bezier|steps)\([^)]*\)", "", value).split()
+        if duration not in tokens or count not in tokens:
+            problems.append(f"{path.name}: {class_name} must play {count} x {duration}")
+        if count == "infinite" or tokens[0] not in keyframes:
+            continue
+        final = FINAL_KEYFRAME.search(keyframes[tokens[0]])
+        final_body = final.group("body") if final else ""
+        opacity = re.search(r"opacity:\s*([0-9.]+)", final_body)
+        transform = re.search(r"transform:\s*([^;]+)", final_body)
+        hidden = opacity is not None and float(opacity.group(1)) == 0
+        in_place = transform is None or not any(float(n) != 0 for n in re.findall(r"-?\d+(?:\.\d+)?", transform.group(1)))
+        clipped = False
+        for element in root.iter():
+            if class_name in element.get("class", "").split():
+                node = parents.get(element)
+                while node is not None and not clipped:
+                    clipped = bool(node.get("clip-path"))
+                    node = parents.get(node)
+        if final is None or not (hidden or in_place or clipped):
+            problems.append(f"{path.name}: {class_name} must end hidden, in place or off its clipped badge")
+    return problems
+
+
 def check_dsh(path: Path, text: str, *, mobile: bool = False) -> list[str]:
     problems: list[str] = []
     keyframes = {match.group("name"): match.group("body") for match in KEYFRAME.finditer(text)}
@@ -448,6 +490,8 @@ def main() -> int:
         if {duration for class_name, duration in loops.items() if class_name not in accumulate} != {"8s"}:
             problems.append(f"{card.name} does not use one 8s loop like the homepage")
         problems.extend(check_ambient(card, card_text, STORIES[rules][1], CARD_AMBIENT[rules] | set(accumulate)))
+    for badge, (classes, duration, count) in BADGE_MOTION.items():
+        problems.extend(check_badge(badge, badge.read_text(encoding="utf-8"), classes, duration, count))
     for path in (HERO, HERO_MOBILE):
         hero = path.read_text(encoding="utf-8")
         if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
@@ -459,7 +503,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes, the Yi盘 record stack grows once per pass; the DSH scan lights its marks and the downloads odometer lands on the real figure; hardware keeps its causal loop story with tails on dashed traces only; badges rest between passes or blink as status lights. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

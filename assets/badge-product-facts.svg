@@ -1,8 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="36" viewBox="0 0 192 36" role="img" aria-labelledby="title desc">
   <title id="title">Yi盘产品事实与限制</title>
   <desc id="desc">查看 Yi盘已确认的产品事实、限制和验证范围。</desc>
+  <defs><linearGradient id="trail" x1="0" x2="1"><stop stop-color="#e45738" stop-opacity="0"/><stop offset="1" stop-color="#e45738" stop-opacity="0.7"/></linearGradient></defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-weight: 700; }
+    .packet { opacity: 0; }
+    .packet-dot { fill: #e45738; }
     .surface { fill: #ffffff; }
     .label { fill: #c8452a; }
     .action { fill: #18202a; }
@@ -10,10 +13,21 @@
       .surface { fill: #202631; }
       .label { fill: #ff8a70; }
       .action { fill: #f4f6f8; }
+      .packet-dot { fill: #ff8a70; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .packet { animation: packet 8s cubic-bezier(0.45, 0, 0.25, 1) 0.8s 3; }
+    }
+    @keyframes packet {
+      0% { opacity: 0; transform: none; }
+      1.5% { opacity: 1; transform: none; }
+      13% { opacity: 1; transform: translateX(162px); }
+      15%, 100% { opacity: 0; transform: translateX(162px); }
     }
   </style>
   <rect class="surface" x="0.5" y="0.5" width="191" height="35" rx="8" fill="#ffffff" stroke="#e45738"/>
   <text class="label" x="14" y="22" fill="#c8452a" font-size="10" letter-spacing="1">FACTS</text>
   <path d="M64 8V28" stroke="#e45738" stroke-opacity="0.55"/>
   <text class="action" x="78" y="23" fill="#18202a" font-size="14">产品事实与限制</text>
+  <g class="packet"><rect x="3" y="33.2" width="14" height="1.6" rx="0.8" fill="url(#trail)"/><circle class="packet-dot" cx="17" cy="34" r="1.8" fill="#e45738"/></g>
 </svg>

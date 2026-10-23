@@ -1,12 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="156" height="36" viewBox="0 0 156 36" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="170" height="36" viewBox="0 0 170 36" role="img" aria-labelledby="title desc">
   <title id="title">访问主页</title>
   <desc id="desc">前往 Rongyi Studio 个人主页。</desc>
+  <defs><clipPath id="clip"><rect x="0.75" y="0.75" width="168.5" height="34.5" rx="7.5"/></clipPath><linearGradient id="sheen" x1="0" x2="1"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#ffffff" stop-opacity="0.42"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-weight: 700; }
+    .shine { transform: translateX(-60px); }
+    @media (prefers-reduced-motion: no-preference) {
+      .shine { animation: shine 8s ease-in-out 1.2s 3; }
+      .arrow { animation: arrow-nudge 8s ease-out 1.2s 3; }
+    }
+    @keyframes shine {
+      0% { transform: translateX(-60px); }
+      11%, 100% { transform: translateX(230px); }
+    }
+    @keyframes arrow-nudge {
+      0%, 10% { transform: none; }
+      13% { transform: translate(2px, -2px); }
+      16%, 100% { transform: none; }
+    }
   </style>
-  <rect x="0.75" y="0.75" width="154.5" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>
-  <rect x="2" y="2" width="152" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
+  <rect x="0.75" y="0.75" width="168.5" height="34.5" rx="7.5" fill="#c44227" stroke="#ff8a70" stroke-width="1.5"/>
+  <rect x="2" y="2" width="166" height="32" rx="6.5" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
+  <g clip-path="url(#clip)"><path class="shine" d="M18 0H46L30 36H2Z" fill="url(#sheen)"/></g>
   <text class="label" x="14" y="22" fill="#ffffff" font-size="10" letter-spacing="1">STUDIO</text>
   <path d="M70 8V28" stroke="#ffffff" stroke-opacity="0.42"/>
   <text class="action" x="84" y="23" fill="#ffffff" font-size="14">访问主页</text>
+  <path class="arrow" d="M145 23L153 15M147 15H153V21" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

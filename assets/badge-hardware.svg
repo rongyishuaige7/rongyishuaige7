@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="190" height="36" viewBox="0 0 190 36" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="36" viewBox="0 0 200 36" role="img" aria-labelledby="title desc">
   <title id="title">查看 Hardware Lab</title>
   <desc id="desc">前往 Hardware Lab 公开硬件项目索引。</desc>
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; font-weight: 700; }
+    .led-ring { fill: #cfe9dc; stroke: #2fa877; }
+    .led-core { fill: #1aa572; }
+    .led-lit { opacity: 0; }
     .surface { fill: #ffffff; }
     .label { fill: #0b7d50; }
     .action { fill: #18202a; }
@@ -10,10 +13,23 @@
       .surface { fill: #202631; }
       .label { fill: #6fe0ae; }
       .action { fill: #f4f6f8; }
+      .led-ring { fill: #183a2e; stroke: #6fe0ae; }
+      .led-core { fill: #46d89c; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .led-lit { animation: badge-led 6s ease-in-out infinite; }
+    }
+    @keyframes badge-led {
+      0%, 72% { opacity: 0; }
+      74%, 82% { opacity: 1; }
+      88% { opacity: 0.4; }
+      94%, 100% { opacity: 0; }
     }
   </style>
-  <rect class="surface" x="0.5" y="0.5" width="189" height="35" rx="8" fill="#ffffff" stroke="#2fa877"/>
-  <text class="label" x="14" y="22" fill="#0b7d50" font-size="10" letter-spacing="1">TOUCH</text>
-  <path d="M67 8V28" stroke="#2fa877" stroke-opacity="0.55"/>
-  <text class="action" x="81" y="23" fill="#18202a" font-size="14">Hardware Lab</text>
+  <rect class="surface" x="0.5" y="0.5" width="199" height="35" rx="8" fill="#ffffff" stroke="#2fa877"/>
+  <circle class="led-ring" cx="14" cy="18" r="3.4" fill="#cfe9dc" stroke="#2fa877" stroke-opacity="0.6"/>
+  <g class="led-lit"><circle class="led-core" cx="14" cy="18" r="7" fill="#1aa572" opacity="0.28"/><circle class="led-core" cx="14" cy="18" r="3.4" fill="#1aa572"/></g>
+  <text class="label" x="24" y="22" fill="#0b7d50" font-size="10" letter-spacing="1">TOUCH</text>
+  <path d="M77 8V28" stroke="#2fa877" stroke-opacity="0.55"/>
+  <text class="action" x="91" y="23" fill="#18202a" font-size="14">Hardware Lab</text>
 </svg>
