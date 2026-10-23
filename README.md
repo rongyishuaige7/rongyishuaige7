@@ -1,11 +1,11 @@
 <a href="https://rongyishuaige7.github.io/">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=fd5a7142">
-  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=82f3d2a1">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=830cdae8">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=40b56b98">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=81ff0917">
-  <img src="./assets/hero-light.svg?v=81ff0917" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，资料与产出留在盘内、云端模型按需调用，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=ba2d018a">
+  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=a03e3f57">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=4180427f">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=3f9b0cca">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=9af2f2c4">
+  <img src="./assets/hero-light.svg?v=9af2f2c4" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，资料与产出留在盘内、云端模型按需调用，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
 </picture>
 </a>
 
@@ -93,7 +93,7 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 - **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
 - **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
-- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39912417777) | MIT
+- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39917162018) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
