@@ -30,7 +30,19 @@
 
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal, .chip-on, .led-on { opacity: 0; }
+    .signal, .chip-on, .led-on, .comet, .pin-hi, .pad-ring { opacity: 0; }
+    .pad-ring { transform-box: fill-box; transform-origin: center; }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -64,10 +76,23 @@
     <path d="M260 150H324"/>
     <path d="M260 158H272L290 176H324"/>
   </g>
+  <g id="trace-comets" fill="none" stroke="var(--pulse)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="22 2000">
+    <path class="comet comet-in-a" d="M36 124H52L70 142H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-a" d="M36 124H52L70 142H100" stroke-width="3"/>
+    <path class="comet comet-in-b" d="M36 150H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-b" d="M36 150H100" stroke-width="3"/>
+    <path class="comet comet-in-c" d="M36 176H52L70 158H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-c" d="M36 176H52L70 158H100" stroke-width="3"/>
+    <path class="comet comet-out-a" d="M260 142H272L290 124H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-a" d="M260 142H272L290 124H324" stroke-width="3"/>
+    <path class="comet comet-out-b" d="M260 150H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-b" d="M260 150H324" stroke-width="3"/>
+    <path class="comet comet-out-c" d="M260 158H272L290 176H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-c" d="M260 158H272L290 176H324" stroke-width="3"/>
+  </g>
   <g fill="var(--zone_fill)" stroke="var(--touch)" stroke-width="2">
     <circle cx="30" cy="124" r="6"/>
     <circle cx="30" cy="150" r="6"/>
     <circle cx="30" cy="176" r="6"/>
+  </g>
+  <g id="pad-ripples" fill="none" stroke="var(--touch)" stroke-width="1.5">
+    <circle class="pad-ring pad-a" cx="30" cy="124" r="6"/>
+    <circle class="pad-ring pad-b" cx="30" cy="150" r="6"/>
+    <circle class="pad-ring pad-c" cx="30" cy="176" r="6"/>
   </g>
   <g fill="var(--touch)">
     <circle cx="52" cy="124" r="3.5"/>
@@ -79,9 +104,19 @@
   <g id="strip-chip">
     <path d="M120 114V107M140 114V107M160 114V107M180 114V107M200 114V107M220 114V107M240 114V107M120 186V193M140 186V193M160 186V193M180 186V193M200 186V193M220 186V193M240 186V193" stroke="var(--touch)" stroke-opacity="0.6" stroke-width="2"/>
     <rect x="100" y="114" width="160" height="72" rx="6" fill="var(--board)" stroke="var(--touch)" stroke-width="1.5"/>
+    <circle class="heartbeat" cx="111" cy="125" r="2.6" fill="var(--touch_text)"/>
     <rect class="chip-on" x="93" y="107" width="174" height="86" rx="11" fill="none" stroke="var(--touch)" stroke-width="2"/>
     <text x="180" y="146" fill="var(--ink)" font-size="20" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
     <text class="mono" x="180" y="173" fill="var(--touch_text)" font-size="17" letter-spacing="0.5" text-anchor="middle">22 PROTOTYPES</text>
+  </g>
+  <g id="chip-bus" stroke="var(--pulse)" stroke-width="2.5" stroke-linecap="round">
+    <path class="pin-hi pin-0" d="M120 114V106M120 186V194"/>
+    <path class="pin-hi pin-1" d="M140 114V106M140 186V194"/>
+    <path class="pin-hi pin-2" d="M160 114V106M160 186V194"/>
+    <path class="pin-hi pin-3" d="M180 114V106M180 186V194"/>
+    <path class="pin-hi pin-4" d="M200 114V106M200 186V194"/>
+    <path class="pin-hi pin-5" d="M220 114V106M220 186V194"/>
+    <path class="pin-hi pin-6" d="M240 114V106M240 186V194"/>
   </g>
 
   <g fill="var(--led_off)" stroke="var(--touch)" stroke-opacity="0.5">

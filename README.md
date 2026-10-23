@@ -97,12 +97,12 @@ npm 每日快照：近 30 天下载 **1,031** · 最新版 **v0.5.0** · 已发�
 
 <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=ce1d4dff">
-  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=445ba85b">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=b9cc6ddd">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=cc248af4">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=62dba998">
-  <img src="./assets/hardware-strip-light.svg?v=62dba998" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=46a1e143">
+  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=5d4fe0fb">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=21e6baf7">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=6cbe5ddb">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=4336ecc9">
+  <img src="./assets/hardware-strip-light.svg?v=4336ecc9" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧 LED。">
 </picture>
 </a>
 

@@ -47,13 +47,17 @@ STORIES = {
         ("lit-output",),
         ("lit-rail", "packet-rail"),
     )),
+    # Sensor pads ripple as their signals leave; the glowing tails ride with the signals;
+    # the pin wave runs while the chip is lit.
     STRIP: ("6s", (
-        ("sig-in-a", "sig-in-b", "sig-in-c"),
-        ("chip-on",),
-        ("sig-out-a", "sig-out-b", "sig-out-c"),
+        ("pad-a", "pad-b", "pad-c", "sig-in-a", "sig-in-b", "sig-in-c", "comet-in-a", "comet-in-b", "comet-in-c"),
+        ("chip-on", "pin-hi"),
+        ("sig-out-a", "sig-out-b", "sig-out-c", "comet-out-a", "comet-out-b", "comet-out-c"),
         ("led-a", "led-b", "led-c"),
     )),
 }
+# The chip's pin-1 dot ticks once a second on the same loop, outside the story.
+STRIP_AMBIENT = {"heartbeat"}
 # Looping cards play a fixed number of passes, then every animation stops on the base
 # frame (the complete static card) instead of moving beside the README text forever.
 DSH_MOBILE = Path("assets/dsh-card-mobile.svg")
@@ -87,10 +91,12 @@ DSH_MOBILE_CLASSES = {"packet-a", "lane-a", "lane-b", "lane-c"}
 HERO_OFFSTAGE_END = frozenset({"drive-shine"})
 HERO_ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<value>[^;]+);")
 FINAL_KEYFRAME = re.compile(r"(?:^|[\s}])(?:to|100%)\s*\{(?P<body>[^}]*)\}")
-FORBIDDEN_ANIMATED_PROPERTIES = re.compile(
-    r"(?:^|[;{])\s*(?:width|height|x|y|top|left|right|bottom|filter|stroke-width)\s*:",
-    re.MULTILINE,
-)
+# Keyframes may only move compositor-friendly properties. The one exception is a dash
+# offset on a pre-dashed stroke, which draws the strip's signal tails along their traces.
+ANIMATED_PROPERTIES = {"transform", "opacity"}
+DASH_KEYFRAMES = {
+    "hardware-strip-": re.compile(r"comet-(?:in|out)-[abc]"),
+}
 ANIMATION = re.compile(r"\.(?P<class>[\w-]+)\s*\{\s*animation:\s*(?P<keyframe>[\w-]+)")
 KEYFRAME = re.compile(r"@keyframes\s+(?P<name>[\w-]+)\s*\{(?P<body>.*?)\n\s*\}", re.DOTALL)
 
@@ -152,6 +158,44 @@ def check_story(path: Path, text: str, cycle: str, stages: tuple[tuple[str, ...]
             )
         previous_end = max(ends)
     return problems
+
+
+def check_properties(path: Path, text: str) -> list[str]:
+    """Keyframes animate transform/opacity; dash offsets only on named, dashed strokes."""
+    problems: list[str] = []
+    dash = next((pattern for prefix, pattern in DASH_KEYFRAMES.items() if path.name.startswith(prefix)), None)
+    dashed_keyframes: set[str] = set()
+    for match in KEYFRAME.finditer(text):
+        name, body = match.group("name"), match.group("body")
+        allowed = set(ANIMATED_PROPERTIES)
+        if dash and dash.fullmatch(name):
+            allowed.add("stroke-dashoffset")
+            dashed_keyframes.add(name)
+        extra = set(re.findall(r"([\w-]+)\s*:", body)) - allowed
+        if extra:
+            problems.append(f"{path.name}: {name} animates {', '.join(sorted(extra))}; only transform/opacity may move")
+    if dashed_keyframes:
+        animated = {class_name for class_name, keyframe in ANIMATION.findall(text) if keyframe in dashed_keyframes}
+        root = ET.fromstring(text)
+        parents = {child: parent for parent in root.iter() for child in parent}
+        for element in root.iter():
+            if not set(element.get("class", "").split()) & animated:
+                continue
+            node, dashed = element, False
+            while node is not None and not dashed:
+                dashed = bool(node.get("stroke-dasharray"))
+                node = parents.get(node)
+            if not dashed:
+                problems.append(f"{path.name}: {element.get('class')} moves a dash offset on an undashed stroke")
+    return problems
+
+
+def check_ambient(path: Path, text: str, stages: tuple[tuple[str, ...], ...], ambient: set[str]) -> list[str]:
+    story = {name for stage in stages for name in stage}
+    return [
+        f"{path.name}: {class_name} is animated outside its story"
+        for class_name in sorted(set(dict(ANIMATION.findall(text))) - story - ambient)
+    ]
 
 
 def seconds(token: str) -> float:
@@ -265,8 +309,7 @@ def main() -> int:
         dark_css = re.search(r"<style>(.*?)</style>", dark_text, re.DOTALL)
         if not light_css or not dark_css or light_css.group(1) != dark_css.group(1):
             problems.append(f"{light.name} and {dark.name} do not share identical motion CSS")
-        if light_css and FORBIDDEN_ANIMATED_PROPERTIES.search(light_css.group(1)):
-            problems.append(f"{light.name} animates a property other than transform or opacity")
+        problems.extend(check_properties(light, light_text))
         if light == HERO:
             problems.extend(check_once(light, light_text, HERO_ORDER, HERO_OFFSTAGE_END))
             continue
@@ -281,13 +324,13 @@ def main() -> int:
     problems.extend(check_story(FLOW_MOBILE, flow_mobile, "8s", FLOW_MOBILE_STAGES))
     for card, passes in LOOP_PASSES.items():
         problems.extend(check_passes(card, card.read_text(encoding="utf-8"), passes))
-    for narrow in (HERO_MOBILE, STRIP_MOBILE):
-        narrow_css = re.search(r"<style>(.*?)</style>", narrow.read_text(encoding="utf-8"), re.DOTALL)
-        if narrow_css and FORBIDDEN_ANIMATED_PROPERTIES.search(narrow_css.group(1)):
-            problems.append(f"{narrow.name} animates a property other than transform or opacity")
+    for narrow in (HERO_MOBILE, FLOW_MOBILE, DSH_MOBILE, STRIP_MOBILE):
+        problems.extend(check_properties(narrow, narrow.read_text(encoding="utf-8")))
     problems.extend(check_once(HERO_MOBILE, HERO_MOBILE.read_text(encoding="utf-8"), HERO_ORDER, HERO_OFFSTAGE_END))
     strip_mobile = STRIP_MOBILE.read_text(encoding="utf-8")
     problems.extend(check_story(STRIP_MOBILE, strip_mobile, *STORIES[STRIP]))
+    for strip in (STRIP, STRIP_MOBILE):
+        problems.extend(check_ambient(strip, strip.read_text(encoding="utf-8"), STORIES[STRIP][1], STRIP_AMBIENT))
     strip_css = re.search(r"<style>(.*?)</style>", STRIP.read_text(encoding="utf-8"), re.DOTALL)
     for timing in re.findall(r"\.[\w-]+\s*\{\s*animation:[^;]+;", strip_css.group(1) if strip_css else ""):
         if timing not in strip_mobile:
@@ -296,9 +339,7 @@ def main() -> int:
         card_text = card.read_text(encoding="utf-8")
         if set(re.findall(r"animation:\s*[\w-]+\s+([\d.]+m?s)", card_text)) != {"8s"}:
             problems.append(f"{card.name} does not use one 8s loop like the homepage")
-        story_classes = {name for stage in STORIES[card][1] for name in stage}
-        for class_name in sorted(set(dict(ANIMATION.findall(card_text))) - story_classes - ambient):
-            problems.append(f"{card.name}: {class_name} is animated outside its story")
+        problems.extend(check_ambient(card, card_text, STORIES[card][1], ambient))
     for path in (HERO, HERO_MOBILE):
         hero = path.read_text(encoding="utf-8")
         if "CLOUD MODELS" in hero or ">AGENT<" in hero or ">CONTEXT<" in hero:
@@ -310,7 +351,7 @@ def main() -> int:
     if problems:
         print("Motion contract validation failed:\n- " + "\n- ".join(problems), file=sys.stderr)
         return 1
-    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story. Static image sources provide reduced-motion fallbacks.")
+    print("Hero motion ends within 5s; Yi盘 and DSH play three causal passes; hardware keeps its causal loop story with tails on dashed traces only. Static image sources provide reduced-motion fallbacks.")
     return 0
 
 

@@ -462,25 +462,69 @@ ${style}
 </svg>
 """)
 
-# The Hardware Lab strip is a small circuit board: three sensor signals run along the traces
-# into the HW LAB chip, the chip lights, then the signal runs out and three LEDs light in turn.
-# It loops every 6s like the original strip; reduced motion shows the still board. Labels are
-# at least 17 units so they stay readable when GitHub scales the image down.
-STRIP_STYLE = """  <style>
+# The Hardware Lab strip is a small circuit board: each sensor pad ripples as its signal leaves,
+# the signals run along the traces with a glowing tail into the HW LAB chip, the chip lights and
+# a wave runs across its pins, then the signal runs out and three LEDs light in turn. The pin-1
+# dot ticks once a second between passes. It loops every 6s like the original strip; reduced
+# motion shows the still board. Labels are at least 17 units so they stay readable when GitHub
+# scales the image down.
+STRIP_STYLE_BASE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal, .chip-on, .led-on { opacity: 0; }
+    .signal, .chip-on, .led-on, .comet, .pin-hi, .pad-ring { opacity: 0; }
+    .pad-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
+      .pad-a { animation: pad-a 6s ease-out infinite; }
+      .pad-b { animation: pad-b 6s ease-out infinite; }
+      .pad-c { animation: pad-c 6s ease-out infinite; }
       .sig-in-a { animation: sig-in-a 6s linear infinite; }
       .sig-in-b { animation: sig-in-b 6s linear infinite; }
       .sig-in-c { animation: sig-in-c 6s linear infinite; }
+      .comet-in-a { animation: comet-in-a 6s linear infinite; }
+      .comet-in-b { animation: comet-in-b 6s linear infinite; }
+      .comet-in-c { animation: comet-in-c 6s linear infinite; }
       .chip-on { animation: chip-on 6s ease-in-out infinite; }
+      .pin-hi { animation: pin-wave 6s ease-out infinite; }
+      .pin-1 { animation-delay: 0.08s; }
+      .pin-2 { animation-delay: 0.16s; }
+      .pin-3 { animation-delay: 0.24s; }
+      .pin-4 { animation-delay: 0.32s; }
+      .pin-5 { animation-delay: 0.4s; }
+      .pin-6 { animation-delay: 0.48s; }
       .sig-out-a { animation: sig-out-a 6s linear infinite; }
       .sig-out-b { animation: sig-out-b 6s linear infinite; }
       .sig-out-c { animation: sig-out-c 6s linear infinite; }
+      .comet-out-a { animation: comet-out-a 6s linear infinite; }
+      .comet-out-b { animation: comet-out-b 6s linear infinite; }
+      .comet-out-c { animation: comet-out-c 6s linear infinite; }
       .led-a { animation: led-a 6s ease-in-out infinite; }
       .led-b { animation: led-b 6s ease-in-out infinite; }
       .led-c { animation: led-c 6s ease-in-out infinite; }
+      .heartbeat { animation: heartbeat 6s ease-out infinite; }
+    }
+    @keyframes pad-a {
+      0%, 0.5% { opacity: 0; transform: none; }
+      1% { opacity: 0.75; transform: none; }
+      6.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pad-b {
+      0%, 2.5% { opacity: 0; transform: none; }
+      3% { opacity: 0.75; transform: none; }
+      8.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pad-c {
+      0%, 4.5% { opacity: 0; transform: none; }
+      5% { opacity: 0.75; transform: none; }
+      10.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pin-wave {
+      0%, 35% { opacity: 0; }
+      36.5% { opacity: 1; }
+      40%, 100% { opacity: 0; }
+    }
+    @keyframes heartbeat {
+      0%, 16.67%, 33.33%, 50%, 66.67%, 83.33%, 100% { opacity: 1; }
+      5%, 16.6%, 21.67%, 33.26%, 38.33%, 49.93%, 55%, 66.6%, 71.67%, 83.26%, 88.33%, 99.93% { opacity: 0.25; }
     }
     @keyframes sig-in-a {
       0%, 1% { transform: translate(0, 0); opacity: 0; }
@@ -620,10 +664,23 @@ ${style}
     <path d="M680 108H1130"/>
     <path d="M680 116H902L920 134H1130"/>
   </g>
+  <g id="trace-comets" fill="none" stroke="${pulse}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="44 2000">
+    <path class="comet comet-in-a" d="M60 82H280L298 100H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-a" d="M60 82H280L298 100H520" stroke-width="3"/>
+    <path class="comet comet-in-b" d="M60 108H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-b" d="M60 108H520" stroke-width="3"/>
+    <path class="comet comet-in-c" d="M60 134H280L298 116H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-c" d="M60 134H280L298 116H520" stroke-width="3"/>
+    <path class="comet comet-out-a" d="M680 100H902L920 82H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-a" d="M680 100H902L920 82H1130" stroke-width="3"/>
+    <path class="comet comet-out-b" d="M680 108H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-b" d="M680 108H1130" stroke-width="3"/>
+    <path class="comet comet-out-c" d="M680 116H902L920 134H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-c" d="M680 116H902L920 134H1130" stroke-width="3"/>
+  </g>
   <g fill="${zone_fill}" stroke="${touch}" stroke-width="2">
     <circle cx="54" cy="82" r="6"/>
     <circle cx="54" cy="108" r="6"/>
     <circle cx="54" cy="134" r="6"/>
+  </g>
+  <g id="pad-ripples" fill="none" stroke="${touch}" stroke-width="1.5">
+    <circle class="pad-ring pad-a" cx="54" cy="82" r="6"/>
+    <circle class="pad-ring pad-b" cx="54" cy="108" r="6"/>
+    <circle class="pad-ring pad-c" cx="54" cy="134" r="6"/>
   </g>
   <g fill="${touch}">
     <circle cx="280" cy="82" r="3.5"/>
@@ -639,9 +696,19 @@ ${style}
   <g id="strip-chip">
     <path d="M540 72V64M560 72V64M580 72V64M600 72V64M620 72V64M640 72V64M660 72V64M540 144V152M560 144V152M580 144V152M600 144V152M620 144V152M640 144V152M660 144V152" stroke="${touch}" stroke-opacity="0.6" stroke-width="2"/>
     <rect x="520" y="72" width="160" height="72" rx="6" fill="${board}" stroke="${touch}" stroke-width="1.5"/>
+    <circle class="heartbeat" cx="531" cy="83" r="2.6" fill="${touch_text}"/>
     <rect class="chip-on" x="513" y="65" width="174" height="86" rx="11" fill="none" stroke="${touch}" stroke-width="2"/>
     <text x="600" y="104" fill="${ink}" font-size="20" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
     <text class="mono" x="600" y="131" fill="${touch_text}" font-size="17" letter-spacing="0.5" text-anchor="middle">${prototypes} PROTOTYPES</text>
+  </g>
+  <g id="chip-bus" stroke="${pulse}" stroke-width="2.5" stroke-linecap="round">
+    <path class="pin-hi pin-0" d="M540 72V63M540 144V153"/>
+    <path class="pin-hi pin-1" d="M560 72V63M560 144V153"/>
+    <path class="pin-hi pin-2" d="M580 72V63M580 144V153"/>
+    <path class="pin-hi pin-3" d="M600 72V63M600 144V153"/>
+    <path class="pin-hi pin-4" d="M620 72V63M620 144V153"/>
+    <path class="pin-hi pin-5" d="M640 72V63M640 144V153"/>
+    <path class="pin-hi pin-6" d="M660 72V63M660 144V153"/>
   </g>
 
   <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">
@@ -686,6 +753,56 @@ def signal_keyframes(name: str, points: tuple[tuple[int, int], ...], start: int,
     return f"    @keyframes {name} {{\n" + "\n".join(rows) + "\n    }"
 
 
+# Tail length in viewBox units: the desktop traces are ~460 long, the narrow ones ~70.
+COMET_TAIL = 44
+COMET_TAIL_NARROW = 22
+SIGNAL_KEYFRAMES = re.compile(r"    @keyframes sig-(in|out)-([abc]) \{\n(.*?)\n    \}", re.DOTALL)
+SIGNAL_ROW = re.compile(r"(?P<points>[\d.%, ]+?)\s*\{\s*transform:\s*translateX?\((?P<shift>[^)]*)\);(?:\s*opacity:\s*(?P<opacity>[\d.]+);)?\s*\}")
+
+
+def number(value: float) -> str:
+    return f"{value:.2f}".rstrip("0").rstrip(".")
+
+
+def comet_keyframes(style: str, tail: int = COMET_TAIL) -> str:
+    """Tail keyframes read from each signal's own keyframes, so the glow stays under the dot.
+
+    The trace is dashed into one tail-long dash; its offset follows the distance the
+    signal has travelled, then the tail drains into the end pad at the same speed and fades.
+    """
+    blocks = []
+    for match in SIGNAL_KEYFRAMES.finditer(style):
+        stops = []
+        for row in SIGNAL_ROW.finditer(match.group(3)):
+            shift = [float(value) for value in re.findall(r"-?[\d.]+", row.group("shift"))] + [0.0]
+            opacity = row.group("opacity")
+            for point in re.findall(r"[\d.]+(?=%)", row.group("points")):
+                stops.append((float(point), shift[0], shift[1], None if opacity is None else float(opacity)))
+        stops.sort()
+        start = next(point for point, _, _, opacity in stops if opacity == 1)
+        end = max(point for point, _, _, opacity in stops if opacity == 1)
+        hidden = max(point for point, _, _, _ in stops if point < start)
+        rows = [f"      0%, {number(hidden)}% {{ opacity: 0; stroke-dashoffset: {tail}px; }}"]
+        travelled, previous = 0.0, None
+        for point, x, y, _ in stops:
+            if not start <= point <= end:
+                continue
+            if previous is not None:
+                travelled += ((x - previous[0]) ** 2 + (y - previous[1]) ** 2) ** 0.5
+            previous = (x, y)
+            rows.append(f"      {number(point)}% {{ opacity: 1; stroke-dashoffset: {number(tail - travelled)}px; }}")
+        drained = end + (end - start) * tail / travelled
+        rows.append(f"      {number(drained)}%, 100% {{ opacity: 0; stroke-dashoffset: {number(-travelled)}px; }}")
+        name = f"comet-{match.group(1)}-{match.group(2)}"
+        blocks.append(f"    @keyframes {name} {{\n" + "\n".join(rows) + "\n    }")
+    if len(blocks) != 6:
+        raise ValueError("expected six strip signals")
+    return style.replace("  </style>", "\n".join(blocks) + "\n  </style>", 1)
+
+
+STRIP_STYLE = comet_keyframes(STRIP_STYLE_BASE)
+
+
 # The narrow strip keeps the same board, chip, LEDs and 6s story on shorter traces. Its signals
 # keep the desktop timing windows, so only their paths are regenerated.
 STRIP_MOBILE_SIGNALS = {
@@ -699,13 +816,13 @@ STRIP_MOBILE_SIGNALS = {
 
 
 def narrow_strip_style() -> str:
-    style = STRIP_STYLE
+    style = STRIP_STYLE_BASE
     for name, (points, start, end) in STRIP_MOBILE_SIGNALS.items():
         keyframes = signal_keyframes(name, points, start, end)
         style, count = re.subn(rf"    @keyframes {name} \{{\n.*?\n    \}}", lambda _: keyframes, style, count=1, flags=re.DOTALL)
         if count != 1:
             raise ValueError(f"missing keyframes {name}")
-    return style
+    return comet_keyframes(style, COMET_TAIL_NARROW)
 
 
 STRIP_MOBILE = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="222" viewBox="0 0 360 222" role="img" aria-labelledby="title desc">
@@ -755,10 +872,23 @@ ${style}
     <path d="M260 150H324"/>
     <path d="M260 158H272L290 176H324"/>
   </g>
+  <g id="trace-comets" fill="none" stroke="${pulse}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="22 2000">
+    <path class="comet comet-in-a" d="M36 124H52L70 142H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-a" d="M36 124H52L70 142H100" stroke-width="3"/>
+    <path class="comet comet-in-b" d="M36 150H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-b" d="M36 150H100" stroke-width="3"/>
+    <path class="comet comet-in-c" d="M36 176H52L70 158H100" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-c" d="M36 176H52L70 158H100" stroke-width="3"/>
+    <path class="comet comet-out-a" d="M260 142H272L290 124H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-a" d="M260 142H272L290 124H324" stroke-width="3"/>
+    <path class="comet comet-out-b" d="M260 150H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-b" d="M260 150H324" stroke-width="3"/>
+    <path class="comet comet-out-c" d="M260 158H272L290 176H324" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-c" d="M260 158H272L290 176H324" stroke-width="3"/>
+  </g>
   <g fill="${zone_fill}" stroke="${touch}" stroke-width="2">
     <circle cx="30" cy="124" r="6"/>
     <circle cx="30" cy="150" r="6"/>
     <circle cx="30" cy="176" r="6"/>
+  </g>
+  <g id="pad-ripples" fill="none" stroke="${touch}" stroke-width="1.5">
+    <circle class="pad-ring pad-a" cx="30" cy="124" r="6"/>
+    <circle class="pad-ring pad-b" cx="30" cy="150" r="6"/>
+    <circle class="pad-ring pad-c" cx="30" cy="176" r="6"/>
   </g>
   <g fill="${touch}">
     <circle cx="52" cy="124" r="3.5"/>
@@ -770,9 +900,19 @@ ${style}
   <g id="strip-chip">
     <path d="M120 114V107M140 114V107M160 114V107M180 114V107M200 114V107M220 114V107M240 114V107M120 186V193M140 186V193M160 186V193M180 186V193M200 186V193M220 186V193M240 186V193" stroke="${touch}" stroke-opacity="0.6" stroke-width="2"/>
     <rect x="100" y="114" width="160" height="72" rx="6" fill="${board}" stroke="${touch}" stroke-width="1.5"/>
+    <circle class="heartbeat" cx="111" cy="125" r="2.6" fill="${touch_text}"/>
     <rect class="chip-on" x="93" y="107" width="174" height="86" rx="11" fill="none" stroke="${touch}" stroke-width="2"/>
     <text x="180" y="146" fill="${ink}" font-size="20" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
     <text class="mono" x="180" y="173" fill="${touch_text}" font-size="17" letter-spacing="0.5" text-anchor="middle">${prototypes} PROTOTYPES</text>
+  </g>
+  <g id="chip-bus" stroke="${pulse}" stroke-width="2.5" stroke-linecap="round">
+    <path class="pin-hi pin-0" d="M120 114V106M120 186V194"/>
+    <path class="pin-hi pin-1" d="M140 114V106M140 186V194"/>
+    <path class="pin-hi pin-2" d="M160 114V106M160 186V194"/>
+    <path class="pin-hi pin-3" d="M180 114V106M180 186V194"/>
+    <path class="pin-hi pin-4" d="M200 114V106M200 186V194"/>
+    <path class="pin-hi pin-5" d="M220 114V106M220 186V194"/>
+    <path class="pin-hi pin-6" d="M240 114V106M240 186V194"/>
   </g>
 
   <g fill="${led_off}" stroke="${touch}" stroke-opacity="0.5">

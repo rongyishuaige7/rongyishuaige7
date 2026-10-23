@@ -26,18 +26,60 @@
   <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
     .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
-    .signal, .chip-on, .led-on { opacity: 0; }
+    .signal, .chip-on, .led-on, .comet, .pin-hi, .pad-ring { opacity: 0; }
+    .pad-ring { transform-box: fill-box; transform-origin: center; }
     @media (prefers-reduced-motion: no-preference) {
+      .pad-a { animation: pad-a 6s ease-out infinite; }
+      .pad-b { animation: pad-b 6s ease-out infinite; }
+      .pad-c { animation: pad-c 6s ease-out infinite; }
       .sig-in-a { animation: sig-in-a 6s linear infinite; }
       .sig-in-b { animation: sig-in-b 6s linear infinite; }
       .sig-in-c { animation: sig-in-c 6s linear infinite; }
+      .comet-in-a { animation: comet-in-a 6s linear infinite; }
+      .comet-in-b { animation: comet-in-b 6s linear infinite; }
+      .comet-in-c { animation: comet-in-c 6s linear infinite; }
       .chip-on { animation: chip-on 6s ease-in-out infinite; }
+      .pin-hi { animation: pin-wave 6s ease-out infinite; }
+      .pin-1 { animation-delay: 0.08s; }
+      .pin-2 { animation-delay: 0.16s; }
+      .pin-3 { animation-delay: 0.24s; }
+      .pin-4 { animation-delay: 0.32s; }
+      .pin-5 { animation-delay: 0.4s; }
+      .pin-6 { animation-delay: 0.48s; }
       .sig-out-a { animation: sig-out-a 6s linear infinite; }
       .sig-out-b { animation: sig-out-b 6s linear infinite; }
       .sig-out-c { animation: sig-out-c 6s linear infinite; }
+      .comet-out-a { animation: comet-out-a 6s linear infinite; }
+      .comet-out-b { animation: comet-out-b 6s linear infinite; }
+      .comet-out-c { animation: comet-out-c 6s linear infinite; }
       .led-a { animation: led-a 6s ease-in-out infinite; }
       .led-b { animation: led-b 6s ease-in-out infinite; }
       .led-c { animation: led-c 6s ease-in-out infinite; }
+      .heartbeat { animation: heartbeat 6s ease-out infinite; }
+    }
+    @keyframes pad-a {
+      0%, 0.5% { opacity: 0; transform: none; }
+      1% { opacity: 0.75; transform: none; }
+      6.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pad-b {
+      0%, 2.5% { opacity: 0; transform: none; }
+      3% { opacity: 0.75; transform: none; }
+      8.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pad-c {
+      0%, 4.5% { opacity: 0; transform: none; }
+      5% { opacity: 0.75; transform: none; }
+      10.5%, 100% { opacity: 0; transform: scale(2.4); }
+    }
+    @keyframes pin-wave {
+      0%, 35% { opacity: 0; }
+      36.5% { opacity: 1; }
+      40%, 100% { opacity: 0; }
+    }
+    @keyframes heartbeat {
+      0%, 16.67%, 33.33%, 50%, 66.67%, 83.33%, 100% { opacity: 1; }
+      5%, 16.6%, 21.67%, 33.26%, 38.33%, 49.93%, 55%, 66.6%, 71.67%, 83.26%, 88.33%, 99.93% { opacity: 0.25; }
     }
     @keyframes sig-in-a {
       0%, 1% { transform: translate(0, 0); opacity: 0; }
@@ -128,6 +170,64 @@
       93% { opacity: 0.12; }
       96%, 100% { opacity: 0; }
     }
+    @keyframes comet-in-a {
+      0%, 1% { opacity: 0; stroke-dashoffset: 44px; }
+      2% { opacity: 1; stroke-dashoffset: 44px; }
+      14% { opacity: 1; stroke-dashoffset: -166px; }
+      15% { opacity: 1; stroke-dashoffset: -176px; }
+      16.5% { opacity: 1; stroke-dashoffset: -201.46px; }
+      17.5% { opacity: 1; stroke-dashoffset: -211.46px; }
+      30% { opacity: 1; stroke-dashoffset: -423.46px; }
+      32.64%, 100% { opacity: 0; stroke-dashoffset: -467.46px; }
+    }
+    @keyframes comet-in-b {
+      0%, 3% { opacity: 0; stroke-dashoffset: 44px; }
+      4% { opacity: 1; stroke-dashoffset: 44px; }
+      10% { opacity: 1; stroke-dashoffset: -26px; }
+      18% { opacity: 1; stroke-dashoffset: -186px; }
+      26% { opacity: 1; stroke-dashoffset: -346px; }
+      32% { opacity: 1; stroke-dashoffset: -416px; }
+      34.68%, 100% { opacity: 0; stroke-dashoffset: -460px; }
+    }
+    @keyframes comet-in-c {
+      0%, 5% { opacity: 0; stroke-dashoffset: 44px; }
+      6% { opacity: 1; stroke-dashoffset: 44px; }
+      18% { opacity: 1; stroke-dashoffset: -166px; }
+      19% { opacity: 1; stroke-dashoffset: -176px; }
+      20.5% { opacity: 1; stroke-dashoffset: -201.46px; }
+      21.5% { opacity: 1; stroke-dashoffset: -211.46px; }
+      34% { opacity: 1; stroke-dashoffset: -423.46px; }
+      36.64%, 100% { opacity: 0; stroke-dashoffset: -467.46px; }
+    }
+    @keyframes comet-out-a {
+      0%, 45% { opacity: 0; stroke-dashoffset: 44px; }
+      46% { opacity: 1; stroke-dashoffset: 44px; }
+      57.5% { opacity: 1; stroke-dashoffset: -168px; }
+      58.5% { opacity: 1; stroke-dashoffset: -178px; }
+      60% { opacity: 1; stroke-dashoffset: -203.46px; }
+      61% { opacity: 1; stroke-dashoffset: -213.46px; }
+      72% { opacity: 1; stroke-dashoffset: -413.46px; }
+      74.5%, 100% { opacity: 0; stroke-dashoffset: -457.46px; }
+    }
+    @keyframes comet-out-b {
+      0%, 47% { opacity: 0; stroke-dashoffset: 44px; }
+      48% { opacity: 1; stroke-dashoffset: 44px; }
+      54% { opacity: 1; stroke-dashoffset: -21px; }
+      62% { opacity: 1; stroke-dashoffset: -181px; }
+      70% { opacity: 1; stroke-dashoffset: -341px; }
+      74% { opacity: 1; stroke-dashoffset: -406px; }
+      76.54%, 100% { opacity: 0; stroke-dashoffset: -450px; }
+    }
+    @keyframes comet-out-c {
+      0%, 49% { opacity: 0; stroke-dashoffset: 44px; }
+      50% { opacity: 1; stroke-dashoffset: 44px; }
+      61.5% { opacity: 1; stroke-dashoffset: -168px; }
+      62.5% { opacity: 1; stroke-dashoffset: -178px; }
+      64% { opacity: 1; stroke-dashoffset: -203.46px; }
+      65% { opacity: 1; stroke-dashoffset: -213.46px; }
+      76% { opacity: 1; stroke-dashoffset: -413.46px; }
+      78.5%, 100% { opacity: 0; stroke-dashoffset: -457.46px; }
+    }
   </style>
 
   <rect x="0.5" y="0.5" width="1199" height="169" rx="20" fill="#edf0f4" stroke="#cbd2dc"/>
@@ -150,10 +250,23 @@
     <path d="M680 108H1130"/>
     <path d="M680 116H902L920 134H1130"/>
   </g>
+  <g id="trace-comets" fill="none" stroke="#1aa572" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="44 2000">
+    <path class="comet comet-in-a" d="M60 82H280L298 100H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-a" d="M60 82H280L298 100H520" stroke-width="3"/>
+    <path class="comet comet-in-b" d="M60 108H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-b" d="M60 108H520" stroke-width="3"/>
+    <path class="comet comet-in-c" d="M60 134H280L298 116H520" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-in-c" d="M60 134H280L298 116H520" stroke-width="3"/>
+    <path class="comet comet-out-a" d="M680 100H902L920 82H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-a" d="M680 100H902L920 82H1130" stroke-width="3"/>
+    <path class="comet comet-out-b" d="M680 108H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-b" d="M680 108H1130" stroke-width="3"/>
+    <path class="comet comet-out-c" d="M680 116H902L920 134H1130" stroke-width="8" stroke-opacity="0.2"/><path class="comet comet-out-c" d="M680 116H902L920 134H1130" stroke-width="3"/>
+  </g>
   <g fill="#f8fafc" stroke="#1aa572" stroke-width="2">
     <circle cx="54" cy="82" r="6"/>
     <circle cx="54" cy="108" r="6"/>
     <circle cx="54" cy="134" r="6"/>
+  </g>
+  <g id="pad-ripples" fill="none" stroke="#1aa572" stroke-width="1.5">
+    <circle class="pad-ring pad-a" cx="54" cy="82" r="6"/>
+    <circle class="pad-ring pad-b" cx="54" cy="108" r="6"/>
+    <circle class="pad-ring pad-c" cx="54" cy="134" r="6"/>
   </g>
   <g fill="#1aa572">
     <circle cx="280" cy="82" r="3.5"/>
@@ -169,9 +282,19 @@
   <g id="strip-chip">
     <path d="M540 72V64M560 72V64M580 72V64M600 72V64M620 72V64M640 72V64M660 72V64M540 144V152M560 144V152M580 144V152M600 144V152M620 144V152M640 144V152M660 144V152" stroke="#1aa572" stroke-opacity="0.6" stroke-width="2"/>
     <rect x="520" y="72" width="160" height="72" rx="6" fill="#f1faf5" stroke="#1aa572" stroke-width="1.5"/>
+    <circle class="heartbeat" cx="531" cy="83" r="2.6" fill="#0b7d50"/>
     <rect class="chip-on" x="513" y="65" width="174" height="86" rx="11" fill="none" stroke="#1aa572" stroke-width="2"/>
     <text x="600" y="104" fill="#18202a" font-size="20" font-weight="800" letter-spacing="1" text-anchor="middle">HW LAB</text>
     <text class="mono" x="600" y="131" fill="#0b7d50" font-size="17" letter-spacing="0.5" text-anchor="middle">22 PROTOTYPES</text>
+  </g>
+  <g id="chip-bus" stroke="#1aa572" stroke-width="2.5" stroke-linecap="round">
+    <path class="pin-hi pin-0" d="M540 72V63M540 144V153"/>
+    <path class="pin-hi pin-1" d="M560 72V63M560 144V153"/>
+    <path class="pin-hi pin-2" d="M580 72V63M580 144V153"/>
+    <path class="pin-hi pin-3" d="M600 72V63M600 144V153"/>
+    <path class="pin-hi pin-4" d="M620 72V63M620 144V153"/>
+    <path class="pin-hi pin-5" d="M640 72V63M640 144V153"/>
+    <path class="pin-hi pin-6" d="M660 72V63M660 144V153"/>
   </g>
 
   <g fill="#cfe9dc" stroke="#1aa572" stroke-opacity="0.5">
