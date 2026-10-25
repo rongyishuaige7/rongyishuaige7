@@ -86,14 +86,14 @@ npm 每日快照：近 30 天下载 **860** · 最新版 **v0.5.1** · 已发布
 
 - **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** 规格驱动开发的 DSH 插件，三个技能分别负责写规格（需求、设计、任务）、按规格实现和验收。`DSH Plugin` `npm` | MIT
 - **[Tech Mentor](https://github.com/rongyishuaige7/tech-mentor)** 按架构意图、流转图、源码解剖、暗坑考查四个阶段，讲解 AI 写好的代码。`Agent Skill` `Shell` | MIT
-- **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/39913679072) | MIT
+- **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/40069513865) | MIT
 - **[宁缺](https://github.com/rongyishuaige7/ningque)** 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
 
 ### 桌面工具
 
 - **[DevFlow Recorder](https://github.com/rongyishuaige7/devflow-recorder)** 在 GNOME Wayland 上记录窗口焦点变化，形成保存在本机的工作时间线。`Rust` `Tauri` `SQLite` | [Web 单元测试与前端构建通过](https://github.com/rongyishuaige7/devflow-recorder/actions/runs/29339471902) | MIT
 - **[Memory Monitor](https://github.com/rongyishuaige7/memory-monitor)** GNOME Shell 扩展：按 PSI 卡顿时间而不是占用率提示内存压力，并列出 Swap 占用较高的进程。`GNOME Shell` `JavaScript` | [语法检查、gjs 测试与扩展打包通过](https://github.com/rongyishuaige7/memory-monitor/actions/runs/30213179885) | MIT
-- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/39919092745) | MIT
+- **[Desktop Pet](https://github.com/rongyishuaige7/pet-desktop-tauri)** Linux/macOS 桌面宠物原型：导入本地动作帧包，React 提供设置界面，Rust 通过 GTK/AppKit 创建透明置顶窗口。`Tauri` `Rust` | [Web 测试、前端构建与 Linux/macOS Rust 检查通过](https://github.com/rongyishuaige7/pet-desktop-tauri/actions/runs/40202302109) | MIT
 
 > **公开证据：** Problem Solution Recorder 的固定验证运行成功；DevFlow 只检查 Web 单元测试与前端构建。
 
