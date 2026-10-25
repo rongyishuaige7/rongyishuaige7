@@ -84,7 +84,11 @@ PALETTES = {
         "fig_bg": "#080b10",
         "fig_stroke": "#262c35",
         "fig_grid": "#141920",
-        "cta_ink": "#17100d",
+        # The card CTA follows the primary badge: white ink on Yi盘 orange. Both
+        # gradient ends keep at least 4.5:1 against white (5.63:1 and 4.55:1).
+        "cta_ink": "#ffffff",
+        "cta_from": "#b93c22",
+        "cta_to": "#cf482b",
         "tag_fill": "#12161d",
         "tag_stroke": "#2b3038",
         "see_wash": "0.085",
@@ -153,7 +157,10 @@ PALETTES = {
         "fig_bg": "#fbfcfd",
         "fig_stroke": "#dfe3e8",
         "fig_grid": "#eef1f5",
-        "cta_ink": "#17100d",
+        # Same white-on-orange CTA in both themes, matching the primary badges.
+        "cta_ink": "#ffffff",
+        "cta_from": "#b93c22",
+        "cta_to": "#cf482b",
         "tag_fill": "#f7f8fa",
         "tag_stroke": "#d5dbe4",
         "see_wash": "0.06",
@@ -1290,8 +1297,8 @@ FLOW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="
       <stop offset="1" stop-color="${carry}" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="ctaFill" x1="0" y1="0" x2="1" y2="0.2">
-      <stop stop-color="${carry}"/>
-      <stop offset="1" stop-color="${carry_2}"/>
+      <stop stop-color="${cta_from}"/>
+      <stop offset="1" stop-color="${cta_to}"/>
     </linearGradient>
     <linearGradient id="ctaShine" x1="0" y1="0" x2="1" y2="0">
       <stop stop-color="#ffffff" stop-opacity="0"/>

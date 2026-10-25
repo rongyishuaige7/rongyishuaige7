@@ -12,8 +12,8 @@
       <stop offset="1" stop-color="#e45738" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="ctaFill" x1="0" y1="0" x2="1" y2="0.2">
-      <stop stop-color="#e45738"/>
-      <stop offset="1" stop-color="#f08a2c"/>
+      <stop stop-color="#b93c22"/>
+      <stop offset="1" stop-color="#cf482b"/>
     </linearGradient>
     <linearGradient id="ctaShine" x1="0" y1="0" x2="1" y2="0">
       <stop stop-color="#ffffff" stop-opacity="0"/>
@@ -295,8 +295,8 @@
       <path class="cta-shine" d="M0 290H40L20 348H-20Z" fill="url(#ctaShine)"/>
     </g>
     <rect class="cta-ring" x="48" y="290" width="200" height="58" rx="14" fill="none" stroke="#e45738" stroke-width="2"/>
-    <text x="72" y="325" fill="#17100d" font-size="19" font-weight="700">查看公开仓库</text>
-    <path class="cta-arrow" d="M207 326L220 313M210 313H220V323" fill="none" stroke="#17100d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="72" y="325" fill="#ffffff" font-size="19" font-weight="700">查看公开仓库</text>
+    <path class="cta-arrow" d="M207 326L220 313M210 313H220V323" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
   <g id="card-status">
     <circle cx="274" cy="319" r="8" fill="#e45738" opacity="0.18"/>
