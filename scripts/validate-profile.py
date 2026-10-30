@@ -133,7 +133,6 @@ REQUIRED_TEXT = (
 REQUIRED_REPOSITORIES = (
     "yipan-showcase",
     "dsh-stats",
-    "dsh-spec",
     "tech-mentor-studio",
     "problem-solution-recorder-oss",
     "ningque",
@@ -151,7 +150,6 @@ LANE_REPOSITORIES = {
     "// 01 CARRY": ("yipan-showcase",),
     "// 02 SEE": (
         "dsh-stats",
-        "dsh-spec",
         "tech-mentor-studio",
         "problem-solution-recorder-oss",
         "ningque",

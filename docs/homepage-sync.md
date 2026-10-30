@@ -620,3 +620,12 @@ GitHub 在 1012px 以下去掉左侧资料栏，内容区反而变宽。1200 宽
 - `validate-profile.py` 的 `REQUIRED_REPOSITORIES` 和 `// 02 SEE` 的 `LANE_REPOSITORIES` 同步改为 `tech-mentor-studio`。
 - 站点 `src/data/projects.ts` 的 slug 改为 `tech-mentor-studio`，摘要、标签、链接和运行限制同步；`fetch-github-status.mjs`、`check-github-status.mjs`、`fetch-studio-data.mjs` 的仓库列表一并替换。
 - 发布前把 studio 仓库从私有改为公开。其 Git 历史里的硬编码 `PROXY_KEY` 是 CLIProxyAPI 的默认本地 key，已在公开前重写清除；本机共享网关的配置与凭据未改动。
+
+## 下线 dsh-spec 条目（2026-10-30）
+
+用户要求从个人主页 README 和主页站点移除 dsh-spec 的展示。仓库本身保持公开，只是不再作为主页工具条目出现。
+
+- README：删除 `// 02 SEE` 下的 dsh-spec 条目，其余工具的顺序和事实不变；`validate-profile.py` 的 `REQUIRED_REPOSITORIES` 和 `LANE_REPOSITORIES` 同步移除 dsh-spec。
+- 站点：`src/data/projects.ts` 去掉 dsh-spec 工具项；`fetch-github-status.mjs`、`check-github-status.mjs` 的仓库清单和 `fetch-studio-data.mjs` 的 npm/发布清单一并移除；`github-status.json` 与 `studio.json` 用 `npm run status` 重新生成，站点 README 的缩略图说明不再提 dsh-spec。
+- 校验：profile 的生成检查、SVG、动效、内容、npm 回归和证据核对通过；站点 `status:check`、26 项测试、Astro 检查（0 error / 0 warning）与静态构建通过，`dist` 中 dsh-spec 出现 0 次。
+

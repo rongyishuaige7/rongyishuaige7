@@ -84,7 +84,6 @@ npm 每日快照：近 30 天下载 **1,403** · 最新版 **v0.5.2** · 已发�
 
 ### Agent 技能与实验
 
-- **[dsh-spec](https://github.com/rongyishuaige7/dsh-spec)** 规格驱动开发的 DSH 插件，三个技能分别负责写规格（需求、设计、任务）、按规格实现和验收。`DSH Plugin` `npm` | MIT
 - **[Tech Mentor Studio](https://github.com/rongyishuaige7/tech-mentor-studio)** 本地工作台：读仓库、提交和未提交改动，让已配置的模型按架构意图、流转图、源码解剖、暗坑考查四个阶段带读，回答里的行号可跳回对应代码。`Node.js` `Express` `本地优先` | MIT
 - **[Problem Solution Recorder](https://github.com/rongyishuaige7/problem-solution-recorder-oss)** 把排障过程保存成可检索的 Markdown，同时生成人读索引和 AI 索引。`Agent Skill` `Markdown` | [v0.2.0 正式发布](https://github.com/rongyishuaige7/problem-solution-recorder-oss/releases/tag/v0.2.0) | [Skill 验证通过](https://github.com/rongyishuaige7/problem-solution-recorder-oss/actions/runs/40901602644) | MIT
 - **[宁缺](https://github.com/rongyishuaige7/ningque)** 一份持续发布品味裁决的独立审美公报。产品由 Codex 独立构思、设计与开发；我负责审查、授权和发布渠道。`Codex` `GitHub Pages`
