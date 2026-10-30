@@ -611,3 +611,12 @@ GitHub 在 1012px 以下去掉左侧资料栏，内容区反而变宽。1200 宽
 - 原按钮渐变 `#e45738 → #f08a2c`（深色 `#ff6b4a → #ff9a3d`）对白字只有 3.67:1 到 2.11:1，浅色主题的右端和深色主题都不达标。渐变改为 `#b93c22 → #cf482b`，和主徽章的 `#c44227` 同属 Yi盘橙；两端对白字为 5.63:1 和 4.55:1，达到 WCAG AA 正文对比度。
 - 窄屏卡没有按钮底色，"查看公开仓库"仍是橙色文字链接，未改。
 - 校验：生成检查、`validate-svg.py`、`validate-motion.py`、`validate-profile.py` 和 npm 回归测试通过；深浅主题、静止版截图确认白字、箭头和按钮边缘。README 的 `?v=` 由生成器按内容哈希更新。
+
+## 工具条目换成 Tech Mentor Studio（2026-10-29）
+
+原条目介绍的是 [tech-mentor](https://github.com/rongyishuaige7/tech-mentor) 技能（四阶段方法论），现改为同一套方法落成的可运行工具 `tech-mentor-studio`；技能不再单独占一行，方法论来源写在 studio 仓库的 README 里。
+
+- README 的 `// 02 SEE` 条目换成 `Node.js` `Express` `本地优先` 的 Tech Mentor Studio，描述保留原来的四个阶段名称。
+- `validate-profile.py` 的 `REQUIRED_REPOSITORIES` 和 `// 02 SEE` 的 `LANE_REPOSITORIES` 同步改为 `tech-mentor-studio`。
+- 站点 `src/data/projects.ts` 的 slug 改为 `tech-mentor-studio`，摘要、标签、链接和运行限制同步；`fetch-github-status.mjs`、`check-github-status.mjs`、`fetch-studio-data.mjs` 的仓库列表一并替换。
+- 发布前把 studio 仓库从私有改为公开。其 Git 历史里的硬编码 `PROXY_KEY` 是 CLIProxyAPI 的默认本地 key，已在公开前重写清除；本机共享网关的配置与凭据未改动。

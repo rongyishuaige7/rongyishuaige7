@@ -134,7 +134,7 @@ REQUIRED_REPOSITORIES = (
     "yipan-showcase",
     "dsh-stats",
     "dsh-spec",
-    "tech-mentor",
+    "tech-mentor-studio",
     "problem-solution-recorder-oss",
     "ningque",
     "devflow-recorder",
@@ -152,7 +152,7 @@ LANE_REPOSITORIES = {
     "// 02 SEE": (
         "dsh-stats",
         "dsh-spec",
-        "tech-mentor",
+        "tech-mentor-studio",
         "problem-solution-recorder-oss",
         "ningque",
         "devflow-recorder",
