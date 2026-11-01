@@ -104,6 +104,33 @@ PALETTES = {
         "link_dot": "#e8edf3",
         "cloud_stroke": "#5a5f66",
         "cloud_lit": "#c7ced8",
+        # Isometric hero materials: top faces catch the light, left faces sit in half shade
+        # and right faces in shade, so each object reads as a solid on the desk.
+        "pool": "0.3",
+        "drive_side": "#151a21",
+        "drive_end": "#0b0e13",
+        "drive_edge": "#3a414c",
+        "metal_top": "#c9d0d9",
+        "metal_side": "#8a939f",
+        "metal_end": "#6b7480",
+        "metal_edge": "#5a626d",
+        "metal_tongue": "#c9d0d9",
+        "metal_hole": "#12161c",
+        "mat_top": "#3a4250",
+        "mat_left": "#1d232c",
+        "mat_right": "#141920",
+        "mat_edge": "#414b5b",
+        "bezel": "#0b0f15",
+        "pcb_top": "#0e2a20",
+        "pcb_side": "#0a1c16",
+        "pcb_end": "#06120e",
+        "pcb_edge": "#1d4a39",
+        "pad": "#c9a24a",
+        "chip_top": "#1b2027",
+        "chip_side": "#111418",
+        "chip_end": "#0a0c0f",
+        "chip_edge": "#3a414c",
+        "chip_ink": "#c3cad4",
     },
     "light": {
         "theme_desc": "浅色",
@@ -176,18 +203,47 @@ PALETTES = {
         "link_dot": "#4c5562",
         "cloud_stroke": "#9aa3ae",
         "cloud_lit": "#4c5562",
+        "pool": "0.18",
+        "drive_side": "#dfe4eb",
+        "drive_end": "#c9d1dc",
+        "drive_edge": "#b9c2cd",
+        "metal_top": "#e3e8ee",
+        "metal_side": "#b4bcc7",
+        "metal_end": "#98a2af",
+        "metal_edge": "#8f99a6",
+        "metal_tongue": "#e3e8ee",
+        "metal_hole": "#3a414c",
+        "mat_top": "#f3f5f8",
+        "mat_left": "#dfe4eb",
+        "mat_right": "#c9d1dc",
+        "mat_edge": "#b9c2cd",
+        "bezel": "#1b2027",
+        "pcb_top": "#1f6b4d",
+        "pcb_side": "#175a40",
+        "pcb_end": "#104532",
+        "pcb_edge": "#2d8a64",
+        "pad": "#d8b25a",
+        "chip_top": "#1b2027",
+        "chip_side": "#111418",
+        "chip_end": "#0a0c0f",
+        "chip_edge": "#3a414c",
+        "chip_ink": "#c3cad4",
     },
 }
 
 # Motion CSS is palette-free so both themes share it byte for byte. Every
 # animation sits inside the no-preference guard; reduced motion shows a still frame.
 
-# The hero plays one entrance pass like the homepage entry cards, then holds the final frame:
-# cards rise in order, the drive face shines once, the DSH capture pans down and back, and the
-# photo deck fans out. Base styles are the final frame, so reduced motion shows it directly.
-# The narrow hero reuses this style: the same classes play the same one-shot story.
+# The hero is an isometric desk with one object per lane, each over a pool of its color: the
+# Yi盘 drive, a monitor showing the real DSH capture, and a prototype board with the photo deck
+# propped behind it. A legend of the three entries sits below. The hero plays one entrance pass
+# and then holds the final frame: the columns rise in order, the drive top shines once, the
+# capture pans down and back, and the photo deck fans out. Base styles are the final frame, so
+# reduced motion shows it directly. After the entrance each lane lights in turn: its legend dot
+# with the drive LED, the screen rim or the board LEDs. The narrow hero reuses this style.
 HERO_STYLE = """  <style>
     text { font-family: Arial, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
     .entry-carry, .entry-see, .entry-touch, .drive-shine, .shot-pan, .deck-1, .deck-2, .deck-3 { transform-box: view-box; transform-origin: 0 0; }
     .lane-dot-carry, .lane-dot-see, .lane-dot-touch { opacity: 0.32; }
     .lane-ring-carry, .lane-ring-see, .lane-ring-touch { opacity: 0; transform-box: fill-box; transform-origin: center; }
@@ -214,7 +270,7 @@ HERO_STYLE = """  <style>
     }
     @keyframes drive-shine {
       from { transform: translateX(0); }
-      to { transform: translateX(172px); }
+      to { transform: translateX(244px); }
     }
     @keyframes shot-pan {
       0% { transform: translateY(0); }
@@ -248,8 +304,9 @@ HERO_STYLE = """  <style>
     }
   </style>"""
 
-# Pieces shared by the desktop and narrow heroes. Both captures need 23px of hidden
-# height below their clip for the pan; layouts place them with their own clip rects.
+# Pieces shared by the desktop and narrow heroes. The objects are drawn once around their own
+# origins; each layout places them with a translate (and the narrow one with a scale) on an
+# outer group, so the animated inner groups never carry a transform attribute of their own.
 HERO_GRADIENTS = """    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${surface_a}"/>
       <stop offset="0.6" stop-color="${surface_b}"/>
@@ -261,24 +318,43 @@ HERO_GRADIENTS = """    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1"
       <stop offset="0.72" stop-color="${touch}" stop-opacity="0"/>
       <stop offset="1" stop-color="${touch}" stop-opacity="0.5"/>
     </linearGradient>
-    <linearGradient id="gridFade" x1="0" y1="0" x2="1" y2="0">
-      <stop stop-color="#ffffff" stop-opacity="0.22"/>
-      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.48"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.78"/>
-    </linearGradient>
-    <radialGradient id="tintCarry" cx="0.5" cy="1" r="0.75">
-      <stop stop-color="${carry}" stop-opacity="${tint}"/>
+    <radialGradient id="gridFade" cx="0.5" cy="0.46" r="0.62">
+      <stop stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="matrix(0.8660 0.5 -0.8660 0.5 0 0)">
+      <path d="M40 0H0V40" fill="none" stroke="${grid_line}" stroke-width="0.9" opacity="${grid_opacity}"/>
+    </pattern>
+    <radialGradient id="poolCarry">
+      <stop stop-color="${carry}" stop-opacity="${pool}"/>
       <stop offset="1" stop-color="${carry}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="tintSee" cx="0.5" cy="1" r="0.75">
-      <stop stop-color="${see}" stop-opacity="${tint}"/>
+    <radialGradient id="poolSee">
+      <stop stop-color="${see}" stop-opacity="${pool}"/>
       <stop offset="1" stop-color="${see}" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="tintTouch" cx="0.5" cy="1" r="0.75">
-      <stop stop-color="${touch}" stop-opacity="${tint}"/>
+    <radialGradient id="poolTouch">
+      <stop stop-color="${touch}" stop-opacity="${pool}"/>
       <stop offset="1" stop-color="${touch}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="driveFace" x1="0" y1="0" x2="1" y2="1">
+    <radialGradient id="glowCarry">
+      <stop stop-color="${carry_2}" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="${carry_2}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowRed">
+      <stop stop-color="${led_red}" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="${led_red}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowAmber">
+      <stop stop-color="${led_amber}" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="${led_amber}" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowGreen">
+      <stop stop-color="${led_green}" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="${led_green}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="driveTop" x1="0" y1="0" x2="1" y2="1">
       <stop stop-color="${drive_face_a}"/>
       <stop offset="1" stop-color="${drive_face_b}"/>
     </linearGradient>
@@ -287,39 +363,194 @@ HERO_GRADIENTS = """    <linearGradient id="surface" x1="0" y1="0" x2="1" y2="1"
       <stop offset="0.5" stop-color="${shine}" stop-opacity="${shine_opacity}"/>
       <stop offset="1" stop-color="${shine}" stop-opacity="0"/>
     </linearGradient>
-    <radialGradient id="driveShadow">
+    <linearGradient id="cellFill" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="${card}" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="${card}" stop-opacity="0.72"/>
+    </linearGradient>
+    <linearGradient id="glare" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="0.4" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="contactShadow">
       <stop stop-color="#000000" stop-opacity="${shadow_opacity}"/>
       <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M40 0H0V40" fill="none" stroke="${grid_line}" stroke-width="0.6" opacity="${grid_opacity}"/>
-    </pattern>
-    <clipPath id="faceClip"><path d="M150 244H234A13 13 0 0 1 247 257V313A13 13 0 0 1 234 326H150Z"/></clipPath>
+    <clipPath id="faceClip"><rect x="0" y="0" width="176" height="64"/></clipPath>
+    <clipPath id="shotClip"><rect x="10" y="10" width="210" height="92" rx="3"/></clipPath>
     <clipPath id="photoClip"><rect x="-64" y="-48" width="128" height="96" rx="8"/></clipPath>
     <filter id="photoShadow" x="-40%" y="-40%" width="180%" height="200%">
       <feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#000000" flood-opacity="${shadow_opacity}"/>
     </filter>
 """
 
-# The drive is drawn at its desktop size; the narrow hero scales the same group.
-DRIVE_BODY = """      <rect x="111" y="244" width="52" height="82" rx="11" fill="${drive_port}" stroke="${carry_2}" stroke-opacity="0.38"/>
-      <rect x="150" y="244" width="13" height="82" fill="${drive_port}"/>
-      <g fill="${drive_slot}" stroke="${drive_slot_stroke}">
-        <rect x="126" y="262" width="6" height="46"/>
-        <rect x="135" y="262" width="6" height="46"/>
-        <rect x="144" y="262" width="6" height="46"/>
-      </g>
-      <path d="M150 244H234A13 13 0 0 1 247 257V313A13 13 0 0 1 234 326H150Z" fill="url(#driveFace)" stroke="${carry_2}" stroke-opacity="0.42"/>
-      <text x="172" y="294" fill="${drive_ink}" font-size="26" font-weight="800">YI<tspan fill="${carry_text}">盘</tspan></text>
-      <g fill="${carry_2}">
-        <rect x="174" y="308" width="18" height="3" opacity="0.25"/>
-        <rect x="196" y="308" width="18" height="3" opacity="0.55"/>
-        <rect x="218" y="308" width="18" height="3"/>
-      </g>
-      <g clip-path="url(#faceClip)">
-        <path class="drive-shine" d="M110 244H150L120 326H80Z" fill="url(#shineBand)"/>
-      </g>
-"""
+# Isometric desk space: x runs to the lower right, y to the lower left, z up. Boxes show their
+# top, their y-max face (left) and their x-max face (right); planes map local 2D drawing onto a
+# face, so labels, traces and the capture sit on the objects instead of floating over them.
+ISO_COS = math.cos(math.pi / 6)
+
+
+def iso_number(value: float, places: int = 2) -> str:
+    text = f"{value:.{places}f}".rstrip("0").rstrip(".")
+    return "0" if text == "-0" else text
+
+
+def iso(x: float, y: float, z: float = 0) -> tuple[float, float]:
+    return ((x - y) * ISO_COS, (x + y) / 2 - z)
+
+
+def iso_poly(points: list[tuple[float, float, float]]) -> str:
+    return " ".join(f"{iso_number(sx)},{iso_number(sy)}" for sx, sy in (iso(*point) for point in points))
+
+
+def iso_box(x0: float, y0: float, z0: float, x1: float, y1: float, z1: float, top: str, left: str, right: str,
+            stroke: str) -> list[str]:
+    edge = f' stroke="{stroke}" stroke-width="0.8" stroke-linejoin="round"'
+    faces = (
+        (left, [(x0, y1, z0), (x1, y1, z0), (x1, y1, z1), (x0, y1, z1)]),
+        (right, [(x1, y0, z0), (x1, y1, z0), (x1, y1, z1), (x1, y0, z1)]),
+        (top, [(x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)]),
+    )
+    return [f'      <polygon points="{iso_poly(points)}" fill="{fill}"{edge}/>' for fill, points in faces]
+
+
+def iso_matrix(origin: tuple[float, float, float], u: tuple[float, float, float], v: tuple[float, float, float]) -> str:
+    """Map local (u, v) drawing units onto the desk plane spanned by unit vectors u and v."""
+    numbers = (*iso(*u), *iso(*v), *iso(*origin))
+    return "matrix(" + " ".join(iso_number(value, 4) for value in numbers) + ")"
+
+
+def top_plane(x: float, y: float, z: float) -> str:
+    return iso_matrix((x, y, z), (1, 0, 0), (0, 1, 0))
+
+
+def front_plane(x: float, y: float, z: float) -> str:
+    """The y-max face: local x runs along desk x, local y runs down from height z."""
+    return iso_matrix((x, y, z), (1, 0, 0), (0, 0, -1))
+
+
+def end_plane(x: float, y: float, z: float) -> str:
+    """The x-max face: local x runs along desk y, local y runs down from height z."""
+    return iso_matrix((x, y, z), (0, 1, 0), (0, 0, -1))
+
+
+# Yi盘: a USB drive lying on the desk, connector toward the viewer's right. Its top carries the
+# YI盘 mark, the three-step tick row and the activity LED that lights with the CARRY lane; the
+# shine sweeps the top once during the entrance.
+def drive_object() -> str:
+    lines = [
+        f'      <ellipse cx="{iso_number(iso(103, 32)[0])}" cy="{iso_number(iso(103, 32)[1] + 4)}" rx="150" ry="62" fill="url(#poolCarry)"/>',
+        f'      <ellipse cx="{iso_number(iso(88, 32)[0])}" cy="{iso_number(iso(88, 32)[1] + 2)}" rx="118" ry="36" fill="url(#contactShadow)"/>',
+    ]
+    lines += iso_box(0, 0, 0, 176, 64, 24, "url(#driveTop)", "${drive_side}", "${drive_end}", "${drive_edge}")
+    lines += iso_box(176, 12, 5, 208, 52, 19, "${metal_top}", "${metal_side}", "${metal_end}", "${metal_edge}")
+    lines += [
+        f'      <g transform="{top_plane(176, 12, 19)}">',
+        '        <rect x="9" y="8" width="7" height="7" fill="${drive_slot}" stroke="${drive_slot_stroke}" stroke-width="0.8"/>',
+        '        <rect x="9" y="25" width="7" height="7" fill="${drive_slot}" stroke="${drive_slot_stroke}" stroke-width="0.8"/>',
+        '      </g>',
+        f'      <g transform="{end_plane(208, 12, 19)}">',
+        '        <rect x="4" y="3" width="32" height="8" fill="${metal_hole}"/>',
+        '        <rect x="8" y="3" width="24" height="3.5" fill="${metal_tongue}"/>',
+        '      </g>',
+        f'      <g transform="{top_plane(0, 0, 24)}">',
+        '        <rect x="6" y="6" width="164" height="52" rx="5" fill="none" stroke="${carry_2}" stroke-opacity="0.32"/>',
+        '        <text x="20" y="44" fill="${drive_ink}" font-size="30" font-weight="800">YI<tspan fill="${carry_text}">盘</tspan></text>',
+        '        <g fill="${carry_2}">',
+        '          <rect x="96" y="40" width="14" height="3" opacity="0.25"/>',
+        '          <rect x="114" y="40" width="14" height="3" opacity="0.55"/>',
+        '          <rect x="132" y="40" width="14" height="3"/>',
+        '        </g>',
+        '        <circle cx="152" cy="20" r="5.5" fill="${drive_slot}" stroke="${drive_slot_stroke}" stroke-width="0.8"/>',
+        '        <circle class="lane-dot-carry" cx="152" cy="20" r="13" fill="url(#glowCarry)"/>',
+        '        <circle class="lane-dot-carry" cx="152" cy="20" r="3.5" fill="${carry_2}"/>',
+        '        <g clip-path="url(#faceClip)">',
+        '          <path class="drive-shine" d="M-70 0H-30L-60 64H-100Z" fill="url(#shineBand)"/>',
+        '        </g>',
+        '      </g>',
+        f'      <polyline points="{iso_poly([(0, 64, 24), (176, 64, 24), (176, 0, 24)])}" fill="none" stroke="${{carry_2}}" stroke-opacity="0.45" stroke-width="1.2" stroke-linejoin="round"/>',
+    ]
+    return "\n".join(lines) + "\n"
+
+
+# DSH Usage: a monitor on a stand. The real capture sits on the screen plane and pans inside
+# its clip; the screen rim lights with the SEE lane. The stand neck sits behind the slab.
+def monitor_object() -> str:
+    lines = [
+        f'      <ellipse cx="{iso_number(iso(115, 6)[0])}" cy="{iso_number(iso(115, 6)[1] + 4)}" rx="170" ry="60" fill="url(#poolSee)"/>',
+        f'      <ellipse cx="{iso_number(iso(115, 6)[0])}" cy="{iso_number(iso(115, 6)[1] + 2)}" rx="78" ry="24" fill="url(#contactShadow)"/>',
+    ]
+    lines += iso_box(80, -16, 0, 150, 28, 5, "${mat_top}", "${mat_left}", "${mat_right}", "${mat_edge}")
+    lines += iso_box(106, -6, 5, 124, 0, 64, "${mat_top}", "${mat_left}", "${mat_right}", "${mat_edge}")
+    lines += iso_box(0, 0, 40, 230, 12, 172, "${mat_top}", "${bezel}", "${mat_right}", "${mat_edge}")
+    lines += [
+        f'      <g transform="{front_plane(0, 12, 172)}">',
+        '        <rect x="10" y="10" width="210" height="92" rx="3" fill="${shot_bg}"/>',
+        '        <g clip-path="url(#shotClip)">',
+        '          <image class="shot-pan dsh-capture" x="10" y="10" width="210" height="114.8" preserveAspectRatio="xMidYMin slice" href="${dsh_trends}"/>',
+        '        </g>',
+        '        <rect x="10" y="10" width="210" height="92" rx="3" fill="url(#glare)"/>',
+        '        <rect x="10.5" y="10.5" width="209" height="91" rx="2.5" fill="none" stroke="${see}" stroke-opacity="0.35"/>',
+        '        <rect class="lane-dot-see" x="7" y="7" width="216" height="98" rx="5" fill="none" stroke="${see_2}" stroke-width="2.2"/>',
+        '        <circle class="lane-dot-see" cx="115" cy="117" r="2.6" fill="${see_2}"/>',
+        '      </g>',
+    ]
+    return "\n".join(lines) + "\n"
+
+
+# Hardware Lab: a prototype board with a chip, header pins and three status LEDs (red, amber,
+# green, as on the strip below) that light with the TOUCH lane. The photo deck stands behind it.
+def board_pool() -> str:
+    """Drawn before the photo deck, so the light pools under the deck as well as the board."""
+    cx, cy = iso(95, 60)
+    return (
+        f'      <ellipse cx="{iso_number(cx)}" cy="{iso_number(cy + 6)}" rx="168" ry="64" fill="url(#poolTouch)"/>\n'
+        f'      <ellipse cx="{iso_number(cx)}" cy="{iso_number(cy + 3)}" rx="132" ry="44" fill="url(#contactShadow)"/>\n'
+    )
+
+
+def board_object() -> str:
+    lines = iso_box(0, 0, 0, 190, 120, 6, "${pcb_top}", "${pcb_side}", "${pcb_end}", "${pcb_edge}")
+    lines += [
+        f'      <g transform="{top_plane(0, 0, 6)}">',
+        '        <g fill="none" stroke="${touch}" stroke-opacity="0.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">',
+        '          <path d="M124 50H148V24H172"/>',
+        '          <path d="M124 62H172"/>',
+        '          <path d="M124 74H148V100H172"/>',
+        '          <path d="M44 50H30V34H14"/>',
+        '          <path d="M44 62H14"/>',
+        '          <path d="M44 74H30V90H14"/>',
+        '        </g>',
+        '        <g fill="${pad}">',
+        '          <rect x="9" y="29" width="10" height="10" rx="1.5"/>',
+        '          <rect x="9" y="57" width="10" height="10" rx="1.5"/>',
+        '          <rect x="9" y="85" width="10" height="10" rx="1.5"/>',
+        '        </g>',
+        '        <g fill="none" stroke="${pad}" stroke-width="1.6">',
+        '          <circle cx="10" cy="10" r="4.5"/>',
+        '          <circle cx="180" cy="10" r="4.5"/>',
+        '          <circle cx="10" cy="110" r="4.5"/>',
+        '          <circle cx="180" cy="110" r="4.5"/>',
+        '        </g>',
+        '      </g>',
+    ]
+    lines += iso_box(44, 37, 6, 124, 87, 14, "${chip_top}", "${chip_side}", "${chip_end}", "${chip_edge}")
+    lines += [
+        f'      <g transform="{top_plane(44, 37, 14)}">',
+        '        <text x="40" y="31" fill="${chip_ink}" font-size="17" font-weight="800" text-anchor="middle">HW LAB</text>',
+        '        <circle cx="7" cy="7" r="2" fill="${chip_ink}" opacity="0.6"/>',
+        '      </g>',
+    ]
+    for (x, y), led, glow in (((172, 24), "led_red", "glowRed"), ((172, 62), "led_amber", "glowAmber"), ((172, 100), "led_green", "glowGreen")):
+        base_x, base_y = iso(x, y, 6)
+        dome_x, dome_y = iso(x, y, 10)
+        lines += [
+            f'      <ellipse cx="{iso_number(base_x)}" cy="{iso_number(base_y)}" rx="7" ry="4" fill="${{{led}_off}}"/>',
+            f'      <circle cx="{iso_number(dome_x)}" cy="{iso_number(dome_y)}" r="4.6" fill="${{{led}_off}}" stroke="${{{led}}}" stroke-opacity="0.5" stroke-width="0.8"/>',
+            f'      <circle class="lane-dot-touch" cx="{iso_number(dome_x)}" cy="{iso_number(dome_y)}" r="15" fill="url(#{glow})"/>',
+            f'      <circle class="lane-dot-touch" cx="{iso_number(dome_x)}" cy="{iso_number(dome_y)}" r="3.6" fill="${{{led}}}"/>',
+        ]
+    return "\n".join(lines) + "\n"
+
 
 # Each deck photo is drawn centred on its own origin, and the deck around the origin of its
 # group. The outer group holds the final fanned pose; the animated inner group starts with the
@@ -345,170 +576,172 @@ PHOTO_DECK = """        <g transform="translate(-52 6) rotate(-8)">
         </g>
 """
 
+# Legend entries: lane code and caption, project name, one fact. Captions say what each visual
+# above is, as the homepage does. Yi盘 also carries its status pill.
+HERO_LANES = {
+    "carry": ("01 CARRY", "Yi盘", "功能示意", "U 盘里的 AI 工作台 · 资料留在盘内"),
+    "see": ("02 SEE", "DSH Usage", "运行截图 · 夹具数据", "会话、Token 与模型费用 · npm 插件"),
+    "touch": ("03 TOUCH", "Hardware Lab", "历史原型照片", "${prototypes} 个硬件原型 · ESP32/STM32/树莓派"),
+}
+HERO_LANES_NARROW = {
+    "carry": ("Yi盘", "功能示意", "U 盘里的 AI 工作台 · 受控内测"),
+    "see": ("DSH Usage", "运行截图 · 夹具数据", "会话、Token 与模型费用"),
+    "touch": ("Hardware Lab", "历史原型照片", "${prototypes} 个硬件原型 · ESP32/STM32"),
+}
+
+
+def hero_cell(lane: str, x: int, y: int = 360, width: int = 360, height: int = 108) -> str:
+    code, name, caption, fact = HERO_LANES[lane]
+    lines = [
+        f'    <rect x="{x}.5" y="{y}.5" width="{width - 1}" height="{height - 1}" rx="12" fill="url(#cellFill)" stroke="${{{lane}}}" stroke-opacity="0.3"/>',
+        f'    <rect x="{x + 18}" y="{y}" width="56" height="2" rx="1" fill="${{{lane}}}"/>',
+        f'    <circle id="lane-dot-{lane}" class="lane-dot-{lane}" cx="{x + 24}" cy="{y + 30}" r="4.5" fill="${{{lane}}}"/>',
+        f'    <circle class="lane-ring-{lane}" cx="{x + 24}" cy="{y + 30}" r="4.5" fill="none" stroke="${{{lane}}}" stroke-width="1.5"/>',
+        f'    <text class="code" x="{x + 38}" y="{y + 36}" fill="${{{lane}_text}}" font-size="17" font-weight="700" letter-spacing="1.5">{code}</text>',
+        f'    <text x="{x + width - 18}" y="{y + 36}" fill="${{muted}}" font-size="17" text-anchor="end">{caption}</text>',
+        f'    <text x="{x + 18}" y="{y + 68}" fill="${{ink}}" font-size="26" font-weight="800" letter-spacing="-0.4">{name}</text>',
+        f'    <text x="{x + 18}" y="{y + 94}" fill="${{soft}}" font-size="17">{fact}</text>',
+    ]
+    if lane == "carry":
+        lines += [
+            '    <g id="carry-status">',
+            f'      <rect x="{x + 88}.5" y="{y + 46}.5" width="99" height="29" rx="14.5" fill="${{tag_fill}}" stroke="${{carry}}" stroke-opacity="0.45"/>',
+            f'      <circle cx="{x + 104}" cy="{y + 61}" r="4" fill="${{carry}}"/>',
+            f'      <text x="{x + 115}" y="{y + 67}" fill="${{carry_text}}" font-size="17">受控内测</text>',
+            '    </g>',
+        ]
+    return "\n".join(lines) + "\n"
+
+
+def hero_row(lane: str, y: int) -> str:
+    name, caption, fact = HERO_LANES_NARROW[lane]
+    return "\n".join((
+        f'    <rect x="20.5" y="{y}.5" width="319" height="73" rx="11" fill="url(#cellFill)" stroke="${{{lane}}}" stroke-opacity="0.3"/>',
+        f'    <rect x="34" y="{y}" width="40" height="2" rx="1" fill="${{{lane}}}"/>',
+        f'    <circle id="lane-dot-{lane}" class="lane-dot-{lane}" cx="38" cy="{y + 27}" r="4" fill="${{{lane}}}"/>',
+        f'    <circle class="lane-ring-{lane}" cx="38" cy="{y + 27}" r="4" fill="none" stroke="${{{lane}}}" stroke-width="1.5"/>',
+        f'    <text x="50" y="{y + 34}" fill="${{ink}}" font-size="20" font-weight="800">{name}</text>',
+        f'    <text x="326" y="{y + 34}" fill="${{muted}}" font-size="17" text-anchor="end">{caption}</text>',
+        f'    <text x="34" y="{y + 60}" fill="${{soft}}" font-size="17">{fact}</text>',
+    )) + "\n"
+
+
 HERO_DESC = (
-    "${theme_desc}品牌横幅，三张项目入口卡。Yi盘：U 盘里的 AI 工作台，受控内测，资料与产出留在盘内，云端模型按需调用，配 U 盘功能示意。"
-    "DSH Usage：会话、Token 与模型费用，配用量趋势页的运行截图，夹具数据。"
-    "Hardware Lab：${prototypes} 个硬件原型，配三张历史原型照片：多模态智能花盆、车流自适应交通信号、健康科普语音终端。"
+    "${theme_desc}品牌横幅，一张等距视角的工作台。左边是 Yi盘 U 盘，U 盘里的 AI 工作台，受控内测，资料留在盘内，属功能示意；"
+    "中间的显示器里是 DSH Usage 用量趋势页的运行截图，夹具数据，会话、Token 与模型费用；"
+    "右边是一块示意电路板，背后立着三张历史原型照片：多模态智能花盆、车流自适应交通信号、健康科普语音终端，"
+    "Hardware Lab 共 ${prototypes} 个硬件原型。底部三栏依次标注 01 CARRY、02 SEE、03 TOUCH。"
 )
 
-# Desktop: Yi盘 leads with the widest card (400) and carries its status and two facts;
-# DSH Usage and Hardware Lab share 328 each. Every label is at least 17 units.
-HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+# Desktop: the wordmark sits top left, the three objects stand on the desk in lane order, and
+# each legend cell sits under its own object. Each column (object, pool, cell) rises as one.
+# The cell rect is drawn after its object so the glass covers the pool's lower edge.
+HERO = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
   <desc id="desc">""" + HERO_DESC + """</desc>
   <defs>
-""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="388">
-      <rect x="16" y="16" width="1168" height="388" fill="url(#gridFade)"/>
+""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="16" y="16" width="1168" height="468">
+      <rect x="16" y="16" width="1168" height="468" fill="url(#gridFade)"/>
     </mask>
-    <clipPath id="panelClip"><rect x="16" y="16" width="1168" height="388" rx="16"/></clipPath>
-    <clipPath id="shotClip"><rect x="494" y="210" width="284" height="132" rx="8"/></clipPath>
+    <clipPath id="panelClip"><rect x="16" y="16" width="1168" height="468" rx="16"/></clipPath>
   </defs>
 ${style}
 
-  <rect x="0.5" y="0.5" width="1199" height="419" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="16" y="16" width="1168" height="388" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <rect x="0.5" y="0.5" width="1199" height="499" rx="20" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="16" y="16" width="1168" height="468" rx="16" fill="url(#surface)" stroke="${panel_stroke}"/>
   <g clip-path="url(#panelClip)">
-    <rect x="16" y="16" width="1168" height="388" fill="url(#grid)" mask="url(#gridMask)"/>
+    <rect x="16" y="16" width="1168" height="468" fill="url(#grid)" mask="url(#gridMask)"/>
   </g>
-  <rect x="16.5" y="16.5" width="1167" height="387" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+  <rect x="16.5" y="16.5" width="1167" height="467" rx="15.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
 
-  <g transform="translate(48 40)">
-    <rect width="46" height="46" rx="12" fill="${card}" stroke="${carry}" stroke-width="2"/>
-    <text x="23" y="31" fill="${carry_text}" font-size="24" font-weight="800" text-anchor="middle">R</text>
-    <text x="64" y="18" fill="${ink}" font-size="18" font-weight="700" letter-spacing="3">RONGYI</text>
-    <text x="64" y="42" fill="${muted}" font-size="17" letter-spacing="1.2">INDIE DEVELOPER · FOUNDER OF YI盘</text>
+  <g id="wordmark">
+    <rect x="48" y="44" width="18" height="4" rx="2" fill="${carry}"/>
+    <rect x="70" y="44" width="18" height="4" rx="2" fill="${see}"/>
+    <rect x="92" y="44" width="18" height="4" rx="2" fill="${touch}"/>
+    <text x="48" y="84" fill="${ink}" font-size="32" font-weight="800" letter-spacing="5">RONGYI</text>
+    <text x="48" y="112" fill="${muted}" font-size="17" letter-spacing="1.2">INDIE DEVELOPER · FOUNDER OF YI盘</text>
+    <text class="code" x="48" y="140" fill="${faint}" font-size="17">rongyishuaige7.github.io</text>
+    <path d="M302 137L311 128M304 128H311V135" fill="none" stroke="${faint}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
   <g id="entry-carry" class="entry-carry">
-    <rect x="48" y="114" width="400" height="274" rx="14" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
-    <rect x="48" y="114" width="400" height="274" rx="14" fill="url(#tintCarry)"/>
-    <circle id="lane-dot-carry" class="lane-dot-carry" cx="58" cy="152" r="4.5" fill="${carry}"/>
-    <circle class="lane-ring-carry" cx="58" cy="152" r="4.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
-    <text x="72" y="162" fill="${carry_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Yi盘</text>
-    <text x="72" y="192" fill="${soft}" font-size="18">U 盘里的 AI 工作台</text>
-    <g id="carry-status">
-      <rect x="316.5" y="136.5" width="107" height="31" rx="15.5" fill="${tag_fill}" stroke="${carry}" stroke-opacity="0.45"/>
-      <circle cx="334" cy="152" r="4" fill="${carry}"/>
-      <text x="346" y="158" fill="${carry_text}" font-size="17">受控内测</text>
-    </g>
-    <g id="drive" transform="translate(-39 0)">
-      <ellipse cx="208" cy="342" rx="108" ry="10" fill="url(#driveShadow)"/>
-""" + DRIVE_BODY + """    </g>
-    <g id="carry-facts">
-      <circle cx="236" cy="266" r="4" fill="${carry}"/>
-      <text x="250" y="272" fill="${soft}" font-size="17">资料与产出留在盘内</text>
-      <circle cx="236" cy="304" r="3.5" fill="none" stroke="${muted}" stroke-width="1.5"/>
-      <text x="250" y="310" fill="${muted}" font-size="17">云端模型按需调用</text>
-    </g>
-    <text x="72" y="370" fill="${muted}" font-size="17">功能示意</text>
-  </g>
+    <g id="drive" transform="translate(150 212)">
+""" + drive_object() + """    </g>
+""" + hero_cell("carry", 40) + """  </g>
 
   <g id="entry-see" class="entry-see">
-    <rect x="472" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
-    <rect x="472" y="114" width="328" height="274" rx="14" fill="url(#tintSee)"/>
-    <circle id="lane-dot-see" class="lane-dot-see" cx="482" cy="152" r="4.5" fill="${see}"/>
-    <circle class="lane-ring-see" cx="482" cy="152" r="4.5" fill="none" stroke="${see}" stroke-width="1.5"/>
-    <text x="496" y="162" fill="${see_text}" font-size="30" font-weight="800" letter-spacing="-0.6">DSH Usage</text>
-    <text x="496" y="192" fill="${soft}" font-size="18">会话、Token 与模型费用</text>
-    <g id="dsh-shot">
-      <rect x="494" y="210" width="284" height="132" rx="8" fill="${shot_bg}"/>
-      <g clip-path="url(#shotClip)">
-        <image class="shot-pan dsh-capture" x="494" y="210" width="284" height="155.3" preserveAspectRatio="xMidYMin slice" href="${dsh_trends}"/>
-      </g>
-      <rect x="494.5" y="210.5" width="283" height="131" rx="7.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
-    </g>
-    <text x="496" y="370" fill="${muted}" font-size="17">运行截图 · 夹具数据</text>
-  </g>
+    <g id="dsh-shot" transform="translate(506 251)">
+""" + monitor_object() + """    </g>
+""" + hero_cell("see", 420) + """  </g>
 
   <g id="entry-touch" class="entry-touch">
-    <rect x="824" y="114" width="328" height="274" rx="14" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
-    <rect x="824" y="114" width="328" height="274" rx="14" fill="url(#tintTouch)"/>
-    <circle id="lane-dot-touch" class="lane-dot-touch" cx="834" cy="152" r="4.5" fill="${touch}"/>
-    <circle class="lane-ring-touch" cx="834" cy="152" r="4.5" fill="none" stroke="${touch}" stroke-width="1.5"/>
-    <text x="848" y="162" fill="${touch_text}" font-size="30" font-weight="800" letter-spacing="-0.6">Hardware Lab</text>
-    <text x="848" y="192" fill="${soft}" font-size="18">${prototypes} 个硬件原型</text>
-    <g id="photo-deck" transform="translate(988 268)">
+    <g transform="translate(950 185)">
+""" + board_pool() + """    </g>
+    <g id="photo-deck" transform="translate(980 153)">
 """ + PHOTO_DECK + """    </g>
-    <text x="848" y="370" fill="${muted}" font-size="17">历史原型照片</text>
-  </g>
+    <g id="hw-board" transform="translate(950 185)">
+""" + board_object() + """    </g>
+""" + hero_cell("touch", 800) + """  </g>
 </svg>
 """)
 
-# Narrow screens get the same three entries as stacked rows at 360 units wide, so text
-# keeps its 17-unit floor at phone width instead of shrinking with the 1200-wide banner.
-HERO_NARROW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="500" viewBox="0 0 360 500" role="img" aria-labelledby="title desc">
+# Narrow screens get the same desk at half scale, staggered around the wordmark, and the
+# legend as stacked rows at 360 units wide, so text keeps its 17-unit floor at phone width.
+# The objects sit inside the panel clip because the monitor's pool reaches past the edge.
+HERO_NARROW = Template("""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="580" viewBox="0 0 360 580" role="img" aria-labelledby="title desc">
   <title id="title">Rongyi，独立开发者 · Yi盘创始人</title>
   <desc id="desc">""" + HERO_DESC + """</desc>
   <defs>
-""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="10" y="10" width="340" height="480">
-      <rect x="10" y="10" width="340" height="480" fill="url(#gridFade)"/>
+""" + HERO_GRADIENTS + """    <mask id="gridMask" maskUnits="userSpaceOnUse" x="10" y="10" width="340" height="560">
+      <rect x="10" y="10" width="340" height="560" fill="url(#gridFade)"/>
     </mask>
-    <clipPath id="panelClip"><rect x="10" y="10" width="340" height="480" rx="14"/></clipPath>
-    <clipPath id="shotClip"><rect x="248" y="266" width="74" height="57" rx="6"/></clipPath>
+    <clipPath id="panelClip"><rect x="10" y="10" width="340" height="560" rx="14"/></clipPath>
   </defs>
 ${style}
 
-  <rect x="0.5" y="0.5" width="359" height="499" rx="18" fill="${shell}" stroke="${shell_stroke}"/>
-  <rect x="10" y="10" width="340" height="480" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
+  <rect x="0.5" y="0.5" width="359" height="579" rx="18" fill="${shell}" stroke="${shell_stroke}"/>
+  <rect x="10" y="10" width="340" height="560" rx="14" fill="url(#surface)" stroke="${panel_stroke}"/>
   <g clip-path="url(#panelClip)">
-    <rect x="10" y="10" width="340" height="480" fill="url(#grid)" mask="url(#gridMask)"/>
+    <rect x="10" y="10" width="340" height="560" fill="url(#grid)" mask="url(#gridMask)"/>
   </g>
-  <rect x="10.5" y="10.5" width="339" height="479" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
+  <rect x="10.5" y="10.5" width="339" height="559" rx="13.5" fill="none" stroke="url(#edge)" opacity="0.8"/>
 
-  <g transform="translate(24 26)">
-    <rect width="44" height="44" rx="11" fill="${card}" stroke="${carry}" stroke-width="2"/>
-    <text x="22" y="30" fill="${carry_text}" font-size="23" font-weight="800" text-anchor="middle">R</text>
-    <text x="58" y="18" fill="${ink}" font-size="18" font-weight="700" letter-spacing="2.4">RONGYI</text>
-    <text x="58" y="40" fill="${muted}" font-size="17" letter-spacing="1">INDIE DEVELOPER</text>
-    <text x="58" y="62" fill="${muted}" font-size="17" letter-spacing="1">FOUNDER OF YI盘</text>
+  <g id="wordmark">
+    <rect x="28" y="30" width="14" height="4" rx="2" fill="${carry}"/>
+    <rect x="46" y="30" width="14" height="4" rx="2" fill="${see}"/>
+    <rect x="64" y="30" width="14" height="4" rx="2" fill="${touch}"/>
+    <text x="28" y="66" fill="${ink}" font-size="26" font-weight="800" letter-spacing="4">RONGYI</text>
+    <text x="28" y="92" fill="${muted}" font-size="17" letter-spacing="1">INDIE DEVELOPER</text>
+    <text x="28" y="114" fill="${muted}" font-size="17" letter-spacing="1">FOUNDER OF YI盘</text>
   </g>
 
   <g id="entry-carry" class="entry-carry">
-    <rect x="24" y="112" width="312" height="112" rx="12" fill="${card}" stroke="${carry}" stroke-opacity="0.32"/>
-    <rect x="24" y="112" width="312" height="112" rx="12" fill="url(#tintCarry)"/>
-    <circle id="lane-dot-carry" class="lane-dot-carry" cx="30" cy="140" r="3.5" fill="${carry}"/>
-    <circle class="lane-ring-carry" cx="30" cy="140" r="3.5" fill="none" stroke="${carry}" stroke-width="1.5"/>
-    <text x="40" y="150" fill="${carry_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Yi盘</text>
-    <text x="40" y="176" fill="${soft}" font-size="17">U 盘里的 AI 工作台</text>
-    <g id="carry-status">
-      <circle cx="45" cy="198" r="4" fill="${carry}"/>
-      <text x="56" y="204" fill="${carry_text}" font-size="17">受控内测</text>
+    <g clip-path="url(#panelClip)">
+      <g id="drive" transform="translate(56 200) scale(0.5)">
+""" + drive_object() + """      </g>
     </g>
-    <g id="drive" transform="translate(167.4 -16.1) scale(0.618)">
-""" + DRIVE_BODY + """    </g>
-    <text x="278" y="210" fill="${muted}" font-size="17" text-anchor="middle">功能示意</text>
-  </g>
+""" + hero_row("carry", 312) + """  </g>
 
   <g id="entry-see" class="entry-see">
-    <rect x="24" y="238" width="312" height="112" rx="12" fill="${card}" stroke="${see}" stroke-opacity="0.32"/>
-    <rect x="24" y="238" width="312" height="112" rx="12" fill="url(#tintSee)"/>
-    <circle id="lane-dot-see" class="lane-dot-see" cx="30" cy="266" r="3.5" fill="${see}"/>
-    <circle class="lane-ring-see" cx="30" cy="266" r="3.5" fill="none" stroke="${see}" stroke-width="1.5"/>
-    <text x="40" y="276" fill="${see_text}" font-size="26" font-weight="800" letter-spacing="-0.4">DSH Usage</text>
-    <text x="40" y="302" fill="${soft}" font-size="17">会话、Token 与模型费用</text>
-    <text x="40" y="330" fill="${muted}" font-size="17">运行截图 · 夹具数据</text>
-    <g id="dsh-shot">
-      <rect x="248" y="266" width="74" height="57" rx="6" fill="${shot_bg}"/>
-      <g clip-path="url(#shotClip)">
-        <image class="shot-pan dsh-capture" x="248" y="266" width="147" height="80.4" preserveAspectRatio="xMinYMin slice" href="${dsh_trends}"/>
-      </g>
-      <rect x="248.5" y="266.5" width="73" height="56" rx="5.5" fill="none" stroke="${see}" stroke-opacity="0.3"/>
+    <g clip-path="url(#panelClip)">
+      <g id="dsh-shot" transform="translate(236.4 114) scale(0.5)">
+""" + monitor_object() + """      </g>
     </g>
-  </g>
+""" + hero_row("see", 394) + """  </g>
 
   <g id="entry-touch" class="entry-touch">
-    <rect x="24" y="364" width="312" height="112" rx="12" fill="${card}" stroke="${touch}" stroke-opacity="0.32"/>
-    <rect x="24" y="364" width="312" height="112" rx="12" fill="url(#tintTouch)"/>
-    <circle id="lane-dot-touch" class="lane-dot-touch" cx="30" cy="392" r="3.5" fill="${touch}"/>
-    <circle class="lane-ring-touch" cx="30" cy="392" r="3.5" fill="none" stroke="${touch}" stroke-width="1.5"/>
-    <text x="40" y="402" fill="${touch_text}" font-size="26" font-weight="800" letter-spacing="-0.4">Hardware Lab</text>
-    <text x="40" y="428" fill="${soft}" font-size="17">${prototypes} 个硬件原型</text>
-    <text x="40" y="456" fill="${muted}" font-size="17">历史原型照片</text>
-    <g id="photo-deck" transform="translate(278 420) scale(0.42)">
-""" + PHOTO_DECK + """    </g>
-  </g>
+    <g clip-path="url(#panelClip)">
+      <g transform="translate(253.7 218.5) scale(0.5)">
+""" + board_pool() + """      </g>
+      <g id="photo-deck" transform="translate(268.7 202.5) scale(0.5)">
+""" + PHOTO_DECK + """      </g>
+      <g id="hw-board" transform="translate(253.7 218.5) scale(0.5)">
+""" + board_object() + """      </g>
+    </g>
+""" + hero_row("touch", 476) + """  </g>
 </svg>
 """)
+
 
 # The Hardware Lab strip is a small circuit board: each sensor pad ripples as its signal leaves,
 # the signals run along the traces with a glowing tail into the HW LAB chip, the chip lights and

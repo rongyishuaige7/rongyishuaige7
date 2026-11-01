@@ -1,11 +1,11 @@
 <a href="https://rongyishuaige7.github.io/">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=6684ff2a">
-  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=30e4372c">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=08428638">
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=3f9b0cca">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=9af2f2c4">
-  <img src="./assets/hero-light.svg?v=9af2f2c4" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。三张项目卡：Yi盘，U 盘里的 AI 工作台，受控内测，资料与产出留在盘内、云端模型按需调用，配功能示意图；DSH Usage，会话、Token 与模型费用，配用量趋势页运行截图（夹具数据）；Hardware Lab，ESP32、STM32 与树莓派硬件原型，配三张历史原型照片。">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hero-mobile-still.svg?v=d6dc446a">
+  <source media="(max-width: 1011px)" srcset="./assets/hero-mobile.svg?v=ecf3b4ac">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hero-still.svg?v=007b2494">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg?v=d3ec4fe2">
+  <source media="(prefers-color-scheme: light)" srcset="./assets/hero-light.svg?v=c258150a">
+  <img src="./assets/hero-light.svg?v=c258150a" width="100%" alt="Rongyi，独立开发者，Yi盘创始人，打开 Rongyi Studio 主页。一张等距视角的工作台：左边是 Yi盘 U 盘，U 盘里的 AI 工作台，受控内测，资料留在盘内（功能示意）；中间的显示器里是 DSH Usage 用量趋势页的运行截图（夹具数据），会话、Token 与模型费用；右边是一块示意电路板，背后立着三张历史原型照片，Hardware Lab，ESP32、STM32 与树莓派硬件原型。">
 </picture>
 </a>
 
@@ -24,9 +24,9 @@
 
 <a href="https://github.com/rongyishuaige7/yipan-showcase">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=1240ce76">
-  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=dd7a19f7">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=c0e27b4a">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-mobile-still.svg?v=07a5f0eb">
+  <source media="(max-width: 1011px)" srcset="./assets/yipan-flow-mobile.svg?v=916aa332">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/yipan-flow-still.svg?v=30dd3736">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/yipan-flow-dark.svg?v=a04ca0e5">
   <source media="(prefers-color-scheme: light)" srcset="./assets/yipan-flow-light.svg?v=b274933e">
   <img src="./assets/yipan-flow-light.svg?v=b274933e" width="100%" alt="Yi盘卡片，U 盘里的 AI 工作台：资料、任务记录和产出保存在盘内，智能处理主要调用云端模型。标签：U 盘存储、云端模型；按钮：查看公开仓库；状态：受控内测。右侧结构示意：U 盘内有三步，盘内资料与任务（Inbox 确认后写入长期知识）经检索交给 Yi盘工作台，受管 Agent 处理当前任务，生成的产出与任务记录留在盘内，随盘带走，并经记录与沉淀回到盘内资料。U 盘外是云端模型，工作台按需请求，模型返回结果。">
@@ -60,9 +60,9 @@
 
 <a href="https://github.com/rongyishuaige7/dsh-stats">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=efebb0bf">
-  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=45459d8b">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=cb932735">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-mobile-still.svg?v=ce892705">
+  <source media="(max-width: 1011px)" srcset="./assets/dsh-card-mobile.svg?v=5ec018e9">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/dsh-card-still.svg?v=04264841">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/dsh-card-dark.svg?v=f3ac57f0">
   <source media="(prefers-color-scheme: light)" srcset="./assets/dsh-card-light.svg?v=577ee0ef">
   <img src="./assets/dsh-card-light.svg?v=577ee0ef" width="100%" alt="DSH Usage：DeepSeek Harness 用量插件，按项目统计 Token、开发时长和预估费用，另含账户余额查询。功能示意，非产品截图：会话记录按项目归集，形成用量柱和开发时间线。项目总览可导出 CSV/JSON，趋势可选近 7 / 30 / 90 天。npm 数值与统计日期见下方每日快照。">
@@ -105,9 +105,9 @@ npm 每日快照：近 30 天下载 **1,238** · 最新版 **v0.5.2** · 已发�
 
 <a href="https://github.com/rongyishuaige7/YI-Hardware-Lab">
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=0f846d13">
-  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=4ccc8fe2">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=108c644f">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-mobile-still.svg?v=a305a4ab">
+  <source media="(max-width: 1011px)" srcset="./assets/hardware-strip-mobile.svg?v=b6cc579f">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/hardware-strip-still.svg?v=3d01ea26">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/hardware-strip-dark.svg?v=cdd41c89">
   <source media="(prefers-color-scheme: light)" srcset="./assets/hardware-strip-light.svg?v=1b3c7aa0">
   <img src="./assets/hardware-strip-light.svg?v=1b3c7aa0" width="100%" alt="Hardware Lab 电路走线示意：传感器信号汇入中间芯片，再依次点亮右侧红、黄、绿三颗 LED。">
@@ -174,9 +174,9 @@ npm 每日快照：近 30 天下载 **1,238** · 最新版 **v0.5.2** · 已发�
 ---
 
 <picture>
-  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/terminal-mobile-still.svg?v=851a7e0f">
-  <source media="(max-width: 1011px)" srcset="./assets/terminal-mobile.svg?v=2ec2e7e6">
-  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/terminal-still.svg?v=65a0028c">
+  <source media="(max-width: 1011px) and (prefers-reduced-motion: reduce)" srcset="./assets/terminal-mobile-still.svg?v=a1369693">
+  <source media="(max-width: 1011px)" srcset="./assets/terminal-mobile.svg?v=a0675e84">
+  <source media="(prefers-reduced-motion: reduce)" srcset="./assets/terminal-still.svg?v=90e06ca6">
   <source media="(prefers-color-scheme: dark)" srcset="./assets/terminal-dark.svg?v=1718875b">
   <source media="(prefers-color-scheme: light)" srcset="./assets/terminal-light.svg?v=74ad1f6a">
   <img src="./assets/terminal-light.svg?v=74ad1f6a" width="100%" alt="终端签名：输入 ./ship --carry --see --touch，输出 Yi盘受控内测、DSH Usage npm 插件、Hardware Lab 22 个原型，随后重新输入。">
