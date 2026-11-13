@@ -70,8 +70,8 @@
 </a>
 
 <!-- npm-snapshot:start -->
-npm 每日快照：近 30 天下载 **1,943** · 最新版 **v0.5.2** · 已发布 **97** 个版本。
-下载统计截至 **2026-11-11** · [刷新结果](https://github.com/rongyishuaige7/rongyishuaige7/actions/workflows/refresh-npm-card.yml)
+npm 每日快照：近 30 天下载 **1,951** · 最新版 **v0.5.2** · 已发布 **97** 个版本。
+下载统计截至 **2026-11-12** · [刷新结果](https://github.com/rongyishuaige7/rongyishuaige7/actions/workflows/refresh-npm-card.yml)
 <!-- npm-snapshot:end -->
 
 <picture>
